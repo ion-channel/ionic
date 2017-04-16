@@ -25,7 +25,7 @@ func TestClient(t *testing.T) {
 
 		g.It("should return an error on a bad url", func() {
 			s := "foosecret"
-			u := "http\\foo://google.com"
+			u := "http://googl%8675309e\\house.com"
 			cli, err := New(s, u)
 
 			Expect(err).NotTo(BeNil())
