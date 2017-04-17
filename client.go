@@ -133,13 +133,13 @@ func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload []
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("bad response from API: %v", resp.Status)
-	}
-
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response body: %v", err.Error())
+	}
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, fmt.Errorf("bad response from API: %v", resp.Status)
 	}
 
 	var ir IonResponse
