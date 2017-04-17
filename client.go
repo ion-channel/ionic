@@ -1,6 +1,7 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -81,7 +82,7 @@ func (ic *IonClient) createURL(endpoint string, params *url.Values, pagination *
 	return &u
 }
 
-func (ic *IonClient) do(method, endpoint string, params *url.Values, payload []byte, headers http.Header, pagination *Pagination) (json.RawMessage, error) {
+func (ic *IonClient) do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, pagination *Pagination) (json.RawMessage, error) {
 	if pagination == nil || pagination.Limit > 0 {
 		ir, err := ic._do(method, endpoint, params, payload, headers, pagination)
 		if err != nil {
@@ -111,10 +112,10 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload []b
 	return data, nil
 }
 
-func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload []byte, headers http.Header, pagination *Pagination) (*IonResponse, error) {
+func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, pagination *Pagination) (*IonResponse, error) {
 	u := ic.createURL(endpoint, params, pagination)
 
-	req, err := http.NewRequest(strings.ToUpper(method), u.String(), nil)
+	req, err := http.NewRequest(strings.ToUpper(method), u.String(), &payload)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err.Error())
 	}
@@ -152,17 +153,17 @@ func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload []
 }
 
 func (ic *IonClient) delete(endpoint string, params *url.Values, headers http.Header) (json.RawMessage, error) {
-	return ic.do("DELETE", endpoint, params, nil, headers, nil)
+	return ic.do("DELETE", endpoint, params, bytes.Buffer{}, headers, nil)
 }
 
 func (ic *IonClient) get(endpoint string, params *url.Values, headers http.Header, pagination *Pagination) (json.RawMessage, error) {
-	return ic.do("GET", endpoint, params, nil, headers, pagination)
+	return ic.do("GET", endpoint, params, bytes.Buffer{}, headers, pagination)
 }
 
-func (ic *IonClient) post(endpoint string, params *url.Values, payload []byte, headers http.Header) (json.RawMessage, error) {
+func (ic *IonClient) post(endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return ic.do("POST", endpoint, params, payload, headers, nil)
 }
 
-func (ic *IonClient) put(endpoint string, params *url.Values, payload []byte, headers http.Header) (json.RawMessage, error) {
+func (ic *IonClient) put(endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return ic.do("PUT", endpoint, params, payload, headers, nil)
 }
