@@ -115,6 +115,9 @@ func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload []
 	u := ic.createURL(endpoint, params, pagination)
 
 	req, err := http.NewRequest(strings.ToUpper(method), u.String(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %v", err.Error())
+	}
 
 	if headers != nil {
 		req.Header = headers
