@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	getUsersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
+	usersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
 )
 
 // User is a representation of an Ion Channel User within the system
@@ -26,7 +26,7 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event Event) ([]User, error) {
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.post(getUsersSubscribedForEventEndpoint, nil, *buff, nil)
+	b, err = ic.post(usersSubscribedForEventEndpoint, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get users: %v", err.Error())
 	}
