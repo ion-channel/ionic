@@ -8,12 +8,16 @@ import (
 
 const (
 	usersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
+	usersGetSelfEndpoint            = "v1/users/getSelf"
 )
 
 // User is a representation of an Ion Channel User within the system
 type User struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	ID         string `json:"id"`
+	Email      string `json:"email"`
+	Username   string `json:"username"`
+	ChatHandle string `json:"chat_handle"`
+	SysAdmin   bool   `json:"sys_admin"`
 }
 
 // GetUsersSubscribedForEvent takes an event and returns a list of users
@@ -40,4 +44,19 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event Event) ([]User, error) {
 	}
 
 	return users.Users, nil
+}
+
+func (ic *IonClient) GetSelf() (*User, error) {
+	b, err := ic.get(usersGetSelfEndpoint, nil, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get self: %v", err.Error())
+	}
+
+	var user User
+	err = json.Unmarshal(b, &user)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse user: %v", err.Error())
+	}
+
+	return &user, nil
 }
