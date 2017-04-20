@@ -73,5 +73,15 @@ func TestClient(t *testing.T) {
 			u := cli.createURL(e, nil, p)
 			Expect(u.String()).To(Equal(fmt.Sprintf("%v/%v?limit=%v&offset=%v", b, e, l, o)))
 		})
+
+		g.It("should set a new token", func() {
+			old := "footoken"
+			new := "bartoken"
+
+			cli, _ := New(old, "http://google.com")
+			Expect(cli.bearerToken).To(Equal(old))
+			cli.SetBearerToken(new)
+			Expect(cli.bearerToken).To(Equal(new))
+		})
 	})
 }
