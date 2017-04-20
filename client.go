@@ -82,6 +82,11 @@ func (ic *IonClient) createURL(endpoint string, params *url.Values, pagination *
 	return &u
 }
 
+// SetBearerToken takes a bearer token string to apply to the client
+func (ic *IonClient) SetBearerToken(bearerToken string) {
+	ic.bearerToken = bearerToken
+}
+
 func (ic *IonClient) do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, pagination *Pagination) (json.RawMessage, error) {
 	if pagination == nil || pagination.Limit > 0 {
 		ir, err := ic._do(method, endpoint, params, payload, headers, pagination)
