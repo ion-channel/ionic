@@ -14,3 +14,25 @@ type EventProject struct {
 	Org      string   `json:"org"`
 	Versions []string `json:"versions"`
 }
+
+func (e *Event) Append(toAppend Event) {
+	for _, v := range toAppend.Vulns.Updates {
+		if !e.contains(v) {
+			e.Vulns.Updates = append(e.Vulns.Updates, v)
+		}
+	}
+}
+
+func (e *Event) contains(vuln string) bool {
+	if e.Vulns.Updates == nil {
+		return false
+	}
+
+	for _, existing := range e.Vulns.Updates {
+		if existing == vuln {
+			return true
+		}
+	}
+
+	return false
+}
