@@ -12,7 +12,11 @@ import (
 	"time"
 )
 
-const maxPagingLimit = 100
+const (
+	maxIdleConns        = 5
+	maxIdleConnsPerHost = 5
+	maxPagingLimit      = 100
+)
 
 // IonClient represnets a communication layer with the Ion Channel API
 type IonClient struct {
@@ -58,7 +62,12 @@ func New(secret string, baseURL string) (*IonClient, error) {
 	ic := &IonClient{
 		baseURL:     u,
 		bearerToken: secret,
-		client:      &http.Client{},
+		client: &http.Client{
+			Transport: &http.Transport{
+				MaxIdleConnsPerHost: maxIdleConnsPerHost,
+				MaxIdleConns:        maxIdleConns,
+			},
+		},
 	}
 
 	return ic, nil
