@@ -46,6 +46,9 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event Event) ([]User, error) {
 	return users.Users, nil
 }
 
+// GetSelf returns the user object associated with the bearer token in use by
+// the Ion Client.  An error is returned if the client cannot talk to the API
+// or the returned user object is nil or blank
 func (ic *IonClient) GetSelf() (*User, error) {
 	b, err := ic.get(usersGetSelfEndpoint, nil, nil, nil)
 	if err != nil {

@@ -43,6 +43,10 @@ type Vulnerability struct {
 	SourceID                    int             `json:"source_id"`
 }
 
+// GetVulnerabilities returns a slice of Vulnerability for a given product and
+// version string over a specified pagination range.  If version is left blank,
+// it will not be considered in the search query.  An error is returned for
+// client communication and unmarshalling errors.
 func (ic *IonClient) GetVulnerabilities(product, version string, pagination *Pagination) ([]Vulnerability, error) {
 	params := &url.Values{}
 	params.Set("product", product)
@@ -64,6 +68,10 @@ func (ic *IonClient) GetVulnerabilities(product, version string, pagination *Pag
 	return vulns, nil
 }
 
+// GetVulnerabilitiesInFile takes the location of a dependency file and returns
+// a slice of vulnerabilities found for the list of dependencies.  An error is
+// returned if the file can't be cannot be read, the API returns an error, or
+// marshalling issues.
 func (ic *IonClient) GetVulnerabilitiesInFile(filePath string) ([]Vulnerability, error) {
 	buff := &bytes.Buffer{}
 	bw := multipart.NewWriter(buff)
@@ -102,6 +110,8 @@ func (ic *IonClient) GetVulnerabilitiesInFile(filePath string) ([]Vulnerability,
 	return vulns, nil
 }
 
+// GetVulnerability takes an ID string and returns the vulnerability found for
+// that ID.  An error is returned for API errors and marshalling errors.
 func (ic *IonClient) GetVulnerability(id string) (*Vulnerability, error) {
 	params := &url.Values{}
 	params.Set("external_id", id)
