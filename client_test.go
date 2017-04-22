@@ -85,3 +85,30 @@ func TestClient(t *testing.T) {
 		})
 	})
 }
+
+var client = &IonClient{
+	baseURL:     nil,
+	bearerToken: "footoken",
+	client:      nil,
+}
+
+func ExamplePagination_customRange() {
+	pages := &Pagination{Offset: 20, Limit: 100}
+
+	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", pages)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Printf("Vulnerabilities: %v\n", vulns)
+}
+
+func ExamplePagination_defaultRange() {
+	// nil for pagination will use the default set by the API and may vary for each object
+	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Printf("Vulnerabilities: %v\n", vulns)
+}
