@@ -1,3 +1,5 @@
+// Package ionic provides a direct representation of the endpoints and objects
+// within the Ion Channel API
 package ionic
 
 import (

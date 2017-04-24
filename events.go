@@ -1,5 +1,7 @@
 package ionic
 
+// Event represents a singular occurance of a change within the Ion Channel
+// system that can be emmitted to trigger a notification
 type Event struct {
 	Vulns EventVulnerability `json:"vulns"`
 }
@@ -15,6 +17,7 @@ type EventProject struct {
 	Versions []string `json:"versions"`
 }
 
+// Append takes an event to join and leaves the union of the two events
 func (e *Event) Append(toAppend Event) {
 	for _, v := range toAppend.Vulns.Updates {
 		if !e.contains(v) {
