@@ -49,6 +49,13 @@ type Pagination struct {
 	Limit  int
 }
 
+// IonErrorResponse represents an error response from the Ion Channel API
+type IonErrorResponse struct {
+	Message string   `json:"message"`
+	Fields  []string `json:"fields"`
+	Code    int      `json:"code"`
+}
+
 // AllItems is a convenience for requesting all items of a given entity
 var AllItems = &Pagination{Offset: 0, Limit: -1}
 
