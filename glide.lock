@@ -1,0 +1,48 @@
+hash: 69cf50088850a29cab29c5fedc39faaaedf84d16867e28335caae30240381c35
+updated: 2017-05-11T14:26:28.988461646-07:00
+imports: []
+testImports:
+- name: github.com/franela/goblin
+  version: 2fa789fd0c6b7975acbfb89a04830b4081a7b0e9
+- name: github.com/gomicro/bogus
+  version: 9361a1667941b6b6d03631ec62f77f8af5058455
+- name: github.com/onsi/gomega
+  version: 00acfa9d92a386415bd235ab069c52063f925998
+  subpackages:
+  - format
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/oraclematcher
+  - internal/testingtsupport
+  - matchers
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
+  - types
+- name: golang.org/x/net
+  version: c9b681d35165f1995d6f3034e61f8761d4b90c99
+  subpackages:
+  - html
+  - html/atom
+  - html/charset
+- name: golang.org/x/text
+  version: 470f45bf29f4147d6fbd7dfd0a02a848e49f5bf4
+  subpackages:
+  - encoding
+  - encoding/charmap
+  - encoding/htmlindex
+  - encoding/internal
+  - encoding/internal/identifier
+  - encoding/japanese
+  - encoding/korean
+  - encoding/simplifiedchinese
+  - encoding/traditionalchinese
+  - encoding/unicode
+  - internal/tag
+  - internal/utf8internal
+  - language
+  - runes
+  - transform
+- name: gopkg.in/yaml.v2
+  version: cd8b52f8269e0feb286dfeef29f8fe4d5b397e0b
