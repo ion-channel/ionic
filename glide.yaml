@@ -1,0 +1,6 @@
+package: github.com/ion-channel/ionic
+import: []
+testImport:
+- package: github.com/franela/goblin
+- package: github.com/gomicro/bogus
+- package: github.com/onsi/gomega
