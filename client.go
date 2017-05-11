@@ -36,11 +36,13 @@ type IonResponse struct {
 
 // Meta represents the metadata section of an IonResponse
 type Meta struct {
+	Copyright  string    `json:"copyright"`
+	Authors    []string  `json:"authors"`
 	Version    string    `json:"version"`
-	LastUpdate time.Time `json:"last_update"`
-	TotalCount int       `json:"total_count"`
-	Limit      int       `json:"limit"`
-	Offset     int       `json:"offset"`
+	LastUpdate time.Time `json:"last_update,omitempty"`
+	TotalCount int       `json:"total_count,omitempty"`
+	Limit      int       `json:"limit,omitempty"`
+	Offset     int       `json:"offset,omitempty"`
 }
 
 // Pagination represents the necessary elements for a paginated request
