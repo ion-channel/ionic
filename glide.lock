@@ -1,0 +1,24 @@
+hash: ac9b897a89a7adb897bcb7d81bb92b2fd0fa385b4ef67de715b034505f0f0992
+updated: 2017-05-11T13:47:03.887004681-07:00
+imports: []
+testImports:
+- name: github.com/franela/goblin
+  version: 74c9fe110d4bfd04c222a089a309e0a97e258534
+- name: github.com/gomicro/bogus
+  version: 244fbba266f402d0239b7c361a90fa52c35689ce
+- name: github.com/onsi/gomega
+  version: 334b8f472b3af5d541c5642701c1e29e2126f486
+  subpackages:
+  - format
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/oraclematcher
+  - internal/testingtsupport
+  - matchers
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
+  - types
+- name: gopkg.in/yaml.v2
+  version: 53feefa2559fb8dfa8d81baad31be332c97d6c77

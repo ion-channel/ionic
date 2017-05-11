@@ -1,0 +1,9 @@
+package: github.com/ion-channel/ionic
+import: []
+testImport:
+- package: github.com/franela/goblin
+  version: ~0.0.1
+- package: github.com/gomicro/bogus
+  version: ~0.0.3
+- package: github.com/onsi/gomega
+  version: ~1.1.0
