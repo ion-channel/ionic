@@ -7,8 +7,8 @@ type Event struct {
 }
 
 type EventVulnerability struct {
-	Updates  []string       `json:"updates"`
-	Projects []EventProject `json:"projects"`
+	Updates  []string       `json:"updates,omitempty"`
+	Projects []EventProject `json:"projects,omitempty"`
 }
 
 type EventProject struct {
