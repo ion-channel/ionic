@@ -14,7 +14,7 @@ func TestEvent(t *testing.T) {
 
 	g.Describe("Event", func() {
 		g.It("should return true if an event contains the specified vulnerability", func() {
-			e := &Event{EventVulnerability{Updates: []string{"CVE-2014-2734"}}}
+			e := &Event{Vulnerability: VulnerabilityEvent{Updates: []string{"CVE-2014-2734"}}}
 			Expect(e.contains("baz")).To(BeFalse())
 			Expect(e.contains("CVE-2014-2734")).To(BeTrue())
 		})
@@ -22,17 +22,17 @@ func TestEvent(t *testing.T) {
 		g.It("should append two events", func() {
 			var left Event
 			json.Unmarshal([]byte(SampleValidEventJSON), &left)
-			Expect(len(left.Vulns.Updates)).To(Equal(1))
+			Expect(len(left.Vulnerability.Updates)).To(Equal(1))
 
 			right := left
-			right.Vulns.Updates = []string{"foo"}
+			right.Vulnerability.Updates = []string{"foo"}
 			left.Append(right)
 
-			Expect(len(left.Vulns.Updates)).To(Equal(2))
+			Expect(len(left.Vulnerability.Updates)).To(Equal(2))
 		})
 	})
 }
 
 const (
-	SampleValidEventJSON = `{"vulns":{"updates": ["CVE-2014-2734"]}}`
+	SampleValidEventJSON = `{"vulnerability":{"updates": ["CVE-2014-2734"]}}`
 )
