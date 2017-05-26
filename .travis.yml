@@ -1,6 +1,11 @@
 language: go
+
 go:
   - 1.7
   - tip
+
 script:
   - go test -v $(go list ./... | grep -v /vendor/)
+
+notifications:
+  email: false
