@@ -8,8 +8,8 @@ import (
 // Event represents a singular occurance of a change within the Ion Channel
 // system that can be emmitted to trigger a notification
 type Event struct {
-	Vulnerability VulnerabilityEvent `json:"vulnerability,omitempty"`
-	User          UserEvent          `json:"user,omitempty"`
+	Vulnerability *VulnerabilityEvent `json:"vulnerability,omitempty"`
+	User          *UserEvent          `json:"user,omitempty"`
 }
 
 // Append takes an event to join and leaves the union of the two events

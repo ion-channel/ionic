@@ -15,26 +15,30 @@ func TestEvent(t *testing.T) {
 	g.Describe("Event", func() {
 		g.Describe("Vulnerability Events", func() {
 			g.It("should return true if an event contains the specified vulnerability", func() {
-				e := &Event{Vulnerability: VulnerabilityEvent{Updates: []string{"CVE-2014-2734"}}}
+				e := &Event{Vulnerability: &VulnerabilityEvent{Updates: []string{"CVE-2014-2734"}}}
 				Expect(e.contains("baz")).To(BeFalse())
 				Expect(e.contains("CVE-2014-2734")).To(BeTrue())
 			})
 
 			g.It("should return false if an event contains no vulnerabilities", func() {
-				e := &Event{Vulnerability: VulnerabilityEvent{Updates: nil}}
+				e := &Event{Vulnerability: &VulnerabilityEvent{Updates: nil}}
 				Expect(e.contains("baz")).To(BeFalse())
 				Expect(e.contains("CVE-2014-2734")).To(BeFalse())
 			})
 
 			g.It("should append two events", func() {
-				var left Event
-				json.Unmarshal([]byte(SampleValidEventJSON), &left)
-				Expect(len(left.Vulnerability.Updates)).To(Equal(1))
+				left := Event{
+					Vulnerability: &VulnerabilityEvent{
+						Updates: []string{"bar"},
+					},
+				}
+				right := Event{
+					Vulnerability: &VulnerabilityEvent{
+						Updates: []string{"foo"},
+					},
+				}
 
-				right := left
-				right.Vulnerability.Updates = []string{"foo"}
 				left.Append(right)
-
 				Expect(len(left.Vulnerability.Updates)).To(Equal(2))
 			})
 		})
