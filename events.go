@@ -80,4 +80,5 @@ func (a *UserEventAction) UnmarshalJSON(b []byte) error {
 type UserEvent struct {
 	Action UserEventAction `json:"action"`
 	User   User            `json:"user"`
+	Link   string          `json:"link"`
 }
