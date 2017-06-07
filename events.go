@@ -81,4 +81,5 @@ type UserEvent struct {
 	Action UserEventAction `json:"action"`
 	User   User            `json:"user"`
 	Link   string          `json:"link"`
+	Team   string          `json:"team"`
 }
