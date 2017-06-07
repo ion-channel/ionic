@@ -1,8 +1,10 @@
-package ionic
+package events
 
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/ion-channel/ionic/users"
 )
 
 // Event represents a singular occurance of a change within the Ion Channel
@@ -80,7 +82,7 @@ func (a *UserEventAction) UnmarshalJSON(b []byte) error {
 // UserEvent represents the user releated segement of an Event within Ion Channel
 type UserEvent struct {
 	Action UserEventAction `json:"action"`
-	User   User            `json:"user"`
+	User   users.User      `json:"user"`
 	Link   string          `json:"link"`
 	Team   string          `json:"team"`
 }

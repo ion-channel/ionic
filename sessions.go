@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/ion-channel/ionic/users"
 )
 
 const (
@@ -14,8 +16,8 @@ const (
 
 // Session represents the BearerToken and User for the current session
 type Session struct {
-	BearerToken string `json:"jwt"`
-	User        User   `json:"user"`
+	BearerToken string     `json:"jwt"`
+	User        users.User `json:"user"`
 }
 
 type loginRequest struct {

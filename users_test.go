@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/ion-channel/ionic/events"
+
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	. "github.com/onsi/gomega"
@@ -25,7 +27,7 @@ func TestUsers(t *testing.T) {
 				SetMethods("POST").
 				SetPayload([]byte(SampleUsersForEventResponse)).
 				SetStatus(http.StatusOK)
-			e := Event{}
+			e := events.Event{}
 
 			users, err := client.GetUsersSubscribedForEvent(e)
 			Expect(err).To(BeNil())

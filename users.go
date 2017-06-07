@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+
+	"github.com/ion-channel/ionic/events"
+	"github.com/ion-channel/ionic/users"
 )
 
 const (
@@ -11,19 +14,10 @@ const (
 	usersGetSelfEndpoint            = "v1/users/getSelf"
 )
 
-// User is a representation of an Ion Channel User within the system
-type User struct {
-	ID         string `json:"id"`
-	Email      string `json:"email"`
-	Username   string `json:"username"`
-	ChatHandle string `json:"chat_handle"`
-	SysAdmin   bool   `json:"sys_admin"`
-}
-
 // GetUsersSubscribedForEvent takes an event and returns a list of users
 // subscribed to that event and returns an error if there are JSON marshalling
 // or unmarshalling issues or issues with the request
-func (ic *IonClient) GetUsersSubscribedForEvent(event Event) ([]User, error) {
+func (ic *IonClient) GetUsersSubscribedForEvent(event events.Event) ([]users.User, error) {
 	b, err := json.Marshal(event)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal event to JSON: %v", err.Error())
@@ -36,7 +30,7 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event Event) ([]User, error) {
 	}
 
 	var users struct {
-		Users []User `json:"users"`
+		Users []users.User `json:"users"`
 	}
 	err = json.Unmarshal(b, &users)
 	if err != nil {
@@ -49,13 +43,13 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event Event) ([]User, error) {
 // GetSelf returns the user object associated with the bearer token in use by
 // the Ion Client.  An error is returned if the client cannot talk to the API
 // or the returned user object is nil or blank
-func (ic *IonClient) GetSelf() (*User, error) {
+func (ic *IonClient) GetSelf() (*users.User, error) {
 	b, err := ic.get(usersGetSelfEndpoint, nil, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get self: %v", err.Error())
 	}
 
-	var user User
+	var user users.User
 	err = json.Unmarshal(b, &user)
 	if err != nil {
 		return nil, fmt.Errorf("cannot parse user: %v", err.Error())

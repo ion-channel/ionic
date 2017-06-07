@@ -1,4 +1,4 @@
-package ionic
+package rules
 
 import (
 	"net/url"

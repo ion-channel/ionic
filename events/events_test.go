@@ -1,4 +1,4 @@
-package ionic
+package events
 
 import (
 	"encoding/json"
