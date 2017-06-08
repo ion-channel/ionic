@@ -52,12 +52,15 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event Event) ([]User, error) {
 func (ic *IonClient) GetSelf() (*User, error) {
 	b, err := ic.get(usersGetSelfEndpoint, nil, nil, nil)
 	if err != nil {
+		fmt.Println("Couldn't getSelf: ", err)
 		return nil, fmt.Errorf("failed to get self: %v", err.Error())
 	}
 
 	var user User
 	err = json.Unmarshal(b, &user)
 	if err != nil {
+		fmt.Println("Couldn't parse getself response: ", err)
+		fmt.Println("Body was: ", b)
 		return nil, fmt.Errorf("cannot parse user: %v", err.Error())
 	}
 

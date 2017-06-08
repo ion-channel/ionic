@@ -140,6 +140,8 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload byt
 func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, pagination *Pagination) (*IonResponse, error) {
 	u := ic.createURL(endpoint, params, pagination)
 
+	fmt.Println("Ionic: using this url: ", u)
+
 	req, err := http.NewRequest(strings.ToUpper(method), u.String(), &payload)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err.Error())
@@ -155,6 +157,7 @@ func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload by
 
 	resp, err := ic.client.Do(req)
 	if err != nil {
+		fmt.Println("error making http request: ", err)
 		return nil, fmt.Errorf("failed http request: %v", err.Error())
 	}
 	defer resp.Body.Close()
