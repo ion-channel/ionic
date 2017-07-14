@@ -50,6 +50,7 @@ type ProjectEvent struct {
 }
 
 var validUserEventActions = map[string]string{
+	"user_signup":  "user_signup",
 	"account_created":  "account_created",
 	"forgot_password":  "forgot_password",
 	"password_changed": "password_changed",
