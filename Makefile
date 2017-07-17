@@ -27,11 +27,12 @@ coverage:  ## Generates the code coverage from all the tests
 
 .PHONY: coverage_compfriendly
 coverage_compfriendly:  ## Generates the code coverage in a computer friendly manner
-	-@mkdir -p $(COVERAGE_DIR)
+	-@rm -rf coverage
+	-@mkdir -p $(COVERAGE_DIR)/tmp
 	@for j in $$(go list ./... | grep -v '/vendor/' | grep -v '/ext/'); do go test -covermode=count -coverprofile=$(COVERAGE_DIR)/$$(basename $$j).out $$j > /dev/null 2>&1; done
-	@echo 'mode: count' > $(COVERAGE_DIR)/full.out
-	@tail -q -n +2 $(COVERAGE_DIR)/*.out >> $(COVERAGE_DIR)/full.out
-	@$(GOCMD) tool cover -func=coverage/full.out | tail -n 1 | sed -e 's/^.*statements)[[:space:]]*//' -e 's/%//'
+	@echo 'mode: count' > $(COVERAGE_DIR)/tmp/full.out
+	@tail -q -n +2 $(COVERAGE_DIR)/*.out >> $(COVERAGE_DIR)/tmp/full.out
+	@$(GOCMD) tool cover -func=$(COVERAGE_DIR)/tmp/full.out | tail -n 1 | sed -e 's/^.*statements)[[:space:]]*//' -e 's/%//'
 
 .PHONY: help
 help:  ## Show This Help
