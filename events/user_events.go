@@ -39,6 +39,6 @@ func (a *UserEventAction) UnmarshalJSON(b []byte) error {
 type UserEvent struct {
 	Action UserEventAction `json:"action"`
 	User   users.User      `json:"user"`
-	Link   string          `json:"link"`
+	URL    string          `json:"url"`
 	Team   string          `json:"team"`
 }
