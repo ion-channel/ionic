@@ -28,10 +28,19 @@ func TestUserEvents(t *testing.T) {
 			Expect(err).NotTo(BeNil())
 			Expect(err.Error()).To(ContainSubstring("invalid user event action"))
 		})
+
+		g.It("should return an invalid error for a blank action", func() {
+			var ue UserEvent
+			err := json.Unmarshal([]byte(SampleBlankUserEvent), &ue)
+
+			Expect(err).NotTo(BeNil())
+			Expect(err.Error()).To(ContainSubstring("invalid user event action"))
+		})
 	})
 }
 
 const (
 	SampleValidUserEvent   = `{"user":{"name":"foo"}, "action":"forgot_password"}`
 	SampleInvalidUserEvent = `{"user":{"name":"foo"}, "action":"foo_action"}`
+	SampleBlankUserEvent   = `{"user":{"name":"foo"}, "action":""}`
 )
