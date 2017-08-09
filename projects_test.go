@@ -21,7 +21,7 @@ func TestProjects(t *testing.T) {
 		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get a ruleset", func() {
-			server.AddPath("/v1/projects/getProject").
+			server.AddPath("/v1/project/getProject").
 				SetMethods("GET").
 				SetPayload([]byte(SampleValidProject)).
 				SetStatus(http.StatusOK)
