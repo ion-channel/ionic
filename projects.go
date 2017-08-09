@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	getProjectEndpoint = "v1/projects/getProject"
+	getProjectEndpoint = "v1/project/getProject"
 )
 
 func (ic *IonClient) GetProject(id, teamID string) (*projects.Project, error) {
