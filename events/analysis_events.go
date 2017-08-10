@@ -33,7 +33,9 @@ func (a *AnalysisEventAction) UnmarshalJSON(b []byte) error {
 }
 
 type AnalysisEvent struct {
-	Action   AnalysisEventAction `json:"action"`
-	Analysis string              `json:"analysis"`
-	URL      string              `json:"url"`
+	Action    AnalysisEventAction `json:"action"`
+	Analysis  string              `json:"analysis"`
+	URL       string              `json:"url"`
+	TeamID    string              `json:"team_id"`
+	ProjectID string              `json:"project_id"`
 }
