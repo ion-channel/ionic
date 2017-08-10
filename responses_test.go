@@ -2,6 +2,7 @@ package ionic
 
 import (
 	"net/http"
+	"strconv"
 	"testing"
 
 	. "github.com/franela/goblin"
@@ -21,7 +22,7 @@ func TestResponses(t *testing.T) {
 			b, s := NewErrorResponse(msg, fields, status)
 			Expect(string(b)).To(ContainSubstring(msg))
 			Expect(string(b)).To(ContainSubstring(fields[0]))
-			Expect(string(b)).To(ContainSubstring(string(status)))
+			Expect(string(b)).To(ContainSubstring(strconv.Itoa(status)))
 			Expect(s).To(Equal(status))
 		})
 	})
