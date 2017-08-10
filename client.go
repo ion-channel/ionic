@@ -11,7 +11,6 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -27,35 +26,10 @@ type IonClient struct {
 	client      *http.Client
 }
 
-// IonResponse represents the response structure expected back from the Ion
-// Channel API calls
-type IonResponse struct {
-	Data json.RawMessage `json:"data"`
-	Meta Meta            `json:"meta"`
-}
-
-// Meta represents the metadata section of an IonResponse
-type Meta struct {
-	Copyright  string    `json:"copyright"`
-	Authors    []string  `json:"authors"`
-	Version    string    `json:"version"`
-	LastUpdate time.Time `json:"last_update,omitempty"`
-	TotalCount int       `json:"total_count,omitempty"`
-	Limit      int       `json:"limit,omitempty"`
-	Offset     int       `json:"offset,omitempty"`
-}
-
 // Pagination represents the necessary elements for a paginated request
 type Pagination struct {
 	Offset int
 	Limit  int
-}
-
-// IonErrorResponse represents an error response from the Ion Channel API
-type IonErrorResponse struct {
-	Message string   `json:"message"`
-	Fields  []string `json:"fields"`
-	Code    int      `json:"code"`
 }
 
 // AllItems is a convenience for requesting all items of a given entity
