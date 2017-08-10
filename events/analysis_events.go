@@ -6,8 +6,9 @@ import (
 )
 
 var validAnalysisEventActions = map[string]string{
-	"analysis_failed": "analysis_failed",
-	"analysis_passed": "analysis_passed",
+	"analysis_failed":   "analysis_failed",
+	"analysis_finished": "analysis_finished",
+	"analysis_passed":   "analysis_passed",
 }
 
 // AnalysisEventAction represents possible actions related to a analysis event
