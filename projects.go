@@ -33,3 +33,16 @@ func (ic *IonClient) GetProject(id, teamID string) (*projects.Project, error) {
 
 	return &p, nil
 }
+
+func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
+	params := &url.Values{}
+	params.Set("id", id)
+	params.Set("team_id", teamID)
+
+	b, err := ic.get(getProjectEndpoint, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get project: %v", err.Error())
+	}
+
+	return b, nil
+}
