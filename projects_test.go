@@ -20,7 +20,7 @@ func TestProjects(t *testing.T) {
 		h, p := server.HostPort()
 		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
 
-		g.It("should get a ruleset", func() {
+		g.It("should get a project", func() {
 			server.AddPath("/v1/project/getProject").
 				SetMethods("GET").
 				SetPayload([]byte(SampleValidProject)).
