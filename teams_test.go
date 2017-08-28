@@ -35,5 +35,5 @@ func TestTeams(t *testing.T) {
 }
 
 const (
-	SampleValidTeam = `{"data":{"id":"cd98e4e1-6926-4989-8ef8-f326cd5956fc","created_at":"2016-09-09T22:06:49.487Z","updated_at":"2016-09-09T22:06:49.487Z","name":"ion-channel","sys_admin":true,"deleted_at":null,"poc_name":"","poc_email":"","poc_name_hash":"","poc_email_hash":""}}`
+	SampleValidTeam = `{"data":{"id":"cd98e4e1-6926-4989-8ef8-f326cd5956fc","created_at":"2016-09-09T22:06:49.487Z","updated_at":"2016-09-09T22:06:49.487Z","name":"ion-channel","sys_admin":true,"poc_name":"","poc_email":"","poc_name_hash":"","poc_email_hash":""}}`
 )

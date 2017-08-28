@@ -11,7 +11,6 @@ type Team struct {
 	UpdatedAt    time.Time `json:"updated_at"`
 	Name         string    `json:"name"`
 	SysAdmin     bool      `json:"sys_admin"`
-	DeletedAt    time.Time `json:"deleted_at"`
 	POCName      string    `json:"poc_name"`
 	POCEmail     string    `json:"poc_email"`
 	POCNameHash  string    `json:"poc_name_hash"`
