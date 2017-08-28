@@ -18,7 +18,7 @@ type Analysis struct {
 	Branch        string            `json:"branch"`
 	Description   string            `json:"description"`
 	Status        string            `json:"status"`
-	RulsetID      string            `json:"ruleset_id"`
+	RulesetID     string            `json:"ruleset_id"`
 	CreatedAt     time.Time         `json:"created_at"`
 	UpdatedAt     time.Time         `json:"updated_at"`
 	Duration      float64           `json:"duration"`
