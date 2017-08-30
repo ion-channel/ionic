@@ -14,7 +14,7 @@ const (
 
 func (ic *IonClient) GetReport(id, teamID, projectID string) (*reports.Report, error) {
 	params := &url.Values{}
-	params.Set("id", id)
+	params.Set("analysis_id", id)
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
