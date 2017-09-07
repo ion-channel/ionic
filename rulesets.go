@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
+	"github.com/ion-channel/ionic/pagination"
 	"github.com/ion-channel/ionic/rulesets"
 )
 
@@ -33,11 +34,11 @@ func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 	return &rs, nil
 }
 
-func (ic *IonClient) GetRuleSets(teamID string) ([]rulesets.RuleSet, error) {
+func (ic *IonClient) GetRuleSets(teamID string, page *pagination.Pagination) ([]rulesets.RuleSet, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.get(getRuleSetsEndpoint, params, nil, nil)
+	b, err := ic.get(getRuleSetsEndpoint, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
 	}

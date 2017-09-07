@@ -8,6 +8,8 @@ import (
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	. "github.com/onsi/gomega"
+
+	"github.com/ion-channel/ionic/pagination"
 )
 
 func TestRuleSets(t *testing.T) {
@@ -38,7 +40,7 @@ func TestRuleSets(t *testing.T) {
 				SetPayload([]byte(SampleValidRuleSets)).
 				SetStatus(http.StatusOK)
 
-			rulesets, err := client.GetRuleSets("a2d2a3e5-e274-bb88-aef2-1d47f029c289")
+			rulesets, err := client.GetRuleSets("a2d2a3e5-e274-bb88-aef2-1d47f029c289", pagination.AllItems)
 			Expect(err).To(BeNil())
 			Expect(len(rulesets)).To(Equal(2))
 			Expect(rulesets[0].ID).To(Equal("c0210380-3d44-495d-9d10-c7d436a63870"))
