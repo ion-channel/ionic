@@ -7,6 +7,7 @@ import (
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
+	"github.com/ion-channel/ionic/pagination"
 	. "github.com/onsi/gomega"
 )
 
@@ -25,7 +26,7 @@ func TestVulns(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(SampleVulnerabilitiesResponse)).
 				SetStatus(http.StatusOK)
-			vulns, err := client.GetVulnerabilities("jdk", "", AllItems)
+			vulns, err := client.GetVulnerabilities("jdk", "", pagination.AllItems)
 
 			Expect(err).To(BeNil())
 			Expect(len(vulns)).To(Equal(21))
@@ -52,7 +53,7 @@ const (
 )
 
 func ExampleIonClient_GetVulnerabilities() {
-	vulns, err := client.GetVulnerabilities("jdk", "", AllItems)
+	vulns, err := client.GetVulnerabilities("jdk", "", pagination.AllItems)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -61,7 +62,7 @@ func ExampleIonClient_GetVulnerabilities() {
 }
 
 func ExampleIonClient_GetVulnerabilities_version() {
-	vulns, err := client.GetVulnerabilities("jdk", "1.7.0", AllItems)
+	vulns, err := client.GetVulnerabilities("jdk", "1.7.0", pagination.AllItems)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

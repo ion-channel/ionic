@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	. "github.com/franela/goblin"
+	"github.com/ion-channel/ionic/pagination"
 	. "github.com/onsi/gomega"
 )
 
@@ -67,7 +68,7 @@ func TestClient(t *testing.T) {
 			b := "http://google.com"
 			o := 21
 			l := 100
-			p := &Pagination{Offset: o, Limit: l}
+			p := &pagination.Pagination{Offset: o, Limit: l}
 			cli, _ := New("foosecret", b)
 
 			u := cli.createURL(e, nil, p)
@@ -93,7 +94,7 @@ var client = &IonClient{
 }
 
 func ExamplePagination_customRange() {
-	pages := &Pagination{Offset: 20, Limit: 100}
+	pages := &pagination.Pagination{Offset: 20, Limit: 100}
 
 	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", pages)
 	if err != nil {

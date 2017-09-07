@@ -9,8 +9,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
+
+	"github.com/ion-channel/ionic/pagination"
 )
 
 const (
@@ -25,15 +26,6 @@ type IonClient struct {
 	bearerToken string
 	client      *http.Client
 }
-
-// Pagination represents the necessary elements for a paginated request
-type Pagination struct {
-	Offset int
-	Limit  int
-}
-
-// AllItems is a convenience for requesting all items of a given entity
-var AllItems = &Pagination{Offset: 0, Limit: -1}
 
 // New takes the credentials required to talk to the API, and the base URL of
 // the API and returns a client for talking to the API and an error if any
@@ -58,7 +50,7 @@ func New(secret string, baseURL string) (*IonClient, error) {
 	return ic, nil
 }
 
-func (ic *IonClient) createURL(endpoint string, params *url.Values, pagination *Pagination) *url.URL {
+func (ic *IonClient) createURL(endpoint string, params *url.Values, page *pagination.Pagination) *url.URL {
 	u := *ic.baseURL
 	u.Path = endpoint
 
@@ -67,9 +59,8 @@ func (ic *IonClient) createURL(endpoint string, params *url.Values, pagination *
 		vals = params
 	}
 
-	if pagination != nil {
-		vals.Set("offset", strconv.Itoa(pagination.Offset))
-		vals.Set("limit", strconv.Itoa(pagination.Limit))
+	if page != nil {
+		page.AddParams(vals)
 	}
 
 	u.RawQuery = vals.Encode()
@@ -81,9 +72,9 @@ func (ic *IonClient) SetBearerToken(bearerToken string) {
 	ic.bearerToken = bearerToken
 }
 
-func (ic *IonClient) do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, pagination *Pagination) (json.RawMessage, error) {
-	if pagination == nil || pagination.Limit > 0 {
-		ir, err := ic._do(method, endpoint, params, payload, headers, pagination)
+func (ic *IonClient) do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
+	if page == nil || page.Limit > 0 {
+		ir, err := ic._do(method, endpoint, params, payload, headers, page)
 		if err != nil {
 			return nil, err
 		}
@@ -91,7 +82,7 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload byt
 		return ir.Data, nil
 	}
 
-	page := &Pagination{Limit: maxPagingLimit, Offset: 0}
+	page = pagination.New(0, maxPagingLimit)
 	var data json.RawMessage
 	data = append(data, []byte("[")...)
 
@@ -103,7 +94,7 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload byt
 		}
 		data = append(data, ir.Data[1:len(ir.Data)-1]...)
 		data = append(data, []byte(",")...)
-		page.Offset += maxPagingLimit
+		page.Up()
 		total = ir.Meta.TotalCount
 	}
 
@@ -111,8 +102,8 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload byt
 	return data, nil
 }
 
-func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, pagination *Pagination) (*IonResponse, error) {
-	u := ic.createURL(endpoint, params, pagination)
+func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (*IonResponse, error) {
+	u := ic.createURL(endpoint, params, page)
 
 	req, err := http.NewRequest(strings.ToUpper(method), u.String(), &payload)
 	if err != nil {
@@ -155,8 +146,8 @@ func (ic *IonClient) delete(endpoint string, params *url.Values, headers http.He
 	return ic.do("DELETE", endpoint, params, bytes.Buffer{}, headers, nil)
 }
 
-func (ic *IonClient) get(endpoint string, params *url.Values, headers http.Header, pagination *Pagination) (json.RawMessage, error) {
-	return ic.do("GET", endpoint, params, bytes.Buffer{}, headers, pagination)
+func (ic *IonClient) get(endpoint string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
+	return ic.do("GET", endpoint, params, bytes.Buffer{}, headers, page)
 }
 
 func (ic *IonClient) post(endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {

@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 
+	"github.com/ion-channel/ionic/pagination"
 	"github.com/ion-channel/ionic/vulnerabilities"
 )
 
@@ -23,14 +24,14 @@ const (
 // version string over a specified pagination range.  If version is left blank,
 // it will not be considered in the search query.  An error is returned for
 // client communication and unmarshalling errors.
-func (ic *IonClient) GetVulnerabilities(product, version string, pagination *Pagination) ([]vulnerabilities.Vulnerability, error) {
+func (ic *IonClient) GetVulnerabilities(product, version string, page *pagination.Pagination) ([]vulnerabilities.Vulnerability, error) {
 	params := &url.Values{}
 	params.Set("product", product)
 	if version != "" {
 		params.Set("version", version)
 	}
 
-	b, err := ic.get(getVulnerabilitiesEndpoint, params, nil, pagination)
+	b, err := ic.get(getVulnerabilitiesEndpoint, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
 	}
