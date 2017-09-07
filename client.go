@@ -82,7 +82,7 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload byt
 		return ir.Data, nil
 	}
 
-	page = pagination.New(maxPagingLimit, 0)
+	page = pagination.New(0, maxPagingLimit)
 	var data json.RawMessage
 	data = append(data, []byte("[")...)
 
