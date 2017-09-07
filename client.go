@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/ion-channel/ionic/pagination"
@@ -61,8 +60,7 @@ func (ic *IonClient) createURL(endpoint string, params *url.Values, page *pagina
 	}
 
 	if page != nil {
-		vals.Set("offset", strconv.Itoa(page.Offset))
-		vals.Set("limit", strconv.Itoa(page.Limit))
+		page.AddParams(vals)
 	}
 
 	u.RawQuery = vals.Encode()
@@ -84,7 +82,7 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload byt
 		return ir.Data, nil
 	}
 
-	page = &pagination.Pagination{Limit: maxPagingLimit, Offset: 0}
+	page = pagination.New(maxPagingLimit, 0)
 	var data json.RawMessage
 	data = append(data, []byte("[")...)
 
@@ -96,7 +94,7 @@ func (ic *IonClient) do(method, endpoint string, params *url.Values, payload byt
 		}
 		data = append(data, ir.Data[1:len(ir.Data)-1]...)
 		data = append(data, []byte(",")...)
-		page.Offset += maxPagingLimit
+		page.Up()
 		total = ir.Meta.TotalCount
 	}
 
