@@ -21,7 +21,7 @@ func TestReports(t *testing.T) {
 		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get a report", func() {
-			server.AddPath("/v1/analysis/getAnalysis").
+			server.AddPath("/v1/report/getAnalysis").
 				SetMethods("GET").
 				SetPayload([]byte(SampleValidReport)).
 				SetStatus(http.StatusOK)

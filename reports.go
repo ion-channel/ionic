@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	reportGetReportEndpoint = "v1/analysis/getAnalysis"
+	reportGetReportEndpoint = "v1/report/getAnalysis"
 )
 
 func (ic *IonClient) GetReport(id, teamID, projectID string) (*reports.Report, error) {
