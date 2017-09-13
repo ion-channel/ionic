@@ -41,6 +41,9 @@ func NewResponse(data interface{}, meta Meta, status int) ([]byte, int) {
 		return NewErrorResponse("failed to marshal data to json", nil, http.StatusInternalServerError)
 	}
 
+	// Due to an issue (https://github.com/golang/go/issues/14493) with how
+	// RawMessage was handled, versions prior to Go 1.8 will base64 encode the
+	// data unless we pass the pointer of the IonResponse struct
 	b, err = json.Marshal(&IonResponse{Data: b, Meta: meta})
 	if err != nil {
 		return NewErrorResponse("failed to marshal response to json", nil, http.StatusInternalServerError)
