@@ -31,6 +31,27 @@ type IonErrorResponse struct {
 	Code    int      `json:"code"`
 }
 
+// NewResponse takes a data object, meta object, and desired status code to
+// build a new response.  It returns a message encoded as a byte slice and a
+// corresponding status code.  The returned message and status code will reflect
+// any errors encountered as part of the encoding process.
+func NewResponse(data interface{}, meta Meta, status int) ([]byte, int) {
+	b, err := json.Marshal(data)
+	if err != nil {
+		return NewErrorResponse("failed to marshal data to json", nil, http.StatusInternalServerError)
+	}
+
+	// Due to an issue (https://github.com/golang/go/issues/14493) with how
+	// RawMessage was handled, versions prior to Go 1.8 will base64 encode the
+	// data unless we pass the pointer of the IonResponse struct
+	b, err = json.Marshal(&IonResponse{Data: b, Meta: meta})
+	if err != nil {
+		return NewErrorResponse("failed to marshal response to json", nil, http.StatusInternalServerError)
+	}
+
+	return b, status
+}
+
 // NewErrorResponse takes a message, related fields, and desired status code to
 // build a new error response.  It returns an error message encoded as a byte
 // slice and a corresponding status code.  The status code returned will be the
