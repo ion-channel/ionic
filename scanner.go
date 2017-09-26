@@ -25,8 +25,8 @@ type addScanRequest struct {
 	ProjectID string               `json:"project_id"`
 	ID        string               `json:"analysis_id"`
 	Status    string               `json:"status"`
-	Results   scanner.ExternalScan `json:"result"`
-	Type      string               `json:"scan-type"`
+	Results   scanner.ExternalScan `json:"results"`
+	Type      string               `json:"scan_type"`
 }
 
 func (ic *IonClient) AnalyzeProject(teamID, projectID string) (*scanner.AnalysisStatus, error) {
