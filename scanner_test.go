@@ -2,9 +2,9 @@ package ionic
 
 import (
 	"fmt"
+	"github.com/ion-channel/ionic/scanner"
 	"net/http"
 	"testing"
-	"github.com/ion-channel/ionic/scanner"
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
@@ -42,25 +42,25 @@ func TestScanner(t *testing.T) {
 			analysisStatus, err := client.GetAnalysisStatus("analysis-id", "ateamid", "aprojectid")
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
-      Expect(analysisStatus.Message).To(Equal("Completed compliance analysis"))
-      Expect(analysisStatus.Status).To(Equal("finished"))
+			Expect(analysisStatus.Message).To(Equal("Completed compliance analysis"))
+			Expect(analysisStatus.Status).To(Equal("finished"))
 			Expect(analysisStatus.ScanStatus[0].Status).To(Equal("finished"))
-      Expect(analysisStatus.ScanStatus[0].Message).To(Equal("Finished difference scan for Apache-Qpid, a difference was detected."))
+			Expect(analysisStatus.ScanStatus[0].Message).To(Equal("Finished difference scan for Apache-Qpid, a difference was detected."))
 		})
 
-    g.It("should add a scan to an analysis", func() {
-      server.AddPath("/v1/scanner/addScanResult").
-        SetMethods("POST").
-        SetPayload([]byte(SampleValidAnalysisStatus)).
-        SetStatus(http.StatusOK)
+		g.It("should add a scan to an analysis", func() {
+			server.AddPath("/v1/scanner/addScanResult").
+				SetMethods("POST").
+				SetPayload([]byte(SampleValidAnalysisStatus)).
+				SetStatus(http.StatusOK)
 
-      scan := scanner.ExternalScan{}
+			scan := scanner.ExternalScan{}
 
-      analysisStatus, err := client.AddScanResult("analysis-id", "ateamid", "aprojectid", "finished", scan)
-      Expect(err).To(BeNil())
-      Expect(analysisStatus.ID).To(Equal("analysis-id"))
-      Expect(analysisStatus.Status).To(Equal("finished"))
-    })
+			analysisStatus, err := client.AddScanResult("analysis-id", "ateamid", "aprojectid", "coverage", "accepted", scan)
+			Expect(err).To(BeNil())
+			Expect(analysisStatus.ID).To(Equal("analysis-id"))
+			Expect(analysisStatus.Status).To(Equal("accepted"))
+		})
 	})
 }
 
