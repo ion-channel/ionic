@@ -54,9 +54,9 @@ func TestScanner(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisStatus)).
 				SetStatus(http.StatusOK)
 
-      coverage := scanner.ExternalCoverage{99.99}
+			coverage := scanner.ExternalCoverage{99.99}
 			scan := scanner.ExternalScan{}
-      scan.Coverage = &coverage
+			scan.Coverage = &coverage
 
 			analysisStatus, err := client.AddScanResult("analysis-id", "ateamid", "aprojectid", "coverage", "accepted", scan)
 			Expect(err).To(BeNil())

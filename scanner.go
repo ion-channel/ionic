@@ -10,9 +10,9 @@ import (
 )
 
 const (
-	scannerAnalyzeProjectEndpoint     = "v1/scanner/analyzeProject"
+	scannerAnalyzeProjectEndpoint    = "v1/scanner/analyzeProject"
 	scannerGetAnalysisStatusEndpoint = "v1/scanner/getAnalysisStatus"
-	scannerAddScanEndpoint = "v1/scanner/addScanResult"
+	scannerAddScanEndpoint           = "v1/scanner/addScanResult"
 )
 
 type analyzeRequest struct {
