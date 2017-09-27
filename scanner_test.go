@@ -27,7 +27,7 @@ func TestScanner(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisStatus)).
 				SetStatus(http.StatusOK)
 
-			analysisStatus, err := client.AnalyzeProject("ateamid", "aprojectid")
+			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid")
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
 			Expect(analysisStatus.Status).To(Equal("accepted"))

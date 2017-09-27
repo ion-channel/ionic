@@ -29,7 +29,7 @@ type addScanRequest struct {
 	Type      string               `json:"scan_type"`
 }
 
-func (ic *IonClient) AnalyzeProject(teamID, projectID string) (*scanner.AnalysisStatus, error) {
+func (ic *IonClient) AnalyzeProject(projectID, teamID string) (*scanner.AnalysisStatus, error) {
 	request := &analyzeRequest{}
 	request.TeamID = teamID
 	request.ProjectID = projectID
