@@ -1,4 +1,4 @@
-package scansummary
+package scans
 
 import (
 	"encoding/json"
