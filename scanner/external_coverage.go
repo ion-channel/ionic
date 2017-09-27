@@ -1,5 +1,5 @@
 package scanner
 
 type ExternalCoverage struct {
-  Value string `json:"value"`
+  Value float64 `json:"value"`
 }

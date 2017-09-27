@@ -10,8 +10,8 @@ type Source struct {
 }
 
 type ExternalScan struct {
-  Coverage  ExternalCoverage `json:"coverage"`
-  Vulnerabilities  ExternalVulnerabilities `json:"vulnerabilities"`
+  Coverage*  ExternalCoverage `json:"coverage,omitempty"`
+  Vulnerabilities*  ExternalVulnerabilities `json:"vulnerabilities,omitempty"`
   Source Source `json:"source"`
   Notes string `json:"notes"`
   Raw []json.RawMessage `json:"raw"`
