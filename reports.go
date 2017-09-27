@@ -9,24 +9,44 @@ import (
 )
 
 const (
-	reportGetReportEndpoint = "v1/report/getAnalysis"
+	reportGetAnalysisReportEndpoint = "v1/report/getAnalysis"
+	reportGetProjectReportEndpoint  = "v1/report/getProject"
 )
 
-func (ic *IonClient) GetReport(id, teamID, projectID string) (*reports.Report, error) {
+func (ic *IonClient) GetAnalysisReport(id, teamID, projectID string) (*reports.AnalysisReport, error) {
 	params := &url.Values{}
 	params.Set("analysis_id", id)
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(reportGetReportEndpoint, params, nil, nil)
+	b, err := ic.get(reportGetAnalysisReportEndpoint, params, nil, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get report: %v", err.Error())
+		return nil, fmt.Errorf("failed to get analysis report: %v", err.Error())
 	}
 
-	var r reports.Report
+	var r reports.AnalysisReport
 	err = json.Unmarshal(b, &r)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get report: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal analysis report: %v", err.Error())
+	}
+
+	return &r, nil
+}
+
+func (ic *IonClient) GetProjectReport(id, teamID string) (*reports.ProjectReport, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("project_id", id)
+
+	b, err := ic.get(reportGetProjectReportEndpoint, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get project report: %v", err.Error())
+	}
+
+	var r reports.ProjectReport
+	err = json.Unmarshal(b, &r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal project report: %v", err.Error())
 	}
 
 	return &r, nil
