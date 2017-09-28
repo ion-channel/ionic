@@ -32,6 +32,18 @@ func TestReports(t *testing.T) {
 			Expect(report.Name).To(Equal("Kermit"))
 		})
 
+		g.It("should get an raw analysis report", func() {
+			server.AddPath("/v1/report/getAnalysis").
+				SetMethods("GET").
+				SetPayload([]byte(SampleValidAnalysisReport)).
+				SetStatus(http.StatusOK)
+
+			report, err := client.GetRawAnalysisReport("d0fbcdaa-4559-4441-1fcc-d43574004088", "ateamid", "aprojectid")
+			Expect(err).To(BeNil())
+			Expect(string(report)).To(ContainSubstring("d0fbcdaa-4559-4441-1fcc-d43574004088"))
+			Expect(string(report)).To(ContainSubstring("Kermit"))
+		})
+
 		g.It("should get a project report", func() {
 			server.AddPath("/v1/report/getProject").
 				SetMethods("GET").
@@ -42,6 +54,18 @@ func TestReports(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(report.ID).To(Equal("AB3DC2C7-4BB8-4211-8F42-158C8AD4BAE3"))
 			Expect(report.Name).To(Equal("Pepe"))
+		})
+
+		g.It("should get a raw project report", func() {
+			server.AddPath("/v1/report/getProject").
+				SetMethods("GET").
+				SetPayload([]byte(SampleValidProjectReport)).
+				SetStatus(http.StatusOK)
+
+			report, err := client.GetRawProjectReport("aprojectid", "ateamid")
+			Expect(err).To(BeNil())
+			Expect(string(report)).To(ContainSubstring("AB3DC2C7-4BB8-4211-8F42-158C8AD4BAE3"))
+			Expect(string(report)).To(ContainSubstring("Pepe"))
 		})
 	})
 }
