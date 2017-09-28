@@ -18,6 +18,7 @@ const (
 type analyzeRequest struct {
 	TeamID    string `json:"team_id"`
 	ProjectID string `json:"project_id"`
+	Branch    string `json:"branch,omitempty"`
 }
 
 type addScanRequest struct {
@@ -29,10 +30,14 @@ type addScanRequest struct {
 	Type      string               `json:"scan_type"`
 }
 
-func (ic *IonClient) AnalyzeProject(projectID, teamID string) (*scanner.AnalysisStatus, error) {
+func (ic *IonClient) AnalyzeProject(projectID, teamID, branch string) (*scanner.AnalysisStatus, error) {
 	request := &analyzeRequest{}
 	request.TeamID = teamID
 	request.ProjectID = projectID
+
+	if branch != "" {
+		request.Branch = branch
+	}
 
 	b, err := json.Marshal(request)
 	if err != nil {

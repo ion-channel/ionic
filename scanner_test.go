@@ -2,9 +2,10 @@ package ionic
 
 import (
 	"fmt"
-	"github.com/ion-channel/ionic/scanner"
 	"net/http"
 	"testing"
+
+	"github.com/ion-channel/ionic/scanner"
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
@@ -27,7 +28,19 @@ func TestScanner(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisStatus)).
 				SetStatus(http.StatusOK)
 
-			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid")
+			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid", "abranch")
+			Expect(err).To(BeNil())
+			Expect(analysisStatus.ID).To(Equal("analysis-id"))
+			Expect(analysisStatus.Status).To(Equal("accepted"))
+		})
+
+		g.It("should create an analysis for a project whithout a branch", func() {
+			server.AddPath("/v1/scanner/analyzeProject").
+				SetMethods("POST").
+				SetPayload([]byte(SampleValidAnalysisStatus)).
+				SetStatus(http.StatusOK)
+
+			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid", "")
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
 			Expect(analysisStatus.Status).To(Equal("accepted"))
