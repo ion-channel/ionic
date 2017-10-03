@@ -24,7 +24,9 @@ type ScanSummary struct {
 	Type        string             `json:"type" xml:"type"`
 }
 
-// ScanSummaryResults is an Ion Channel representation of the results from a scan summary.  It contains what thype of results and the data pertaining to the results.
+// ScanSummaryResults is an Ion Channel representation of the results from a
+// scan summary.  It contains what type of results and the data pertaining to
+// the results.
 type ScanSummaryResults struct {
 	Type string      `json:"type" xml:"type"`
 	Data interface{} `json:"data" xml:"data"`
