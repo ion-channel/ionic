@@ -38,13 +38,13 @@ func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 
 	b, err := ic.get(getRuleSetEndpoint, params, nil, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
+		return nil, fmt.Errorf("failed to get ruleset: %v", err.Error())
 	}
 
 	var rs rulesets.RuleSet
 	err = json.Unmarshal(b, &rs)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal ruleset: %v", err.Error())
 	}
 
 	return &rs, nil
@@ -62,7 +62,7 @@ func (ic *IonClient) GetRuleSets(teamID string, page *pagination.Pagination) ([]
 	var rs []rulesets.RuleSet
 	err = json.Unmarshal(b, &rs)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal rulesets: %v", err.Error())
 	}
 
 	return rs, nil
