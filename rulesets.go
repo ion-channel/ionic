@@ -15,6 +15,44 @@ const (
 	getRuleSetsEndpoint       = "v1/ruleset/getRulesets"
 )
 
+func (ic *IonClient) GetAppliedRuleSet(id, teamID, analysisID string) (*rulesets.AppliedRulesetSummary, error) {
+	params := &url.Values{}
+	params.Set("project_id", id)
+	params.Set("team_id", teamID)
+	if analysisID != "" {
+		params.Set("analysis_id", analysisID)
+	}
+
+	b, err := ic.get(getAppliedRuleSetEndpoint, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get applied ruleset summary: %v", err.Error())
+	}
+
+	var s rulesets.AppliedRulesetSummary
+	err = json.Unmarshal(b, &s)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal applied ruleset summary: %v", err.Error())
+	}
+
+	return &s, nil
+}
+
+func (ic *IonClient) GetRawAppliedRuleSet(id, teamID, analysisID string, page *pagination.Pagination) (json.RawMessage, error) {
+	params := &url.Values{}
+	params.Set("project_id", id)
+	params.Set("team_id", teamID)
+	if analysisID != "" {
+		params.Set("analysis_id", analysisID)
+	}
+
+	b, err := ic.get(getAppliedRuleSetEndpoint, params, nil, page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get applied rulesets: %v", err.Error())
+	}
+
+	return b, nil
+}
+
 func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 	params := &url.Values{}
 	params.Set("id", id)
@@ -22,13 +60,13 @@ func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 
 	b, err := ic.get(getRuleSetEndpoint, params, nil, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
+		return nil, fmt.Errorf("failed to get ruleset: %v", err.Error())
 	}
 
 	var rs rulesets.RuleSet
 	err = json.Unmarshal(b, &rs)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal ruleset: %v", err.Error())
 	}
 
 	return &rs, nil
@@ -46,7 +84,7 @@ func (ic *IonClient) GetRuleSets(teamID string, page *pagination.Pagination) ([]
 	var rs []rulesets.RuleSet
 	err = json.Unmarshal(b, &rs)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal rulesets: %v", err.Error())
 	}
 
 	return rs, nil
