@@ -1,8 +1,6 @@
 package scanner
 
-import (
-	"encoding/json"
-)
+import "encoding/json"
 
 type Source struct {
 	Name string `json:"name"`
@@ -14,5 +12,5 @@ type ExternalScan struct {
 	Vulnerabilities *ExternalVulnerabilities `json:"vulnerabilities,omitempty"`
 	Source          Source                   `json:"source"`
 	Notes           string                   `json:"notes"`
-	Raw             []json.RawMessage        `json:"raw"`
+	Raw             *json.RawMessage         `json:"raw,omitempty"`
 }
