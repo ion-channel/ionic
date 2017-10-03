@@ -15,6 +15,22 @@ const (
 	getRuleSetsEndpoint       = "v1/ruleset/getRulesets"
 )
 
+func (ic *IonClient) GetRawAppliedRuleSet(id, teamID, analysisID string, page *pagination.Pagination) (json.RawMessage, error) {
+	params := &url.Values{}
+	params.Set("project_id", id)
+	params.Set("team_id", teamID)
+	if analysisID != "" {
+		params.Set("analysis_id", analysisID)
+	}
+
+	b, err := ic.get(getAppliedRuleSetEndpoint, params, nil, page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get applied rulesets: %v", err.Error())
+	}
+
+	return b, nil
+}
+
 func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 	params := &url.Values{}
 	params.Set("id", id)
