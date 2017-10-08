@@ -102,6 +102,7 @@ type AboutYMLResults struct {
 }
 
 type CoverageResults struct {
+	Value float64 `json:"value"`
 }
 
 type DependencyResults struct {
