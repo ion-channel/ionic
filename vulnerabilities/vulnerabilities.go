@@ -8,38 +8,38 @@ import (
 // Vulnerability represents a singular vulnerability record in the Ion Channel
 // Platform
 type Vulnerability struct {
-	ID           int    `json:"id"`
-	ExternalID   string `json:"external_id"`
-	SourceID     int    `json:"source_id"`
-	Title        string `json:"title"`
-	Summary      string `json:"summary"`
-	Score        string `json:"score"`
-	ScoreVersion string `json:"score_version"`
-	ScoreSystem  string `json:"score_system"`
+	ID           int    `json:"id" xml:"id"`
+	ExternalID   string `json:"external_id" xml:"exteral_id"`
+	SourceID     int    `json:"source_id" xml:"source_id"`
+	Title        string `json:"title" xml:"title"`
+	Summary      string `json:"summary" xml:"summary"`
+	Score        string `json:"score" xml:"score"`
+	ScoreVersion string `json:"score_version" xml:"score_version"`
+	ScoreSystem  string `json:"score_system" xml:"score_system"`
 	ScoreDetails struct {
-		CVSSv2 CVSSv2 `json:"cvssv2"`
-		CVSSv3 CVSSv3 `json:"cvssv3"`
-	} `json:"score_details"`
-	Vector                      string          `json:"vector"`
-	AccessComplexity            string          `json:"access_complexity"`
-	VulnerabilityAuthentication string          `json:"vulnerability_authentication"`
-	ConfidentialityImpact       string          `json:"confidentiality_impact"`
-	IntegrityImpact             string          `json:"integrity_impact"`
-	AvailabilityImpact          string          `json:"availability_impact"`
-	VulnerabilitySource         string          `json:"vulnerabilty_source"`
-	AssessmentCheck             json.RawMessage `json:"assessment_check"`
-	Scanner                     json.RawMessage `json:"scanner"`
-	Recommendation              string          `json:"recommendation"`
+		CVSSv2 CVSSv2 `json:"cvssv2" xml:"cvssv2"`
+		CVSSv3 CVSSv3 `json:"cvssv3" xml:"cvssv3"`
+	} `json:"score_details" xml:""`
+	Vector                      string          `json:"vector" xml:"vector"`
+	AccessComplexity            string          `json:"access_complexity" xml:"access_complexity"`
+	VulnerabilityAuthentication string          `json:"vulnerability_authentication" xml:"vulnerability_authentication"`
+	ConfidentialityImpact       string          `json:"confidentiality_impact" xml:"confidentiality_impact"`
+	IntegrityImpact             string          `json:"integrity_impact" xml:"integrity_impact"`
+	AvailabilityImpact          string          `json:"availability_impact" xml:"availability_impact"`
+	VulnerabilitySource         string          `json:"vulnerabilty_source" xml:"vulnerability_source"`
+	AssessmentCheck             json.RawMessage `json:"assessment_check" xml:"assessment_check"`
+	Scanner                     json.RawMessage `json:"scanner" xml:"scanner"`
+	Recommendation              string          `json:"recommendation" xml:"recommendation"`
 	References                  []struct {
-		Type   string `json:"type"`
-		Source string `json:"source"`
-		URL    string `json:"url"`
-		Text   string `json:"text"`
-	} `json:"references"`
-	ModifiedAt  time.Time `json:"modified_at"`
-	PublishedAt time.Time `json:"published_at"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+		Type   string `json:"type" xml:"type"`
+		Source string `json:"source" xml:"source"`
+		URL    string `json:"url" xml:"url"`
+		Text   string `json:"text" xml:"text"`
+	} `json:"references" xml:"references"`
+	ModifiedAt  time.Time `json:"modified_at" xml:"modified_at"`
+	PublishedAt time.Time `json:"published_at" xml:"published_at"`
+	CreatedAt   time.Time `json:"created_at" xml:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at" xml:"updated_at"`
 }
 
 // CVSSv2 represents the variables that go into determining the CVSS v2 score
