@@ -19,7 +19,7 @@ type Vulnerability struct {
 	ScoreDetails struct {
 		CVSSv2 CVSSv2 `json:"cvssv2" xml:"cvssv2"`
 		CVSSv3 CVSSv3 `json:"cvssv3" xml:"cvssv3"`
-	} `json:"score_details" xml:""`
+	} `json:"score_details" xml:"score_details"`
 	Vector                      string          `json:"vector" xml:"vector"`
 	AccessComplexity            string          `json:"access_complexity" xml:"access_complexity"`
 	VulnerabilityAuthentication string          `json:"vulnerability_authentication" xml:"vulnerability_authentication"`

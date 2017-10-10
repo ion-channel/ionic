@@ -175,24 +175,24 @@ type VirusResults struct {
 
 type VulnerabilityResults struct {
 	Vulnerabilities []struct {
-		ID              int                             `json:"id"`
-		ExternalID      string                          `json:"external_id"`
-		SourceID        int                             `json:"source_id"`
-		Title           string                          `json:"title"`
-		Name            string                          `json:"name"`
-		Org             string                          `json:"org"`
-		Version         string                          `json:"version"`
-		Up              interface{}                     `json:"up"`
-		Edition         interface{}                     `json:"edition"`
-		Aliases         []string                        `json:"aliases"`
-		CreatedAt       time.Time                       `json:"created_at"`
-		UpdatedAt       time.Time                       `json:"updated_at"`
-		References      interface{}                     `json:"references"`
-		Part            interface{}                     `json:"part"`
-		Language        interface{}                     `json:"language"`
-		Vulnerabilities []vulnerabilities.Vulnerability `json:"vulnerabilities"`
-	} `json:"vulnerabilities"`
+		ID              int                             `json:"id" xml:"id"`
+		ExternalID      string                          `json:"external_id" xml:"external_id"`
+		SourceID        int                             `json:"source_id" xml:"source_id"`
+		Title           string                          `json:"title" xml:"title"`
+		Name            string                          `json:"name" xml:"name"`
+		Org             string                          `json:"org" xml:"org"`
+		Version         string                          `json:"version" xml:"version"`
+		Up              interface{}                     `json:"up" xml:"up"`
+		Edition         interface{}                     `json:edition"" xml:"edition"`
+		Aliases         []string                        `json:"aliases" xml:"aliases"`
+		CreatedAt       time.Time                       `json:"created_at" xml:"created_at"`
+		UpdatedAt       time.Time                       `json:"updated_at" xml:"updated_at"`
+		References      interface{}                     `json:"references" xml:"references"`
+		Part            interface{}                     `json:"part" xml:"part"`
+		Language        interface{}                     `json:"language" xml:"language"`
+		Vulnerabilities []vulnerabilities.Vulnerability `json:"vulnerabilities" xml:"vulnerabilities"`
+	} `json:"vulnerabilities" xml:"vulnerabilities"`
 	Meta struct {
-		VulnerabilityCount int `json:"vulnerability_count"`
-	} `json:"meta"`
+		VulnerabilityCount int `json:"vulnerability_count" xml:"vulnerability_count"`
+	} `json:"meta" xml:"meta"`
 }
