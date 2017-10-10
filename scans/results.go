@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/ion-channel/ionic/vulnerabilities"
 )
 
 // Results is an Ion Channel representation of the results from a
@@ -173,76 +175,22 @@ type VirusResults struct {
 
 type VulnerabilityResults struct {
 	Vulnerabilities []struct {
-		ID              int         `json:"id"`
-		Name            string      `json:"name"`
-		Org             string      `json:"org"`
-		Version         string      `json:"version"`
-		Up              interface{} `json:"up"`
-		Edition         interface{} `json:"edition"`
-		Aliases         interface{} `json:"aliases"`
-		CreatedAt       time.Time   `json:"created_at"`
-		UpdatedAt       time.Time   `json:"updated_at"`
-		Title           interface{} `json:"title"`
-		References      interface{} `json:"references"`
-		Part            interface{} `json:"part"`
-		Language        interface{} `json:"language"`
-		SourceID        int         `json:"source_id"`
-		ExternalID      string      `json:"external_id"`
-		Vulnerabilities []struct {
-			ID           int    `json:"id"`
-			ExternalID   string `json:"external_id"`
-			Title        string `json:"title"`
-			Summary      string `json:"summary"`
-			Score        string `json:"score"`
-			ScoreVersion string `json:"score_version"`
-			ScoreSystem  string `json:"score_system"`
-			ScoreDetails struct {
-				Cvssv2 struct {
-					VectorString          string  `json:"vectorString"`
-					AccessVector          string  `json:"accessVector"`
-					AccessComplexity      string  `json:"accessComplexity"`
-					Authentication        string  `json:"authentication"`
-					ConfidentialityImpact string  `json:"confidentialityImpact"`
-					IntegrityImpact       string  `json:"integrityImpact"`
-					AvailabilityImpact    string  `json:"availabilityImpact"`
-					BaseScore             float64 `json:"baseScore"`
-				} `json:"cvssv2"`
-				Cvssv3 struct {
-					VectorString          string  `json:"vectorString"`
-					AttackVector          string  `json:"attackVector"`
-					AttackComplexity      string  `json:"attackComplexity"`
-					PrivilegesRequired    string  `json:"privilegesRequired"`
-					UserInteraction       string  `json:"userInteraction"`
-					Scope                 string  `json:"scope"`
-					ConfidentialityImpact string  `json:"confidentialityImpact"`
-					IntegrityImpact       string  `json:"integrityImpact"`
-					AvailabilityImpact    string  `json:"availabilityImpact"`
-					BaseScore             float64 `json:"baseScore"`
-					BaseSeverity          string  `json:"baseSeverity"`
-				} `json:"cvssv3"`
-			} `json:"score_details"`
-			Vector                      string      `json:"vector"`
-			AccessComplexity            string      `json:"access_complexity"`
-			VulnerabilityAuthentication string      `json:"vulnerability_authentication"`
-			ConfidentialityImpact       string      `json:"confidentiality_impact"`
-			IntegrityImpact             string      `json:"integrity_impact"`
-			AvailabilityImpact          string      `json:"availability_impact"`
-			VulnerabilitySource         interface{} `json:"vulnerability_source"`
-			AssessmentCheck             interface{} `json:"assessment_check"`
-			Scanner                     interface{} `json:"scanner"`
-			Recommendation              string      `json:"recommendation"`
-			References                  []struct {
-				Type   string `json:"type"`
-				Source string `json:"source"`
-				URL    string `json:"url"`
-				Text   string `json:"text"`
-			} `json:"references"`
-			ModifiedAt  time.Time `json:"modified_at"`
-			PublishedAt time.Time `json:"published_at"`
-			CreatedAt   time.Time `json:"created_at"`
-			UpdatedAt   time.Time `json:"updated_at"`
-			SourceID    int       `json:"source_id"`
-		} `json:"vulnerabilities"`
+		ID              int                             `json:"id"`
+		ExternalID      string                          `json:"external_id"`
+		SourceID        int                             `json:"source_id"`
+		Title           string                          `json:"title"`
+		Name            string                          `json:"name"`
+		Org             string                          `json:"org"`
+		Version         string                          `json:"version"`
+		Up              interface{}                     `json:"up"`
+		Edition         interface{}                     `json:"edition"`
+		Aliases         []string                        `json:"aliases"`
+		CreatedAt       time.Time                       `json:"created_at"`
+		UpdatedAt       time.Time                       `json:"updated_at"`
+		References      interface{}                     `json:"references"`
+		Part            interface{}                     `json:"part"`
+		Language        interface{}                     `json:"language"`
+		Vulnerabilities []vulnerabilities.Vulnerability `json:"vulnerabilities"`
 	} `json:"vulnerabilities"`
 	Meta struct {
 		VulnerabilityCount int `json:"vulnerability_count"`
