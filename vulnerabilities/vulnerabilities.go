@@ -45,28 +45,28 @@ type Vulnerability struct {
 // CVSSv2 represents the variables that go into determining the CVSS v2 score
 // for a given vulnerability
 type CVSSv2 struct {
-	VectorString          string  `json:"vectorString"`
-	AccessVector          string  `json:"accessVector"`
-	AccessComplexity      string  `json:"accessComplexity"`
-	Authentication        string  `json:"authentication"`
-	ConfidentialityImpact string  `json:"confidentialityImpact"`
-	IntegrityImpact       string  `json:"integrityImpact"`
-	AvailabilityImpact    string  `json:"availabilityImpact"`
-	BaseScore             float64 `json:"baseScore"`
+	VectorString          string  `json:"vectorString" xml:"vectorString"`
+	AccessVector          string  `json:"accessVector" xml:"accessVector"`
+	AccessComplexity      string  `json:"accessComplexity" xml:"accessComplexity"`
+	Authentication        string  `json:"authentication" xml:"authentication"`
+	ConfidentialityImpact string  `json:"confidentialityImpact" xml:"confidentialityImpact"`
+	IntegrityImpact       string  `json:"integrityImpact" xml:"integrityImpact"`
+	AvailabilityImpact    string  `json:"availabilityImpact" xml:"availabilityImpact"`
+	BaseScore             float64 `json:"baseScore" xml:"baseScore"`
 }
 
 // CVSSv3 represents the variables that go into determining the CVSS v3 score
 // for a given vulnerability
 type CVSSv3 struct {
-	VectorString          string  `json:"vectorString"`
-	AttackVector          string  `json:"attackVector"`
-	AttackComplexity      string  `json:"attackComplexity"`
-	PrivilegesRequired    string  `json:"privilegesRequired"`
-	UserInteraction       string  `json:"userInteraction"`
-	Scope                 string  `json:"scope"`
-	ConfidentialityImpact string  `json:"confidentialityImpact"`
-	IntegrityImpact       string  `json:"integrityImpact"`
-	AvailabilityImpact    string  `json:"availabilityImpact"`
-	BaseScore             float64 `json:"baseScore"`
-	BaseSeverity          string  `json:"baseSeverity"`
+	VectorString          string  `json:"vectorString" xml:"vectorString"`
+	AccessVector          string  `json:"accessVector" xml:"accessVector"`
+	AccessComplexity      string  `json:"accessComplexity" xml:"accessComplexity"`
+	PrivilegesRequired    string  `json:"privilegesRequired" xml:"privilegesRequired"`
+	UserInteraction       string  `json:"userInteraction" xml:"userInteraction"`
+	Scope                 string  `json:"scope" xml:"scope"`
+	ConfidentialityImpact string  `json:"confidentialityImpact" xml:"confidentialityImpact"`
+	IntegrityImpact       string  `json:"integrityImpact" xml:"integrityImpact"`
+	AvailabilityImpact    string  `json:"availabilityImpact" xml:"availabilityImpact"`
+	BaseScore             float64 `json:"baseScore" xml:"baseScore"`
+	BaseSeverity          string  `json:"baseSeverity" xml:"baseSeverity"`
 }
