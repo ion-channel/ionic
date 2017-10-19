@@ -39,7 +39,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var a AboutYMLResults
 		err := json.Unmarshal(tr.RawData, &a)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall about yml results: %v", err)
 		}
 
 		r.Data = a
@@ -47,7 +47,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var c CoverageResults
 		err := json.Unmarshal(tr.RawData, &c)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall coverage results: %v", err)
 		}
 
 		r.Data = c
@@ -55,7 +55,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var d DependencyResults
 		err := json.Unmarshal(tr.RawData, &d)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall dependency results: %v", err)
 		}
 
 		r.Data = d
@@ -63,7 +63,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var e EcosystemResults
 		err := json.Unmarshal(tr.RawData, &e)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall ecosystems results: %v", err)
 		}
 
 		r.Data = e
@@ -71,7 +71,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var l LicenseResults
 		err := json.Unmarshal(tr.RawData, &l)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall license results: %v", err)
 		}
 
 		r.Data = l
@@ -79,7 +79,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var v VirusResults
 		err := json.Unmarshal(tr.RawData, &v)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall virus results: %v", err)
 		}
 
 		r.Data = v
@@ -87,7 +87,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var v VulnerabilityResults
 		err := json.Unmarshal(tr.RawData, &v)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall vulnerability results: %v", err)
 		}
 
 		r.Data = v
@@ -95,7 +95,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var v ExternalVulnerabilitiesResults
 		err := json.Unmarshal(tr.RawData, &v)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall external vulnerabilities results: %v", err)
 		}
 
 		r.Data = v
@@ -103,7 +103,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		var v DifferenceResults
 		err := json.Unmarshal(tr.RawData, &v)
 		if err != nil {
-			return err
+			return fmt.Errorf("failed to unmarshall difference results: %v", err)
 		}
 
 		r.Data = v
