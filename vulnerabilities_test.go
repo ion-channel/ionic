@@ -44,6 +44,17 @@ func TestVulns(t *testing.T) {
 			Expect(vuln.Vector).To(Equal("NETWORK"))
 			Expect(vuln.AccessComplexity).To(Equal("MEDIUM"))
 		})
+
+		g.It("should get a raw vulnerability", func() {
+			server.AddPath("/v1/vulnerability/getVulnerability").
+				SetMethods("GET").
+				SetPayload([]byte(SampleVulnerabilityResponse)).
+				SetStatus(http.StatusOK)
+			bodyBytes, err := client.GetRawVulnerability("CVE-2013-4164")
+
+			Expect(err).To(BeNil())
+			Expect(string(bodyBytes)).To(ContainSubstring("CVE-2013-4164"))
+		})
 	})
 }
 
