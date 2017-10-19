@@ -199,8 +199,10 @@ type VirusResults struct {
 	DataScanned        string `json:"data_scanned" xml:"data_scanned"`
 	DataRead           string `json:"data_read" xml:"data_read"`
 	Time               string `json:"time" xml:"time"`
-	FileNotes          string `json:"file_notes" xml:"file_notes"`
-	ClamavDetails      struct {
+	FileNotes          struct {
+		EmptyFiles []string `json:"empty_file" xml:"empty_file"`
+	} `json:"file_notes" xml:"file_notes"`
+	ClamavDetails struct {
 		ClamavVersion   string `json:"clamav_version" xml:"clamav_version"`
 		ClamavDbVersion string `json:"clamav_db_version" xml:"clamav_db_version"`
 	} `json:"clam_av_details" xml:"clam_av_details"`
