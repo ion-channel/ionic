@@ -116,5 +116,5 @@ func (ic *IonClient) GetRawVulnerability(id string) (json.RawMessage, error) {
 		return nil, fmt.Errorf("failed to get vulnerability: %v", err.Error())
 	}
 
-  return b, nil
+	return b, nil
 }
