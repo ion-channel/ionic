@@ -91,7 +91,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		}
 
 		r.Data = v
-	case "external_vulnerbilities":
+	case "external_vulnerability":
 		var v ExternalVulnerabilitiesResults
 		err := json.Unmarshal(tr.RawData, &v)
 		if err != nil {
