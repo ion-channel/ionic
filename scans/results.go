@@ -91,6 +91,22 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		}
 
 		r.Data = v
+	case "external_vulnerbilities":
+		var v ExternalVulnerabilitiesResults
+		err := json.Unmarshal(tr.RawData, &v)
+		if err != nil {
+			return err
+		}
+
+		r.Data = v
+	case "difference":
+		var v DifferenceResults
+		err := json.Unmarshal(tr.RawData, &v)
+		if err != nil {
+			return err
+		}
+
+		r.Data = v
 	default:
 		return fmt.Errorf("invalid results type")
 	}
@@ -134,6 +150,13 @@ type DependencyResults struct {
 	} `json:"meta" xml:"meta"`
 }
 
+// DifferenceResults represents the checksum of a project.  It includes a checksum
+// and flag indicating if there was a difference detected within that last 5 scans
+type DifferenceResults struct {
+	Checksum   string `json:"checksum"`
+	Difference bool   `json:"difference"`
+}
+
 // EcosystemResults represents the data collected from an ecosystems scan.  It
 // include the name of the ecosystem and the number of lines seen for the given
 // ecosystem.
@@ -142,6 +165,16 @@ type EcosystemResults struct {
 		Ecosystem string `json:"ecosystem" xml:"ecosystem"`
 		Lines     int    `json:"lines" xml:"lines"`
 	} `json:"ecosystems" xml:"ecosystems"`
+}
+
+// ExternalVulnerabilitiesResults represents the data colleced from an external
+// vulnerability scan.  It includes the number of each vulnerability criticality
+// seen within the project.
+type ExternalVulnerabilitiesResults struct {
+	Critical int `json:"critical"`
+	High     int `json:"high"`
+	Medium   int `json:"medium"`
+	Low      int `json:"low"`
 }
 
 // LicenseResults represents the data colleced from a license scan.  It
