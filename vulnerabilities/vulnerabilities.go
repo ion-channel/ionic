@@ -30,7 +30,24 @@ type Vulnerability struct {
 	AssessmentCheck             json.RawMessage `json:"assessment_check" xml:"assessment_check"`
 	Scanner                     json.RawMessage `json:"scanner" xml:"scanner"`
 	Recommendation              string          `json:"recommendation" xml:"recommendation"`
-	References                  []struct {
+	Dependencies                []struct {
+		ID         int           `json:"id"`
+		Name       string        `json:"name"`
+		Org        string        `json:"org"`
+		Version    string        `json:"version"`
+		Up         string        `json:"up"`
+		Edition    string        `json:"edition"`
+		Aliases    interface{}   `json:"aliases"`
+		CreatedAt  time.Time     `json:"created_at"`
+		UpdatedAt  time.Time     `json:"updated_at"`
+		Title      string        `json:"title"`
+		References []interface{} `json:"references"`
+		Part       string        `json:"part"`
+		Language   string        `json:"language"`
+		SourceID   int           `json:"source_id"`
+		ExternalID string        `json:"external_id"`
+	}
+	References []struct {
 		Type   string `json:"type" xml:"type"`
 		Source string `json:"source" xml:"source"`
 		URL    string `json:"url" xml:"url"`
