@@ -53,6 +53,19 @@ func TestScanResults(t *testing.T) {
 			Expect(d.Meta.UpdateAvailableCount).To(Equal(2))
 		})
 
+		g.It("should unmarshal a scan results with difference data", func() {
+			var r Results
+			err := json.Unmarshal([]byte(SampleValidScanResultsDifference), &r)
+
+			Expect(err).To(BeNil())
+			Expect(r.Type).To(Equal("difference"))
+
+			d, ok := r.Data.(DifferenceResults)
+			Expect(ok).To(Equal(true))
+			Expect(d.Checksum).To(Equal("checksumishere"))
+			Expect(d.Difference).To(BeTrue())
+		})
+
 		g.It("should unmarshal a scan results with ecosystem data", func() {
 			var r Results
 			err := json.Unmarshal([]byte(SampleValidScanResultsEcosystems), &r)
@@ -63,6 +76,21 @@ func TestScanResults(t *testing.T) {
 			e, ok := r.Data.(EcosystemResults)
 			Expect(ok).To(Equal(true))
 			Expect(len(e.Ecosystems)).To(Equal(3))
+		})
+
+		g.It("should unmarshal a scan results with external vulnerabilities scan data", func() {
+			var r Results
+			err := json.Unmarshal([]byte(SampleValidExternalVulnerabilities), &r)
+
+			Expect(err).To(BeNil())
+			Expect(r.Type).To(Equal("external_vulnerability"))
+
+			e, ok := r.Data.(ExternalVulnerabilitiesResults)
+			Expect(ok).To(Equal(true))
+			Expect(e.Critical).To(Equal(1))
+			Expect(e.High).To(Equal(0))
+			Expect(e.Medium).To(Equal(1))
+			Expect(e.Low).To(Equal(0))
 		})
 
 		g.It("should unmarshal a scan results with license data", func() {
@@ -120,4 +148,6 @@ const (
 	SampleValidScanResultsVirus         = `{"type":"virus","data":{"known_viruses":10,"engine_version":"","scanned_directories":1,"scanned_files":2,"infected_files":1,"data_scanned":"some cool data was scanned","data_read":"we read some data","time":"10PM","file_notes":"should probably put some notes here","clam_av_details":{"clamav_version":"1.0.0","clamav_db_version":"1.1.0"}}}`
 	SampleValidScanResultsVulnerability = `{"type":"vulnerability","data":{"vulnerabilities":[{"id":316274974,"name":"hadoop","org":"apache","version":"2.8.0","up":null,"edition":null,"aliases":null,"created_at":"2017-02-13T20:02:32.785Z","updated_at":"2017-02-13T20:02:32.785Z","title":null,"references":null,"part":null,"language":null,"source_id":1,"external_id":"cpe:/a:apache:hadoop:2.8.0","vulnerabilities":[{"id":92596,"external_id":"CVE-2017-7669","title":"CVE-2017-7669","summary":"In Apache Hadoop 2.8.0, 3.0.0-alpha1, and 3.0.0-alpha2, the LinuxContainerExecutor runs docker commands as root with insufficient input validation. When the docker feature is enabled, authenticated users can run commands as root.","score":"8.5","score_version":"2.0","score_system":"CVSS","score_details":{"cvssv2":{"vectorString":"(AV:N/AC:M/Au:S/C:C/I:C/A:C)","accessVector":"NETWORK","accessComplexity":"MEDIUM","authentication":"SINGLE","confidentialityImpact":"COMPLETE","integrityImpact":"COMPLETE","availabilityImpact":"COMPLETE","baseScore":8.5},"cvssv3":{"vectorString":"AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H","attackVector":"NETWORK","attackComplexity":"HIGH","privilegesRequired":"LOW","userInteraction":"NONE","scope":"UNCHANGED","confidentialityImpact":"HIGH","integrityImpact":"HIGH","availabilityImpact":"HIGH","baseScore":7.5,"baseSeverity":"HIGH"}},"vector":"NETWORK","access_complexity":"MEDIUM","vulnerability_authentication":"SINGLE","confidentiality_impact":"COMPLETE","integrity_impact":"COMPLETE","availability_impact":"COMPLETE","vulnerability_source":null,"assessment_check":null,"scanner":null,"recommendation":"","references":[{"type":"UNKNOWN","source":"","url":"http://www.securityfocus.com/bid/98795","text":"http://www.securityfocus.com/bid/98795"},{"type":"UNKNOWN","source":"","url":"https://mail-archives.apache.org/mod_mbox/hadoop-user/201706.mbox/%3C4A2FDA56-491B-4C2A-915F-C9D4A4BDB92A%40apache.org%3E","text":"https://mail-archives.apache.org/mod_mbox/hadoop-user/201706.mbox/%3C4A2FDA56-491B-4C2A-915F-C9D4A4BDB92A%40apache.org%3E"}],"modified_at":"2017-06-09T16:21:00.000Z","published_at":"2017-06-05T01:29:00.000Z","created_at":"2017-07-12T23:07:35.491Z","updated_at":"2017-07-12T23:07:35.491Z","source_id":1}]}],"meta":{"vulnerability_count":1}}}`
 	SampleInvalidResults                = `{"type":"fooresult", "data":"I pitty the foo"}`
+	SampleValidScanResultsDifference    = `{"data": {"checksum": "checksumishere","difference": true},"type": "difference"}`
+	SampleValidExternalVulnerabilities  = `{"type":"external_vulnerability","data":{"critical":1,"high":0,"medium":1,"low": 0}}`
 )
