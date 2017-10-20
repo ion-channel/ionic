@@ -34,6 +34,8 @@ func (ic *IonClient) GetProject(id, teamID string) (*projects.Project, error) {
 	return &p, nil
 }
 
+// GetRawProject takes a project ID and team ID and returns the raw json of the
+// project.  It also returns any API errors it may encounter.
 func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("id", id)

@@ -3,6 +3,8 @@ package vulnerabilities
 import (
 	"encoding/json"
 	"time"
+
+	"github.com/ion-channel/ionic/products"
 )
 
 // Vulnerability represents a singular vulnerability record in the Ion Channel
@@ -20,34 +22,18 @@ type Vulnerability struct {
 		CVSSv2 CVSSv2 `json:"cvssv2" xml:"cvssv2"`
 		CVSSv3 CVSSv3 `json:"cvssv3" xml:"cvssv3"`
 	} `json:"score_details" xml:"score_details"`
-	Vector                      string          `json:"vector" xml:"vector"`
-	AccessComplexity            string          `json:"access_complexity" xml:"access_complexity"`
-	VulnerabilityAuthentication string          `json:"vulnerability_authentication" xml:"vulnerability_authentication"`
-	ConfidentialityImpact       string          `json:"confidentiality_impact" xml:"confidentiality_impact"`
-	IntegrityImpact             string          `json:"integrity_impact" xml:"integrity_impact"`
-	AvailabilityImpact          string          `json:"availability_impact" xml:"availability_impact"`
-	VulnerabilitySource         string          `json:"vulnerabilty_source" xml:"vulnerability_source"`
-	AssessmentCheck             json.RawMessage `json:"assessment_check" xml:"assessment_check"`
-	Scanner                     json.RawMessage `json:"scanner" xml:"scanner"`
-	Recommendation              string          `json:"recommendation" xml:"recommendation"`
-	Dependencies                []struct {
-		ID         int           `json:"id"`
-		Name       string        `json:"name"`
-		Org        string        `json:"org"`
-		Version    string        `json:"version"`
-		Up         string        `json:"up"`
-		Edition    string        `json:"edition"`
-		Aliases    interface{}   `json:"aliases"`
-		CreatedAt  time.Time     `json:"created_at"`
-		UpdatedAt  time.Time     `json:"updated_at"`
-		Title      string        `json:"title"`
-		References []interface{} `json:"references"`
-		Part       string        `json:"part"`
-		Language   string        `json:"language"`
-		SourceID   int           `json:"source_id"`
-		ExternalID string        `json:"external_id"`
-	}
-	References []struct {
+	Vector                      string             `json:"vector" xml:"vector"`
+	AccessComplexity            string             `json:"access_complexity" xml:"access_complexity"`
+	VulnerabilityAuthentication string             `json:"vulnerability_authentication" xml:"vulnerability_authentication"`
+	ConfidentialityImpact       string             `json:"confidentiality_impact" xml:"confidentiality_impact"`
+	IntegrityImpact             string             `json:"integrity_impact" xml:"integrity_impact"`
+	AvailabilityImpact          string             `json:"availability_impact" xml:"availability_impact"`
+	VulnerabilitySource         string             `json:"vulnerabilty_source" xml:"vulnerability_source"`
+	AssessmentCheck             json.RawMessage    `json:"assessment_check" xml:"assessment_check"`
+	Scanner                     json.RawMessage    `json:"scanner" xml:"scanner"`
+	Recommendation              string             `json:"recommendation" xml:"recommendation"`
+	Dependencies                []products.Product `json:"dependencies" xml:"dependencies"`
+	References                  []struct {
 		Type   string `json:"type" xml:"type"`
 		Source string `json:"source" xml:"source"`
 		URL    string `json:"url" xml:"url"`
