@@ -107,6 +107,8 @@ func (ic *IonClient) GetVulnerability(id string) (*vulnerabilities.Vulnerability
 	return &vuln, nil
 }
 
+// GetRawVulnerability takes an ID string and returns the raw json message
+// found for that ID.  An error is returned for API errors.
 func (ic *IonClient) GetRawVulnerability(id string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("external_id", id)
