@@ -12,31 +12,31 @@ const (
 	getProductEndpoint = "v1/vulnerability/getProducts"
 )
 
-// GetProduct takes a product ID.  It returns the product found, and any API
-// errors it may encounters.
-func (ic *IonClient) GetProduct(id string) (*products.Product, error) {
+// GetProducts takes a product ID search string.  It returns the product found,
+// and any API errors it may encounters.
+func (ic *IonClient) GetProducts(idSearch string) ([]products.Product, error) {
 	params := &url.Values{}
-	params.Set("external_id", id)
+	params.Set("external_id", idSearch)
 
 	b, err := ic.get(getProductEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get raw product: %v", err.Error())
 	}
 
-	var p products.Product
-	err = json.Unmarshal(b, &p)
+	var ps []products.Product
+	err = json.Unmarshal(b, &ps)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get product: %v", err.Error())
+		return nil, fmt.Errorf("failed to get products: %v", err.Error())
 	}
 
-	return &p, nil
+	return ps, nil
 }
 
-// GetRawProduct takes a product ID.  It returns a raw json message of the
-// product found, and any API errors it may encounters.
-func (ic *IonClient) GetRawProduct(id string) (json.RawMessage, error) {
+// GetRawProducts takes a product ID search string.  It returns a raw json
+// message of the product found, and any API errors it may encounters.
+func (ic *IonClient) GetRawProducts(idSearch string) (json.RawMessage, error) {
 	params := &url.Values{}
-	params.Set("external_id", id)
+	params.Set("external_id", idSearch)
 
 	b, err := ic.get(getProductEndpoint, params, nil, nil)
 	if err != nil {

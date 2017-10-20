@@ -12,12 +12,12 @@ func ExampleIonClient_GetProduct() {
 		panic(fmt.Sprintf("Panic creating Ion Client: %v", err.Error()))
 	}
 
-	product, err := client.GetProduct("cpe:/a:ruby-lang:ruby:1.8.7")
+	ps, err := client.GetProducts("cpe:/a:ruby-lang:ruby:1.8.7")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	fmt.Printf("Product: %v\n", product)
+	fmt.Printf("Products: %v\n", ps)
 }
 
 func ExampleIonClient_GetRawProduct() {
@@ -26,10 +26,10 @@ func ExampleIonClient_GetRawProduct() {
 		panic(fmt.Sprintf("Panic creating Ion Client: %v", err.Error()))
 	}
 
-	bodyBytes, err := client.GetRawProduct("cpe:/a:ruby-lang:ruby:1.8.7")
+	bodyBytes, err := client.GetRawProducts("cpe:/a:ruby-lang:ruby:1.8.7")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	fmt.Printf("Product: %v\n", string(bodyBytes))
+	fmt.Printf("Raw Products: %v\n", string(bodyBytes))
 }
