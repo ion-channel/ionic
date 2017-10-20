@@ -3,6 +3,7 @@
 [![Go Reportcard](https://goreportcard.com/badge/github.com/ion-channel/ionic)](https://goreportcard.com/report/github.com/ion-channel/ionic)
 [![GoDoc](https://godoc.org/github.com/ion-channel/ionic?status.png)](https://godoc.org/github.com/ion-channel/ionic)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/ion-channel/ionic/blob/master/LICENSE.md)
+[![Release](https://img.shields.io/github/release/ion-channel/ionic.svg)](https://github.com/ion-channel/ionic/releases/latest)
 
 A Golang SDK for the Ion Channel API
 
