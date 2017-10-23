@@ -153,8 +153,8 @@ type DependencyResults struct {
 // DifferenceResults represents the checksum of a project.  It includes a checksum
 // and flag indicating if there was a difference detected within that last 5 scans
 type DifferenceResults struct {
-	Checksum   string `json:"checksum"`
-	Difference bool   `json:"difference"`
+	Checksum   string `json:"checksum" xml:"checksum"`
+	Difference bool   `json:"difference" xml:"difference"`
 }
 
 // EcosystemResults represents the data collected from an ecosystems scan.  It
