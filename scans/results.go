@@ -153,8 +153,8 @@ type DependencyResults struct {
 // DifferenceResults represents the checksum of a project.  It includes a checksum
 // and flag indicating if there was a difference detected within that last 5 scans
 type DifferenceResults struct {
-	Checksum   string `json:"checksum"`
-	Difference bool   `json:"difference"`
+	Checksum   string `json:"checksum" xml:"checksum"`
+	Difference bool   `json:"difference" xml:"difference"`
 }
 
 // EcosystemResults represents the data collected from an ecosystems scan.  It
@@ -171,10 +171,10 @@ type EcosystemResults struct {
 // vulnerability scan.  It includes the number of each vulnerability criticality
 // seen within the project.
 type ExternalVulnerabilitiesResults struct {
-	Critical int `json:"critical"`
-	High     int `json:"high"`
-	Medium   int `json:"medium"`
-	Low      int `json:"low"`
+	Critical int `json:"critical" xml:"critical"`
+	High     int `json:"high" xml:"high"`
+	Medium   int `json:"medium" xml:"medium"`
+	Low      int `json:"low" xml:"low"`
 }
 
 // LicenseResults represents the data colleced from a license scan.  It
