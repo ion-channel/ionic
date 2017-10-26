@@ -43,6 +43,14 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 		}
 
 		r.Data = a
+	case "community":
+		var c []CommunityResults
+		err := json.Unmarshal(tr.RawData, &c)
+		if err != nil {
+			return fmt.Errorf("failed to unmarshall community results: %v", err)
+		}
+
+		r.Data = c
 	case "coverage", "external_coverage":
 		var c CoverageResults
 		err := json.Unmarshal(tr.RawData, &c)
@@ -121,6 +129,14 @@ type AboutYMLResults struct {
 	Message string `json:"message" xml:"message"`
 	Valid   bool   `json:"valid" xml:"valid"`
 	Content string `json:"content" xml:"content"`
+}
+
+// CommunityResults represents the data collected from a community scan.  It
+// represents all known data regarding the open community of a software project
+type CommunityResults struct {
+	Committers int    `json:"committers" xml:"committers"`
+	Name       string `json:"name" xml:"name"`
+	URL        string `json:"url" xml:"url"`
 }
 
 // CoverageResults represents the data collected from a code coverage scan.  It
