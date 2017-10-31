@@ -149,7 +149,7 @@ func TestScanResults(t *testing.T) {
 			err := json.Unmarshal([]byte(SampleInvalidResults), &r)
 
 			Expect(err).NotTo(BeNil())
-			Expect(err.Error()).To(ContainSubstring("invalid results type"))
+			Expect(err.Error()).To(ContainSubstring("unsupported results type found:"))
 		})
 	})
 }
