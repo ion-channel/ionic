@@ -116,7 +116,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 
 		r.Data = v
 	default:
-		return fmt.Errorf("invalid results type")
+		return fmt.Errorf("unsupported results type found: %v", tr.Type)
 	}
 
 	return nil
