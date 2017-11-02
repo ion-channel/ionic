@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	getProjectEndpoint = "v1/project/getProject"
+	getProjectEndpoint  = "v1/project/getProject"
+	getProjectsEndpoint = "v1/project/getProjects"
 )
 
 // GetProject takes a project ID and team ID and returns the project.  It
@@ -47,4 +48,23 @@ func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
 	}
 
 	return b, nil
+}
+
+// GetProjects
+func (ic *IonClient) GetProjects(teamID string) ([]projects.Project, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	b, err := ic.get(getProjectsEndpoint, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
+	}
+
+	var pList []projects.Project
+	err = json.Unmarshal(b, &pList)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
+	}
+
+	return pList, nil
 }
