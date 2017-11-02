@@ -50,7 +50,8 @@ func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
 	return b, nil
 }
 
-// GetProjects
+// GetProjects takes a team ID and returns the projects for that team.  It
+// returns an error for any API errors it may encounter.
 func (ic *IonClient) GetProjects(teamID string) ([]projects.Project, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
