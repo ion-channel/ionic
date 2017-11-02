@@ -32,6 +32,7 @@ type Analysis struct {
 // within the system
 type AnalysisSummary struct {
 	ID            string    `json:"analysis_id"`
+	TeamID        string    `json:"team_id"`
 	BuildNumber   string    `json:"build_number"`
 	Branch        string    `json:"branch"`
 	Description   string    `json:"description"`
