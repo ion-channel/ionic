@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	analysisGetAnalysisEndpoint       = "v1/animal/getAnalysis"
-	analysisGetLatestAnalysisEndpoint = "v1/animal/getLatestAnalysisSummary"
+	analysisGetAnalysisEndpoint              = "v1/animal/getAnalysis"
+	analysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
 )
 
 // GetAnalysis returns the specified analysis
@@ -34,18 +34,18 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID string) (*analysis.Analys
 	return &a, nil
 }
 
-// GetLatestAnalysis returns the latest analysis for the specified project
-func (ic *IonClient) GetLatestAnalysis(teamID, projectID string) (*analysis.Analysis, error) {
+// GetLatestAnalysisSummary returns the latest analysis for the specified project
+func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analysis.AnalysisSummary, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(analysisGetLatestAnalysisEndpoint, params, nil, nil)
+	b, err := ic.get(analysisGetLatestAnalysisSummaryEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())
 	}
 
-	var a analysis.Analysis
+	var a analysis.AnalysisSummary
 	err = json.Unmarshal(b, &a)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())
