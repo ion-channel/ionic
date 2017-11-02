@@ -13,7 +13,9 @@ const (
 	analysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
 )
 
-// GetAnalysis returns the specified analysis
+// GetAnalysis takes an analysis ID, team ID, and project ID.  It returns the
+// analysis found.  If the analysis is not found it will return an error, and
+// will return an error for any other API issues it encounters.
 func (ic *IonClient) GetAnalysis(id, teamID, projectID string) (*analysis.Analysis, error) {
 	params := &url.Values{}
 	params.Set("id", id)
@@ -34,7 +36,25 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID string) (*analysis.Analys
 	return &a, nil
 }
 
-// GetLatestAnalysisSummary returns the latest analysis for the specified project
+// GetRawAnalysis takes an analysis ID, team ID, and project ID, and returns the
+// raw JSON from the API.  It returns an error for any API issues it encounters.
+func (ic *IonClient) GetRawAnalysis(id, teamID, projectID string) (json.RawMessage, error) {
+	params := &url.Values{}
+	params.Set("id", id)
+	params.Set("team_id", teamID)
+	params.Set("project_id", projectID)
+
+	b, err := ic.get(analysisGetAnalysisEndpoint, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+	}
+
+	return b, nil
+}
+
+// GetLatestAnalysisSummary takes a team ID and project ID, and returns the
+// latest analysis summary for the project. It returns an error for any API
+// issues it encounters.
 func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analysis.AnalysisSummary, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
@@ -52,4 +72,19 @@ func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analys
 	}
 
 	return &a, nil
+}
+
+// GetRawLatestAnalysisSummary takes a team ID and project ID, and returns the
+// raw JSON from the API.  It returns an error for any API issues it encounters.
+func (ic *IonClient) GetRawLatestAnalysisSummary(teamID, projectID string) (json.RawMessage, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("project_id", projectID)
+
+	b, err := ic.get(analysisGetLatestAnalysisSummaryEndpoint, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())
+	}
+
+	return b, nil
 }

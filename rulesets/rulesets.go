@@ -1,10 +1,10 @@
 package rulesets
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/ion-channel/ionic/rules"
-	"github.com/ion-channel/ionic/scans"
 )
 
 type RuleSet struct {
@@ -19,28 +19,29 @@ type RuleSet struct {
 }
 
 type AppliedRulesetSummary struct {
-	ID            string              `json:"id"`
-	TeamID        string              `json:"team_id"`
-	ProjectID     string              `json:"project_id"`
-	BuildNumber   string              `json:"build_number"`
-	Name          string              `json:"name"`
-	Text          string              `json:"text"`
-	Type          string              `json:"type"`
-	Source        string              `json:"source"`
-	Branch        string              `json:"branch"`
-	Description   string              `json:"description"`
-	Status        string              `json:"status"`
-	RulesetID     string              `json:"ruleset_id"`
-	CreatedAt     time.Time           `json:"created_at"`
-	UpdatedAt     time.Time           `json:"updated_at"`
-	Duration      float64             `json:"duration"`
-	TriggerHash   string              `json:"trigger_hash"`
-	TriggerText   string              `json:"trigger_text"`
-	TriggerAuthor string              `json:"trigger_author"`
-	ScanSummaries []scans.ScanSummary `json:"scan_summaries"`
-	RulesetName   string              `json:"ruleset_name"`
-	Risk          string              `json:"risk"`
-	Summary       string              `json:"summary"`
-	Trigger       string              `json:"trigger"`
-	Passed        bool                `json:"passed"`
+	ProjectID             string `json:"project_id"`
+	TeamID                string `json:"team_id"`
+	AnalysisID            string `json:"analysis_id"`
+	RuleEvaluationSummary struct {
+		Summary     string `json:"summary"`
+		Ruleresults []struct {
+			ID          string          `json:"id"`
+			AnalysisID  string          `json:"analysis_id"`
+			TeamID      string          `json:"team_id"`
+			ProjectID   string          `json:"project_id"`
+			Description string          `json:"description"`
+			Name        string          `json:"name"`
+			Summary     string          `json:"summary"`
+			CreatedAt   time.Time       `json:"created_at"`
+			UpdatedAt   time.Time       `json:"updated_at"`
+			Results     json.RawMessage `json:"results"`
+			Duration    float64         `json:"duration"`
+			Passed      bool            `json:"passed"`
+			Risk        string          `json:"risk"`
+			Type        string          `json:"type"`
+		} `json:"ruleresults"`
+	} `json:"rule_evaluation_summary"`
+	RuleEvalCreatedAt time.Time `json:"rule_eval_created_at"`
+	CreatedAt         time.Time `json:"created_at"`
+	UpdatedAt         time.Time `json:"updated_at"`
 }
