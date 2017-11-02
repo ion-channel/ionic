@@ -34,8 +34,8 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID string) (*analysis.Analys
 	return &a, nil
 }
 
-// GetLatestAnalysisSumary returns the latest analysis for the specified project
-func (ic *IonClient) GetLatestAnalysisSumary(teamID, projectID string) (*analysis.AnalysisSummary, error) {
+// GetLatestAnalysisSummary returns the latest analysis for the specified project
+func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analysis.AnalysisSummary, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
