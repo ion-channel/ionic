@@ -35,6 +35,7 @@ type AnalysisReport struct {
 	ScanSummaries []scans.ScanSummary `json:"scan_summaries" xml:"scan_summaries"`
 }
 
+// ProjectReport gives the details of a project including past analyses
 type ProjectReport struct {
 	ID                string                     `json:"id"`
 	TeamID            string                     `json:"team_id"`
@@ -61,4 +62,33 @@ type ProjectReport struct {
 	Tags              []string                   `json:"tags"`
 	RulesetName       string                     `json:"ruleset_name"`
 	AnalysisSummaries []analysis.AnalysisSummary `json:"analysis_summaries"`
+}
+
+// ProjectReports is used for getting a high level overview, returning a single analysis
+type ProjectReports struct {
+	ID              string                   `json:"id"`
+	TeamID          string                   `json:"team_id"`
+	RulesetID       string                   `json:"ruleset_id"`
+	Name            string                   `json:"name"`
+	Type            string                   `json:"type"`
+	Source          string                   `json:"source"`
+	Branch          string                   `json:"branch"`
+	Description     string                   `json:"description"`
+	Active          bool                     `json:"active"`
+	ChatChannel     string                   `json:"chat_channel"`
+	CreatedAt       time.Time                `json:"created_at"`
+	UpdatedAt       time.Time                `json:"updated_at"`
+	DeployKey       string                   `json:"deploy_key"`
+	Monitor         bool                     `json:"should_monitor"`
+	PocName         string                   `json:"poc_name"`
+	PocEmail        string                   `json:"poc_email"`
+	Username        string                   `json:"username"`
+	Password        string                   `json:"password"`
+	KeyFingerprint  string                   `json:"key_fingerprint"`
+	PocNameHash     string                   `json:"poc_name_hash"`
+	PocEmailHash    string                   `json:"poc_email_hash"`
+	Aliases         []string                 `json:"aliases"`
+	Tags            []string                 `json:"tags"`
+	RulesetName     string                   `json:"ruleset_name"`
+	AnalysisSummary analysis.AnalysisSummary `json:"analysis_summary"`
 }
