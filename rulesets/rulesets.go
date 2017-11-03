@@ -23,7 +23,7 @@ type AppliedRulesetSummary struct {
 	TeamID                string `json:"team_id"`
 	AnalysisID            string `json:"analysis_id"`
 	RuleEvaluationSummary struct {
-		RulesetName           string `json:"ruleset_name"`
+		RulesetName string `json:"ruleset_name"`
 		Summary     string `json:"summary"`
 		Ruleresults []struct {
 			ID          string          `json:"id"`
