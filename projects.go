@@ -1,16 +1,19 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
+	"strconv"
 
 	"github.com/ion-channel/ionic/projects"
 )
 
 const (
-	getProjectEndpoint  = "v1/project/getProject"
-	getProjectsEndpoint = "v1/project/getProjects"
+	getProjectEndpoint    = "v1/project/getProject"
+	getProjectsEndpoint   = "v1/project/getProjects"
+	updateProjectEndpoint = "v1/project/updateProject"
 )
 
 // GetProject takes a project ID and team ID and returns the project.  It
@@ -68,4 +71,34 @@ func (ic *IonClient) GetProjects(teamID string) ([]projects.Project, error) {
 	}
 
 	return pList, nil
+}
+
+func (ic *IonClient) UpdateProject(project *projects.Project) (*projects.Project, error) {
+	params := &url.Values{}
+
+	params.Set("id", project.ID)
+	params.Set("team_id", project.TeamID)
+
+	params.Set("name", project.Name)
+	params.Set("type", project.Type)
+	params.Set("active", strconv.FormatBool(project.Active))
+	params.Set("source", project.Source)
+	params.Set("branch", project.Branch)
+	params.Set("description", project.Description)
+	params.Set("ruleset_id", project.RulesetID)
+	params.Set("chat_channel", project.ChatChannel)
+	params.Set("should_monitor", strconv.FormatBool(project.Monitor))
+
+	b, err := ic.put(updateProjectEndpoint, params, bytes.Buffer{}, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
+	}
+
+	var p projects.Project
+	err = json.Unmarshal(b, &p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response from update: %v", err.Error())
+	}
+
+	return &p, nil
 }
