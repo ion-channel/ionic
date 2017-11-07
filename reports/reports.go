@@ -7,7 +7,8 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-// AnalysisReport is a Ion Channel representation of a report output from a given analysis
+// AnalysisReport is a Ion Channel representation of a report output from a
+// given analysis
 type AnalysisReport struct {
 	ID            string              `json:"id" xml:"id"`
 	TeamID        string              `json:"team_id" xml:"team_id"`
@@ -62,7 +63,8 @@ type ProjectReport struct {
 	AnalysisSummaries []analysis.AnalysisSummary `json:"analysis_summaries"`
 }
 
-// ProjectReports is used for getting a high level overview, returning a single analysis
+// ProjectReports is used for getting a high level overview, returning a single
+// analysis
 type ProjectReports struct {
 	ID              string                    `json:"id"`
 	TeamID          string                    `json:"team_id"`
