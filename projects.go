@@ -7,6 +7,7 @@ import (
 	"net/url"
 	"strconv"
 
+	"github.com/ion-channel/ionic/pagination"
 	"github.com/ion-channel/ionic/projects"
 )
 
@@ -55,11 +56,11 @@ func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
 
 // GetProjects takes a team ID and returns the projects for that team.  It
 // returns an error for any API errors it may encounter.
-func (ic *IonClient) GetProjects(teamID string) ([]projects.Project, error) {
+func (ic *IonClient) GetProjects(teamID string, page *pagination.Pagination) ([]projects.Project, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.get(getProjectsEndpoint, params, nil, nil)
+	b, err := ic.get(getProjectsEndpoint, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
 	}
