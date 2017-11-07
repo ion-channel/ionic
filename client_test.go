@@ -93,7 +93,7 @@ var client = &IonClient{
 	client:      nil,
 }
 
-func ExamplePagination_customRange() {
+func ExampleIonClient_customPaginationRange() {
 	pages := &pagination.Pagination{Offset: 20, Limit: 100}
 
 	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", pages)
@@ -104,7 +104,7 @@ func ExamplePagination_customRange() {
 	fmt.Printf("Vulnerabilities: %v\n", vulns)
 }
 
-func ExamplePagination_defaultRange() {
+func ExampleIonClient_defaultPaginationRange() {
 	// nil for pagination will use the default set by the API and may vary for each object
 	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", nil)
 	if err != nil {
