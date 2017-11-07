@@ -7,7 +7,8 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-// AnalysisReport is a Ion Channel representation of a report output from a given analysis
+// AnalysisReport is a Ion Channel representation of a report output from a
+// given analysis
 type AnalysisReport struct {
 	ID            string              `json:"id" xml:"id"`
 	TeamID        string              `json:"team_id" xml:"team_id"`
@@ -56,15 +57,14 @@ type ProjectReport struct {
 	Username          string                     `json:"username"`
 	Password          string                     `json:"password"`
 	KeyFingerprint    string                     `json:"key_fingerprint"`
-	PocNameHash       string                     `json:"poc_name_hash"`
-	PocEmailHash      string                     `json:"poc_email_hash"`
 	Aliases           []string                   `json:"aliases"`
 	Tags              []string                   `json:"tags"`
 	RulesetName       string                     `json:"ruleset_name"`
 	AnalysisSummaries []analysis.AnalysisSummary `json:"analysis_summaries"`
 }
 
-// ProjectReports is used for getting a high level overview, returning a single analysis
+// ProjectReports is used for getting a high level overview, returning a single
+// analysis
 type ProjectReports struct {
 	ID              string                    `json:"id"`
 	TeamID          string                    `json:"team_id"`
@@ -85,8 +85,6 @@ type ProjectReports struct {
 	Username        string                    `json:"username"`
 	Password        string                    `json:"password"`
 	KeyFingerprint  string                    `json:"key_fingerprint"`
-	PocNameHash     string                    `json:"poc_name_hash"`
-	PocEmailHash    string                    `json:"poc_email_hash"`
 	Aliases         []string                  `json:"aliases"`
 	Tags            []string                  `json:"tags"`
 	RulesetName     string                    `json:"ruleset_name"`
