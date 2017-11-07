@@ -50,7 +50,7 @@ func TestProjects(t *testing.T) {
 				SetPayload([]byte(SampleValidProjects)).
 				SetStatus(http.StatusOK)
 
-			projects, err := client.GetProjects("bef86653-1926-4990-8ef8-5f26cd59d6fc")
+			projects, err := client.GetProjects("bef86653-1926-4990-8ef8-5f26cd59d6fc", nil)
 			Expect(err).To(BeNil())
 			Expect(len(projects)).To(Equal(1))
 			Expect(projects[0].ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
