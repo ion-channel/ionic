@@ -56,8 +56,6 @@ type ProjectReport struct {
 	Username          string                     `json:"username"`
 	Password          string                     `json:"password"`
 	KeyFingerprint    string                     `json:"key_fingerprint"`
-	PocNameHash       string                     `json:"poc_name_hash"`
-	PocEmailHash      string                     `json:"poc_email_hash"`
 	Aliases           []string                   `json:"aliases"`
 	Tags              []string                   `json:"tags"`
 	RulesetName       string                     `json:"ruleset_name"`
@@ -85,8 +83,6 @@ type ProjectReports struct {
 	Username        string                    `json:"username"`
 	Password        string                    `json:"password"`
 	KeyFingerprint  string                    `json:"key_fingerprint"`
-	PocNameHash     string                    `json:"poc_name_hash"`
-	PocEmailHash    string                    `json:"poc_email_hash"`
 	Aliases         []string                  `json:"aliases"`
 	Tags            []string                  `json:"tags"`
 	RulesetName     string                    `json:"ruleset_name"`
