@@ -3,8 +3,10 @@ package reports
 import (
 	"time"
 
+	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/analysis"
 	"github.com/ion-channel/ionic/scans"
+	"github.com/ion-channel/ionic/tags"
 )
 
 // AnalysisReport is a Ion Channel representation of a report output from a
@@ -57,8 +59,8 @@ type ProjectReport struct {
 	Username          string                     `json:"username"`
 	Password          string                     `json:"password"`
 	KeyFingerprint    string                     `json:"key_fingerprint"`
-	Aliases           []string                   `json:"aliases"`
-	Tags              []string                   `json:"tags"`
+	Aliases           []aliases.Alias            `json:"aliases"`
+	Tags              []tags.Tag                 `json:"tags"`
 	RulesetName       string                     `json:"ruleset_name"`
 	AnalysisSummaries []analysis.AnalysisSummary `json:"analysis_summaries"`
 }
@@ -85,8 +87,8 @@ type ProjectReports struct {
 	Username        string                    `json:"username"`
 	Password        string                    `json:"password"`
 	KeyFingerprint  string                    `json:"key_fingerprint"`
-	Aliases         []string                  `json:"aliases"`
-	Tags            []string                  `json:"tags"`
+	Aliases         []aliases.Alias           `json:"aliases"`
+	Tags            []tags.Tag                `json:"tags"`
 	RulesetName     string                    `json:"ruleset_name"`
 	AnalysisSummary *analysis.AnalysisSummary `json:"analysis_summary"`
 }
