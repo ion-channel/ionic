@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	maxIdleConns        = 5
-	maxIdleConnsPerHost = 5
+	maxIdleConns        = 25
+	maxIdleConnsPerHost = 25
 	maxPagingLimit      = 100
 )
 
