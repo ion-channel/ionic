@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	maxIdleConns        = 5
-	maxIdleConnsPerHost = 5
+	maxIdleConns        = 25
+	maxIdleConnsPerHost = 25
 	maxPagingLimit      = 100
 )
 
@@ -30,7 +30,18 @@ type IonClient struct {
 // New takes the credentials required to talk to the API, and the base URL of
 // the API and returns a client for talking to the API and an error if any
 // issues instantiating the client are encountered
-func New(secret string, baseURL string) (*IonClient, error) {
+func New(secret, baseURL string) (*IonClient, error) {
+	c := &http.Client{
+		Transport: &http.Transport{
+			MaxIdleConnsPerHost: maxIdleConnsPerHost,
+			MaxIdleConns:        maxIdleConns,
+		},
+	}
+
+	return NewWithClient(secret, baseURL, c)
+}
+
+func NewWithClient(secret, baseURL string, client *http.Client) (*IonClient, error) {
 	u, err := url.Parse(baseURL)
 	if err != nil {
 		return nil, fmt.Errorf("cannot instantiate new ion client: %v", err.Error())
@@ -39,12 +50,7 @@ func New(secret string, baseURL string) (*IonClient, error) {
 	ic := &IonClient{
 		baseURL:     u,
 		bearerToken: secret,
-		client: &http.Client{
-			Transport: &http.Transport{
-				MaxIdleConnsPerHost: maxIdleConnsPerHost,
-				MaxIdleConns:        maxIdleConns,
-			},
-		},
+		client:      client,
 	}
 
 	return ic, nil
