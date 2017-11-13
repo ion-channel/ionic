@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+//ScanStatus needs a comment
 type ScanStatus struct {
 	ID               string    `json:"id"`
 	AnalysisStatusID string    `json:"analysis_status_id"`

@@ -74,6 +74,7 @@ func (ic *IonClient) GetProjects(teamID string, page *pagination.Pagination) ([]
 	return pList, nil
 }
 
+//UpdateProject needs a comment
 func (ic *IonClient) UpdateProject(project *projects.Project) (*projects.Project, error) {
 	params := &url.Values{}
 

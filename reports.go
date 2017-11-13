@@ -13,6 +13,7 @@ const (
 	reportGetProjectReportEndpoint  = "v1/report/getProject"
 )
 
+//GetAnalysisReport needs a comment
 func (ic *IonClient) GetAnalysisReport(id, teamID, projectID string) (*reports.AnalysisReport, error) {
 	params := &url.Values{}
 	params.Set("analysis_id", id)
@@ -33,6 +34,7 @@ func (ic *IonClient) GetAnalysisReport(id, teamID, projectID string) (*reports.A
 	return &r, nil
 }
 
+//GetRawAnalysisReport needs a comment
 func (ic *IonClient) GetRawAnalysisReport(id, teamID, projectID string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("analysis_id", id)
@@ -47,6 +49,7 @@ func (ic *IonClient) GetRawAnalysisReport(id, teamID, projectID string) (json.Ra
 	return b, nil
 }
 
+//GetProjectReport needs a comment
 func (ic *IonClient) GetProjectReport(id, teamID string) (*reports.ProjectReport, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
@@ -66,6 +69,7 @@ func (ic *IonClient) GetProjectReport(id, teamID string) (*reports.ProjectReport
 	return &r, nil
 }
 
+//GetRawProjectReport needs a comment
 func (ic *IonClient) GetRawProjectReport(id, teamID string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)

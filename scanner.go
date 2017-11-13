@@ -30,6 +30,7 @@ type addScanRequest struct {
 	Type      string               `json:"scan_type"`
 }
 
+//AnalyzeProject needs a comment
 func (ic *IonClient) AnalyzeProject(projectID, teamID, branch string) (*scanner.AnalysisStatus, error) {
 	request := &analyzeRequest{}
 	request.TeamID = teamID
@@ -59,6 +60,7 @@ func (ic *IonClient) AnalyzeProject(projectID, teamID, branch string) (*scanner.
 	return &a, nil
 }
 
+//GetAnalysisStatus needs a comment
 func (ic *IonClient) GetAnalysisStatus(id, teamID, projectID string) (*scanner.AnalysisStatus, error) {
 	params := &url.Values{}
 	params.Set("id", id)
@@ -79,6 +81,7 @@ func (ic *IonClient) GetAnalysisStatus(id, teamID, projectID string) (*scanner.A
 	return &a, nil
 }
 
+//AddScanResult needs a comment
 func (ic *IonClient) AddScanResult(id, teamID, projectID, status, scanType string, scanResults scanner.ExternalScan) (*scanner.AnalysisStatus, error) {
 	request := &addScanRequest{}
 	request.ID = id

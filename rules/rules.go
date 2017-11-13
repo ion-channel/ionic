@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+//Rule needs a comment
 type Rule struct {
 	ID             string
 	ScanType       string

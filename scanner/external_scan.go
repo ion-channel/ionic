@@ -2,11 +2,13 @@ package scanner
 
 import "encoding/json"
 
+//Source needs a comment
 type Source struct {
 	Name string `json:"name"`
-	Url  string `json:"url"`
+	URL  string `json:"url"`
 }
 
+//ExternalScan needs a comment
 type ExternalScan struct {
 	Coverage        *ExternalCoverage        `json:"coverage,omitempty"`
 	Vulnerabilities *ExternalVulnerabilities `json:"vulnerabilities,omitempty"`

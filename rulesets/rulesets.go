@@ -7,6 +7,7 @@ import (
 	"github.com/ion-channel/ionic/rules"
 )
 
+//RuleSet needs a comment
 type RuleSet struct {
 	ID          string       `json:"id"`
 	TeamID      string       `json:"team_id"`
@@ -18,6 +19,7 @@ type RuleSet struct {
 	Rules       []rules.Rule `json:"rules"`
 }
 
+//AppliedRulesetSummary needs a comment
 type AppliedRulesetSummary struct {
 	ProjectID             string `json:"project_id"`
 	TeamID                string `json:"team_id"`

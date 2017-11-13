@@ -15,6 +15,7 @@ const (
 	getRuleSetsEndpoint       = "v1/ruleset/getRulesets"
 )
 
+//GetAppliedRuleSet needs a comment
 func (ic *IonClient) GetAppliedRuleSet(id, teamID, analysisID string) (*rulesets.AppliedRulesetSummary, error) {
 	params := &url.Values{}
 	params.Set("project_id", id)
@@ -37,6 +38,7 @@ func (ic *IonClient) GetAppliedRuleSet(id, teamID, analysisID string) (*rulesets
 	return &s, nil
 }
 
+//GetRawAppliedRuleSet needs a comment
 func (ic *IonClient) GetRawAppliedRuleSet(id, teamID, analysisID string, page *pagination.Pagination) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("project_id", id)
@@ -53,6 +55,7 @@ func (ic *IonClient) GetRawAppliedRuleSet(id, teamID, analysisID string, page *p
 	return b, nil
 }
 
+//GetRuleSet needs a comment
 func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 	params := &url.Values{}
 	params.Set("id", id)
@@ -72,6 +75,7 @@ func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 	return &rs, nil
 }
 
+//GetRuleSets needs a comment
 func (ic *IonClient) GetRuleSets(teamID string, page *pagination.Pagination) ([]rulesets.RuleSet, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)

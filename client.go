@@ -41,6 +41,7 @@ func New(secret, baseURL string) (*IonClient, error) {
 	return NewWithClient(secret, baseURL, c)
 }
 
+//NewWithClient needs a comment
 func NewWithClient(secret, baseURL string, client *http.Client) (*IonClient, error) {
 	u, err := url.Parse(baseURL)
 	if err != nil {

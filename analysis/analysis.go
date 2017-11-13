@@ -28,9 +28,9 @@ type Analysis struct {
 	ScanSummaries []json.RawMessage `json:"scan_summaries"`
 }
 
-// AnalysisSummary is a representation of a summarized Ion Channel Analysis
+// Summary is a representation of a summarized Ion Channel Analysis
 // within the system
-type AnalysisSummary struct {
+type Summary struct {
 	ID            string    `json:"id"`
 	AnalysisID    string    `json:"analysis_id"`
 	TeamID        string    `json:"team_id"`

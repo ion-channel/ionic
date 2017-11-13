@@ -32,6 +32,7 @@ func (a *AnalysisEventAction) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+//AnalysisEvent needs a comment
 type AnalysisEvent struct {
 	Action    AnalysisEventAction `json:"action"`
 	Analysis  string              `json:"analysis"`

@@ -2,6 +2,7 @@ package tags
 
 import "time"
 
+//Tag needs a comment
 type Tag struct {
 	ID          string      `json:"id"`
 	TeamID      string      `json:"team_id"`
