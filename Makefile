@@ -53,7 +53,7 @@ fmt: ## Run gofmt
 .PHONY: vet
 vet: ## Run go vet
 	@echo "vetting..."
-	@$(GOVET) -tests=false $(shell $(GOLIST) ./... | grep -v '/vendor/')
+	@if [[ "$(shell $(GOCMD) version | grep "1.7")" != "" ]]; then $(GOVET) -test=false $(shell $(GOLIST) ./... | grep -v '/vendor/') ; else $(GOVET) -tests=false $(shell $(GOLIST) ./... | grep -v '/vendor/'); fi
 
 .PHONY: lint
 lint: ## Run golint
