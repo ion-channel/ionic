@@ -68,7 +68,7 @@ func TestScanner(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisStatus)).
 				SetStatus(http.StatusOK)
 
-			coverage := scanner.ExternalCoverage{99.99}
+			coverage := scanner.ExternalCoverage{Value: 99.99}
 			scan := scanner.ExternalScan{}
 			scan.Coverage = &coverage
 

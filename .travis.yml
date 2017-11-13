@@ -5,6 +5,7 @@ go:
   - tip
 
 script:
+  - make fmt vet lint
   - go test -v $(go list ./... | grep -v /vendor/)
 
 notifications:

@@ -183,7 +183,7 @@ type EcosystemResults struct {
 	} `json:"ecosystems" xml:"ecosystems"`
 }
 
-// ExternalVulnerabilitiesResults represents the data colleced from an external
+// ExternalVulnerabilitiesResults represents the data collected from an external
 // vulnerability scan.  It includes the number of each vulnerability criticality
 // seen within the project.
 type ExternalVulnerabilitiesResults struct {
@@ -193,7 +193,7 @@ type ExternalVulnerabilitiesResults struct {
 	Low      int `json:"low" xml:"low"`
 }
 
-// LicenseResults represents the data colleced from a license scan.  It
+// LicenseResults represents the data collected from a license scan.  It
 // includes the name and type of each license seen within the project.
 type LicenseResults struct {
 	License struct {
@@ -204,7 +204,7 @@ type LicenseResults struct {
 	} `json:"license" xml:"license"`
 }
 
-// VirusResults represents the data colleced from a virus scan.  It includes
+// VirusResults represents the data collected from a virus scan.  It includes
 // information of the viruses seen and the virus scanner used.
 type VirusResults struct {
 	KnownViruses       int    `json:"known_viruses" xml:"known_viruses"`
@@ -224,6 +224,7 @@ type VirusResults struct {
 	} `json:"clam_av_details" xml:"clam_av_details"`
 }
 
+//VulnerabilityResults needs a comment
 type VulnerabilityResults struct {
 	Vulnerabilities []struct {
 		ID              int                             `json:"id" xml:"id"`
@@ -234,7 +235,7 @@ type VulnerabilityResults struct {
 		Org             string                          `json:"org" xml:"org"`
 		Version         string                          `json:"version" xml:"version"`
 		Up              interface{}                     `json:"up" xml:"up"`
-		Edition         interface{}                     `json:edition"" xml:"edition"`
+		Edition         interface{}                     `json:"edition" xml:"edition"`
 		Aliases         []string                        `json:"aliases" xml:"aliases"`
 		CreatedAt       time.Time                       `json:"created_at" xml:"created_at"`
 		UpdatedAt       time.Time                       `json:"updated_at" xml:"updated_at"`
