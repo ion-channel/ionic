@@ -53,7 +53,7 @@ fmt: ## Run gofmt
 .PHONY: vet
 vet: ## Run go vet
 	@echo "vetting..."
-	@if [[ "$(shell $(GOCMD) version | grep "1.7")" != "" ]]; then $(GOVET) -test=false $(shell $(GOLIST) ./... | grep -v '/vendor/') ; else $(GOVET) -tests=false $(shell $(GOLIST) ./... | grep -v '/vendor/'); fi
+	@if [[ "$(shell $(GOCMD) version | grep "1.7")" == "" ]]; then $(GOVET) -tests=false $(shell $(GOLIST) ./... | grep -v '/vendor/'); else echo Vetting disabled for Go 1.7 due to a false positive and no way to disable it.; fi
 
 .PHONY: lint
 lint: ## Run golint
