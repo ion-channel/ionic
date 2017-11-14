@@ -55,7 +55,7 @@ func (ic *IonClient) GetRawAnalysis(id, teamID, projectID string) (json.RawMessa
 // GetLatestAnalysisSummary takes a team ID and project ID, and returns the
 // latest analysis summary for the project. It returns an error for any API
 // issues it encounters.
-func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analysis.AnalysisSummary, error) {
+func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analysis.Summary, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
@@ -65,7 +65,7 @@ func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analys
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())
 	}
 
-	var a analysis.AnalysisSummary
+	var a analysis.Summary
 	err = json.Unmarshal(b, &a)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())

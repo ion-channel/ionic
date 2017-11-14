@@ -74,6 +74,7 @@ func (ic *IonClient) GetProjects(teamID string, page *pagination.Pagination) ([]
 	return pList, nil
 }
 
+//UpdateProject returns the project stored or an error encountered by the API
 func (ic *IonClient) UpdateProject(project *projects.Project) (*projects.Project, error) {
 	params := &url.Values{}
 
