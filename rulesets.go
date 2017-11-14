@@ -15,10 +15,10 @@ const (
 	getRuleSetsEndpoint       = "v1/ruleset/getRulesets"
 )
 
-//GetAppliedRuleSet needs a comment
-func (ic *IonClient) GetAppliedRuleSet(id, teamID, analysisID string) (*rulesets.AppliedRulesetSummary, error) {
+//GetAppliedRuleSet takes a projectID, teamID, and analysisID and returns the corresponding applied ruleset summary or an error encountered by the API
+func (ic *IonClient) GetAppliedRuleSet(projectID, teamID, analysisID string) (*rulesets.AppliedRulesetSummary, error) {
 	params := &url.Values{}
-	params.Set("project_id", id)
+	params.Set("project_id", projectID)
 	params.Set("team_id", teamID)
 	if analysisID != "" {
 		params.Set("analysis_id", analysisID)
@@ -38,10 +38,10 @@ func (ic *IonClient) GetAppliedRuleSet(id, teamID, analysisID string) (*rulesets
 	return &s, nil
 }
 
-//GetRawAppliedRuleSet needs a comment
-func (ic *IonClient) GetRawAppliedRuleSet(id, teamID, analysisID string, page *pagination.Pagination) (json.RawMessage, error) {
+//GetRawAppliedRuleSet takes a projectID, teamID, analysisID, and page definition and returns the corresponding applied ruleset summary json or an error encountered by the API
+func (ic *IonClient) GetRawAppliedRuleSet(projectID, teamID, analysisID string, page *pagination.Pagination) (json.RawMessage, error) {
 	params := &url.Values{}
-	params.Set("project_id", id)
+	params.Set("project_id", projectID)
 	params.Set("team_id", teamID)
 	if analysisID != "" {
 		params.Set("analysis_id", analysisID)
@@ -55,10 +55,10 @@ func (ic *IonClient) GetRawAppliedRuleSet(id, teamID, analysisID string, page *p
 	return b, nil
 }
 
-//GetRuleSet needs a comment
-func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
+//GetRuleSet takes a rule set ID and a teamID returns the corresponding rule set or an error encountered by the API
+func (ic *IonClient) GetRuleSet(ruleSetID, teamID string) (*rulesets.RuleSet, error) {
 	params := &url.Values{}
-	params.Set("id", id)
+	params.Set("id", ruleSetID)
 	params.Set("team_id", teamID)
 
 	b, err := ic.get(getRuleSetEndpoint, params, nil, nil)
@@ -75,7 +75,7 @@ func (ic *IonClient) GetRuleSet(id, teamID string) (*rulesets.RuleSet, error) {
 	return &rs, nil
 }
 
-//GetRuleSets needs a comment
+//GetRuleSets takes a teamID and page definition and returns a collection of rule sets or an error encountered by the API
 func (ic *IonClient) GetRuleSets(teamID string, page *pagination.Pagination) ([]rulesets.RuleSet, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)

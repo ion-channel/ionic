@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//Rule needs a comment
+//Rule identifies an Ion system predicate a project is held against
 type Rule struct {
 	ID             string
 	ScanType       string

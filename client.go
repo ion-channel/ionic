@@ -41,7 +41,9 @@ func New(secret, baseURL string) (*IonClient, error) {
 	return NewWithClient(secret, baseURL, c)
 }
 
-//NewWithClient needs a comment
+// NewWithClient takes the credentials required to talk to the API, the base
+// URL of the API, and an existing HTTP client, and returns a client for talking
+// to the API and an error if any issues instantiating the client are encountered
 func NewWithClient(secret, baseURL string, client *http.Client) (*IonClient, error) {
 	u, err := url.Parse(baseURL)
 	if err != nil {

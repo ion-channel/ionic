@@ -14,8 +14,8 @@ var validAnalysisEventActions = map[string]string{
 // AnalysisEventAction represents possible actions related to a analysis event
 type AnalysisEventAction string
 
-// UnmarshalJSON is a custom unmarshaller for enforcing a analysis event action is
-// a valid value and returns an error if the value is invalid
+// UnmarshalJSON is a custom unmarshaller for validating an AnalysisEventAction
+// or it returns an error
 func (a *AnalysisEventAction) UnmarshalJSON(b []byte) error {
 	var aStr string
 	err := json.Unmarshal(b, &aStr)
@@ -32,7 +32,7 @@ func (a *AnalysisEventAction) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-//AnalysisEvent needs a comment
+//AnalysisEvent identifies the result of an analysis of a project
 type AnalysisEvent struct {
 	Action    AnalysisEventAction `json:"action"`
 	Analysis  string              `json:"analysis"`

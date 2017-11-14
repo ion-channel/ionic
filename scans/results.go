@@ -224,7 +224,8 @@ type VirusResults struct {
 	} `json:"clam_av_details" xml:"clam_av_details"`
 }
 
-//VulnerabilityResults needs a comment
+//VulnerabilityResults represents the data collected from a vulnerability scan.  It includes
+// information of the vulnerabilities seen.
 type VulnerabilityResults struct {
 	Vulnerabilities []struct {
 		ID              int                             `json:"id" xml:"id"`
