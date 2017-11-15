@@ -1,6 +1,7 @@
 package users
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -13,7 +14,7 @@ type User struct {
 	CreatedAt  time.Time         `json:"created_at"`
 	UpdatedAt  time.Time         `json:"updated_at"`
 	LastActive time.Time         `json:"last_active_at"`
-	Metadata   string            `json:"metadata"`
+	Metadata   json.RawMessage   `json:"metadata"`
 	SysAdmin   bool              `json:"sys_admin"`
 	Teams      map[string]string `json:"teams"`
 }
