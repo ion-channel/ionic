@@ -2,8 +2,8 @@ package vulnerabilities
 
 import (
 	"encoding/json"
-	"time"
 	"strings"
+	"time"
 
 	"github.com/ion-channel/ionic/products"
 )
@@ -75,7 +75,9 @@ type CVSSv3 struct {
 	BaseSeverity          string  `json:"baseSeverity" xml:"baseSeverity"`
 }
 
-func NewFromShorthandV3(shorthand string) *CVSSv3 {
+// NewV3FromShorthand takes a shorthand representation of a CVSSv3 and returns
+// an expanded struct representation
+func NewV3FromShorthand(shorthand string) *CVSSv3 {
 	shorthand = strings.ToUpper(shorthand)
 	shorthand = strings.TrimPrefix(shorthand, "CVSS:3.0/")
 	metrics := strings.Split(shorthand, "/")
@@ -85,76 +87,56 @@ func NewFromShorthandV3(shorthand string) *CVSSv3 {
 	for _, metric := range metrics {
 		parts := strings.Split(metric, ":")
 		switch parts[0] {
-		case "AV" :
+		case "AV":
 			switch parts[1] {
-			case "N" :
+			case "N":
 				sv.AccessVector = "network"
-			case "A" :
+			case "A":
 				sv.AccessVector = "adjacent"
-			case "L" :
+			case "L":
 				sv.AccessVector = "local"
-			case "P" :
+			case "P":
 				sv.AccessVector = "physical"
 			}
-		case "AC" :
+		case "AC":
+			sv.AccessComplexity = parseLowHighNone(parts[1])
+		case "PR":
+			sv.PrivilegesRequired = parseLowHighNone(parts[1])
+		case "UI":
 			switch parts[1] {
-			case "L" :
-				sv.AccessComplexity = "low"
-			case "H" :
-				sv.AccessComplexity = "high"
-			}
-		case "PR" :
-			switch parts [1] {
-			case "N" :
-				sv.PrivilegesRequired = "none"
-			case "L" :
-				sv.PrivilegesRequired = "low"
-			case "H" :
-				sv.PrivilegesRequired = "high"
-			}
-		case "UI" :
-			switch parts [1] {
-			case "N" :
+			case "N":
 				sv.UserInteraction = "none"
-			case "R" :
+			case "R":
 				sv.UserInteraction = "required"
 			}
-		case "S" :
-		  switch parts [1]{
-			case "U" :
+		case "S":
+			switch parts[1] {
+			case "U":
 				sv.Scope = "unchanged"
-			case "C" :
+			case "C":
 				sv.Scope = "changed"
 			}
-		case "C" :
-			switch parts [1]{
-			case "H" :
-				sv.ConfidentialityImpact = "high"
-			case "L" :
-				sv.ConfidentialityImpact = "low"
-			case "N" :
-				sv.ConfidentialityImpact = "none"
-			}
-		case "I" :
-			switch parts [1]{
-			case "H" :
-				sv.IntegrityImpact = "high"
-			case "L" :
-				sv.IntegrityImpact = "low"
-			case "N" :
-				sv.IntegrityImpact = "none"
-			}
-		case "A" :
-			switch parts [1]{
-			case "H" :
-				sv.AvailabilityImpact = "high"
-			case "L" :
-				sv.AvailabilityImpact = "low"
-			case "N" :
-				sv.AvailabilityImpact = "none"
-			}
+		case "C":
+			sv.ConfidentialityImpact = parseLowHighNone(parts[1])
+		case "I":
+			sv.IntegrityImpact = parseLowHighNone(parts[1])
+		case "A":
+			sv.AvailabilityImpact = parseLowHighNone(parts[1])
 		}
 	}
 
 	return sv
+}
+
+func parseLowHighNone(lhn string) string {
+	switch lhn {
+	case "N":
+		return "none"
+	case "L":
+		return "low"
+	case "H":
+		return "high"
+	default:
+		return lhn
+	}
 }
