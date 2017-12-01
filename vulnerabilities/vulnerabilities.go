@@ -3,6 +3,7 @@ package vulnerabilities
 import (
 	"encoding/json"
 	"time"
+	"strings"
 
 	"github.com/ion-channel/ionic/products"
 )
@@ -72,4 +73,88 @@ type CVSSv3 struct {
 	AvailabilityImpact    string  `json:"availabilityImpact" xml:"availabilityImpact"`
 	BaseScore             float64 `json:"baseScore" xml:"baseScore"`
 	BaseSeverity          string  `json:"baseSeverity" xml:"baseSeverity"`
+}
+
+func NewFromShorthandV3(shorthand string) *CVSSv3 {
+	shorthand = strings.ToUpper(shorthand)
+	shorthand = strings.TrimPrefix(shorthand, "CVSS:3.0/")
+	metrics := strings.Split(shorthand, "/")
+
+	sv := &CVSSv3{}
+
+	for _, metric := range metrics {
+		parts := strings.Split(metric, ":")
+		switch parts[0] {
+		case "AV" :
+			switch parts[1] {
+			case "N" :
+				sv.AccessVector = "network"
+			case "A" :
+				sv.AccessVector = "adjacent"
+			case "L" :
+				sv.AccessVector = "local"
+			case "P" :
+				sv.AccessVector = "physical"
+			}
+		case "AC" :
+			switch parts[1] {
+			case "L" :
+				sv.AccessComplexity = "low"
+			case "H" :
+				sv.AccessComplexity = "high"
+			}
+		case "PR" :
+			switch parts [1] {
+			case "N" :
+				sv.PrivilegesRequired = "none"
+			case "L" :
+				sv.PrivilegesRequired = "low"
+			case "H" :
+				sv.PrivilegesRequired = "high"
+			}
+		case "UI" :
+			switch parts [1] {
+			case "N" :
+				sv.UserInteraction = "none"
+			case "R" :
+				sv.UserInteraction = "required"
+			}
+		case "S" :
+		  switch parts [1]{
+			case "U" :
+				sv.Scope = "unchanged"
+			case "C" :
+				sv.Scope = "changed"
+			}
+		case "C" :
+			switch parts [1]{
+			case "H" :
+				sv.ConfidentialityImpact = "high"
+			case "L" :
+				sv.ConfidentialityImpact = "low"
+			case "N" :
+				sv.ConfidentialityImpact = "none"
+			}
+		case "I" :
+			switch parts [1]{
+			case "H" :
+				sv.IntegrityImpact = "high"
+			case "L" :
+				sv.IntegrityImpact = "low"
+			case "N" :
+				sv.IntegrityImpact = "none"
+			}
+		case "A" :
+			switch parts [1]{
+			case "H" :
+				sv.AvailabilityImpact = "high"
+			case "L" :
+				sv.AvailabilityImpact = "low"
+			case "N" :
+				sv.AvailabilityImpact = "none"
+			}
+		}
+	}
+
+	return sv
 }
