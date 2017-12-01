@@ -2,6 +2,7 @@ package vulnerabilities
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 
 	"github.com/ion-channel/ionic/products"
@@ -72,4 +73,70 @@ type CVSSv3 struct {
 	AvailabilityImpact    string  `json:"availabilityImpact" xml:"availabilityImpact"`
 	BaseScore             float64 `json:"baseScore" xml:"baseScore"`
 	BaseSeverity          string  `json:"baseSeverity" xml:"baseSeverity"`
+}
+
+// NewV3FromShorthand takes a shorthand representation of a CVSSv3 and returns
+// an expanded struct representation
+func NewV3FromShorthand(shorthand string) *CVSSv3 {
+	shorthand = strings.ToUpper(shorthand)
+	shorthand = strings.TrimPrefix(shorthand, "CVSS:3.0/")
+	metrics := strings.Split(shorthand, "/")
+
+	sv := &CVSSv3{}
+
+	for _, metric := range metrics {
+		parts := strings.Split(metric, ":")
+		switch parts[0] {
+		case "AV":
+			switch parts[1] {
+			case "N":
+				sv.AccessVector = "network"
+			case "A":
+				sv.AccessVector = "adjacent"
+			case "L":
+				sv.AccessVector = "local"
+			case "P":
+				sv.AccessVector = "physical"
+			}
+		case "AC":
+			sv.AccessComplexity = parseLowHighNone(parts[1])
+		case "PR":
+			sv.PrivilegesRequired = parseLowHighNone(parts[1])
+		case "UI":
+			switch parts[1] {
+			case "N":
+				sv.UserInteraction = "none"
+			case "R":
+				sv.UserInteraction = "required"
+			}
+		case "S":
+			switch parts[1] {
+			case "U":
+				sv.Scope = "unchanged"
+			case "C":
+				sv.Scope = "changed"
+			}
+		case "C":
+			sv.ConfidentialityImpact = parseLowHighNone(parts[1])
+		case "I":
+			sv.IntegrityImpact = parseLowHighNone(parts[1])
+		case "A":
+			sv.AvailabilityImpact = parseLowHighNone(parts[1])
+		}
+	}
+
+	return sv
+}
+
+func parseLowHighNone(lhn string) string {
+	switch lhn {
+	case "N":
+		return "none"
+	case "L":
+		return "low"
+	case "H":
+		return "high"
+	default:
+		return lhn
+	}
 }
