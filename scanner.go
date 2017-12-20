@@ -46,7 +46,7 @@ func (ic *IonClient) AnalyzeProject(projectID, teamID, branch string) (*scanner.
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.post(scannerAnalyzeProjectEndpoint, nil, *buff, nil)
+	b, err = ic.Post(scannerAnalyzeProjectEndpoint, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to start analysis: %v", err.Error())
 	}
@@ -67,7 +67,7 @@ func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID string) (*s
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(scannerGetAnalysisStatusEndpoint, params, nil, nil)
+	b, err := ic.Get(scannerGetAnalysisStatusEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
@@ -98,7 +98,7 @@ func (ic *IonClient) AddScanResult(scanResultID, teamID, projectID, status, scan
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.post(scannerAddScanEndpoint, nil, *buff, nil)
+	b, err = ic.Post(scannerAddScanEndpoint, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to start analysis: %v", err.Error())
 	}
