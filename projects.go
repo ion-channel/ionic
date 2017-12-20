@@ -25,7 +25,7 @@ func (ic *IonClient) GetProject(id, teamID string) (*projects.Project, error) {
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.get(getProjectEndpoint, params, nil, nil)
+	b, err := ic.Get(getProjectEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -46,7 +46,7 @@ func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.get(getProjectEndpoint, params, nil, nil)
+	b, err := ic.Get(getProjectEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -60,7 +60,7 @@ func (ic *IonClient) GetProjects(teamID string, page *pagination.Pagination) ([]
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.get(getProjectsEndpoint, params, nil, page)
+	b, err := ic.Get(getProjectsEndpoint, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
 	}
@@ -91,7 +91,7 @@ func (ic *IonClient) UpdateProject(project *projects.Project) (*projects.Project
 	params.Set("chat_channel", project.ChatChannel)
 	params.Set("should_monitor", strconv.FormatBool(project.Monitor))
 
-	b, err := ic.put(updateProjectEndpoint, params, bytes.Buffer{}, nil)
+	b, err := ic.Put(updateProjectEndpoint, params, bytes.Buffer{}, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
 	}

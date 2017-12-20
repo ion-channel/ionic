@@ -19,7 +19,7 @@ func (ic *IonClient) GetTeam(id string) (*teams.Team, error) {
 	params := &url.Values{}
 	params.Set("someid", id)
 
-	b, err := ic.get(teamsGetTeamEndpoint, params, nil, nil)
+	b, err := ic.Get(teamsGetTeamEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team: %v", err.Error())
 	}

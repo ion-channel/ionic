@@ -24,7 +24,7 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event events.Event) ([]users.Use
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.post(usersSubscribedForEventEndpoint, nil, *buff, nil)
+	b, err = ic.Post(usersSubscribedForEventEndpoint, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get users: %v", err.Error())
 	}
@@ -44,7 +44,7 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event events.Event) ([]users.Use
 // the Ion Client.  An error is returned if the client cannot talk to the API
 // or the returned user object is nil or blank
 func (ic *IonClient) GetSelf() (*users.User, error) {
-	b, err := ic.get(usersGetSelfEndpoint, nil, nil, nil)
+	b, err := ic.Get(usersGetSelfEndpoint, nil, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get self: %v", err.Error())
 	}

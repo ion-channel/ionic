@@ -151,18 +151,30 @@ func (ic *IonClient) _do(method, endpoint string, params *url.Values, payload by
 	return &ir, nil
 }
 
-func (ic *IonClient) delete(endpoint string, params *url.Values, headers http.Header) (json.RawMessage, error) {
+// Delete takes an endpoint, params, and headers to pass as a delete call to the
+// API.  It will return a json RawMessage for the response and any errors it
+// encounters with the API.
+func (ic *IonClient) Delete(endpoint string, params *url.Values, headers http.Header) (json.RawMessage, error) {
 	return ic.do("DELETE", endpoint, params, bytes.Buffer{}, headers, nil)
 }
 
-func (ic *IonClient) get(endpoint string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
+// Get takes an endpoint, params, headers, and pagination params to pass as a
+// get call to the API.  It will return a json RawMessage for the response and
+// any errors it encounters with the API.
+func (ic *IonClient) Get(endpoint string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
 	return ic.do("GET", endpoint, params, bytes.Buffer{}, headers, page)
 }
 
-func (ic *IonClient) post(endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
+// Post takes an endpoint, params, payload, and headers to pass as a post call
+// to the API.  It will return a json RawMessage for the response and any errors
+// it encounters with the API.
+func (ic *IonClient) Post(endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return ic.do("POST", endpoint, params, payload, headers, nil)
 }
 
-func (ic *IonClient) put(endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
+// Put takes an endpoint, params, payload, and headers to pass as a put call to
+// the API.  It will return a json RawMessage for the response and any errors it
+// encounters with the API.
+func (ic *IonClient) Put(endpoint string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return ic.do("PUT", endpoint, params, payload, headers, nil)
 }

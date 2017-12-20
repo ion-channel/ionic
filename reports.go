@@ -20,7 +20,7 @@ func (ic *IonClient) GetAnalysisReport(analysisID, teamID, projectID string) (*r
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(reportGetAnalysisReportEndpoint, params, nil, nil)
+	b, err := ic.Get(reportGetAnalysisReportEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis report: %v", err.Error())
 	}
@@ -41,7 +41,7 @@ func (ic *IonClient) GetRawAnalysisReport(analysisID, teamID, projectID string) 
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(reportGetAnalysisReportEndpoint, params, nil, nil)
+	b, err := ic.Get(reportGetAnalysisReportEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis report: %v", err.Error())
 	}
@@ -55,7 +55,7 @@ func (ic *IonClient) GetProjectReport(projectID, teamID string) (*reports.Projec
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(reportGetProjectReportEndpoint, params, nil, nil)
+	b, err := ic.Get(reportGetProjectReportEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project report: %v", err.Error())
 	}
@@ -75,7 +75,7 @@ func (ic *IonClient) GetRawProjectReport(projectID, teamID string) (json.RawMess
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(reportGetProjectReportEndpoint, params, nil, nil)
+	b, err := ic.Get(reportGetProjectReportEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project report: %v", err.Error())
 	}

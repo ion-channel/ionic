@@ -18,7 +18,7 @@ func (ic *IonClient) GetProducts(idSearch string) ([]products.Product, error) {
 	params := &url.Values{}
 	params.Set("external_id", idSearch)
 
-	b, err := ic.get(getProductEndpoint, params, nil, nil)
+	b, err := ic.Get(getProductEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get raw product: %v", err.Error())
 	}
@@ -38,7 +38,7 @@ func (ic *IonClient) GetRawProducts(idSearch string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("external_id", idSearch)
 
-	b, err := ic.get(getProductEndpoint, params, nil, nil)
+	b, err := ic.Get(getProductEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get raw product: %v", err.Error())
 	}

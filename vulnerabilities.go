@@ -31,7 +31,7 @@ func (ic *IonClient) GetVulnerabilities(product, version string, page *paginatio
 		params.Set("version", version)
 	}
 
-	b, err := ic.get(getVulnerabilitiesEndpoint, params, nil, page)
+	b, err := ic.Get(getVulnerabilitiesEndpoint, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
 	}
@@ -73,7 +73,7 @@ func (ic *IonClient) GetVulnerabilitiesInFile(filePath string) ([]vulnerabilitie
 	h.Set("Content-Type", bw.FormDataContentType())
 	bw.Close()
 
-	b, err := ic.post(getVulnerabilitiesInFileEndpoint, nil, *buff, h)
+	b, err := ic.Post(getVulnerabilitiesInFileEndpoint, nil, *buff, h)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
 	}
@@ -93,7 +93,7 @@ func (ic *IonClient) GetVulnerability(id string) (*vulnerabilities.Vulnerability
 	params := &url.Values{}
 	params.Set("external_id", id)
 
-	b, err := ic.get(getVulnerabilityEndpoint, params, nil, nil)
+	b, err := ic.Get(getVulnerabilityEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerability: %v", err.Error())
 	}
@@ -113,7 +113,7 @@ func (ic *IonClient) GetRawVulnerability(id string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("external_id", id)
 
-	b, err := ic.get(getVulnerabilityEndpoint, params, nil, nil)
+	b, err := ic.Get(getVulnerabilityEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerability: %v", err.Error())
 	}

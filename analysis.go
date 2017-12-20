@@ -22,7 +22,7 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID string) (*analysis.Analys
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(analysisGetAnalysisEndpoint, params, nil, nil)
+	b, err := ic.Get(analysisGetAnalysisEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
@@ -44,7 +44,7 @@ func (ic *IonClient) GetRawAnalysis(id, teamID, projectID string) (json.RawMessa
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(analysisGetAnalysisEndpoint, params, nil, nil)
+	b, err := ic.Get(analysisGetAnalysisEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
@@ -60,7 +60,7 @@ func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID string) (*analys
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(analysisGetLatestAnalysisSummaryEndpoint, params, nil, nil)
+	b, err := ic.Get(analysisGetLatestAnalysisSummaryEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())
 	}
@@ -81,7 +81,7 @@ func (ic *IonClient) GetRawLatestAnalysisSummary(teamID, projectID string) (json
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.get(analysisGetLatestAnalysisSummaryEndpoint, params, nil, nil)
+	b, err := ic.Get(analysisGetLatestAnalysisSummaryEndpoint, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())
 	}
