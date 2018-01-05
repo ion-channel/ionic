@@ -4,15 +4,50 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/url"
 
 	"github.com/ion-channel/ionic/events"
 	"github.com/ion-channel/ionic/users"
 )
 
 const (
-	usersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
+	usersCreateUserEndpoint         = "v1/users/createUser"
 	usersGetSelfEndpoint            = "v1/users/getSelf"
+	usersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
 )
+
+// CreateUser takes an email, username, and password.  The username and password
+// are not required, and can be left blank if so chosen.  It will return the
+// instantiated user object from the API or an error if it encounters one with
+// the API.
+func (ic *IonClient) CreateUser(email, username, password string) (*users.User, error) {
+	if email == "" {
+		return nil, fmt.Errorf("email is required")
+	}
+
+	params := &url.Values{}
+	params.Set("email", email)
+	if username != "" {
+		params.Set("username", username)
+	}
+	if password != "" {
+		params.Set("password", password)
+		params.Set("password_confirmation", password)
+	}
+
+	b, err := ic.Post(usersCreateUserEndpoint, params, bytes.Buffer{}, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create user: %v", err.Error())
+	}
+
+	var u users.User
+	err = json.Unmarshal(b, &u)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response from api: %v", err.Error())
+	}
+
+	return &u, nil
+}
 
 // GetUsersSubscribedForEvent takes an event and returns a list of users
 // subscribed to that event and returns an error if there are JSON marshalling
