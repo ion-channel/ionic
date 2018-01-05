@@ -145,25 +145,31 @@ type CoverageResults struct {
 	Value float64 `json:"value" xml:"value"`
 }
 
+// Dependency represents data for an individual requirement resolution
+type Dependency struct {
+	LatestVersion string `json:"latest_version" xml:"latest_version"`
+	Org           string `json:"org" xml:"org"`
+	Name          string `json:"name" xml:"name"`
+	Type          string `json:"type" xml:"type"`
+	Package       string `json:"package" xml:"package"`
+	Version       string `json:"version" xml:"version"`
+	Scope         string `json:"scope" xml:"scope"`
+}
+
+// DependencyMeta represents data for a summary of all dependencies resolved
+type DependencyMeta struct {
+	FirstDegreeCount     int `json:"first_degree_count" xml:"first_degree_count"`
+	NoVersionCount       int `json:"no_version_count" xml:"no_version_count"`
+	TotalUniqueCount     int `json:"total_unique_count" xml:"total_unique_count"`
+	UpdateAvailableCount int `json:"update_available_count" xml:"update_available_count"`
+}
+
 // DependencyResults represents the data collected from a dependency scan.  It
 // includes a list of the dependencies seen and meta data counts about those
 // dependencies seen.
 type DependencyResults struct {
-	Dependencies []struct {
-		LatestVersion string `json:"latest_version" xml:"latest_version"`
-		Org           string `json:"org" xml:"org"`
-		Name          string `json:"name" xml:"name"`
-		Type          string `json:"type" xml:"type"`
-		Package       string `json:"package" xml:"package"`
-		Version       string `json:"version" xml:"version"`
-		Scope         string `json:"scope" xml:"scope"`
-	} `json:"dependencies" xml:"dependencies"`
-	Meta struct {
-		FirstDegreeCount     int `json:"first_degree_count" xml:"first_degree_count"`
-		NoVersionCount       int `json:"no_version_count" xml:"no_version_count"`
-		TotalUniqueCount     int `json:"total_unique_count" xml:"total_unique_count"`
-		UpdateAvailableCount int `json:"update_available_count" xml:"update_available_count"`
-	} `json:"meta" xml:"meta"`
+	Dependencies []Dependency   `json:"dependencies" xml:"dependencies"`
+	Meta         DependencyMeta `json:"meta" xml:"meta"`
 }
 
 // DifferenceResults represents the checksum of a project.  It includes a checksum
