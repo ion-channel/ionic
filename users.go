@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/url"
 
 	"github.com/ion-channel/ionic/events"
 	"github.com/ion-channel/ionic/users"
@@ -16,6 +15,13 @@ const (
 	usersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
 )
 
+type createUserOptions struct {
+	Email                string `json:"email"`
+	Username             string `json:"username"`
+	Password             string `json:"password"`
+	PasswordConfirmation string `json:"password_confirmation"`
+}
+
 // CreateUser takes an email, username, and password.  The username and password
 // are not required, and can be left blank if so chosen.  It will return the
 // instantiated user object from the API or an error if it encounters one with
@@ -25,17 +31,21 @@ func (ic *IonClient) CreateUser(email, username, password string) (*users.User, 
 		return nil, fmt.Errorf("email is required")
 	}
 
-	params := &url.Values{}
-	params.Set("email", email)
-	if username != "" {
-		params.Set("username", username)
-	}
-	if password != "" {
-		params.Set("password", password)
-		params.Set("password_confirmation", password)
+	opts := createUserOptions{
+		Email:                email,
+		Username:             username,
+		Password:             password,
+		PasswordConfirmation: password,
 	}
 
-	b, err := ic.Post(usersCreateUserEndpoint, params, bytes.Buffer{}, nil)
+	b, err := json.Marshal(opts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	buff := bytes.NewBuffer(b)
+
+	b, err = ic.Post(usersCreateUserEndpoint, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %v", err.Error())
 	}
