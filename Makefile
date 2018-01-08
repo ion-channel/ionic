@@ -45,6 +45,9 @@ help:  ## Show This Help
 test:  ## Run all available tests
 	$(GOTEST)
 
+.PHONY: linters
+linters:  fmt vet lint  ## Run all of the linters
+
 .PHONY: fmt
 fmt: ## Run gofmt
 	@echo "checking formatting..."
@@ -53,7 +56,7 @@ fmt: ## Run gofmt
 .PHONY: vet
 vet: ## Run go vet
 	@echo "vetting..."
-	@if [[ "$(shell $(GOCMD) version | grep "1.7")" == "" ]]; then $(GOVET) -tests=false $(shell $(GOLIST) ./... | grep -v '/vendor/'); else echo Vetting disabled for Go 1.7 due to a false positive and no way to disable it.; fi
+	@$(GOVET) $(shell $(GOLIST) ./... | grep -v '/vendor/')
 
 .PHONY: lint
 lint: ## Run golint
