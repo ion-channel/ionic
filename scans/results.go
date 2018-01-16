@@ -44,7 +44,7 @@ func (r *Results) UnmarshalJSON(b []byte) error {
 
 		r.Data = a
 	case "community":
-		var c []CommunityResults
+		var c CommunityResults
 		err := json.Unmarshal(tr.RawData, &c)
 		if err != nil {
 			return fmt.Errorf("failed to unmarshall community results: %v", err)
