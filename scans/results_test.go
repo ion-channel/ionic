@@ -32,12 +32,11 @@ func TestScanResults(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(r.Type).To(Equal("community"))
 
-			a, ok := r.Data.([]CommunityResults)
+			a, ok := r.Data.(CommunityResults)
 			Expect(ok).To(Equal(true))
-			Expect(len(a)).To(Equal(1))
-			Expect(a[0].Committers).To(Equal(7))
-			Expect(a[0].Name).To(Equal("ion-channel/ion-connect"))
-			Expect(a[0].URL).To(Equal("https://github.com/ion-channel/ion-connect"))
+			Expect(a.Committers).To(Equal(7))
+			Expect(a.Name).To(Equal("ion-channel/ion-connect"))
+			Expect(a.URL).To(Equal("https://github.com/ion-channel/ion-connect"))
 		})
 
 		g.It("should unmarshal a scan results with coverage data", func() {
@@ -156,7 +155,7 @@ func TestScanResults(t *testing.T) {
 
 const (
 	SampleValidScanResultsAboutYML      = `{"type":"about_yml", "data":{"message": "foo message", "valid": true, "content": "some content"}}`
-	SampleValidScanResultsCommunity     = `{"type":"community", "data":[{"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}]}`
+	SampleValidScanResultsCommunity     = `{"type":"community", "data":{"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}}`
 	SampleValidScanResultsCoverage      = `{"type":"external_coverage", "data":{"value":42.0}}`
 	SampleValidScanResultsDependency    = `{"type":"dependency","data":{"dependencies":[{"latest_version":"2.0","org":"net.sourceforge.javacsv","name":"javacsv","type":"maven","package":"jar","version":"2.0","scope":"compile"},{"latest_version":"4.12","org":"junit","name":"junit","type":"maven","package":"jar","version":"4.11","scope":"test"},{"latest_version":"1.4-atlassian-1","org":"org.hamcrest","name":"hamcrest-core","type":"maven","package":"jar","version":"1.3","scope":"test"},{"latest_version":"4.5.2","org":"org.apache.httpcomponents","name":"httpclient","type":"maven","package":"jar","version":"4.3.4","scope":"compile"},{"latest_version":"4.4.5","org":"org.apache.httpcomponents","name":"httpcore","type":"maven","package":"jar","version":"4.3.2","scope":"compile"},{"latest_version":"99.0-does-not-exist","org":"commons-logging","name":"commons-logging","type":"maven","package":"jar","version":"1.1.3","scope":"compile"},{"latest_version":"20041127.091804","org":"commons-codec","name":"commons-codec","type":"maven","package":"jar","version":"1.6","scope":"compile"}],"meta":{"first_degree_count":3,"no_version_count":0,"total_unique_count":7,"update_available_count":2}}}`
 	SampleValidScanResultsEcosystems    = `{"type":"ecosystems","data":{"ecosystems":[{"ecosystem":"Java","lines":2430},{"ecosystem":"Makefile","lines":210},{"ecosystem":"Ruby","lines":666}]}}`
