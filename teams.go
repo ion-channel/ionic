@@ -29,7 +29,7 @@ type CreateTeamOptions struct {
 // CreateTeam takes a create team options, validates the minimum info is
 // present, and makes the calls to create the team. It returns the team created
 // and any errors it encounters with the API.
-func (ic *IonClient) CreateTeam(opts CreateTeamOptions) (*teams.Team, error) {
+func (ic *IonClient) CreateTeam(opts CreateTeamOptions, token string) (*teams.Team, error) {
 	if opts.Name == "" {
 		return nil, fmt.Errorf("name missing from options")
 	}
@@ -41,7 +41,7 @@ func (ic *IonClient) CreateTeam(opts CreateTeamOptions) (*teams.Team, error) {
 
 	buff := bytes.NewBuffer(b)
 
-	b, err = ic.Post(teamsCreateTeamEndpoint, nil, *buff, nil)
+	b, err = ic.Post(teamsCreateTeamEndpoint, token, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create team: %v", err.Error())
 	}
@@ -58,11 +58,11 @@ func (ic *IonClient) CreateTeam(opts CreateTeamOptions) (*teams.Team, error) {
 // GetTeam takes a team id and returns the Ion Channel representation of that
 // team.  An error is returned for client communications and unmarshalling
 // errors.
-func (ic *IonClient) GetTeam(id string) (*teams.Team, error) {
+func (ic *IonClient) GetTeam(id, token string) (*teams.Team, error) {
 	params := &url.Values{}
 	params.Set("someid", id)
 
-	b, err := ic.Get(teamsGetTeamEndpoint, params, nil, nil)
+	b, err := ic.Get(teamsGetTeamEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team: %v", err.Error())
 	}

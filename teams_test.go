@@ -18,7 +18,7 @@ func TestTeams(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get a team", func() {
 			server.AddPath("/v1/teams/getTeam").
@@ -26,7 +26,7 @@ func TestTeams(t *testing.T) {
 				SetPayload([]byte(SampleValidTeam)).
 				SetStatus(http.StatusOK)
 
-			team, err := client.GetTeam("cd98e4e1-6926-4989-8ef8-f326cd5956fc")
+			team, err := client.GetTeam("cd98e4e1-6926-4989-8ef8-f326cd5956fc", "atoken")
 			Expect(err).To(BeNil())
 			Expect(team.ID).To(Equal("cd98e4e1-6926-4989-8ef8-f326cd5956fc"))
 			Expect(team.Name).To(Equal("ion-channel"))
@@ -43,7 +43,7 @@ func TestTeams(t *testing.T) {
 				POCName:  "Ion",
 				POCEmail: "test@iontest.com",
 			}
-			team, err := client.CreateTeam(opts)
+			team, err := client.CreateTeam(opts, "atoken")
 			Expect(err).To(BeNil())
 			Expect(team.ID).To(Equal("5c4a8a84-efa0-4357-91f6-9f9e95f7dd1a"))
 			Expect(team.Name).To(Equal("test-team"))
