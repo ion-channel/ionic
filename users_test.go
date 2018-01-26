@@ -20,7 +20,7 @@ func TestUsers(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("secret", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get users for an event", func() {
 			server.AddPath("/v1/users/subscribedForEvent").
@@ -29,7 +29,7 @@ func TestUsers(t *testing.T) {
 				SetStatus(http.StatusOK)
 			e := events.Event{}
 
-			users, err := client.GetUsersSubscribedForEvent(e)
+			users, err := client.GetUsersSubscribedForEvent(e, "atoken")
 			Expect(err).To(BeNil())
 			Expect(len(users)).To(Equal(1))
 			Expect(users[0].Email).To(Equal("ion@iontest.io"))
@@ -41,7 +41,7 @@ func TestUsers(t *testing.T) {
 				SetPayload([]byte(SampleSelfResponse)).
 				SetStatus(http.StatusOK)
 
-			me, err := client.GetSelf()
+			me, err := client.GetSelf("atoken")
 			Expect(err).To(BeNil())
 			Expect(me.Email).To(Equal("admin@ion.io"))
 			Expect(me.Username).To(Equal("ion"))
