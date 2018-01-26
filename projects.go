@@ -17,15 +17,15 @@ const (
 	updateProjectEndpoint = "v1/project/updateProject"
 )
 
-// GetProject takes a project ID and team ID and returns the project.  It
-// returns an error if it receives a bad response from the API or fails to
-// unmarshal the JSON response from the API.
-func (ic *IonClient) GetProject(id, teamID string) (*projects.Project, error) {
+// GetProject takes a project ID, team ID, and token. It returns the project and
+// an error if it receives a bad response from the API or fails to unmarshal the
+// JSON response from the API.
+func (ic *IonClient) GetProject(id, teamID, token string) (*projects.Project, error) {
 	params := &url.Values{}
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(getProjectEndpoint, params, nil, nil)
+	b, err := ic.Get(getProjectEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -39,14 +39,14 @@ func (ic *IonClient) GetProject(id, teamID string) (*projects.Project, error) {
 	return &p, nil
 }
 
-// GetRawProject takes a project ID and team ID and returns the raw json of the
+// GetRawProject takes a project ID, team ID, and token. It returns the raw json of the
 // project.  It also returns any API errors it may encounter.
-func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
+func (ic *IonClient) GetRawProject(id, teamID, token string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(getProjectEndpoint, params, nil, nil)
+	b, err := ic.Get(getProjectEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -56,11 +56,11 @@ func (ic *IonClient) GetRawProject(id, teamID string) (json.RawMessage, error) {
 
 // GetProjects takes a team ID and returns the projects for that team.  It
 // returns an error for any API errors it may encounter.
-func (ic *IonClient) GetProjects(teamID string, page *pagination.Pagination) ([]projects.Project, error) {
+func (ic *IonClient) GetProjects(teamID, token string, page *pagination.Pagination) ([]projects.Project, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(getProjectsEndpoint, params, nil, page)
+	b, err := ic.Get(getProjectsEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
 	}
@@ -74,8 +74,9 @@ func (ic *IonClient) GetProjects(teamID string, page *pagination.Pagination) ([]
 	return pList, nil
 }
 
-//UpdateProject returns the project stored or an error encountered by the API
-func (ic *IonClient) UpdateProject(project *projects.Project) (*projects.Project, error) {
+//UpdateProject takes a project to update and token to use. It returns the
+// project stored or an error encountered by the API
+func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*projects.Project, error) {
 	params := &url.Values{}
 
 	params.Set("id", project.ID)
@@ -91,7 +92,7 @@ func (ic *IonClient) UpdateProject(project *projects.Project) (*projects.Project
 	params.Set("chat_channel", project.ChatChannel)
 	params.Set("should_monitor", strconv.FormatBool(project.Monitor))
 
-	b, err := ic.Put(updateProjectEndpoint, params, bytes.Buffer{}, nil)
+	b, err := ic.Put(updateProjectEndpoint, token, params, bytes.Buffer{}, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
 	}
