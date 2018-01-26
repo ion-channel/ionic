@@ -18,7 +18,7 @@ func TestReports(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get an analysis report", func() {
 			server.AddPath("/v1/report/getAnalysis").
@@ -26,7 +26,7 @@ func TestReports(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisReport)).
 				SetStatus(http.StatusOK)
 
-			report, err := client.GetAnalysisReport("d0fbcdaa-4559-4441-1fcc-d43574004088", "ateamid", "aprojectid")
+			report, err := client.GetAnalysisReport("d0fbcdaa-4559-4441-1fcc-d43574004088", "ateamid", "aprojectid", "atoken")
 			Expect(err).To(BeNil())
 			Expect(report.ID).To(Equal("d0fbcdaa-4559-4441-1fcc-d43574004088"))
 			Expect(report.Name).To(Equal("Kermit"))
@@ -38,7 +38,7 @@ func TestReports(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisReport)).
 				SetStatus(http.StatusOK)
 
-			report, err := client.GetRawAnalysisReport("d0fbcdaa-4559-4441-1fcc-d43574004088", "ateamid", "aprojectid")
+			report, err := client.GetRawAnalysisReport("d0fbcdaa-4559-4441-1fcc-d43574004088", "ateamid", "aprojectid", "atoken")
 			Expect(err).To(BeNil())
 			Expect(string(report)).To(ContainSubstring("d0fbcdaa-4559-4441-1fcc-d43574004088"))
 			Expect(string(report)).To(ContainSubstring("Kermit"))
@@ -50,7 +50,7 @@ func TestReports(t *testing.T) {
 				SetPayload([]byte(SampleValidProjectReport)).
 				SetStatus(http.StatusOK)
 
-			report, err := client.GetProjectReport("aprojectid", "ateamid")
+			report, err := client.GetProjectReport("aprojectid", "ateamid", "atoken")
 			Expect(err).To(BeNil())
 			Expect(report.ID).To(Equal("AB3DC2C7-4BB8-4211-8F42-158C8AD4BAE3"))
 			Expect(report.Name).To(Equal("Pepe"))
@@ -62,7 +62,7 @@ func TestReports(t *testing.T) {
 				SetPayload([]byte(SampleValidProjectReport)).
 				SetStatus(http.StatusOK)
 
-			report, err := client.GetRawProjectReport("aprojectid", "ateamid")
+			report, err := client.GetRawProjectReport("aprojectid", "ateamid", "atoken")
 			Expect(err).To(BeNil())
 			Expect(string(report)).To(ContainSubstring("AB3DC2C7-4BB8-4211-8F42-158C8AD4BAE3"))
 			Expect(string(report)).To(ContainSubstring("Pepe"))
