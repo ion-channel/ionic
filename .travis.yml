@@ -2,7 +2,7 @@ language: go
 
 go:
   - 1.8
-  - tip
+  - 1.9.3
 
 install:
   - go get -u github.com/golang/lint/golint
