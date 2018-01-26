@@ -16,18 +16,16 @@ func TestClient(t *testing.T) {
 
 	g.Describe("Client", func() {
 		g.It("should return a new client", func() {
-			s := "foosecret"
 			u := "http://google.com"
-			cli, err := New(s, u)
+			cli, err := New(u)
 
 			Expect(err).To(BeNil())
-			Expect(cli.bearerToken).To(Equal(s))
+			Expect(cli).NotTo(BeNil())
 		})
 
 		g.It("should return an error on a bad url", func() {
-			s := "foosecret"
 			u := "http://googl%8675309e\\house.com"
-			cli, err := New(s, u)
+			cli, err := New(u)
 
 			Expect(err).NotTo(BeNil())
 			Expect(cli).To(BeNil())
@@ -36,7 +34,7 @@ func TestClient(t *testing.T) {
 		g.It("should create a url with params nil", func() {
 			e := "some/random/endpoint"
 			b := "http://google.com"
-			cli, _ := New("foosecret", b)
+			cli, _ := New(b)
 
 			u := cli.createURL(e, nil, nil)
 			Expect(u.String()).To(Equal(fmt.Sprintf("%v/%v", b, e)))
@@ -45,7 +43,7 @@ func TestClient(t *testing.T) {
 		g.It("should create a url with empty params", func() {
 			e := "some/random/endpoint"
 			b := "http://google.com"
-			cli, _ := New("foosecret", b)
+			cli, _ := New(b)
 			p := &url.Values{}
 
 			u := cli.createURL(e, p, nil)
@@ -55,7 +53,7 @@ func TestClient(t *testing.T) {
 		g.It("should create a url with params", func() {
 			e := "some/random/endpoint"
 			b := "http://google.com"
-			cli, _ := New("foosecret", b)
+			cli, _ := New(b)
 			p := &url.Values{}
 			p.Set("foo", "bar")
 
@@ -69,34 +67,23 @@ func TestClient(t *testing.T) {
 			o := 21
 			l := 100
 			p := &pagination.Pagination{Offset: o, Limit: l}
-			cli, _ := New("foosecret", b)
+			cli, _ := New(b)
 
 			u := cli.createURL(e, nil, p)
 			Expect(u.String()).To(Equal(fmt.Sprintf("%v/%v?limit=%v&offset=%v", b, e, l, o)))
-		})
-
-		g.It("should set a new token", func() {
-			old := "footoken"
-			new := "bartoken"
-
-			cli, _ := New(old, "http://google.com")
-			Expect(cli.bearerToken).To(Equal(old))
-			cli.SetBearerToken(new)
-			Expect(cli.bearerToken).To(Equal(new))
 		})
 	})
 }
 
 var client = &IonClient{
-	baseURL:     nil,
-	bearerToken: "footoken",
-	client:      nil,
+	baseURL: nil,
+	client:  nil,
 }
 
 func ExampleIonClient_customPaginationRange() {
 	pages := &pagination.Pagination{Offset: 20, Limit: 100}
 
-	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", pages)
+	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", "sometoken", pages)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -106,7 +93,7 @@ func ExampleIonClient_customPaginationRange() {
 
 func ExampleIonClient_defaultPaginationRange() {
 	// nil for pagination will use the default set by the API and may vary for each object
-	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", nil)
+	vulns, err := client.GetVulnerabilities("ruby", "1.9.3", "sometoken", nil)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

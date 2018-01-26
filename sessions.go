@@ -41,7 +41,7 @@ func (ic *IonClient) Login(username, password string) (*Session, error) {
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.Post(sessionsLoginEndpoint, nil, *buff, headers)
+	b, err = ic.Post(sessionsLoginEndpoint, "", nil, *buff, headers)
 	if err != nil {
 		return nil, fmt.Errorf("failed to login: %v", err.Error())
 	}

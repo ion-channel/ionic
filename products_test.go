@@ -19,7 +19,7 @@ func TestProducts(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get a product", func() {
 			server.AddPath("/v1/vulnerability/getProducts").
@@ -27,7 +27,7 @@ func TestProducts(t *testing.T) {
 				SetPayload([]byte(SampleValidProduct)).
 				SetStatus(http.StatusOK)
 
-			product, err := client.GetProducts("cpe:/a:ruby-lang:ruby:1.8.7")
+			product, err := client.GetProducts("cpe:/a:ruby-lang:ruby:1.8.7", "someapikey")
 			Expect(err).To(BeNil())
 			Expect(product[0].ID).To(Equal(99182))
 			Expect(product[0].Name).To(Equal("ruby"))
@@ -39,7 +39,7 @@ func TestProducts(t *testing.T) {
 				SetPayload([]byte(SampleValidProduct)).
 				SetStatus(http.StatusOK)
 
-			raw, err := client.GetRawProducts("cpe:/a:ruby-lang:ruby:1.8.7")
+			raw, err := client.GetRawProducts("cpe:/a:ruby-lang:ruby:1.8.7", "fookey")
 			Expect(err).To(BeNil())
 			Expect(raw).To(Equal(json.RawMessage(SampleValidRawProduct)))
 		})

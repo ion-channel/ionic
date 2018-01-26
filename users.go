@@ -45,7 +45,7 @@ func (ic *IonClient) CreateUser(email, username, password string) (*users.User, 
 
 	buff := bytes.NewBuffer(b)
 
-	b, err = ic.Post(usersCreateUserEndpoint, nil, *buff, nil)
+	b, err = ic.Post(usersCreateUserEndpoint, "", nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %v", err.Error())
 	}
@@ -59,17 +59,17 @@ func (ic *IonClient) CreateUser(email, username, password string) (*users.User, 
 	return &u, nil
 }
 
-// GetUsersSubscribedForEvent takes an event and returns a list of users
+// GetUsersSubscribedForEvent takes an event and token, and returns a list of users
 // subscribed to that event and returns an error if there are JSON marshalling
 // or unmarshalling issues or issues with the request
-func (ic *IonClient) GetUsersSubscribedForEvent(event events.Event) ([]users.User, error) {
+func (ic *IonClient) GetUsersSubscribedForEvent(event events.Event, token string) ([]users.User, error) {
 	b, err := json.Marshal(event)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal event to JSON: %v", err.Error())
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.Post(usersSubscribedForEventEndpoint, nil, *buff, nil)
+	b, err = ic.Post(usersSubscribedForEventEndpoint, token, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get users: %v", err.Error())
 	}
@@ -85,11 +85,11 @@ func (ic *IonClient) GetUsersSubscribedForEvent(event events.Event) ([]users.Use
 	return users.Users, nil
 }
 
-// GetSelf returns the user object associated with the bearer token in use by
-// the Ion Client.  An error is returned if the client cannot talk to the API
-// or the returned user object is nil or blank
-func (ic *IonClient) GetSelf() (*users.User, error) {
-	b, err := ic.Get(usersGetSelfEndpoint, nil, nil, nil)
+// GetSelf returns the user object associated with the bearer token provided.
+// An error is returned if the client cannot talk to the API or the returned
+// user object is nil or blank
+func (ic *IonClient) GetSelf(token string) (*users.User, error) {
+	b, err := ic.Get(usersGetSelfEndpoint, token, nil, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get self: %v", err.Error())
 	}

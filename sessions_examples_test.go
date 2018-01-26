@@ -9,7 +9,7 @@ import (
 func ExampleIonClient_Login() {
 	// In theory you should not have an API key yet, so providing blank will
 	// work just fine
-	client, err := ionic.New("", "https://api.test.ionchannel.io")
+	client, err := ionic.New("https://api.test.ionchannel.io")
 	if err != nil {
 		panic(fmt.Sprintf("Panic creating Ion Client: %v", err.Error()))
 	}
@@ -19,6 +19,7 @@ func ExampleIonClient_Login() {
 		fmt.Println(err.Error())
 	}
 
-	// Update your client with your new bearer token
-	client.SetBearerToken(sess.BearerToken)
+	// Use the bearer token in subsequent calls
+	vuln, _ := client.GetVulnerability("CVE-1234-1234", sess.BearerToken)
+	fmt.Printf("Vulns: %v\n", vuln)
 }

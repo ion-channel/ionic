@@ -18,7 +18,7 @@ func TestAnalysis(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get an analysis", func() {
 			server.AddPath("/v1/animal/getAnalysis").
@@ -26,7 +26,7 @@ func TestAnalysis(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysis)).
 				SetStatus(http.StatusOK)
 
-			analysis, err := client.GetAnalysis("f9bca953-80ac-46c4-b195-d37f3bc4f498", "ateamid", "aprojectid")
+			analysis, err := client.GetAnalysis("f9bca953-80ac-46c4-b195-d37f3bc4f498", "ateamid", "aprojectid", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(analysis.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 			Expect(analysis.Status).To(Equal("finished"))
@@ -41,7 +41,7 @@ func TestAnalysis(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysis)).
 				SetStatus(http.StatusOK)
 
-			analysis, err := client.GetRawAnalysis("f9bca953-80ac-46c4-b195-d37f3bc4f498", "ateamid", "aprojectid")
+			analysis, err := client.GetRawAnalysis("f9bca953-80ac-46c4-b195-d37f3bc4f498", "ateamid", "aprojectid", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(string(analysis)).To(ContainSubstring("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 			Expect(string(analysis)).To(ContainSubstring("finished"))
@@ -55,7 +55,7 @@ func TestAnalysis(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisSummary)).
 				SetStatus(http.StatusOK)
 
-			analysis, err := client.GetLatestAnalysisSummary("ateamid", "aprojectid")
+			analysis, err := client.GetLatestAnalysisSummary("ateamid", "aprojectid", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(analysis.TeamID).To(Equal("cf47e4d1-bcf8-4990-8ef8-f325ae59d6fc"))
 			Expect(analysis.Passed).To(Equal(false))
@@ -67,7 +67,7 @@ func TestAnalysis(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisSummary)).
 				SetStatus(http.StatusOK)
 
-			analysis, err := client.GetRawLatestAnalysisSummary("ateamid", "aprojectid")
+			analysis, err := client.GetRawLatestAnalysisSummary("ateamid", "aprojectid", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(string(analysis)).To(ContainSubstring("cf47e4d1-bcf8-4990-8ef8-f325ae59d6fc"))
 			Expect(string(analysis)).To(ContainSubstring("failed"))

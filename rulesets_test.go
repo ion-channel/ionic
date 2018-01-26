@@ -20,7 +20,7 @@ func TestRuleSets(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get a ruleset", func() {
 			server.AddPath("/v1/ruleset/getRuleset").
@@ -28,7 +28,7 @@ func TestRuleSets(t *testing.T) {
 				SetPayload([]byte(SampleValidRuleSet)).
 				SetStatus(http.StatusOK)
 
-			ruleset, err := client.GetRuleSet("c0210380-3d44-495d-9d10-c7d436a63870", "a2d2a3e5-e274-bb88-aef2-1d47f029c289")
+			ruleset, err := client.GetRuleSet("c0210380-3d44-495d-9d10-c7d436a63870", "a2d2a3e5-e274-bb88-aef2-1d47f029c289", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(ruleset.ID).To(Equal("c0210380-3d44-495d-9d10-c7d436a63870"))
 			Expect(ruleset.Name).To(Equal("all things"))
@@ -40,7 +40,7 @@ func TestRuleSets(t *testing.T) {
 				SetPayload([]byte(SampleValidRuleSets)).
 				SetStatus(http.StatusOK)
 
-			rulesets, err := client.GetRuleSets("a2d2a3e5-e274-bb88-aef2-1d47f029c289", pagination.AllItems)
+			rulesets, err := client.GetRuleSets("a2d2a3e5-e274-bb88-aef2-1d47f029c289", "sometoken", pagination.AllItems)
 			Expect(err).To(BeNil())
 			Expect(len(rulesets)).To(Equal(2))
 			Expect(rulesets[0].ID).To(Equal("c0210380-3d44-495d-9d10-c7d436a63870"))
@@ -54,7 +54,7 @@ func TestRuleSets(t *testing.T) {
 				SetPayload([]byte(SampleAppliedRuleset)).
 				SetStatus(http.StatusOK)
 
-			applied, err := client.GetAppliedRuleSet("0AA84783-C2D7-440F-B78B-7E315288398A", "48501083-16EA-4254-9C73-60419A7A4ECB", "")
+			applied, err := client.GetAppliedRuleSet("0AA84783-C2D7-440F-B78B-7E315288398A", "48501083-16EA-4254-9C73-60419A7A4ECB", "", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(len(applied.RuleEvaluationSummary.Ruleresults)).To(Equal(7))
 		})
@@ -65,7 +65,7 @@ func TestRuleSets(t *testing.T) {
 				SetPayload([]byte(SampleAppliedRuleset)).
 				SetStatus(http.StatusOK)
 
-			applied, err := client.GetRawAppliedRuleSet("0AA84783-C2D7-440F-B78B-7E315288398A", "48501083-16EA-4254-9C73-60419A7A4ECB", "", pagination.AllItems)
+			applied, err := client.GetRawAppliedRuleSet("0AA84783-C2D7-440F-B78B-7E315288398A", "48501083-16EA-4254-9C73-60419A7A4ECB", "", "sometoken", pagination.AllItems)
 			Expect(err).To(BeNil())
 			Expect(string(applied)).To(ContainSubstring("\"team_id\":\"800E898B-CCD8-4394-A559-F17D08030413\""))
 			Expect(string(applied)).To(ContainSubstring("\"project_id\":\"32D701E1-E173-43EF-9CC8-E4CB27417FD8\""))
