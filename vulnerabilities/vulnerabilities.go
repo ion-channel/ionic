@@ -11,18 +11,15 @@ import (
 // Vulnerability represents a singular vulnerability record in the Ion Channel
 // Platform
 type Vulnerability struct {
-	ID           int    `json:"id" xml:"id"`
-	ExternalID   string `json:"external_id" xml:"exteral_id"`
-	SourceID     int    `json:"source_id" xml:"source_id"`
-	Title        string `json:"title" xml:"title"`
-	Summary      string `json:"summary" xml:"summary"`
-	Score        string `json:"score" xml:"score"`
-	ScoreVersion string `json:"score_version" xml:"score_version"`
-	ScoreSystem  string `json:"score_system" xml:"score_system"`
-	ScoreDetails struct {
-		CVSSv2 CVSSv2 `json:"cvssv2" xml:"cvssv2"`
-		CVSSv3 CVSSv3 `json:"cvssv3" xml:"cvssv3"`
-	} `json:"score_details" xml:"score_details"`
+	ID                          int                `json:"id" xml:"id"`
+	ExternalID                  string             `json:"external_id" xml:"exteral_id"`
+	SourceID                    int                `json:"source_id" xml:"source_id"`
+	Title                       string             `json:"title" xml:"title"`
+	Summary                     string             `json:"summary" xml:"summary"`
+	Score                       string             `json:"score,omitempty" xml:"score"`
+	ScoreVersion                string             `json:"score_version,omitempty" xml:"score_version"`
+	ScoreSystem                 string             `json:"score_system" xml:"score_system"`
+	ScoreDetails                ScoreDetails       `json:"score_details" xml:"score_details"`
 	Vector                      string             `json:"vector" xml:"vector"`
 	AccessComplexity            string             `json:"access_complexity" xml:"access_complexity"`
 	VulnerabilityAuthentication string             `json:"vulnerability_authentication" xml:"vulnerability_authentication"`
@@ -34,16 +31,17 @@ type Vulnerability struct {
 	Scanner                     json.RawMessage    `json:"scanner" xml:"scanner"`
 	Recommendation              string             `json:"recommendation" xml:"recommendation"`
 	Dependencies                []products.Product `json:"dependencies" xml:"dependencies"`
-	References                  []struct {
-		Type   string `json:"type" xml:"type"`
-		Source string `json:"source" xml:"source"`
-		URL    string `json:"url" xml:"url"`
-		Text   string `json:"text" xml:"text"`
-	} `json:"references" xml:"references"`
-	ModifiedAt  time.Time `json:"modified_at" xml:"modified_at"`
-	PublishedAt time.Time `json:"published_at" xml:"published_at"`
-	CreatedAt   time.Time `json:"created_at" xml:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at" xml:"updated_at"`
+	References                  []Reference        `json:"references" xml:"references"`
+	ModifiedAt                  time.Time          `json:"modified_at" xml:"modified_at"`
+	PublishedAt                 time.Time          `json:"published_at" xml:"published_at"`
+	CreatedAt                   time.Time          `json:"created_at" xml:"created_at"`
+	UpdatedAt                   time.Time          `json:"updated_at" xml:"updated_at"`
+}
+
+// ScoreDetails represents the possible details for each version of scoring
+type ScoreDetails struct {
+	CVSSv2 *CVSSv2 `json:"cvssv2,omitempty" xml:"cvssv2"`
+	CVSSv3 *CVSSv3 `json:"cvssv3,omitempty" xml:"cvssv3"`
 }
 
 // CVSSv2 represents the variables that go into determining the CVSS v2 score
@@ -73,6 +71,14 @@ type CVSSv3 struct {
 	AvailabilityImpact    string  `json:"availabilityImpact" xml:"availabilityImpact"`
 	BaseScore             float64 `json:"baseScore" xml:"baseScore"`
 	BaseSeverity          string  `json:"baseSeverity" xml:"baseSeverity"`
+}
+
+// Reference represents a location where a CVE may have been referenced
+type Reference struct {
+	Type   string `json:"type" xml:"type"`
+	Source string `json:"source" xml:"source"`
+	URL    string `json:"url" xml:"url"`
+	Text   string `json:"text" xml:"text"`
 }
 
 // NewV3FromShorthand takes a shorthand representation of a CVSSv3 and returns
