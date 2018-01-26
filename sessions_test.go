@@ -18,7 +18,7 @@ func TestSessions(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get a session for valid credentials", func() {
 			server.AddPath("/v1/sessions/login").
