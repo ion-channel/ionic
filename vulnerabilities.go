@@ -18,7 +18,33 @@ const (
 	getVulnerabilitiesEndpoint       = "v1/vulnerability/getVulnerabilities"
 	getVulnerabilitiesInFileEndpoint = "v1/vulnerability/getVulnerabilitiesInFile"
 	getVulnerabilityEndpoint         = "v1/vulnerability/getVulnerability"
+	postVulnerabilityEndpoint        = "v1/internal/vulnerability/addVulnerability"
 )
+
+// AddVulnerability takes in a vulnerability object populated with the desired
+// data to send to the API and a token to use. It will return the inserted
+// vulnerability and any errors it encounters with the API.
+func (ic *IonClient) AddVulnerability(newVuln *vulnerabilities.Vulnerability, token string) (*vulnerabilities.Vulnerability, error) {
+	nv, err := json.Marshal(newVuln)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal new vuln into payload: %v", err.Error())
+	}
+
+	p := bytes.NewBuffer(nv)
+
+	b, err := ic.Post(postVulnerabilityEndpoint, token, nil, *p, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to add vulnerability: %v", err.Error())
+	}
+
+	var v vulnerabilities.Vulnerability
+	err = json.Unmarshal(b, &v)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal json into vuln: %v", err.Error())
+	}
+
+	return &v, nil
+}
 
 // GetVulnerabilities returns a slice of Vulnerability for a given product and
 // version string over a specified pagination range.  If version is left blank,

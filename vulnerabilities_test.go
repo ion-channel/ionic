@@ -8,6 +8,7 @@ import (
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	"github.com/ion-channel/ionic/pagination"
+	"github.com/ion-channel/ionic/vulnerabilities"
 	. "github.com/onsi/gomega"
 )
 
@@ -16,10 +17,16 @@ func TestVulns(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Vulnerabilities", func() {
-		server := bogus.New()
-		server.Start()
-		h, p := server.HostPort()
-		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+		var server *bogus.Bogus
+		var h, p string
+		var client *IonClient
+
+		g.BeforeEach(func() {
+			server = bogus.New()
+			server.Start()
+			h, p = server.HostPort()
+			client, _ = New(fmt.Sprintf("http://%v:%v", h, p))
+		})
 
 		g.It("should get vulnerabilities", func() {
 			server.AddPath("/v1/vulnerability/getVulnerabilities").
@@ -54,6 +61,29 @@ func TestVulns(t *testing.T) {
 
 			Expect(err).To(BeNil())
 			Expect(string(bodyBytes)).To(ContainSubstring("CVE-2013-4164"))
+		})
+
+		g.It("should post a new vulnerability", func() {
+			server.AddPath("/v1/internal/vulnerability/addVulnerability").
+				SetMethods("POST").
+				SetPayload([]byte(SampleVulnerabilityResponse)).
+				SetStatus(http.StatusOK)
+
+			newV := &vulnerabilities.Vulnerability{
+				ExternalID: "CVE-2013-4164",
+			}
+
+			v, err := client.AddVulnerability(newV, "atoken")
+			Expect(err).To(BeNil())
+			Expect(v).NotTo(BeNil())
+			Expect(v.ExternalID).To(Equal("CVE-2013-4164"))
+
+			hr := server.HitRecords()
+			Expect(len(hr)).To(Equal(1))
+
+			b := string(hr[0].Body)
+			Expect(b).NotTo(Equal(""))
+			Expect(b).To(ContainSubstring("CVE-2013-4164"))
 		})
 	})
 }
