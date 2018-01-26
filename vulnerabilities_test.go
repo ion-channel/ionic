@@ -19,14 +19,14 @@ func TestVulns(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("secret", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get vulnerabilities", func() {
 			server.AddPath("/v1/vulnerability/getVulnerabilities").
 				SetMethods("GET").
 				SetPayload([]byte(SampleVulnerabilitiesResponse)).
 				SetStatus(http.StatusOK)
-			vulns, err := client.GetVulnerabilities("jdk", "", pagination.AllItems)
+			vulns, err := client.GetVulnerabilities("jdk", "", "atoken", pagination.AllItems)
 
 			Expect(err).To(BeNil())
 			Expect(len(vulns)).To(Equal(21))
@@ -37,7 +37,7 @@ func TestVulns(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(SampleVulnerabilityResponse)).
 				SetStatus(http.StatusOK)
-			vuln, err := client.GetVulnerability("CVE-2013-4164")
+			vuln, err := client.GetVulnerability("CVE-2013-4164", "atoken")
 
 			Expect(err).To(BeNil())
 			Expect(vuln.Title).To(Equal("CVE-2013-4164"))
@@ -50,7 +50,7 @@ func TestVulns(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(SampleVulnerabilityResponse)).
 				SetStatus(http.StatusOK)
-			bodyBytes, err := client.GetRawVulnerability("CVE-2013-4164")
+			bodyBytes, err := client.GetRawVulnerability("CVE-2013-4164", "atoken")
 
 			Expect(err).To(BeNil())
 			Expect(string(bodyBytes)).To(ContainSubstring("CVE-2013-4164"))

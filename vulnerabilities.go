@@ -24,14 +24,14 @@ const (
 // version string over a specified pagination range.  If version is left blank,
 // it will not be considered in the search query.  An error is returned for
 // client communication and unmarshalling errors.
-func (ic *IonClient) GetVulnerabilities(product, version string, page *pagination.Pagination) ([]vulnerabilities.Vulnerability, error) {
+func (ic *IonClient) GetVulnerabilities(product, version, token string, page *pagination.Pagination) ([]vulnerabilities.Vulnerability, error) {
 	params := &url.Values{}
 	params.Set("product", product)
 	if version != "" {
 		params.Set("version", version)
 	}
 
-	b, err := ic.Get(getVulnerabilitiesEndpoint, params, nil, page)
+	b, err := ic.Get(getVulnerabilitiesEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
 	}
@@ -49,7 +49,7 @@ func (ic *IonClient) GetVulnerabilities(product, version string, page *paginatio
 // a slice of vulnerabilities found for the list of dependencies.  An error is
 // returned if the file can't be cannot be read, the API returns an error, or
 // marshalling issues.
-func (ic *IonClient) GetVulnerabilitiesInFile(filePath string) ([]vulnerabilities.Vulnerability, error) {
+func (ic *IonClient) GetVulnerabilitiesInFile(filePath, token string) ([]vulnerabilities.Vulnerability, error) {
 	buff := &bytes.Buffer{}
 	bw := multipart.NewWriter(buff)
 
@@ -73,7 +73,7 @@ func (ic *IonClient) GetVulnerabilitiesInFile(filePath string) ([]vulnerabilitie
 	h.Set("Content-Type", bw.FormDataContentType())
 	bw.Close()
 
-	b, err := ic.Post(getVulnerabilitiesInFileEndpoint, nil, *buff, h)
+	b, err := ic.Post(getVulnerabilitiesInFileEndpoint, token, nil, *buff, h)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
 	}
@@ -89,11 +89,11 @@ func (ic *IonClient) GetVulnerabilitiesInFile(filePath string) ([]vulnerabilitie
 
 // GetVulnerability takes an ID string and returns the vulnerability found for
 // that ID.  An error is returned for API errors and marshalling errors.
-func (ic *IonClient) GetVulnerability(id string) (*vulnerabilities.Vulnerability, error) {
+func (ic *IonClient) GetVulnerability(id, token string) (*vulnerabilities.Vulnerability, error) {
 	params := &url.Values{}
 	params.Set("external_id", id)
 
-	b, err := ic.Get(getVulnerabilityEndpoint, params, nil, nil)
+	b, err := ic.Get(getVulnerabilityEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerability: %v", err.Error())
 	}
@@ -109,11 +109,11 @@ func (ic *IonClient) GetVulnerability(id string) (*vulnerabilities.Vulnerability
 
 // GetRawVulnerability takes an ID string and returns the raw json message
 // found for that ID.  An error is returned for API errors.
-func (ic *IonClient) GetRawVulnerability(id string) (json.RawMessage, error) {
+func (ic *IonClient) GetRawVulnerability(id, token string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("external_id", id)
 
-	b, err := ic.Get(getVulnerabilityEndpoint, params, nil, nil)
+	b, err := ic.Get(getVulnerabilityEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerability: %v", err.Error())
 	}
