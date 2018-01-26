@@ -21,7 +21,7 @@ func TestScanner(t *testing.T) {
 		server := bogus.New()
 		server.Start()
 		h, p := server.HostPort()
-		client, _ := New("", fmt.Sprintf("http://%v:%v", h, p))
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should create an analysis for a project", func() {
 			server.AddPath("/v1/scanner/analyzeProject").
@@ -29,7 +29,7 @@ func TestScanner(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisStatus)).
 				SetStatus(http.StatusOK)
 
-			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid", "abranch")
+			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid", "abranch", "atoken")
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
 			Expect(analysisStatus.Status).To(Equal("accepted"))
@@ -41,7 +41,7 @@ func TestScanner(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisStatus)).
 				SetStatus(http.StatusOK)
 
-			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid", "")
+			analysisStatus, err := client.AnalyzeProject("aprojectid", "ateamid", "", "atoken")
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
 			Expect(analysisStatus.Status).To(Equal("accepted"))
@@ -53,7 +53,7 @@ func TestScanner(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysisScanStatus)).
 				SetStatus(http.StatusOK)
 
-			analysisStatus, err := client.GetAnalysisStatus("analysis-id", "ateamid", "aprojectid")
+			analysisStatus, err := client.GetAnalysisStatus("analysis-id", "ateamid", "aprojectid", "atoken")
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
 			Expect(analysisStatus.Message).To(Equal("Completed compliance analysis"))
@@ -72,7 +72,7 @@ func TestScanner(t *testing.T) {
 			scan := scanner.ExternalScan{}
 			scan.Coverage = &coverage
 
-			analysisStatus, err := client.AddScanResult("analysis-id", "ateamid", "aprojectid", "coverage", "accepted", scan)
+			analysisStatus, err := client.AddScanResult("analysis-id", "ateamid", "aprojectid", "coverage", "accepted", "atoken", scan)
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
 			Expect(analysisStatus.Status).To(Equal("accepted"))
@@ -88,7 +88,7 @@ func TestScanner(t *testing.T) {
 			err := json.Unmarshal([]byte(SampleRawExternalScanData), &scan)
 			Expect(err).To(BeNil())
 
-			_, err = client.AddScanResult("analysis-id", "ateamid", "aprojectid", "coverage", "accepted", scan)
+			_, err = client.AddScanResult("analysis-id", "ateamid", "aprojectid", "coverage", "accepted", "atoken", scan)
 			Expect(err).To(BeNil())
 			Expect(server.HitRecords()[len(server.HitRecords())-1].Body).To(Equal([]byte(SampleRawExternalBody)))
 		})

@@ -31,7 +31,7 @@ type addScanRequest struct {
 }
 
 //AnalyzeProject takes a projectID, teamID, and project branch, performs an analysis, and returns the result status or an error encountered by the API
-func (ic *IonClient) AnalyzeProject(projectID, teamID, branch string) (*scanner.AnalysisStatus, error) {
+func (ic *IonClient) AnalyzeProject(projectID, teamID, branch, token string) (*scanner.AnalysisStatus, error) {
 	request := &analyzeRequest{}
 	request.TeamID = teamID
 	request.ProjectID = projectID
@@ -46,7 +46,7 @@ func (ic *IonClient) AnalyzeProject(projectID, teamID, branch string) (*scanner.
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.Post(scannerAnalyzeProjectEndpoint, nil, *buff, nil)
+	b, err = ic.Post(scannerAnalyzeProjectEndpoint, token, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to start analysis: %v", err.Error())
 	}
@@ -61,13 +61,13 @@ func (ic *IonClient) AnalyzeProject(projectID, teamID, branch string) (*scanner.
 }
 
 //GetAnalysisStatus takes an analysisID, teamID, and projectID and returns the analysis status or an error encountered by the API
-func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID string) (*scanner.AnalysisStatus, error) {
+func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID, token string) (*scanner.AnalysisStatus, error) {
 	params := &url.Values{}
 	params.Set("id", analysisID)
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(scannerGetAnalysisStatusEndpoint, params, nil, nil)
+	b, err := ic.Get(scannerGetAnalysisStatusEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
@@ -84,7 +84,7 @@ func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID string) (*s
 //AddScanResult takes a scanResultID, teamID, projectID, status, scanType, and
 //client provided scan results, and adds them to the returned project analysis
 //or an error encountered by the API
-func (ic *IonClient) AddScanResult(scanResultID, teamID, projectID, status, scanType string, scanResults scanner.ExternalScan) (*scanner.AnalysisStatus, error) {
+func (ic *IonClient) AddScanResult(scanResultID, teamID, projectID, status, scanType, token string, scanResults scanner.ExternalScan) (*scanner.AnalysisStatus, error) {
 	request := &addScanRequest{}
 	request.ID = scanResultID
 	request.TeamID = teamID
@@ -98,7 +98,7 @@ func (ic *IonClient) AddScanResult(scanResultID, teamID, projectID, status, scan
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.Post(scannerAddScanEndpoint, nil, *buff, nil)
+	b, err = ic.Post(scannerAddScanEndpoint, token, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to start analysis: %v", err.Error())
 	}
