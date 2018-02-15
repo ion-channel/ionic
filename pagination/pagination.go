@@ -2,6 +2,7 @@ package pagination
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -33,6 +34,33 @@ func New(offset, limit int) *Pagination {
 	}
 
 	return p
+}
+
+// ParseFromRequest parses pagination params from an http request and returns
+// the pagination object and an error if the pagination is not found
+func ParseFromRequest(req *http.Request) (*Pagination, error) {
+	oStr := req.Header.Get("Offset")
+	lStr := req.Header.Get("Limit")
+
+	if oStr == "" {
+		oStr = "0"
+	}
+
+	if lStr == "" {
+		lStr = "10"
+	}
+
+	o, err := strconv.Atoi(oStr)
+	if err != nil {
+		o = 0
+	}
+
+	l, err := strconv.Atoi(lStr)
+	if err != nil {
+		l = 10
+	}
+
+	return &Pagination{Offset: o, Limit: l}, nil
 }
 
 // AddParams appends the pagination params to the provided set of URL values
