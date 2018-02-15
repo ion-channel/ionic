@@ -19,6 +19,8 @@ type Project struct {
 	Description    string          `json:"description"`
 	KeyFingerprint string          `json:"key_fingerprint"`
 	Name           string          `json:"name"`
+	POCEmail       string          `json:"poc_email"`
+	POCName        string          `json:"poc_name"`
 	RulesetID      string          `json:"ruleset_id"`
 	Monitor        bool            `json:"should_monitor"`
 	Source         string          `json:"source"`
