@@ -173,7 +173,7 @@ func TestPagination(t *testing.T) {
 				Expect(p.Limit).To(Equal(51))
 			})
 
-			g.It("should assume no limit when the limit is not in the request", func() {
+			g.It("should assume the default limit when the limit is not in the request", func() {
 				req := &http.Request{
 					Header: http.Header{},
 				}
