@@ -1,6 +1,7 @@
 package pagination
 
 import (
+	"net/http"
 	"net/url"
 	"testing"
 
@@ -130,6 +131,71 @@ func TestPagination(t *testing.T) {
 			g.It("should be blank when all items", func() {
 				sql := AllItems.SQL()
 				Expect(sql).To(Equal(""))
+			})
+		})
+
+		g.Describe("Parsing", func() {
+			g.It("should parse pagination params from the request", func() {
+				req := &http.Request{
+					Header: http.Header{},
+				}
+				req.Header.Set("Offset", "100")
+				req.Header.Set("Limit", "50")
+
+				p, err := ParseFromRequest(req)
+				Expect(err).To(BeNil())
+				Expect(p.Offset).To(Equal(100))
+				Expect(p.Limit).To(Equal(50))
+			})
+
+			g.It("should assume no offset when the offset is not in the request", func() {
+				req := &http.Request{
+					Header: http.Header{},
+				}
+				req.Header.Set("Limit", "50")
+
+				p, err := ParseFromRequest(req)
+				Expect(err).To(BeNil())
+				Expect(p.Offset).To(Equal(0))
+				Expect(p.Limit).To(Equal(50))
+			})
+
+			g.It("should use a default when offset is not a number", func() {
+				req := &http.Request{
+					Header: http.Header{},
+				}
+				req.Header.Set("Offset", "destroy")
+				req.Header.Set("Limit", "51")
+
+				p, err := ParseFromRequest(req)
+				Expect(err).To(BeNil())
+				Expect(p.Offset).To(Equal(0))
+				Expect(p.Limit).To(Equal(51))
+			})
+
+			g.It("should assume no limit when the limit is not in the request", func() {
+				req := &http.Request{
+					Header: http.Header{},
+				}
+				req.Header.Set("Offset", "100")
+
+				p, err := ParseFromRequest(req)
+				Expect(err).To(BeNil())
+				Expect(p.Offset).To(Equal(100))
+				Expect(p.Limit).To(Equal(10))
+			})
+
+			g.It("should use a default when limit is not a number", func() {
+				req := &http.Request{
+					Header: http.Header{},
+				}
+				req.Header.Set("Offset", "101")
+				req.Header.Set("Limit", "war_doctor")
+
+				p, err := ParseFromRequest(req)
+				Expect(err).To(BeNil())
+				Expect(p.Offset).To(Equal(101))
+				Expect(p.Limit).To(Equal(10))
 			})
 		})
 	})
