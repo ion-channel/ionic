@@ -4,7 +4,8 @@ package events
 // system that can be emmitted to trigger a notification
 type Event struct {
 	Analysis      *AnalysisEvent      `json:"analysis,omitempty"`
-	Vulnerability *VulnerabilityEvent `json:"vulnerability,omitempty"`
+	Delivery      *DeliveryEvent      `json:"delivery,omitempty"`
 	Project       *ProjectEvent       `json:"project,omitempty"`
+	Vulnerability *VulnerabilityEvent `json:"vulnerability,omitempty"`
 	User          *UserEvent          `json:"user,omitempty"`
 }
