@@ -43,15 +43,16 @@ func TestDeliveryEvents(t *testing.T) {
 			ue := DeliveryEvent{
 				Action: "delivery_finished",
 			}
-			_, err := json.Marshal(ue)
+			bytes, err := json.Marshal(ue)
 
 			Expect(err).To(BeNil())
-
+			Expect(string(bytes)).To(Equal(SampleMarshalledDeliveryEvent))
 		})
 	})
 }
 
 const (
-	SampleValidDeliveryEvent   = `{"delivery":"foodelivery", "action":"delivery_failed"}`
-	SampleInvalidDeliveryEvent = `{"delivery":"foodelivery", "action":"foo_action"}`
+	SampleMarshalledDeliveryEvent = `{"action":"delivery_finished","analysis":"","project_id":"","team_id":"","timestamp":"","url":""}`
+	SampleValidDeliveryEvent      = `{"delivery":"foodelivery", "action":"delivery_failed"}`
+	SampleInvalidDeliveryEvent    = `{"delivery":"foodelivery", "action":"foo_action"}`
 )
