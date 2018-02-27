@@ -38,6 +38,16 @@ func TestDeliveryEvents(t *testing.T) {
 			Expect(err).NotTo(BeNil())
 			Expect(err.Error()).To(ContainSubstring("invalid delivery event action"))
 		})
+
+		g.It("should correctly marshal the action", func() {
+			ue := DeliveryEvent{
+				Action: "delivery_finished",
+			}
+			_, err := json.Marshal(ue)
+
+			Expect(err).To(BeNil())
+
+		})
 	})
 }
 
