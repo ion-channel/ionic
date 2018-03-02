@@ -39,10 +39,8 @@ func (d DeliveryEventAction) MarshalJSON() ([]byte, error) {
 		return nil, fmt.Errorf("invalid delivery event action")
 	}
 
-	bytes, err := json.Marshal(d)
-	if err != nil {
-		return nil, err
-	}
+	bytes := []byte(fmt.Sprintf("\"%v\"", d))
+
 	return bytes, nil
 }
 
