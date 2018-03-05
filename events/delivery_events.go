@@ -52,4 +52,5 @@ type DeliveryEvent struct {
 	TeamID    string              `json:"team_id"`
 	Timestamp string              `json:"timestamp"`
 	URL       string              `json:"url"`
+	Filename  string              `json:"filename"`
 }
