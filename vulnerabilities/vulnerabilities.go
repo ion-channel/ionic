@@ -13,7 +13,7 @@ import (
 type Vulnerability struct {
 	ID                          int                `json:"id" xml:"id"`
 	ExternalID                  string             `json:"external_id" xml:"exteral_id"`
-	SourceID                    int                `json:"source_id" xml:"source_id"`
+	Source                      []Source           `json:"source" xml:"source"`
 	Title                       string             `json:"title" xml:"title"`
 	Summary                     string             `json:"summary" xml:"summary"`
 	Score                       string             `json:"score,omitempty" xml:"score"`
@@ -36,6 +36,18 @@ type Vulnerability struct {
 	PublishedAt                 time.Time          `json:"published_at" xml:"published_at"`
 	CreatedAt                   time.Time          `json:"created_at" xml:"created_at"`
 	UpdatedAt                   time.Time          `json:"updated_at" xml:"updated_at"`
+}
+
+// Source represents information about where the vulnerability data came from
+type Source struct {
+	ID           int       `json:"id" xml:"id"`
+	Name         string    `json:"name" xml:"name"`
+	Description  string    `json:"description" xml:"description"`
+	CreatedAt    time.Time `json:"created_at" xml:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at" xml:"updated_at"`
+	Attribution  string    `json:"attribution" xml:"attribution"`
+	License      string    `json:"license" xml:"license"`
+	CopyrightURL string    `json:"copyright_url" xml:"copyright_url"`
 }
 
 // ScoreDetails represents the possible details for each version of scoring
