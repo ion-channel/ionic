@@ -26,6 +26,8 @@ type AnalysisReport struct {
 	RulesetID     string              `json:"ruleset_id" xml:"ruleset_id"`
 	RulesetName   string              `json:"ruleset_name" xml:"ruleset_name"`
 	Passed        bool                `json:"passed" xml:"passed"`
+	Aliases       []aliases.Alias     `json:"aliases"`
+	Tags          []tags.Tag          `json:"tags"`
 	CreatedAt     time.Time           `json:"created_at" xml:"created_at"`
 	UpdatedAt     time.Time           `json:"updated_at" xml:"updated_at"`
 	Duration      float64             `json:"duration" xml:"duration"`
