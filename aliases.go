@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/ion-channel/ionic/projects"
+	"github.com/ion-channel/ionic/aliases"
 )
 
 const (
@@ -22,7 +22,7 @@ type createAliasOptions struct {
 
 //AddAlias takes a project and adds an alias to it. It returns the
 // project stored or an error encountered by the API
-func (ic *IonClient) AddAlias(projectID, teamID, name, version, token string) (*projects.Project, error) {
+func (ic *IonClient) AddAlias(projectID, teamID, name, version, token string) (*aliases.Alias, error) {
 	params := &url.Values{}
 
 	alias := createAliasOptions{
@@ -42,11 +42,11 @@ func (ic *IonClient) AddAlias(projectID, teamID, name, version, token string) (*
 		return nil, fmt.Errorf("failed to create alias: %v", err.Error())
 	}
 
-	var p projects.Project
-	err = json.Unmarshal(b, &p)
+	var a aliases.Alias
+	err = json.Unmarshal(b, &a)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response from create: %v", err.Error())
 	}
 
-	return &p, nil
+	return &a, nil
 }
