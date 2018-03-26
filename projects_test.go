@@ -29,7 +29,7 @@ func TestProjects(t *testing.T) {
 				SetPayload([]byte(SampleValidProject)).
 				SetStatus(http.StatusCreated)
 
-			project, err := client.CreateProject(project, "")
+			project, err := client.CreateProject(project, "bef86653-1926-4990-8ef8-5f26cd59d6fc", "")
 			Expect(err).To(BeNil())
 			Expect(project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
 			Expect(project.Name).To(Equal("Statler"))
