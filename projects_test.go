@@ -8,6 +8,7 @@ import (
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
+	"github.com/ion-channel/ionic/projects"
 	. "github.com/onsi/gomega"
 )
 
@@ -20,6 +21,19 @@ func TestProjects(t *testing.T) {
 		server.Start()
 		h, p := server.HostPort()
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+
+		g.It("should create a project", func() {
+			project := &projects.Project{}
+			server.AddPath("/v1/project/createProject").
+				SetMethods("POST").
+				SetPayload([]byte(SampleValidProject)).
+				SetStatus(http.StatusCreated)
+
+			project, err := client.CreateProject(project, "")
+			Expect(err).To(BeNil())
+			Expect(project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
+			Expect(project.Name).To(Equal("Statler"))
+		})
 
 		g.It("should get a project", func() {
 			server.AddPath("/v1/project/getProject").
