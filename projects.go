@@ -12,10 +12,36 @@ import (
 )
 
 const (
+	createProjectEndpoint = "v1/project/createProject"
 	getProjectEndpoint    = "v1/project/getProject"
 	getProjectsEndpoint   = "v1/project/getProjects"
 	updateProjectEndpoint = "v1/project/updateProject"
 )
+
+//CreateProject takes a project object and token to use. It returns the
+// project stored or an error encountered by the API
+func (ic *IonClient) CreateProject(project *projects.Project, teamID, token string) (*projects.Project, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	b, err := json.Marshal(project)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshall project: %v", err.Error())
+	}
+
+	b, err = ic.Post(createProjectEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create project: %v", err.Error())
+	}
+
+	var p projects.Project
+	err = json.Unmarshal(b, &p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response from create: %v", err.Error())
+	}
+
+	return &p, nil
+}
 
 // GetProject takes a project ID, team ID, and token. It returns the project and
 // an error if it receives a bad response from the API or fails to unmarshal the
