@@ -73,3 +73,12 @@ func NewErrorResponse(message string, fields []string, status int) ([]byte, int)
 
 	return b, status
 }
+
+// WriteErrorResponse takes an http writer, message, related fields, and desired status code to
+// build a new error response. To the http writer, it writes an error message
+// and a corresponding status code.
+func WriteErrorResponse(w http.ResponseWriter, message string, fields []string, status int) {
+	b, s := NewErrorResponse(message, fields, status)
+	w.WriteHeader(s)
+	w.Write(b)
+}
