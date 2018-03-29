@@ -12,9 +12,9 @@ func TestScanResults(t *testing.T) {
 	g := Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
-	g.Describe("Scan Results", func() {
+	g.Describe("Translated Scan Results", func() {
 		g.It("should unmarshal a scan results with about yml data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsAboutYML), &r)
 
 			Expect(err).To(BeNil())
@@ -26,7 +26,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with community data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsCommunity), &r)
 
 			Expect(err).To(BeNil())
@@ -40,7 +40,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with coverage data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsCoverage), &r)
 
 			Expect(err).To(BeNil())
@@ -52,7 +52,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with dependency data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsDependency), &r)
 
 			Expect(err).To(BeNil())
@@ -68,7 +68,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with difference data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsDifference), &r)
 
 			Expect(err).To(BeNil())
@@ -81,7 +81,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with ecosystem data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsEcosystems), &r)
 
 			Expect(err).To(BeNil())
@@ -93,7 +93,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with external vulnerabilities scan data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidExternalVulnerabilities), &r)
 
 			Expect(err).To(BeNil())
@@ -108,7 +108,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with license data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsLicense), &r)
 
 			Expect(err).To(BeNil())
@@ -120,7 +120,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with virus data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsVirus), &r)
 
 			Expect(err).To(BeNil())
@@ -132,7 +132,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should unmarshal a scan results with vulnerability data", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidScanResultsVulnerability), &r)
 
 			Expect(err).To(BeNil())
@@ -144,7 +144,7 @@ func TestScanResults(t *testing.T) {
 		})
 
 		g.It("should return an error for an invalid results type", func() {
-			var r Results
+			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleInvalidResults), &r)
 
 			Expect(err).NotTo(BeNil())
