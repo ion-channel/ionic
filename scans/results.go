@@ -9,15 +9,29 @@ import (
 	"github.com/ion-channel/ionic/vulnerabilities"
 )
 
-// Results is an Ion Channel representation of the results from a
-// scan summary.  It contains what type of results and the data pertaining to
-// the results.
-type Results struct {
+// UntranslatedResults represents a result of a specific type that has not been
+// translated for use in reports
+type UntranslatedResults struct {
+	AboutYML                *AboutYMLResults                `json:"about_yml,omitempty"`
+	Community               *CommunityResults               `json:"community,omitempty"`
+	Coverage                *CoverageResults                `json:"coverage,omitempty"`
+	Dependency              *DependencyResults              `json:"dependency,omitempty"`
+	Difference              *DifferenceResults              `json:"difference,omitempty"`
+	Ecosystem               *EcosystemResults               `json:"ecosystems,omitempty"`
+	ExternalVulnerabilities *ExternalVulnerabilitiesResults `json:"external_vulnerability,omitempty"`
+	License                 *LicenseResults                 `json:"license,omitempty"`
+	Virus                   *VirusResults                   `json:"virus,omitempty"`
+	Vulnerability           *VulnerabilityResults           `json:"vulnerability,omitempty"`
+}
+
+// TranslatedResults represents a result of a specific type that has been
+// translated for use in reports
+type TranslatedResults struct {
 	Type string      `json:"type" xml:"type"`
 	Data interface{} `json:"data,omitempty" xml:"data,omitempty"`
 }
 
-type results struct {
+type translatedResults struct {
 	Type    string          `json:"type"`
 	RawData json.RawMessage `json:"data"`
 }
@@ -25,8 +39,8 @@ type results struct {
 // UnmarshalJSON is a custom JSON unmarshaller implementation for the standard
 // go json package to know how to properly interpret ScanSummaryResults from
 // JSON.
-func (r *Results) UnmarshalJSON(b []byte) error {
-	var tr results
+func (r *TranslatedResults) UnmarshalJSON(b []byte) error {
+	var tr translatedResults
 	err := json.Unmarshal(b, &tr)
 	if err != nil {
 		return err
@@ -202,12 +216,18 @@ type ExternalVulnerabilitiesResults struct {
 // LicenseResults represents the data collected from a license scan.  It
 // includes the name and type of each license seen within the project.
 type LicenseResults struct {
-	License struct {
-		Name string `json:"name" xml:"name"`
-		Type []struct {
-			Name string `json:"name" xml:"name"`
-		} `json:"type" xml:"type"`
-	} `json:"license" xml:"license"`
+	*License `json:"license" xml:"license"`
+}
+
+// License represents a name and slice of types of licenses seen in a given file
+type License struct {
+	Name string        `json:"name" xml:"name"`
+	Type []LicenseType `json:"type" xml:"type"`
+}
+
+// LicenseType represents a type of license such as MIT, Apache 2.0, etc
+type LicenseType struct {
+	Name string `json:"name" xml:"name"`
 }
 
 // VirusResults represents the data collected from a virus scan.  It includes
