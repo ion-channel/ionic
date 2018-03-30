@@ -86,7 +86,7 @@ func TestAnalysis(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalyses)).
 				SetStatus(http.StatusOK)
 
-			analyses, err := client.GetAnalyses("f9bca953-80ac-46c4-b195-d37f3bc4f498", "ateamid", "aprojectid", "sometoken")
+			analyses, err := client.GetAnalyses("ateamid", "aprojectid", "sometoken", nil)
 			Expect(err).To(BeNil())
 			Expect(len(analyses)).To(Equal(2))
 			Expect(analyses[0].ID).To(Equal("a5f7409b-d976-403b-af86-a9976fea901a"))
@@ -101,7 +101,7 @@ func TestAnalysis(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalyses)).
 				SetStatus(http.StatusOK)
 
-			analyses, err := client.GetRawAnalyses("f9bca953-80ac-46c4-b195-d37f3bc4f498", "ateamid", "aprojectid", "sometoken")
+			analyses, err := client.GetRawAnalyses("ateamid", "aprojectid", "sometoken", nil)
 			Expect(err).To(BeNil())
 			Expect(string(analyses)).To(ContainSubstring("a5f7409b-d976-403b-af86-a9976fea901a"))
 			Expect(string(analyses)).To(ContainSubstring("finished"))

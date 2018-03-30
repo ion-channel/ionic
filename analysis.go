@@ -6,6 +6,7 @@ import (
 	"net/url"
 
 	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/pagination"
 )
 
 const (
@@ -39,12 +40,12 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID, token string) (*analysis
 
 // GetAnalyses takes a team ID, project ID, and token. It returns a slice of
 // analyses for the project or an error for any API issues it encounters.
-func (ic *IonClient) GetAnalyses(teamID, projectID, token string) ([]analysis.Analysis, error) {
+func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *pagination.Pagination) ([]analysis.Analysis, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(analysisGetAnalysesEndpoint, token, params, nil, nil)
+	b, err := ic.Get(analysisGetAnalysesEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analyses: %v", err.Error())
 	}
@@ -76,12 +77,12 @@ func (ic *IonClient) GetRawAnalysis(id, teamID, projectID, token string) (json.R
 
 // GetRawAnalyses takes a team ID, project ID, and token. It returns the raw
 // JSON from the API. It returns an error for any API issue it encounters.
-func (ic *IonClient) GetRawAnalyses(teamID, projectID, token string) (json.RawMessage, error) {
+func (ic *IonClient) GetRawAnalyses(teamID, projectID, token string, page *pagination.Pagination) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(analysisGetAnalysesEndpoint, token, params, nil, nil)
+	b, err := ic.Get(analysisGetAnalysesEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
