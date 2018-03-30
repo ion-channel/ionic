@@ -6,10 +6,12 @@ import (
 	"net/url"
 
 	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/pagination"
 )
 
 const (
 	analysisGetAnalysisEndpoint              = "v1/animal/getAnalysis"
+	analysisGetAnalysesEndpoint              = "v1/animal/getAnalyses"
 	analysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
 )
 
@@ -30,10 +32,31 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID, token string) (*analysis
 	var a analysis.Analysis
 	err = json.Unmarshal(b, &a)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal analysis: %v", err.Error())
 	}
 
 	return &a, nil
+}
+
+// GetAnalyses takes a team ID, project ID, and token. It returns a slice of
+// analyses for the project or an error for any API issues it encounters.
+func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *pagination.Pagination) ([]analysis.Analysis, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("project_id", projectID)
+
+	b, err := ic.Get(analysisGetAnalysesEndpoint, token, params, nil, page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analyses: %v", err.Error())
+	}
+
+	var as []analysis.Analysis
+	err = json.Unmarshal(b, &as)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal analyses: %v", err.Error())
+	}
+
+	return as, nil
 }
 
 // GetRawAnalysis takes an analysis ID, team ID, project ID, and token.  It returns the
@@ -45,6 +68,21 @@ func (ic *IonClient) GetRawAnalysis(id, teamID, projectID, token string) (json.R
 	params.Set("project_id", projectID)
 
 	b, err := ic.Get(analysisGetAnalysisEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+	}
+
+	return b, nil
+}
+
+// GetRawAnalyses takes a team ID, project ID, and token. It returns the raw
+// JSON from the API. It returns an error for any API issue it encounters.
+func (ic *IonClient) GetRawAnalyses(teamID, projectID, token string, page *pagination.Pagination) (json.RawMessage, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("project_id", projectID)
+
+	b, err := ic.Get(analysisGetAnalysesEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
