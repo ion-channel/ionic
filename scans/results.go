@@ -27,8 +27,6 @@ type UntranslatedResults struct {
 // Translate moves information from the particular sub-struct, IE
 // AboutYMLResults or LicenseResults into a generic, Data struct
 func (u *UntranslatedResults) Translate() *TranslatedResults {
-	fmt.Printf("in Translate\n")
-	fmt.Printf("%+v\n", u)
 	var tr TranslatedResults
 	// There is an argument to be made that the following "if" clauses
 	// could be simplified with introspection since they all do
@@ -43,7 +41,6 @@ func (u *UntranslatedResults) Translate() *TranslatedResults {
 		tr.Data = u.Community
 	}
 	if u.Coverage != nil {
-		fmt.Printf("we have a coverage object that is not nil\n")
 		tr.Type = "coverage"
 		tr.Data = u.Coverage
 	}

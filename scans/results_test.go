@@ -12,6 +12,48 @@ func TestScanResults(t *testing.T) {
 	g := Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
+	g.Describe("Untranslated Scan Results", func(){
+		g.It("should translate untranslated scan results", func(){
+			var untranslatedResult UntranslatedResults
+			err := json.Unmarshal([]byte(SampleValidUntranslatedScanResultsLicense), &untranslatedResult)
+
+			// validate the json parsing
+			Expect(err).NotTo(HaveOccurred())
+			Expect(untranslatedResult.AboutYML).To(BeNil())
+			Expect(untranslatedResult.Community).To(BeNil())
+			Expect(untranslatedResult.Coverage).To(BeNil())
+			Expect(untranslatedResult.Dependency).To(BeNil())
+			Expect(untranslatedResult.Difference).To(BeNil())
+			Expect(untranslatedResult.Ecosystem).To(BeNil())
+			Expect(untranslatedResult.ExternalVulnerabilities).To(BeNil())
+			Expect(untranslatedResult.Vulnerability).To(BeNil())
+			Expect(untranslatedResult.License).NotTo(BeNil())
+			license := untranslatedResult.License
+			Expect(license.Name).To(Equal("some license"))
+			Expect(license.Type).To(HaveLen(1))
+			Expect(license.Type[0].Name).To(Equal("a license"))
+
+			// translate it
+			translatedResult := untranslatedResult.Translate()
+
+			// validate translated object
+			Expect(translatedResult).NotTo(BeNil())
+			Expect(translatedResult.Type).To(Equal("license"))
+			Expect(translatedResult.Data).NotTo(BeNil())
+			wasLicenseResults := false
+			switch translatedResult.Data.(type) {
+			case *LicenseResults:
+				wasLicenseResults = true
+			}
+			Expect(wasLicenseResults).To(BeTrue())
+			licenseResults := translatedResult.Data.(*LicenseResults)
+			Expect(licenseResults.Type).To(HaveLen(1))
+			Expect(licenseResults.Type[0].Name).To(Equal("a license"))
+			Expect(licenseResults.Name).To(Equal("some license"))
+			Expect(licenseResults.License.Type).To(HaveLen(1))
+			Expect(licenseResults.License.Type[0].Name).To(Equal("a license"))
+		})
+	})
 	g.Describe("Translated Scan Results", func() {
 		g.It("should unmarshal a scan results with about yml data", func() {
 			var r TranslatedResults
@@ -165,4 +207,6 @@ const (
 	SampleInvalidResults                = `{"type":"fooresult", "data":"I pitty the foo"}`
 	SampleValidScanResultsDifference    = `{"data": {"checksum": "checksumishere","difference": true},"type": "difference"}`
 	SampleValidExternalVulnerabilities  = `{"type":"external_vulnerability","data":{"critical":1,"high":0,"medium":1,"low": 0}}`
+
+	SampleValidUntranslatedScanResultsLicense = `{"license": {"license": {"type": [{"name": "a license"}], "name": "some license"}}}`
 )
