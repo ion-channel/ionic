@@ -13,7 +13,7 @@ type Analysis struct {
 	ProjectID     string              `json:"project_id" xml:"project_id"`
 	BuildNumber   string              `json:"build_number" xml:"build_number"`
 	Name          string              `json:"name" xml:"name"`
-	Text          string              `json:"text" xml:"text"`
+	Text          *string             `json:"text" xml:"text"`
 	Type          string              `json:"type" xml:"type"`
 	Source        string              `json:"source" xml:"source"`
 	Branch        string              `json:"branch" xml:"branch"`
