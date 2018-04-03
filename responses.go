@@ -15,13 +15,13 @@ type IonResponse struct {
 
 // Meta represents the metadata section of an IonResponse
 type Meta struct {
-	Copyright  string    `json:"copyright"`
-	Authors    []string  `json:"authors"`
-	Version    string    `json:"version"`
-	LastUpdate time.Time `json:"last_update,omitempty"`
-	TotalCount int       `json:"total_count,omitempty"`
-	Limit      int       `json:"limit,omitempty"`
-	Offset     int       `json:"offset,omitempty"`
+	Copyright  string     `json:"copyright"`
+	Authors    []string   `json:"authors"`
+	Version    string     `json:"version"`
+	LastUpdate *time.Time `json:"last_update,omitempty"`
+	TotalCount int        `json:"total_count,omitempty"`
+	Limit      int        `json:"limit,omitempty"`
+	Offset     int        `json:"offset,omitempty"`
 }
 
 // IonErrorResponse represents an error response from the Ion Channel API
@@ -31,20 +31,38 @@ type IonErrorResponse struct {
 	Code    int      `json:"code"`
 }
 
+// MakeIonResponse constructs an IonResponse object for eventual return
+// Returns a pointer due to an issue (https://github.com/golang/go/issues/14493)
+// with how RawMessage was handled, versions prior to Go 1.8 will base64
+// encode the data unless we pass the pointer of the IonResponse struct
+func MakeIonResponse(data interface{}, meta Meta) (*IonResponse, error) {
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	if meta.Copyright == "" {
+		meta.Copyright = "Copyright 2018 Selection Pressure LLC www.selectpress.net"
+	}
+	if meta.Authors == nil || len(meta.Authors) < 1 {
+		meta.Authors = append(meta.Authors, "Ion Channel Dev Team")
+	}
+	if meta.Version == "" {
+		meta.Version = "v1"
+	}
+	return &IonResponse{Data: b, Meta: meta}, nil
+}
+
 // NewResponse takes a data object, meta object, and desired status code to
 // build a new response.  It returns a message encoded as a byte slice and a
 // corresponding status code.  The returned message and status code will reflect
 // any errors encountered as part of the encoding process.
 func NewResponse(data interface{}, meta Meta, status int) ([]byte, int) {
-	b, err := json.Marshal(data)
+	ionResponse, err := MakeIonResponse(data, meta)
 	if err != nil {
-		return NewErrorResponse("failed to marshal data to json", nil, http.StatusInternalServerError)
+		return NewErrorResponse(err.Error(), nil, http.StatusInternalServerError)
 	}
 
-	// Due to an issue (https://github.com/golang/go/issues/14493) with how
-	// RawMessage was handled, versions prior to Go 1.8 will base64 encode the
-	// data unless we pass the pointer of the IonResponse struct
-	b, err = json.Marshal(&IonResponse{Data: b, Meta: meta})
+	b, err := json.Marshal(ionResponse)
 	if err != nil {
 		return NewErrorResponse("failed to marshal response to json", nil, http.StatusInternalServerError)
 	}
