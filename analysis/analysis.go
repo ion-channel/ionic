@@ -14,7 +14,6 @@ type Analysis struct {
 	BuildNumber   string              `json:"build_number" xml:"build_number"`
 	Name          string              `json:"name" xml:"name"`
 	Text          *string             `json:"text" xml:"text"`
-	Suspect       *string             `json:"suspect" xml:"suspect"`
 	Type          string              `json:"type" xml:"type"`
 	Source        string              `json:"source" xml:"source"`
 	Branch        string              `json:"branch" xml:"branch"`
