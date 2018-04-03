@@ -31,11 +31,8 @@ type IonErrorResponse struct {
 	Code    int      `json:"code"`
 }
 
-// MakeIonResponse constructs an IonResponse object for eventual return
-// Returns a pointer due to an issue (https://github.com/golang/go/issues/14493)
-// with how RawMessage was handled, versions prior to Go 1.8 will base64
-// encode the data unless we pass the pointer of the IonResponse struct
-func MakeIonResponse(data interface{}, meta Meta) (*IonResponse, error) {
+// makeIonResponse constructs an IonResponse object for eventual return
+func makeIonResponse(data interface{}, meta Meta) (*IonResponse, error) {
 	b, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
@@ -57,7 +54,7 @@ func MakeIonResponse(data interface{}, meta Meta) (*IonResponse, error) {
 // corresponding status code.  The returned message and status code will reflect
 // any errors encountered as part of the encoding process.
 func NewResponse(data interface{}, meta Meta, status int) ([]byte, int) {
-	ionResponse, err := MakeIonResponse(data, meta)
+	ionResponse, err := makeIonResponse(data, meta)
 	if err != nil {
 		return NewErrorResponse(err.Error(), nil, http.StatusInternalServerError)
 	}
