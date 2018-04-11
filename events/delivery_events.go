@@ -8,6 +8,7 @@ import (
 var validDeliveryEventActions = map[string]string{
 	"delivery_failed":   "delivery_failed",
 	"delivery_finished": "delivery_finished",
+	"delivery_canceled": "delivery_canceled",
 }
 
 // DeliveryEventAction represents possible actions related to a delivery event
