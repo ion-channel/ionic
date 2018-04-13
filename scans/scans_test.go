@@ -37,6 +37,11 @@ func TestScanSummary(t *testing.T) {
 				Expect(ss.TranslatedResults).NotTo(BeNil())
 				Expect(ss.TranslatedResults.Type).To(Equal("community"))
 			})
+			g.It("should unmarshal a scan summary with a bad, list-ified community results member", func(){
+				var ss ScanSummary
+				err := json.Unmarshal([]byte(badCommunityResults), &ss)
+				Expect(err).NotTo(HaveOccurred())
+			})
 		})
 
 		g.Describe("Marshalling", func() {
@@ -127,6 +132,28 @@ func TestScanSummary(t *testing.T) {
 }
 
 const (
+	badCommunityResults = `{
+                "description": "This scan data has not been evaluated against a rule.",
+                "created_at": "2018-01-11T05:38:49.478Z",
+                "results": {
+                    "data": [
+                        {
+                            "url": "https://github.com/simon/putty",
+                            "committers": 0,
+                            "name": "simon/putty"
+                        }
+                    ],
+                    "type": "community"
+                },
+                "updated_at": "2018-01-11T05:38:49.478Z",
+                "summary": "Finished community scan for Putty-Source, community data was detected.",
+                "team_id": "78536455-a13c-4661-890a-785197f6d9d4",
+                "analysis_id": "7f19b79d-5c5f-4c4a-99b3-86c2b0483785",
+                "duration": 493.197211995721,
+                "project_id": "474b67d8-4817-4209-b614-09c74f3d6c12",
+                "id": "6ff786fc-8374-cf33-3a7b-eb5168dc9105",
+                "name": "community"
+            }`
 	sampleUntranslatedResults = `{
   "id": "41e6905a-a16d-45a7-9d2c-2794840ca03e",
   "team_id": "cuketest",
