@@ -20,8 +20,8 @@ type UntranslatedResults struct {
 	Ecosystem               *EcosystemResults               `json:"ecosystems,omitempty"`
 	ExternalVulnerabilities *ExternalVulnerabilitiesResults `json:"external_vulnerability,omitempty"`
 	License                 *LicenseResults                 `json:"license,omitempty"`
-	Virus                   *VirusResults                   `json:"virus,omitempty"`
-	Vulnerability           *VulnerabilityResults           `json:"vulnerability,omitempty"`
+	Virus                   *VirusResults                   `json:"clamav,omitempty"`
+	Vulnerability           *VulnerabilityResults           `json:"vulnerabilities,omitempty"`
 }
 
 // Translate moves information from the particular sub-struct, IE
