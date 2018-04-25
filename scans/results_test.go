@@ -2,6 +2,7 @@ package scans
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	. "github.com/franela/goblin"
@@ -12,8 +13,30 @@ func TestScanResults(t *testing.T) {
 	g := Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
-	g.Describe("Untranslated Scan Results", func(){
-		g.It("should translate untranslated scan results", func(){
+	g.Describe("Untranslated Scan Results", func() {
+		g.It("should parse untranslated scan results", func() {
+			var untranslatedLicenseResult UntranslatedResults
+			err := json.Unmarshal([]byte(SampleValidUntranslatedScanResultsLicense), &untranslatedLicenseResult)
+
+			// validate the json parsing
+			Expect(err).NotTo(HaveOccurred())
+			Expect(untranslatedLicenseResult.License).NotTo(BeNil())
+
+			var untranslatedVulnerabilityResult UntranslatedResults
+			err = json.Unmarshal([]byte(SampleValidUntranslatedScanResultsVulnerability), &untranslatedVulnerabilityResult)
+			// validate the json parsing
+			Expect(err).To(BeNil())
+			fmt.Printf("Untranslated: %v", untranslatedVulnerabilityResult)
+			Expect(untranslatedVulnerabilityResult.Vulnerability).NotTo(BeNil())
+
+			var untranslatedVirusResult UntranslatedResults
+			err = json.Unmarshal([]byte(SampleValidUntranslatedScanResultsVirus), &untranslatedVirusResult)
+			// validate the json parsing
+			Expect(err).NotTo(HaveOccurred())
+			Expect(untranslatedVirusResult.Virus).NotTo(BeNil())
+		})
+
+		g.It("should translate untranslated scan results", func() {
 			var untranslatedResult UntranslatedResults
 			err := json.Unmarshal([]byte(SampleValidUntranslatedScanResultsLicense), &untranslatedResult)
 
@@ -208,5 +231,7 @@ const (
 	SampleValidScanResultsDifference    = `{"data": {"checksum": "checksumishere","difference": true},"type": "difference"}`
 	SampleValidExternalVulnerabilities  = `{"type":"external_vulnerability","data":{"critical":1,"high":0,"medium":1,"low": 0}}`
 
-	SampleValidUntranslatedScanResultsLicense = `{"license": {"license": {"type": [{"name": "a license"}], "name": "some license"}}}`
+	SampleValidUntranslatedScanResultsLicense       = `{"license": {"license": {"type": [{"name": "a license"}], "name": "some license"}}}`
+	SampleValidUntranslatedScanResultsVulnerability = `{"vulnerabilities": {"meta": {"vulnerability_count": 0},"vulnerabilities": []}}`
+	SampleValidUntranslatedScanResultsVirus         = `{"clam_av_details":{"clamav_db_version":"Tue Apr 24 12:26:01 2018\n","clamav_version":"ClamAV 0.99.4"},"clamav":{"data_read":"2.78 MB (ratio 1.68:1)","data_scanned":"4.66 MB","engine_version":"0.99.4","file_notes":{"empty_file":["/workspace/851c1261-471c-4713-bdc4-fabb0c2d0f6a/xunit-plugin-1-102/xunit-plugin-master/src/main/resources/util/taglib"]},"infected_files":0,"known_viruses":6480116,"scanned_directories":132,"scanned_files":305,"time":"18.655 sec (0 m 18 s)"}      }`
 )
