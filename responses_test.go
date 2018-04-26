@@ -35,7 +35,7 @@ func TestResponses(t *testing.T) {
 			Expect(string(b)).To(ContainSubstring("not yos"))
 			Expect(s).To(Equal(status))
 		})
-		g.It("should make an ion response object", func(){
+		g.It("should make an ion response object", func() {
 			data := struct {
 				Foo string `json:"foo"`
 			}{
@@ -55,15 +55,15 @@ func TestResponses(t *testing.T) {
 			Expect(response.Meta.Authors[0]).To(Equal("us"))
 			Expect(response.Meta.Version).To(Equal("vtest"))
 		})
-		g.It("should add default Copyright value if missing", func(){
+		g.It("should add default Copyright value if missing", func() {
 			data := struct {
 				Foo string `json:"foo"`
 			}{
 				Foo: "Bar",
 			}
 			meta := Meta{
-				Authors:   []string{"us"},
-				Version:   "vtest",
+				Authors: []string{"us"},
+				Version: "vtest",
 			}
 			response, err := makeIonResponse(data, meta)
 			Expect(err).NotTo(HaveOccurred())
@@ -74,7 +74,7 @@ func TestResponses(t *testing.T) {
 			Expect(response.Meta.Authors[0]).To(Equal("us"))
 			Expect(response.Meta.Version).To(Equal("vtest"))
 		})
-		g.It("should add default Authors value if missing", func(){
+		g.It("should add default Authors value if missing", func() {
 			data := struct {
 				Foo string `json:"foo"`
 			}{
@@ -93,7 +93,7 @@ func TestResponses(t *testing.T) {
 			Expect(response.Meta.Authors[0]).To(Equal("Ion Channel Dev Team"))
 			Expect(response.Meta.Version).To(Equal("vtest"))
 		})
-		g.It("should add default Version value if missing", func(){
+		g.It("should add default Version value if missing", func() {
 			data := struct {
 				Foo string `json:"foo"`
 			}{

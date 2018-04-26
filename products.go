@@ -9,7 +9,8 @@ import (
 )
 
 const (
-	getProductEndpoint = "v1/vulnerability/getProducts"
+	getProductEndpoint    = "v1/vulnerability/getProducts"
+	productSearchEndpoint = "v1/product/search"
 )
 
 // GetProducts takes a product ID search string and token.  It returns the product found,
@@ -44,4 +45,21 @@ func (ic *IonClient) GetRawProducts(idSearch, token string) (json.RawMessage, er
 	}
 
 	return b, nil
+}
+
+// GetProductSearch takes a search query. It returns a new raw json message of
+// all the matching products in the Bunsen dependencies table
+func (ic *IonClient) GetProductSearch(userQuery, token string) ([]products.Product, error) {
+	params := &url.Values{}
+	params.Set("user_query", userQuery)
+	b, err := ic.Get(productSearchEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to GetProductSearch: %v", err.Error())
+	}
+	var products []products.Product
+	err = json.Unmarshal(b, &products)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse products: %v", err.Error())
+	}
+	return products, nil
 }
