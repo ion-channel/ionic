@@ -26,11 +26,11 @@ type summary struct {
 	CreatedAt   time.Time       `json:"created_at" xml:"created_at"`
 	UpdatedAt   time.Time       `json:"updated_at" xml:"updated_at"`
 	Duration    float64         `json:"duration" xml:"duration"`
-	Passed      bool            `json:"passed" xml:"passed"`
-	Risk        string          `json:"risk" xml:"risk"`
 	Name        string          `json:"name" xml:"name"`
 	Description string          `json:"description" xml:"description"`
+	Risk        string          `json:"risk" xml:"risk"`
 	Type        string          `json:"type" xml:"type"`
+	Passed      bool            `json:"passed" xml:"passed"`
 }
 
 // MarshalJSON meets the marshaller interface to custom wrangle translated or
