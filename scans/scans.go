@@ -7,16 +7,16 @@ import (
 	"time"
 )
 
-// ScanSummary is an Ion Channel representation of the summary produced by an
+// Summary is an Ion Channel representation of the summary produced by an
 // individual scan on a project.  It contains all the details the Ion Channel
 // platform discovers for that scan.
-type ScanSummary struct {
-	*scanSummary
+type Summary struct {
+	*summary
 	TranslatedResults   *TranslatedResults   `json:"-"`
 	UntranslatedResults *UntranslatedResults `json:"-"`
 }
 
-type scanSummary struct {
+type summary struct {
 	ID          string          `json:"id" xml:"id"`
 	TeamID      string          `json:"team_id" xml:"team_id"`
 	ProjectID   string          `json:"project_id" xml:"project_id"`
@@ -35,7 +35,7 @@ type scanSummary struct {
 
 // MarshalJSON meets the marshaller interface to custom wrangle translated or
 // untranslated results into the same results key for the JSON
-func (s *ScanSummary) MarshalJSON() ([]byte, error) {
+func (s *Summary) MarshalJSON() ([]byte, error) {
 	if s.TranslatedResults != nil {
 		b, err := json.Marshal(s.TranslatedResults)
 		if err != nil {
@@ -54,20 +54,20 @@ func (s *ScanSummary) MarshalJSON() ([]byte, error) {
 		s.Results = b
 	}
 
-	return json.Marshal(s.scanSummary)
+	return json.Marshal(s.summary)
 }
 
 // UnmarshalJSON meets the unmarshaller interface to custom wrangle results from
 // a singular results key into the correct translated or untranslated results
 // field
-func (s *ScanSummary) UnmarshalJSON(b []byte) error {
-	var ss scanSummary
+func (s *Summary) UnmarshalJSON(b []byte) error {
+	var ss summary
 	err := json.Unmarshal(b, &ss)
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal scans summary: %v", err.Error())
 	}
 
-	s.scanSummary = &ss
+	s.summary = &ss
 
 	var tr TranslatedResults
 	err = json.Unmarshal(s.Results, &tr)

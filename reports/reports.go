@@ -14,14 +14,14 @@ import (
 // given analysis
 type AnalysisReport struct {
 	*analysis.Analysis
-	RulesetName   string              `json:"ruleset_name" xml:"ruleset_name"`
-	Passed        bool                `json:"passed" xml:"passed"`
-	Aliases       []aliases.Alias     `json:"aliases"`
-	Tags          []tags.Tag          `json:"tags"`
-	Trigger       string              `json:"trigger" xml:"trigger"`
-	Risk          string              `json:"risk" xml:"risk"`
-	Summary       string              `json:"summary" xml:"summary"`
-	ScanSummaries []scans.ScanSummary `json:"scan_summaries" xml:"scan_summaries"`
+	RulesetName   string          `json:"ruleset_name" xml:"ruleset_name"`
+	Passed        bool            `json:"passed" xml:"passed"`
+	Aliases       []aliases.Alias `json:"aliases"`
+	Tags          []tags.Tag      `json:"tags"`
+	Trigger       string          `json:"trigger" xml:"trigger"`
+	Risk          string          `json:"risk" xml:"risk"`
+	Summary       string          `json:"summary" xml:"summary"`
+	ScanSummaries []scans.Summary `json:"scan_summaries" xml:"scan_summaries"`
 }
 
 // ProjectReport gives the details of a project including past analyses

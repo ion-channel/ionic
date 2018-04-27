@@ -9,14 +9,14 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestScanSummary(t *testing.T) {
+func TestSummary(t *testing.T) {
 	g := Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Scan Summary", func() {
 		g.Describe("Unmarshalling", func() {
 			g.It("should populate results with untranslated result", func() {
-				var ss ScanSummary
+				var ss Summary
 				err := json.Unmarshal([]byte(sampleUntranslatedResults), &ss)
 
 				Expect(err).To(BeNil())
@@ -28,7 +28,7 @@ func TestScanSummary(t *testing.T) {
 			})
 
 			g.It("should populate results with translated result", func() {
-				var ss ScanSummary
+				var ss Summary
 				err := json.Unmarshal([]byte(sampleTranslatedResults), &ss)
 
 				Expect(err).To(BeNil())
@@ -37,8 +37,8 @@ func TestScanSummary(t *testing.T) {
 				Expect(ss.TranslatedResults).NotTo(BeNil())
 				Expect(ss.TranslatedResults.Type).To(Equal("community"))
 			})
-			g.It("should unmarshal a scan summary with a bad, list-ified community results member", func(){
-				var ss ScanSummary
+			g.It("should unmarshal a scan summary with a bad, list-ified community results member", func() {
+				var ss Summary
 				err := json.Unmarshal([]byte(badCommunityResults), &ss)
 				Expect(err).NotTo(HaveOccurred())
 			})
@@ -46,8 +46,8 @@ func TestScanSummary(t *testing.T) {
 
 		g.Describe("Marshalling", func() {
 			g.It("should output results with untranslated result", func() {
-				s := &ScanSummary{
-					scanSummary: &scanSummary{
+				s := &Summary{
+					summary: &summary{
 						ID:          "41e6905a-a16d-45a7-9d2c-2794840ca03e",
 						TeamID:      "cuketest",
 						AnalysisID:  "c2a79402-e3bf-4069-89c8-7a4ecb10d33f",
@@ -88,8 +88,8 @@ func TestScanSummary(t *testing.T) {
 			})
 
 			g.It("should output results with translated result", func() {
-				s := &ScanSummary{
-					scanSummary: &scanSummary{
+				s := &Summary{
+					summary: &summary{
 						ID:          "41e6905a-a16d-45a7-9d2c-2794840ca03e",
 						TeamID:      "cuketest",
 						AnalysisID:  "c2a79402-e3bf-4069-89c8-7a4ecb10d33f",
