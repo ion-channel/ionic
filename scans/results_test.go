@@ -2,7 +2,6 @@ package scans
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	. "github.com/franela/goblin"
@@ -26,7 +25,6 @@ func TestScanResults(t *testing.T) {
 			err = json.Unmarshal([]byte(SampleValidUntranslatedScanResultsVulnerability), &untranslatedVulnerabilityResult)
 			// validate the json parsing
 			Expect(err).To(BeNil())
-			fmt.Printf("Untranslated: %v", untranslatedVulnerabilityResult)
 			Expect(untranslatedVulnerabilityResult.Vulnerability).NotTo(BeNil())
 
 			var untranslatedVirusResult UntranslatedResults
