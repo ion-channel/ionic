@@ -33,6 +33,17 @@ type summary struct {
 	Passed      bool            `json:"passed" xml:"passed"`
 }
 
+// Translate performs a one way translation on a summary by translating the
+// UntranslatedResults if they are not nil, putting the output into Translated
+// results, and setting UntranslatedResults to be nil.
+func (s *Summary) Translate() {
+	if s.UntranslatedResults != nil {
+		translated := s.UntranslatedResults.Translate()
+		s.TranslatedResults = translated
+		s.UntranslatedResults = nil
+	}
+}
+
 // MarshalJSON meets the marshaller interface to custom wrangle translated or
 // untranslated results into the same results key for the JSON
 func (s *Summary) MarshalJSON() ([]byte, error) {
