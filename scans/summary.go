@@ -33,6 +33,25 @@ type summary struct {
 	Passed      bool            `json:"passed" xml:"passed"`
 }
 
+// NewSummary takes a scan and returns the appropriate fields as part of a
+// summary
+func NewSummary(s *Scan) *Summary {
+	return &Summary{
+		summary: &summary{
+			ID:          s.ID,
+			TeamID:      s.TeamID,
+			ProjectID:   s.ProjectID,
+			Summary:     s.Summary,
+			Results:     s.Results,
+			CreatedAt:   s.CreatedAt,
+			UpdatedAt:   s.UpdatedAt,
+			Duration:    s.Duration,
+			Name:        s.Name,
+			Description: s.Description,
+		},
+	}
+}
+
 // Translate performs a one way translation on a summary by translating the
 // UntranslatedResults if they are not nil, putting the output into Translated
 // results, and setting UntranslatedResults to be nil.
