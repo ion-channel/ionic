@@ -112,12 +112,7 @@ func (r *TranslatedResults) UnmarshalJSON(b []byte) error {
 		var c CommunityResults
 		err := json.Unmarshal(tr.RawData, &c)
 		if err != nil {
-			// either Oscar or Doozer is putting incorrectly formatted
-			// community data results. First off they're "translated" when
-			// we expect them to be "untranslated," second their Data
-			// member contains a list of object when we expect it to BE
-			// an object. So, if we "cannot unmarshal array," we're probably
-			// in this case. Try one more time:
+			// Note: Could be a slice, needs to be fixed
 			if strings.Contains(err.Error(), "cannot unmarshal array") {
 				var sliceOfCommunityResults []CommunityResults
 				err := json.Unmarshal(tr.RawData, &sliceOfCommunityResults)
