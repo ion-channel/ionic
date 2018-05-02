@@ -45,6 +45,7 @@ func NewSummary(s *Scan) *Summary {
 			ID:          s.ID,
 			TeamID:      s.TeamID,
 			ProjectID:   s.ProjectID,
+			AnalysisID:  s.AnalysisID,
 			Summary:     s.Summary,
 			Results:     s.Results,
 			CreatedAt:   s.CreatedAt,
