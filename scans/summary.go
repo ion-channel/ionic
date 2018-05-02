@@ -36,11 +36,16 @@ type summary struct {
 // NewSummary takes a scan and returns the appropriate fields as part of a
 // summary
 func NewSummary(s *Scan) *Summary {
+	if s.scan == nil {
+		s.scan = &scan{}
+	}
+
 	return &Summary{
 		summary: &summary{
 			ID:          s.ID,
 			TeamID:      s.TeamID,
 			ProjectID:   s.ProjectID,
+			AnalysisID:  s.AnalysisID,
 			Summary:     s.Summary,
 			Results:     s.Results,
 			CreatedAt:   s.CreatedAt,
@@ -49,18 +54,34 @@ func NewSummary(s *Scan) *Summary {
 			Name:        s.Name,
 			Description: s.Description,
 		},
+		UntranslatedResults: s.UntranslatedResults,
+		TranslatedResults:   s.TranslatedResults,
 	}
 }
 
 // Translate performs a one way translation on a summary by translating the
 // UntranslatedResults if they are not nil, putting the output into Translated
-// results, and setting UntranslatedResults to be nil.
-func (s *Summary) Translate() {
+// results, and setting UntranslatedResults to be nil. It returns an error if
+// it encounters a JSON error when translating the results.
+func (s *Summary) Translate() error {
 	if s.UntranslatedResults != nil {
 		translated := s.UntranslatedResults.Translate()
 		s.TranslatedResults = translated
 		s.UntranslatedResults = nil
+
+		b, err := json.Marshal(s.TranslatedResults)
+		if err != nil {
+			return fmt.Errorf("failed to translate scan: %v", err.Error())
+		}
+
+		if s.summary == nil {
+			s.summary = &summary{}
+		}
+
+		s.Results = b
 	}
+
+	return nil
 }
 
 // MarshalJSON meets the marshaller interface to custom wrangle translated or

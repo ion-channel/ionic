@@ -1,8 +1,6 @@
 package reports
 
 import (
-	"encoding/json"
-
 	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/analysis"
 	"github.com/ion-channel/ionic/scans"
@@ -27,28 +25,17 @@ type AnalysisReport struct {
 func NewAnalysisReport(a *analysis.Analysis) (*AnalysisReport, error) {
 	ar := AnalysisReport{Analysis: a}
 
-	for _, oldScan := range a.ScanSummaries {
-		if oldScan.TranslatedResults == nil && oldScan.UntranslatedResults != nil {
-			translatedResults := oldScan.UntranslatedResults.Translate()
+	summaries := make([]scans.Summary, 0, len(a.ScanSummaries))
+	for i := range a.ScanSummaries {
+		scan := a.ScanSummaries[i]
+		scan.Translate()
+		a.ScanSummaries[i] = scan
 
-			newScan := oldScan
-			newScan.UntranslatedResults = nil
-			newScan.TranslatedResults = translatedResults
-			b, err := json.Marshal(translatedResults)
-			if err != nil {
-				return nil, err
-			}
-
-			newScan.Results = b
-
-			summary := scans.NewSummary(&newScan)
-			ar.ScanSummaries = append(ar.ScanSummaries, *summary)
-		} else {
-			// already translated
-			summary := scans.NewSummary(&oldScan)
-			ar.ScanSummaries = append(ar.ScanSummaries, *summary)
-		}
+		summary := scans.NewSummary(&a.ScanSummaries[i])
+		summaries = append(summaries, *summary)
 	}
+
+	ar.ScanSummaries = summaries
 
 	return &ar, nil
 }

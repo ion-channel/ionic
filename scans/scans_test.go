@@ -14,6 +14,52 @@ func TestScan(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Scan", func() {
+		g.Describe("Translating", func() {
+			g.It("should translate an untranslated scan", func() {
+				s := &Scan{
+					UntranslatedResults: &UntranslatedResults{
+						License: &LicenseResults{},
+					},
+				}
+				Expect(s.UntranslatedResults).NotTo(BeNil())
+				Expect(s.TranslatedResults).To(BeNil())
+
+				err := s.Translate()
+				Expect(err).To(BeNil())
+				Expect(s.UntranslatedResults).To(BeNil())
+				Expect(s.TranslatedResults).NotTo(BeNil())
+				Expect(s.TranslatedResults.Type).To(Equal("license"))
+				Expect(s.Results).NotTo(BeNil())
+				Expect(len(s.Results)).NotTo(Equal(0))
+			})
+
+			g.It("should not translate an already translated scan", func() {
+				s := &Scan{
+					UntranslatedResults: &UntranslatedResults{
+						License: &LicenseResults{},
+					},
+				}
+				Expect(s.UntranslatedResults).NotTo(BeNil())
+				Expect(s.TranslatedResults).To(BeNil())
+
+				err := s.Translate()
+				Expect(err).To(BeNil())
+				Expect(s.UntranslatedResults).To(BeNil())
+				Expect(s.TranslatedResults).NotTo(BeNil())
+				Expect(s.TranslatedResults.Type).To(Equal("license"))
+				Expect(s.Results).NotTo(BeNil())
+				Expect(len(s.Results)).NotTo(Equal(0))
+
+				err = s.Translate()
+				Expect(err).To(BeNil())
+				Expect(s.UntranslatedResults).To(BeNil())
+				Expect(s.TranslatedResults).NotTo(BeNil())
+				Expect(s.TranslatedResults.Type).To(Equal("license"))
+				Expect(s.Results).NotTo(BeNil())
+				Expect(len(s.Results)).NotTo(Equal(0))
+			})
+		})
+
 		g.Describe("Unmarshalling", func() {
 			g.It("should populate results with untranslated result", func() {
 				var ss Scan
