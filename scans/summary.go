@@ -60,13 +60,27 @@ func NewSummary(s *Scan) *Summary {
 
 // Translate performs a one way translation on a summary by translating the
 // UntranslatedResults if they are not nil, putting the output into Translated
-// results, and setting UntranslatedResults to be nil.
-func (s *Summary) Translate() {
+// results, and setting UntranslatedResults to be nil. It returns an error if
+// it encounters a JSON error when translating the results.
+func (s *Summary) Translate() error {
 	if s.UntranslatedResults != nil {
 		translated := s.UntranslatedResults.Translate()
 		s.TranslatedResults = translated
 		s.UntranslatedResults = nil
+
+		b, err := json.Marshal(s.TranslatedResults)
+		if err != nil {
+			return fmt.Errorf("failed to translate scan: %v", err.Error())
+		}
+
+		if s.summary == nil {
+			s.summary = &summary{}
+		}
+
+		s.Results = b
 	}
+
+	return nil
 }
 
 // MarshalJSON meets the marshaller interface to custom wrangle translated or

@@ -24,10 +24,13 @@ func TestSummary(t *testing.T) {
 				Expect(ss.UntranslatedResults).NotTo(BeNil())
 				Expect(ss.TranslatedResults).To(BeNil())
 
-				ss.Translate()
+				err := ss.Translate()
+				Expect(err).To(BeNil())
 				Expect(ss.UntranslatedResults).To(BeNil())
 				Expect(ss.TranslatedResults).NotTo(BeNil())
 				Expect(ss.TranslatedResults.Type).To(Equal("license"))
+				Expect(ss.Results).NotTo(BeNil())
+				Expect(len(ss.Results)).NotTo(Equal(0))
 			})
 
 			g.It("should not translate an already translated summary", func() {
@@ -39,15 +42,21 @@ func TestSummary(t *testing.T) {
 				Expect(ss.UntranslatedResults).NotTo(BeNil())
 				Expect(ss.TranslatedResults).To(BeNil())
 
-				ss.Translate()
+				err := ss.Translate()
+				Expect(err).To(BeNil())
 				Expect(ss.UntranslatedResults).To(BeNil())
 				Expect(ss.TranslatedResults).NotTo(BeNil())
 				Expect(ss.TranslatedResults.Type).To(Equal("license"))
+				Expect(ss.Results).NotTo(BeNil())
+				Expect(len(ss.Results)).NotTo(Equal(0))
 
-				ss.Translate()
+				err = ss.Translate()
+				Expect(err).To(BeNil())
 				Expect(ss.UntranslatedResults).To(BeNil())
 				Expect(ss.TranslatedResults).NotTo(BeNil())
 				Expect(ss.TranslatedResults.Type).To(Equal("license"))
+				Expect(ss.Results).NotTo(BeNil())
+				Expect(len(ss.Results)).NotTo(Equal(0))
 			})
 		})
 
