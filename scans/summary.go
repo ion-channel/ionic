@@ -36,6 +36,10 @@ type summary struct {
 // NewSummary takes a scan and returns the appropriate fields as part of a
 // summary
 func NewSummary(s *Scan) *Summary {
+	if s.scan == nil {
+		s.scan = &scan{}
+	}
+
 	return &Summary{
 		summary: &summary{
 			ID:          s.ID,
@@ -49,6 +53,8 @@ func NewSummary(s *Scan) *Summary {
 			Name:        s.Name,
 			Description: s.Description,
 		},
+		UntranslatedResults: s.UntranslatedResults,
+		TranslatedResults:   s.TranslatedResults,
 	}
 }
 
