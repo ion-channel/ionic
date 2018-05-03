@@ -21,7 +21,7 @@ type Product struct {
 	Part       string        `json:"part" xml:"part"`
 	Language   string        `json:"language" xml:"language"`
 	ExternalID string        `json:"external_id" xml:"external_id"`
-	Source     []Source      `json:"source" xml:"source"`
+	Sources    []Source      `json:"source" xml:"source"`
 }
 
 // Source represents information about where the product data came from

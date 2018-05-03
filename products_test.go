@@ -29,6 +29,7 @@ func TestProducts(t *testing.T) {
 
 			product, err := client.GetProducts("cpe:/a:oracle:jdk:1.6.0:update_71", "someapikey")
 			Expect(err).To(BeNil())
+			Expect(product[0].Sources[0].Name).To(Equal("NVD"))
 			Expect(product[0].ID).To(Equal(84647))
 			Expect(product[0].Name).To(Equal("jdk"))
 		})
