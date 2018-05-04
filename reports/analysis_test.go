@@ -140,10 +140,10 @@ func TestAnalysisReport(t *testing.T) {
 				Expect(ar.ScanSummaries[0].Results).NotTo(BeNil())
 				Expect(len(ar.ScanSummaries[0].Results)).NotTo(Equal(0))
 
-				lr, ok := ar.ScanSummaries[0].TranslatedResults.Data.(scans.CommunityResults)
+				cr, ok := ar.ScanSummaries[0].TranslatedResults.Data.(scans.CommunityResults)
 				Expect(ok).To(BeTrue())
-				Expect(lr.Committers).To(Equal(5))
-				Expect(lr.Name).To(Equal("reponame"))
+				Expect(cr.Committers).To(Equal(5))
+				Expect(cr.Name).To(Equal("reponame"))
 			})
 		})
 	})
