@@ -16,10 +16,18 @@ func TestProducts(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Products", func() {
-		server := bogus.New()
-		server.Start()
-		h, p := server.HostPort()
-		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+		var server *bogus.Bogus
+		var h, p string
+		var client *IonClient
+		g.BeforeEach(func(){
+			server = bogus.New()
+			server.Start()
+			h, p = server.HostPort()
+			client, _ = New(fmt.Sprintf("http://%v:%v", h, p))
+		})
+		g.AfterEach(func(){
+			server.Close()
+		})
 
 		g.It("should get a product", func() {
 			server.AddPath("/v1/vulnerability/getProducts").
@@ -50,8 +58,28 @@ func TestProducts(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "someapikey")
+			products, err := client.GetProductSearch("less", "mahVersion", "someapikey")
 			Expect(err).To(BeNil())
+			hitRecords := server.HitRecords()
+			Expect(hitRecords).To(HaveLen(1))
+			hitRecord := hitRecords[0]
+			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
+			Expect(hitRecord.Query.Get("version")).To(Equal("mahVersion"))
+			Expect(products).To(HaveLen(5))
+			Expect(products[0].ID).To(Equal(39862))
+		})
+		g.It("should omit version from product search when it is not given", func(){
+			server.AddPath("/v1/product/search").
+				SetMethods("GET").
+				SetPayload([]byte(sampleBunsenSearchResponse)).
+				SetStatus(http.StatusOK)
+			products, err := client.GetProductSearch("less", "", "someapikey")
+			Expect(err).To(BeNil())
+			hitRecords := server.HitRecords()
+			Expect(hitRecords).To(HaveLen(1))
+			hitRecord := hitRecords[0]
+			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
+			Expect(hitRecord.Query.Get("version")).To(Equal(""))
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
 		})
