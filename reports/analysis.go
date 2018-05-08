@@ -1,8 +1,12 @@
 package reports
 
 import (
+	"strings"
+
 	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/projects"
+	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/scans"
 	"github.com/ion-channel/ionic/tags"
 )
@@ -22,20 +26,32 @@ type AnalysisReport struct {
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
-func NewAnalysisReport(a *analysis.Analysis) (*AnalysisReport, error) {
-	ar := AnalysisReport{Analysis: a}
-
-	summaries := make([]scans.Summary, 0, len(a.ScanSummaries))
-	for i := range a.ScanSummaries {
-		scan := a.ScanSummaries[i]
-		scan.Translate()
-		a.ScanSummaries[i] = scan
-
-		summary := scans.NewSummary(&a.ScanSummaries[i])
-		summaries = append(summaries, *summary)
+func NewAnalysisReport(analysis *analysis.Analysis, project *projects.Project, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
+	ar := AnalysisReport{
+		Analysis: analysis,
+		Trigger:  "source commit",
+		Risk:     "high",
 	}
 
-	ar.ScanSummaries = summaries
+	// Project Details
+	ar.Aliases = project.Aliases
+	ar.Tags = project.Tags
+
+	// RulesetEval Details
+	if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
+		ar.RulesetName = appliedRuleset.RuleEvaluationSummary.RulesetName
+
+		if strings.ToLower(appliedRuleset.RuleEvaluationSummary.Summary) == "pass" {
+			ar.Risk = "low"
+			ar.Passed = true
+		}
+
+		for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
+			appliedRuleset.RuleEvaluationSummary.Ruleresults[i].Translate()
+		}
+
+		ar.ScanSummaries = appliedRuleset.RuleEvaluationSummary.Ruleresults
+	}
 
 	return &ar, nil
 }
