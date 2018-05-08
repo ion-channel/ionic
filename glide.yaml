@@ -3,4 +3,5 @@ import: []
 testImport:
 - package: github.com/franela/goblin
 - package: github.com/gomicro/bogus
+  version: 615633fee854e1c323e616a0ec3df0f3fdc51e66
 - package: github.com/onsi/gomega

@@ -19,7 +19,6 @@ func TestScanner(t *testing.T) {
 
 	g.Describe("Scanner", func() {
 		server := bogus.New()
-		server.Start()
 		h, p := server.HostPort()
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 

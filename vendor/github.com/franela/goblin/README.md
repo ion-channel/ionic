@@ -4,7 +4,7 @@ Goblin
 
 ![](https://github.com/marcosnils/goblin/blob/master/goblin_logo.jpg?raw=true)
 
-A [Mocha](http://mochajs.org/) like BDD testing framework for Go
+A [Mocha](http://visionmedia.github.io/mocha/) like BDD testing framework for Go
 
 No extensive documentation nor complicated steps to get it running
 
@@ -32,7 +32,6 @@ What do I get with it?
 - Use a declarative and expressive language to write your tests
 - Plug different assertion libraries ([Gomega](https://github.com/onsi/gomega) supported so far)
 - Skip your tests the same way as you would do in Mocha
-- Automatic terminal support for colored outputs
 - Two line setup is all you need to get up running
 
 
@@ -48,20 +47,20 @@ package foobar
 
 import (
     "testing"
-    . "github.com/franela/goblin"
+    . "goblin"
 )
 
 func Test(t *testing.T) {
-    g := Goblin(t)
-    g.Describe("Numbers", func() {
-        g.It("Should add two numbers ", func() {
-            g.Assert(1+1).Equal(2)
-        })
-        g.It("Should match equal numbers", func() {
-            g.Assert(2).Equal(4)
-        })
-        g.It("Should substract two numbers")
-    })
+  g := Goblin(t)
+  g.Describe("Numbers", func() {
+      g.It("Should add two numbers ", func() {
+          g.Assert(1+1).Equal(2)
+      })
+      g.It("Should match equal numbers", func() {
+          g.Assert(2).Equal(4)
+      })
+      g.It("Should substract two numbers")
+  })
 }
 ```
 
@@ -70,26 +69,6 @@ Ouput will be something like:
 ![](https://github.com/marcosnils/goblin/blob/master/goblin_output.png?raw=true)
 
 Nice and easy, right?
-
-Can I do asynchronous tests?
-----------------------------
-
-Yes! Goblin will help you to test asynchronous things, like goroutines, etc. You just need to add a ```done``` parameter to the handler function of your ```It```. This handler function should be called when your test passes.
-
-```go
-  ...
-  g.Describe("Numbers", func() {
-      g.It("Should add two numbers asynchronously", func(done Done) {
-          go func() {
-              g.Assert(1+1).Equal(2)
-              done()
-          }()
-      })
-  })
-  ...
-```
-
-Goblin will wait for the ```done``` call, a ```Fail``` call or any false assertion.
 
 How do I use it with Gomega?
 ----------------------------
@@ -102,7 +81,7 @@ package foobar
 
 import (
     "testing"
-    . "github.com/franela/goblin"
+    . "goblin"
     . "github.com/onsi/gomega"
 )
 
@@ -113,21 +92,12 @@ func Test(t *testing.T) {
     RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
     g.Describe("lala", func() {
-        g.It("lslslslsls", func() {
-            Expect(1).To(Equal(10))
-        })
+      g.It("lslslslsls", func() {
+        Expect(1).To(Equal(10))
+      })
     })
 }
 ```
-
-
-FAQ:
-----
-
-### How do I run specific tests?
-
-If `-goblin.run=$REGES` is supplied to the `go test` command then only tests that match the supplied regex will run
-
 
 TODO:
 -----
