@@ -21,7 +21,6 @@ func TestProducts(t *testing.T) {
 		var client *IonClient
 		g.BeforeEach(func(){
 			server = bogus.New()
-			server.Start()
 			h, p = server.HostPort()
 			client, _ = New(fmt.Sprintf("http://%v:%v", h, p))
 		})
@@ -63,6 +62,7 @@ func TestProducts(t *testing.T) {
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
 			hitRecord := hitRecords[0]
+			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
 			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
 			Expect(hitRecord.Query.Get("version")).To(Equal("mahVersion"))
 			Expect(products).To(HaveLen(5))
@@ -78,6 +78,7 @@ func TestProducts(t *testing.T) {
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
 			hitRecord := hitRecords[0]
+			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
 			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
 			Expect(hitRecord.Query.Get("version")).To(Equal(""))
 			Expect(products).To(HaveLen(5))

@@ -1,5 +1,0 @@
-package: github.com/gomicro/bogus
-import: []
-testImport:
-- package: github.com/franela/goblin
-- package: github.com/onsi/gomega

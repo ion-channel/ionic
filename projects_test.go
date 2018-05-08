@@ -18,7 +18,6 @@ func TestProjects(t *testing.T) {
 
 	g.Describe("Projects", func() {
 		server := bogus.New()
-		server.Start()
 		h, p := server.HostPort()
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 

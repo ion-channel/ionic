@@ -1,6 +1,6 @@
 language: go
 go:
-  - 1.2
+  - 1.6
   - tip
 before_script:
   - curl -s -L -I https://gocover.io/_/github.com/gomicro/bogus
