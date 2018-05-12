@@ -21,7 +21,7 @@ type AppliedRulesetSummary struct {
 // RuleEvaluationSummary represents the ruleset and the scans that were
 // evaluated with the ruleset
 type RuleEvaluationSummary struct {
-	RulesetName string          `json:"ruleset_name"`
-	Summary     string          `json:"summary"`
-	Ruleresults []scans.Summary `json:"ruleresults"`
+	RulesetName string             `json:"ruleset_name"`
+	Summary     string             `json:"summary"`
+	Ruleresults []scans.Evaluation `json:"ruleresults"`
 }
