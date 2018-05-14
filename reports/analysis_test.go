@@ -42,14 +42,14 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				var summary scans.Summary
-				json.Unmarshal([]byte(sampleUntranslatedResults), &summary)
+				var eval scans.Evaluation
+				json.Unmarshal([]byte(sampleUntranslatedResults), &eval)
 
 				app := &rulesets.AppliedRulesetSummary{
 					RuleEvaluationSummary: &rulesets.RuleEvaluationSummary{
 						RulesetName: "super cool ruleset",
 						Summary:     "pass",
-						Ruleresults: []scans.Summary{summary},
+						Ruleresults: []scans.Evaluation{eval},
 					},
 				}
 
@@ -105,14 +105,14 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				var summary scans.Summary
-				json.Unmarshal([]byte(sampleTranslatedResults), &summary)
+				var eval scans.Evaluation
+				json.Unmarshal([]byte(sampleTranslatedResults), &eval)
 
 				app := &rulesets.AppliedRulesetSummary{
 					RuleEvaluationSummary: &rulesets.RuleEvaluationSummary{
 						RulesetName: "super cool ruleset",
 						Summary:     "pass",
-						Ruleresults: []scans.Summary{summary},
+						Ruleresults: []scans.Evaluation{eval},
 					},
 				}
 
