@@ -257,10 +257,7 @@ type DifferenceResults struct {
 // include the name of the ecosystem and the number of lines seen for the given
 // ecosystem.
 type EcosystemResults struct {
-	Ecosystems []struct {
-		Ecosystem string `json:"ecosystem" xml:"ecosystem"`
-		Lines     int    `json:"lines" xml:"lines"`
-	} `json:"ecosystems" xml:"ecosystems"`
+	Ecosystems map[string]int `json:"ecosystems" xml:"ecosystems"`
 }
 
 // ExternalVulnerabilitiesResults represents the data collected from an external
