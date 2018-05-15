@@ -260,6 +260,19 @@ type EcosystemResults struct {
 	Ecosystems map[string]int `json:"ecosystems" xml:"ecosystems"`
 }
 
+// UnmarshalJSON meets the unmarshaller interface to custom wrangle the
+// ecosystem scan into an ecosystem result
+func (e *EcosystemResults) UnmarshalJSON(b []byte) error {
+	var m map[string]int
+	err := json.Unmarshal(b, &m)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal ecosystem result: %v", err.Error())
+	}
+
+	e.Ecosystems = m
+	return nil
+}
+
 // ExternalVulnerabilitiesResults represents the data collected from an external
 // vulnerability scan.  It includes the number of each vulnerability criticality
 // seen within the project.
