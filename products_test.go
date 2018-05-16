@@ -57,7 +57,7 @@ func TestProducts(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "mahVersion", "someapikey")
+			products, err := client.GetProductSearch("less", "mahVersion", "mahVendor", "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
@@ -65,15 +65,16 @@ func TestProducts(t *testing.T) {
 			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
 			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
 			Expect(hitRecord.Query.Get("version")).To(Equal("mahVersion"))
+			Expect(hitRecord.Query.Get("vendor")).To(Equal("mahVendor"))
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
 		})
-		g.It("should omit version from product search when it is not given", func(){
+		g.It("should omit version and vendor from product search when it is not given", func(){
 			server.AddPath("/v1/product/search").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "", "someapikey")
+			products, err := client.GetProductSearch("less", "", "", "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
@@ -81,6 +82,7 @@ func TestProducts(t *testing.T) {
 			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
 			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
 			Expect(hitRecord.Query.Get("version")).To(Equal(""))
+			Expect(hitRecord.Query.Get("vendor")).To(Equal(""))
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
 		})
