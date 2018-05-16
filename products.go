@@ -49,9 +49,9 @@ func (ic *IonClient) GetRawProducts(idSearch, token string) (json.RawMessage, er
 
 // GetProductSearch takes a search query. It returns a new raw json message of
 // all the matching products in the Bunsen dependencies table
-func (ic *IonClient) GetProductSearch(userQuery, version, vendor, token string) ([]products.Product, error) {
+func (ic *IonClient) GetProductSearch(productIdentifier, version, vendor, token string) ([]products.Product, error) {
 	params := &url.Values{}
-	params.Set("user_query", userQuery)
+	params.Set("product_identifier", productIdentifier)
 	if version != "" {
 		params.Set("version", version)
 	}
