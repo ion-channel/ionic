@@ -63,7 +63,7 @@ func TestProducts(t *testing.T) {
 			Expect(hitRecords).To(HaveLen(1))
 			hitRecord := hitRecords[0]
 			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
-			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
+			Expect(hitRecord.Query.Get("product_identifier")).To(Equal("less"))
 			Expect(hitRecord.Query.Get("version")).To(Equal("mahVersion"))
 			Expect(hitRecord.Query.Get("vendor")).To(Equal("mahVendor"))
 			Expect(products).To(HaveLen(5))
@@ -80,7 +80,7 @@ func TestProducts(t *testing.T) {
 			Expect(hitRecords).To(HaveLen(1))
 			hitRecord := hitRecords[0]
 			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
-			Expect(hitRecord.Query.Get("user_query")).To(Equal("less"))
+			Expect(hitRecord.Query.Get("product_identifier")).To(Equal("less"))
 			Expect(hitRecord.Query.Get("version")).To(Equal(""))
 			Expect(hitRecord.Query.Get("vendor")).To(Equal(""))
 			Expect(products).To(HaveLen(5))
