@@ -156,6 +156,23 @@ func TestScanResults(t *testing.T) {
 			Expect(len(e.Ecosystems)).To(Equal(3))
 		})
 
+		g.It("should marshal a scan result with ecosystem data", func() {
+			r := &TranslatedResults{
+				Type: "ecosystems",
+				Data: EcosystemResults{
+					Ecosystems: map[string]int{
+						"Java":     2430,
+						"Makefile": 210,
+						"Ruby":     666,
+					},
+				},
+			}
+
+			b, err := json.Marshal(r)
+			Expect(err).To(BeNil())
+			Expect(string(b)).To(Equal(SampleValidScanResultsEcosystems))
+		})
+
 		g.It("should unmarshal a scan results with external vulnerabilities scan data", func() {
 			var r TranslatedResults
 			err := json.Unmarshal([]byte(SampleValidExternalVulnerabilities), &r)

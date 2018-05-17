@@ -260,6 +260,12 @@ type EcosystemResults struct {
 	Ecosystems map[string]int `json:"ecosystems" xml:"ecosystems"`
 }
 
+// MarshalJSON meets the marshaller interface to custom wrangle an ecosystem
+// result into the json shape
+func (e EcosystemResults) MarshalJSON() ([]byte, error) {
+	return json.Marshal(e.Ecosystems)
+}
+
 // UnmarshalJSON meets the unmarshaller interface to custom wrangle the
 // ecosystem scan into an ecosystem result
 func (e *EcosystemResults) UnmarshalJSON(b []byte) error {
