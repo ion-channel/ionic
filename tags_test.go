@@ -15,9 +15,15 @@ func TestTags(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Tags", func() {
-		server := bogus.New()
-		h, p := server.HostPort()
-		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+		var server *bogus.Bogus
+		var h, p string
+		var client *IonClient
+
+		g.BeforeEach(func() {
+			server = bogus.New()
+			h, p = server.HostPort()
+			client, _ = New(fmt.Sprintf("http://%v:%v", h, p))
+		})
 
 		g.It("should get a tag", func() {
 			server.AddPath("/v1/tag/getTag").
@@ -31,9 +37,27 @@ func TestTags(t *testing.T) {
 			Expect(tag.Name).To(Equal("Jenkins"))
 		})
 
+		g.It("should create a tag", func() {
+			server.AddPath("/v1/tag/createTag").
+				SetMethods("POST").
+				SetPayload([]byte(SampleValidTag)).
+				SetStatus(http.StatusCreated)
+
+			tag, err := client.CreateTag("A3EB1676-C91A-4FCF-AE1D-9F887C0D4B66", "Jenkins", "wild description", "atoken")
+
+			hitRecords := server.HitRecords()
+			Expect(hitRecords).To(HaveLen(1))
+			hitRecord := hitRecords[0]
+			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer atoken"))
+			Expect(err).To(BeNil())
+			Expect(tag.ID).To(Equal("27A06D70-A8AA-4532-ABBF-C83ADF49F855"))
+			Expect(tag.TeamID).To(Equal("A3EB1676-C91A-4FCF-AE1D-9F887C0D4B66"))
+			Expect(tag.Name).To(Equal("Jenkins"))
+			Expect(tag.Description).To(Equal("CI"))
+		})
 	})
 }
 
 const (
-	SampleValidTag = `{"data":{"id":"27A06D70-A8AA-4532-ABBF-C83ADF49F855","team_id":"A3EB1676-C91A-4FCF-AE1D-9F887C0D4B66","name":"Jenkins","description":null,"created_at":"2017-07-10T18:39:53.914Z","updated_at":"2017-07-10T18:39:53.914Z"}}`
+	SampleValidTag = `{"data":{"id":"27A06D70-A8AA-4532-ABBF-C83ADF49F855","team_id":"A3EB1676-C91A-4FCF-AE1D-9F887C0D4B66","name":"Jenkins","description":"CI","created_at":"2017-07-10T18:39:53.914Z","updated_at":"2017-07-10T18:39:53.914Z"}}`
 )
