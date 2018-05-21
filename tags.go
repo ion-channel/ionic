@@ -12,6 +12,7 @@ import (
 const (
 	createTagEndpoint = "v1/tag/createTag"
 	getTagEndpoint    = "v1/tag/getTag"
+	getTagsEndpoint   = "v1/tag/getTags"
 )
 
 // CreateTag takes a team ID, name, and description. It returns the details of
@@ -61,6 +62,40 @@ func (ic *IonClient) GetTag(id, teamID, token string) (*tags.Tag, error) {
 	}
 
 	return &t, nil
+}
+
+// GetTags takes a team ID. It returns the details of a singular tag and any
+// errors encountered with the API.
+func (ic *IonClient) GetTags(teamID, token string) ([]tags.Tag, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	b, err := ic.Get(getTagsEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get tag: %v", err.Error())
+	}
+
+	var ts []tags.Tag
+	err = json.Unmarshal(b, &ts)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse tag: %v", err.Error())
+	}
+
+	return ts, nil
+}
+
+// GetRawTags takes a team ID. It returns the details of a singular tag and any
+// errors encountered with the API.
+func (ic *IonClient) GetRawTags(teamID, token string) (json.RawMessage, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	b, err := ic.Get(getTagsEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get tag: %v", err.Error())
+	}
+
+	return b, nil
 }
 
 // GetRawTag takes a tag ID and a team ID. It returns the details of a singular
