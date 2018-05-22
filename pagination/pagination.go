@@ -36,9 +36,9 @@ func New(offset, limit int) *Pagination {
 	return p
 }
 
-// ParseFromRequest parses pagination params from an http request and returns
-// the pagination object and an error if the pagination is not found
-func ParseFromRequest(req *http.Request) (*Pagination, error) {
+// ParseFromRequest parses pagination params from an http request. It will defer
+// to defaults if the pagination params are not found.
+func ParseFromRequest(req *http.Request) *Pagination {
 	oStr := req.Header.Get("Offset")
 	lStr := req.Header.Get("Limit")
 
@@ -60,7 +60,7 @@ func ParseFromRequest(req *http.Request) (*Pagination, error) {
 		l = 10
 	}
 
-	return &Pagination{Offset: o, Limit: l}, nil
+	return &Pagination{Offset: o, Limit: l}
 }
 
 // AddParams appends the pagination params to the provided set of URL values
