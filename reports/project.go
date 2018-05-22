@@ -13,6 +13,15 @@ type ProjectReport struct {
 	AnalysisSummaries []analysis.Summary `json:"analysis_summaries"`
 }
 
+// NewProjectReport takes a project and analysis summaries to return a
+// constructed Project Report
+func NewProjectReport(project *projects.Project, summaries []analysis.Summary) *ProjectReport {
+	return &ProjectReport{
+		Project:           project,
+		AnalysisSummaries: summaries,
+	}
+}
+
 // ProjectReports is used for getting a high level overview, returning a single
 // analysis
 type ProjectReports struct {
