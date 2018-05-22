@@ -142,8 +142,7 @@ func TestPagination(t *testing.T) {
 				req.Header.Set("Offset", "100")
 				req.Header.Set("Limit", "50")
 
-				p, err := ParseFromRequest(req)
-				Expect(err).To(BeNil())
+				p := ParseFromRequest(req)
 				Expect(p.Offset).To(Equal(100))
 				Expect(p.Limit).To(Equal(50))
 			})
@@ -154,8 +153,7 @@ func TestPagination(t *testing.T) {
 				}
 				req.Header.Set("Limit", "50")
 
-				p, err := ParseFromRequest(req)
-				Expect(err).To(BeNil())
+				p := ParseFromRequest(req)
 				Expect(p.Offset).To(Equal(0))
 				Expect(p.Limit).To(Equal(50))
 			})
@@ -167,8 +165,7 @@ func TestPagination(t *testing.T) {
 				req.Header.Set("Offset", "destroy")
 				req.Header.Set("Limit", "51")
 
-				p, err := ParseFromRequest(req)
-				Expect(err).To(BeNil())
+				p := ParseFromRequest(req)
 				Expect(p.Offset).To(Equal(0))
 				Expect(p.Limit).To(Equal(51))
 			})
@@ -179,8 +176,7 @@ func TestPagination(t *testing.T) {
 				}
 				req.Header.Set("Offset", "100")
 
-				p, err := ParseFromRequest(req)
-				Expect(err).To(BeNil())
+				p := ParseFromRequest(req)
 				Expect(p.Offset).To(Equal(100))
 				Expect(p.Limit).To(Equal(10))
 			})
@@ -192,8 +188,7 @@ func TestPagination(t *testing.T) {
 				req.Header.Set("Offset", "101")
 				req.Header.Set("Limit", "war_doctor")
 
-				p, err := ParseFromRequest(req)
-				Expect(err).To(BeNil())
+				p := ParseFromRequest(req)
 				Expect(p.Offset).To(Equal(101))
 				Expect(p.Limit).To(Equal(10))
 			})
