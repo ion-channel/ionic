@@ -63,7 +63,7 @@ func NewSummary(a *Analysis, appliedRuleset *rulesets.AppliedRulesetSummary) *Su
 		if appliedRuleset != nil {
 			risk, passed = appliedRuleset.SummarizeEvaluation()
 
-			if appliedRuleset.RuleEvaluationSummary != nil {
+			if appliedRuleset.RuleEvaluationSummary != nil && appliedRuleset.RuleEvaluationSummary.RulesetName != "" {
 				rulesetName = appliedRuleset.RuleEvaluationSummary.RulesetName
 			}
 		}

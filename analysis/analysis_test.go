@@ -29,5 +29,17 @@ func TestAnalysis(t *testing.T) {
 			Expect(s.Passed).To(Equal(false))
 			Expect(s.Risk).To(Equal("high"))
 		})
+
+		g.It("should return N/A for ruleset name when it is not available", func() {
+			a := &Analysis{}
+			ar := &rulesets.AppliedRulesetSummary{
+				RuleEvaluationSummary: &rulesets.RuleEvaluationSummary{},
+			}
+
+			s := NewSummary(a, ar)
+			Expect(s.RulesetName).To(Equal("N/A"))
+			Expect(s.Passed).To(Equal(false))
+			Expect(s.Risk).To(Equal("high"))
+		})
 	})
 }
