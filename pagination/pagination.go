@@ -43,8 +43,10 @@ func New(offset, limit int) *Pagination {
 	return p
 }
 
-// ParseFromRequest parses pagination params from an http request. It will defer
-// to defaults if the pagination params are not found.
+// ParseFromRequest parses pagination params from an http request's query params
+// or from the headers. The URL query params are favored over the header values
+// if both are provided. It will defer to defaults if the pagination params are
+// not found.
 func ParseFromRequest(req *http.Request) *Pagination {
 	var oStr, lStr string
 
