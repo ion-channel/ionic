@@ -21,7 +21,7 @@ type Meta struct {
 	LastUpdate *time.Time `json:"last_update,omitempty"`
 	TotalCount int        `json:"total_count,omitempty"`
 	Limit      int        `json:"limit,omitempty"`
-	Offset     int        `json:"offset,omitempty"`
+	Offset     int        `json:"offset"`
 }
 
 // IonErrorResponse represents an error response from the Ion Channel API
