@@ -135,7 +135,18 @@ func TestPagination(t *testing.T) {
 		})
 
 		g.Describe("Parsing", func() {
-			g.It("should parse pagination params from the request", func() {
+			g.It("should parse offset and limit from query params", func() {
+				u, _ := url.Parse("http://localhost/something?offset=10&limit=100")
+				req := &http.Request{
+					URL: u,
+				}
+
+				p := ParseFromRequest(req)
+				Expect(p.Offset).To(Equal(10))
+				Expect(p.Limit).To(Equal(100))
+			})
+
+			g.It("should parse pagination params from the headers", func() {
 				req := &http.Request{
 					Header: http.Header{},
 				}
@@ -145,6 +156,12 @@ func TestPagination(t *testing.T) {
 				p := ParseFromRequest(req)
 				Expect(p.Offset).To(Equal(100))
 				Expect(p.Limit).To(Equal(50))
+			})
+
+			g.It("should return the default pagination values when nothing is given", func() {
+				p := ParseFromRequest(&http.Request{})
+				Expect(p.Offset).To(Equal(DefaultOffset))
+				Expect(p.Limit).To(Equal(DefaultLimit))
 			})
 
 			g.It("should assume no offset when the offset is not in the request", func() {

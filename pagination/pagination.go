@@ -8,6 +8,13 @@ import (
 	"strings"
 )
 
+const (
+	// DefaultOffset is the standard offset chosen when nothing is provided
+	DefaultOffset = 0
+	// DefaultLimit is the standard limit chosen when nothing is provided
+	DefaultLimit = 10
+)
+
 // AllItems is a convenience for requesting all items of a given entity
 var AllItems = &Pagination{Offset: 0, Limit: -1}
 
@@ -39,28 +46,41 @@ func New(offset, limit int) *Pagination {
 // ParseFromRequest parses pagination params from an http request. It will defer
 // to defaults if the pagination params are not found.
 func ParseFromRequest(req *http.Request) *Pagination {
-	oStr := req.Header.Get("Offset")
-	lStr := req.Header.Get("Limit")
+	var oStr, lStr string
 
-	if oStr == "" {
-		oStr = "0"
+	if req.URL != nil {
+		oStr = req.URL.Query().Get("offset")
+		lStr = req.URL.Query().Get("limit")
 	}
 
-	if lStr == "" {
-		lStr = "10"
+	if oStr == "" && lStr == "" && req.Header != nil {
+		oStr = req.Header.Get("Offset")
+		lStr = req.Header.Get("Limit")
+	}
+
+	if oStr == "" && lStr == "" {
+		return New(DefaultOffset, DefaultLimit)
+	}
+
+	if oStr == "" {
+		oStr = strconv.Itoa(DefaultOffset)
 	}
 
 	o, err := strconv.Atoi(oStr)
 	if err != nil {
-		o = 0
+		o = DefaultOffset
+	}
+
+	if lStr == "" {
+		oStr = strconv.Itoa(DefaultLimit)
 	}
 
 	l, err := strconv.Atoi(lStr)
 	if err != nil {
-		l = 10
+		l = DefaultLimit
 	}
 
-	return &Pagination{Offset: o, Limit: l}
+	return New(o, l)
 }
 
 // AddParams appends the pagination params to the provided set of URL values
