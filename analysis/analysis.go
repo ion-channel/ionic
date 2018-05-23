@@ -3,6 +3,7 @@ package analysis
 import (
 	"time"
 
+	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/scans"
 )
 
@@ -49,4 +50,44 @@ type Summary struct {
 	TriggerText   string    `json:"trigger_text"`
 	TriggerAuthor string    `json:"trigger_author"`
 	Trigger       string    `json:"trigger"`
+}
+
+// NewSummary takes an Analysis and AppliedRulesetSummary to calculate and
+// return a Summary of the Analysis
+func NewSummary(a *Analysis, appliedRuleset *rulesets.AppliedRulesetSummary) *Summary {
+	if a != nil {
+		rulesetName := "N/A"
+		risk := "high"
+		passed := false
+
+		if appliedRuleset != nil {
+			risk, passed = appliedRuleset.SummarizeEvaluation()
+
+			if appliedRuleset.RuleEvaluationSummary != nil && appliedRuleset.RuleEvaluationSummary.RulesetName != "" {
+				rulesetName = appliedRuleset.RuleEvaluationSummary.RulesetName
+			}
+		}
+
+		return &Summary{
+			ID:            a.ID,
+			AnalysisID:    a.ID,
+			TeamID:        a.TeamID,
+			BuildNumber:   a.BuildNumber,
+			Branch:        a.Branch,
+			Description:   a.Description,
+			Risk:          risk,
+			Summary:       "",
+			Passed:        passed,
+			RulesetID:     a.RulesetID,
+			RulesetName:   rulesetName,
+			Duration:      a.Duration,
+			CreatedAt:     a.CreatedAt,
+			TriggerHash:   a.TriggerHash,
+			TriggerText:   a.TriggerText,
+			TriggerAuthor: a.TriggerAuthor,
+			Trigger:       "source commit",
+		}
+	}
+
+	return &Summary{}
 }

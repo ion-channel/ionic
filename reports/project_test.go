@@ -15,6 +15,28 @@ func TestProjectReport(t *testing.T) {
 	g := Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
+	g.Describe("Project Report", func() {
+		g.It("should return a new project report", func() {
+			expectedProjectID := "thisproject"
+			expectedSummaryID := "thisanalysis"
+
+			p := &projects.Project{
+				ID: expectedProjectID,
+			}
+
+			ss := []analysis.Summary{
+				analysis.Summary{
+					ID: expectedSummaryID,
+				},
+			}
+
+			r := NewProjectReport(p, ss)
+			Expect(r.Project.ID).To(Equal(expectedProjectID))
+			Expect(len(r.AnalysisSummaries)).To(Equal(1))
+			Expect(r.AnalysisSummaries[0].ID).To(Equal(expectedSummaryID))
+		})
+	})
+
 	g.Describe("Project Reports", func() {
 		g.It("should return a new project reports", func() {
 			expectedProjectID := "thisproject"
