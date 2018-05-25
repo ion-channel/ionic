@@ -19,7 +19,7 @@ type Meta struct {
 	Authors    []string   `json:"authors"`
 	Version    string     `json:"version"`
 	LastUpdate *time.Time `json:"last_update,omitempty"`
-	TotalCount int        `json:"total_count,omitempty"`
+	TotalCount int        `json:"total_count"`
 	Limit      int        `json:"limit,omitempty"`
 	Offset     int        `json:"offset"`
 }
