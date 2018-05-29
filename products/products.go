@@ -45,6 +45,6 @@ type ProductSearchResult struct {
 
 // Github represents information from Github about a given repository
 type Github struct {
-       URI            string
-       CommitterCount uint
+       URI            string `json:"uri" xml:"uri"`
+       CommitterCount uint `json:"committer_count" xml:"committer_count"`
 }
