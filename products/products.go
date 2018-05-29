@@ -35,3 +35,16 @@ type Source struct {
 	License      string    `json:"license" xml:"license"`
 	CopyrightURL string    `json:"copyright_url" xml:"copyright_url"`
 }
+
+// ProductSearchResult represents information about a product as well as
+// other info, like Git repository, committer counts, etc
+type ProductSearchResult struct {
+       Product Product `json:"product" xml:"product"`
+       Github  Github  `json:"github,omitempty" xml:"github,omitempty"`
+}
+
+// Github represents information from Github about a given repository
+type Github struct {
+       URI            string `json:"uri" xml:"uri"`
+       CommitterCount uint `json:"committer_count" xml:"committer_count"`
+}
