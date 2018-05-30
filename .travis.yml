@@ -4,8 +4,6 @@ go:
   - 1.8
   - 1.9.3
 
-sudo: required
-
 install:
   - make travis_setup
 
