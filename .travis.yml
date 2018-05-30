@@ -4,12 +4,15 @@ go:
   - 1.8
   - 1.9.3
 
+sudo: required
+
 install:
-  - go get -u github.com/golang/lint/golint
+  - make travis_setup
 
 script:
   - make fmt vet lint
   - go test -v $(go list ./... | grep -v /vendor/)
+  - make coverage analyze
 
 notifications:
   email: false

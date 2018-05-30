@@ -19,6 +19,26 @@ COVERAGE_DIR=coverage
 .PHONY: all
 all: test build
 
+.PHONY: travis_setup
+travis_setup: ## Setup the travis environmnet
+	@if [[ -n "$$BUILD_ENV" ]] && [[ "$$BUILD_ENV" == "testing" ]]; then echo -e "$(INFO_COLOR)THIS IS EXECUTING AGAINST THE TESTING ENVIRONMEMNT$(NO_COLOR)"; fi
+	@sudo /etc/init.d/postgresql stop
+	@echo "Installing AWS cli"
+	@sudo pip install awscli
+	@echo "Downloading latest Ionize"
+	@wget --quiet https://s3.amazonaws.com/public.ionchannel.io/files/ionize/linux/bin/ionize
+	@chmod +x ionize && mkdir -p $$HOME/.local/bin && mv ionize $$HOME/.local/bin
+	@echo "Installing Go Linter"
+	@go get -u github.com/golang/lint/golint
+
+.PHONY: analyze
+analyze:  ## Perform an analysis of the project
+	@if [[ -n "$$BUILD_ENV" ]] && [[ "$$BUILD_ENV" == "testing" ]]; then \
+		IONCHANNEL_SECRET_KEY=$$TESTING_APIKEY IONCHANNEL_ENDPOINT_URL=$$TESTING_ENDPOINT_URL ionize --config .ionize.test.yaml analyze; \
+	else \
+		ionize analyze; \
+	fi
+
 .PHONY: clean
 clean: ## Cleans out all generated items
 	-@$(GOCLEAN)
@@ -26,7 +46,7 @@ clean: ## Cleans out all generated items
 
 .PHONY: coverage
 coverage:  ## Generates the code coverage from all the tests
-	@echo "Total Coverage: $$(make coverage_compfriendly)%"
+	@echo "Total Coverage: $$(make --no-print-directory coverage_compfriendly | tee coverage.txt)%"
 
 .PHONY: coverage_compfriendly
 coverage_compfriendly:  ## Generates the code coverage in a computer friendly manner
