@@ -5,11 +5,12 @@ go:
   - 1.9.3
 
 install:
-  - go get -u github.com/golang/lint/golint
+  - make travis_setup
 
 script:
   - make fmt vet lint
   - go test -v $(go list ./... | grep -v /vendor/)
+  - make coverage analyze
 
 notifications:
   email: false
