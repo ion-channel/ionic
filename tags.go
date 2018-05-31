@@ -13,6 +13,7 @@ const (
 	createTagEndpoint = "v1/tag/createTag"
 	getTagEndpoint    = "v1/tag/getTag"
 	getTagsEndpoint   = "v1/tag/getTags"
+	updateTagEndpoint = "v1/tag/updateTag"
 )
 
 // CreateTag takes a team ID, name, and description. It returns the details of
@@ -38,6 +39,35 @@ func (ic *IonClient) CreateTag(teamID, name, description, token string) (*tags.T
 	err = json.Unmarshal(b, &t)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response from create: %v", err.Error())
+	}
+
+	return &t, nil
+}
+
+// UpdateTag takes an ID, team ID, name, and description. It returns the details of
+// the updated tag, or any errors encountered with the API.
+func (ic *IonClient) UpdateTag(id, teamID, name, description, token string) (*tags.Tag, error) {
+	tag := &tags.Tag{
+		ID:          id,
+		TeamID:      teamID,
+		Name:        name,
+		Description: description,
+	}
+
+	b, err := json.Marshal(tag)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal tag params to JSON: %v", err.Error())
+	}
+
+	b, err = ic.Put(updateTagEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update tag: %v", err.Error())
+	}
+
+	var t tags.Tag
+	err = json.Unmarshal(b, &t)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response from update: %v", err.Error())
 	}
 
 	return &t, nil
