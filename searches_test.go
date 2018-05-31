@@ -46,7 +46,7 @@ func TestSearches(t *testing.T) {
 		g.It("should perform a repositories search", func() {
 			server.AddPath("/v1/search/repositories").
 				SetMethods("GET").
-				SetPayload([]byte(sampleValidRositaRepoSearch)).
+				SetPayload([]byte(sampleValidSourceRepoSearch)).
 				SetStatus(http.StatusOK)
 			searchResults, err := client.GetSearchRepositories("https://github.com/apache/ode", "sometoken")
 			Expect(err).NotTo(HaveOccurred())
@@ -65,5 +65,5 @@ func TestSearches(t *testing.T) {
 
 const (
 	sampleValidProdIDSearch     = `{"data": [{"product": {"name": "jdk", "language": "", "title": "IBM Jdk 1.4.2", "created_at": "2017-02-13T20:02:38.33Z", "up": "", "updated_at": "2017-02-13T20:02:38.33Z", "edition": "", "version": "1.4.2", "references": [], "source": null, "org": "ibm", "part": "/a", "external_id": "cpe:/a:ibm:jdk:1.4.2", "id": 52994, "aliases": null}, "github": {"committer_count": 31337, "uri": "https://github.com/ibm/jdk"}}, {"product": {"name": "jdk", "language": "", "title": "IBM Jdk 5.0", "created_at": "2017-02-13T20:02:38.33Z", "up": "", "updated_at": "2017-02-13T20:02:38.33Z", "edition": "", "version": "5.0", "references": [], "source": null, "org": "ibm", "part": "/a", "external_id": "cpe:/a:ibm:jdk:5.0", "id": 52995, "aliases": null}, "github": {"committer_count": 31337, "uri": "https://github.com/ibm/jdk"}}], "meta": { "authors": [ "Ion Channel Dev Team" ], "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net", "offset": 0, "total_count": 2, "version": "v1"}}`
-	sampleValidRositaRepoSearch = `{"meta": {"total_count": 2, "offset": 0, "version": "v1", "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net", "authors": ["Ion Channel Dev Team"]}, "data": [{"product": {"name": "ode", "language": "", "source": null, "created_at": "2018-03-27T22:26:14.991Z", "title": "Apache Ode 1.1.1", "up": "rc1", "updated_at": "2018-03-27T22:26:14.991Z", "edition": "", "part": "/a", "references": null, "version": "1.1.1", "org": "apache", "external_id": "cpe:/a:apache:ode:1.1.1:rc1", "id": 759066869, "aliases": null}, "github": {"committer_count": 11, "uri": "https://github.com/apache/ode"}}]}`
+	sampleValidSourceRepoSearch = `{"meta": {"total_count": 2, "offset": 0, "version": "v1", "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net", "authors": ["Ion Channel Dev Team"]}, "data": [{"product": {"name": "ode", "language": "", "source": null, "created_at": "2018-03-27T22:26:14.991Z", "title": "Apache Ode 1.1.1", "up": "rc1", "updated_at": "2018-03-27T22:26:14.991Z", "edition": "", "part": "/a", "references": null, "version": "1.1.1", "org": "apache", "external_id": "cpe:/a:apache:ode:1.1.1:rc1", "id": 759066869, "aliases": null}, "github": {"committer_count": 11, "uri": "https://github.com/apache/ode"}}]}`
 )
