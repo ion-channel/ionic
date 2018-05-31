@@ -13,6 +13,9 @@ const (
 	searchByRepositoriesEndpoint       = "v1/search/repositories"
 )
 
+// GetSearchProductIdentifiers takes a product identifier, version and vendor to perform
+// a productidentifier search against the Ion API, assembling a slice of Ionic
+// products.ProductSearchResponse objects
 func (ic *IonClient) GetSearchProductIdentifiers(productIdentifer, version, vendor, token string) ([]products.ProductSearchResult, error) {
 	params := &url.Values{}
 	params.Set("productidentifiers", productIdentifer)
@@ -33,6 +36,9 @@ func (ic *IonClient) GetSearchProductIdentifiers(productIdentifer, version, vend
 	return results, nil
 }
 
+// GetSearchRepositories takes a repository string and performs
+// a repository search against the Ion API, assembling a slice of Ionic
+// products.ProductSearchResponse objects
 func (ic *IonClient) GetSearchRepositories(repo, token string) ([]products.ProductSearchResult, error) {
 	params := &url.Values{}
 	params.Set("github", repo)

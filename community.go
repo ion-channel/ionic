@@ -13,6 +13,8 @@ const (
 	searchRepoEndpoint = `v1/repo/search`
 )
 
+// GetRepo takes in a repository string and calls the Ion API to get
+// a pointer to the Ionic community.Repo
 func (ic *IonClient) GetRepo(repo, token string) (*community.Repo, error) {
 	params := &url.Values{}
 	params.Set("repo", repo)
@@ -29,6 +31,9 @@ func (ic *IonClient) GetRepo(repo, token string) (*community.Repo, error) {
 	return &resultRepo, nil
 }
 
+// SearchRepo takes an organization name (org) and a project name (project) and
+// calls the Ion API to retrieve the information, then forms a slice of
+// Ionic community.Repo objects
 func (ic *IonClient) SearchRepo(org, project, token string) ([]community.Repo, error) {
 	params := &url.Values{}
 	params.Set("org", org)
