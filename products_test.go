@@ -19,12 +19,12 @@ func TestProducts(t *testing.T) {
 		var server *bogus.Bogus
 		var h, p string
 		var client *IonClient
-		g.BeforeEach(func(){
+		g.BeforeEach(func() {
 			server = bogus.New()
 			h, p = server.HostPort()
 			client, _ = New(fmt.Sprintf("http://%v:%v", h, p))
 		})
-		g.AfterEach(func(){
+		g.AfterEach(func() {
 			server.Close()
 		})
 
@@ -69,7 +69,7 @@ func TestProducts(t *testing.T) {
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
 		})
-		g.It("should omit version and vendor from product search when it is not given", func(){
+		g.It("should omit version and vendor from product search when it is not given", func() {
 			server.AddPath("/v1/product/search").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).

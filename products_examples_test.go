@@ -6,7 +6,7 @@ import (
 	"github.com/ion-channel/ionic"
 )
 
-func ExampleIonClient_GetProduct() {
+func ExampleIonClient_getProduct() {
 	client, err := ionic.New("https://api.test.ionchannel.io")
 	if err != nil {
 		panic(fmt.Sprintf("Panic creating Ion Client: %v", err.Error()))
@@ -20,7 +20,7 @@ func ExampleIonClient_GetProduct() {
 	fmt.Printf("Products: %v\n", ps)
 }
 
-func ExampleIonClient_GetRawProduct() {
+func ExampleIonClient_getRawProduct() {
 	client, err := ionic.New("https://api.test.ionchannel.io")
 	if err != nil {
 		panic(fmt.Sprintf("Panic creating Ion Client: %v", err.Error()))
