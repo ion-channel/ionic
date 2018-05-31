@@ -6,9 +6,20 @@ import (
 )
 
 var validDeliveryEventActions = map[string]string{
-	"delivery_failed":   "delivery_failed",
-	"delivery_finished": "delivery_finished",
-	"delivery_canceled": "delivery_canceled",
+	"delivery_failed":          "delivery_failed",
+	"artifact_delivery_failed": "artifact_delivery_failed",
+	"report_delivery_failed":   "report_delivery_failed",
+	"seva_delivery_failed":     "seva_delivery_failed",
+
+	"delivery_finished":          "delivery_finished",
+	"artifact_delivery_finished": "artifact_delivery_finished",
+	"report_delivery_finished":   "report_delivery_finished",
+	"seva_delivery_finished":     "seva_delivery_finished",
+
+	"delivery_canceled":          "delivery_canceled",
+	"artifact_delivery_canceled": "artifact_delivery_canceled",
+	"report_delivery_canceled":   "report_delivery_canceled",
+	"seva_delivery_canceled":     "seva_delivery_canceled",
 }
 
 // DeliveryEventAction represents possible actions related to a delivery event
