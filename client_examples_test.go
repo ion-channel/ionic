@@ -6,7 +6,7 @@ import (
 	"github.com/ion-channel/ionic"
 )
 
-func ExampleIonClient_New() {
+func ExampleIonClient_new() {
 	client, err := ionic.New("https://api.test.ionchannel.io")
 	if err != nil {
 		panic(fmt.Sprintf("Panic creating Ion Client: %v", err.Error()))
