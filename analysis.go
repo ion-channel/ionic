@@ -13,6 +13,7 @@ const (
 	analysisGetAnalysisEndpoint              = "v1/animal/getAnalysis"
 	analysisGetAnalysesEndpoint              = "v1/animal/getAnalyses"
 	analysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
+	analysisGetPublicAnalysisEndpoint        = "v1/animal/getPublicAnalysis"
 )
 
 // GetAnalysis takes an analysis ID, team ID, project ID, and token.  It returns the
@@ -57,6 +58,27 @@ func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *paginati
 	}
 
 	return as, nil
+}
+
+// GetPublicAnalysis takes an analysis ID.  It returns the
+// analysis found.  If the analysis is not found it will return an error, and
+// will return an error for any other API issues it encounters.
+func (ic *IonClient) GetPublicAnalysis(id string) (*analysis.Analysis, error) {
+	params := &url.Values{}
+	params.Set("id", id)
+
+	b, err := ic.Get(analysisGetPublicAnalysisEndpoint, "", params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+	}
+
+	var a analysis.Analysis
+	err = json.Unmarshal(b, &a)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal analysis: %v", err.Error())
+	}
+
+	return &a, nil
 }
 
 // GetRawAnalysis takes an analysis ID, team ID, project ID, and token.  It returns the
