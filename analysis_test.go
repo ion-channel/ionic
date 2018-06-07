@@ -15,9 +15,15 @@ func TestAnalysis(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Analysis", func() {
-		server := bogus.New()
-		h, p := server.HostPort()
-		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+		var server *bogus.Bogus
+		var h, p string
+		var client *IonClient
+
+		g.BeforeEach(func() {
+			server = bogus.New()
+			h, p = server.HostPort()
+			client, _ = New(fmt.Sprintf("http://%v:%v", h, p))
+		})
 
 		g.It("should get an analysis", func() {
 			server.AddPath("/v1/animal/getAnalysis").
@@ -47,6 +53,7 @@ func TestAnalysis(t *testing.T) {
 			Expect(analysis.Type).To(Equal("git"))
 			Expect(analysis.TriggerAuthor).To(Equal("Daniel Hess"))
 			Expect(len(analysis.ScanSummaries)).To(Equal(2))
+			Expect(server.Hits()).To(Equal(1))
 		})
 
 		g.It("should get a raw analysis", func() {
