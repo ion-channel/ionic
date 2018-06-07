@@ -60,14 +60,14 @@ func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *paginati
 	return as, nil
 }
 
-// GetPublicAnalysis takes an analysis ID and token.  It returns the
+// GetPublicAnalysis takes an analysis ID.  It returns the
 // analysis found.  If the analysis is not found it will return an error, and
 // will return an error for any other API issues it encounters.
-func (ic *IonClient) GetPublicAnalysis(id, token string) (*analysis.Analysis, error) {
+func (ic *IonClient) GetPublicAnalysis(id string) (*analysis.Analysis, error) {
 	params := &url.Values{}
 	params.Set("id", id)
 
-	b, err := ic.Get(analysisGetPublicAnalysisEndpoint, token, params, nil, nil)
+	b, err := ic.Get(analysisGetPublicAnalysisEndpoint, "", params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}

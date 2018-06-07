@@ -40,7 +40,7 @@ func TestAnalysis(t *testing.T) {
 				SetPayload([]byte(SampleValidAnalysis)).
 				SetStatus(http.StatusOK)
 
-			analysis, err := client.GetPublicAnalysis("f9bca953-80ac-46c4-b195-d37f3bc4f498", "sometoken")
+			analysis, err := client.GetPublicAnalysis("f9bca953-80ac-46c4-b195-d37f3bc4f498")
 			Expect(err).To(BeNil())
 			Expect(analysis.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 			Expect(analysis.Status).To(Equal("finished"))
