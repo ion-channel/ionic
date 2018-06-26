@@ -88,9 +88,9 @@ func TestProducts(t *testing.T) {
 			Expect(products[0].ID).To(Equal(39862))
 		})
 		g.It("should marshal and unmarshal products with scores", func() {
-			searchResultJson := `{"product":{"name":"django","language":"","source":null,"created_at":"2017-02-13T20:02:35.667Z","title":"Django Project Django 1.0-alpha-1","up":"alpha1","updated_at":"2017-02-13T20:02:35.667Z","edition":"","part":"/a","references":[],"version":"1.0","org":"djangoproject","external_id":"cpe:/a:djangoproject:django:1.0:alpha1","id":30955,"aliases":null},"github":{"committer_count":2,"uri":"https://github.com/monsooncommerce/gstats"},"mean_score":0.534,"scores":[{"term":"django","score":0.393},{"term":"1.0","score":0.842}]}`
+			searchResultJSON := `{"product":{"name":"django","language":"","source":null,"created_at":"2017-02-13T20:02:35.667Z","title":"Django Project Django 1.0-alpha-1","up":"alpha1","updated_at":"2017-02-13T20:02:35.667Z","edition":"","part":"/a","references":[],"version":"1.0","org":"djangoproject","external_id":"cpe:/a:djangoproject:django:1.0:alpha1","id":30955,"aliases":null},"github":{"committer_count":2,"uri":"https://github.com/monsooncommerce/gstats"},"mean_score":0.534,"scores":[{"term":"django","score":0.393},{"term":"1.0","score":0.842}]}`
 			var searchResult products.ProductSearchResult
-			err := json.Unmarshal([]byte(searchResultJson), &searchResult)
+			err := json.Unmarshal([]byte(searchResultJSON), &searchResult)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(searchResult.Product.Up).To(Equal("alpha1"))
 			Expect(searchResult.Scores).To(HaveLen(2))
