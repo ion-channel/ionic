@@ -41,6 +41,7 @@ type Source struct {
 type ProductSearchResult struct {
 	Product Product `json:"product" xml:"product"`
 	Github  Github  `json:"github,omitempty" xml:"github,omitempty"`
+	Score   float64 `json:"score"`
 }
 
 // Github represents information from Github about a given repository
