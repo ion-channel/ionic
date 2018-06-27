@@ -39,8 +39,17 @@ type Source struct {
 // ProductSearchResult represents information about a product as well as
 // other info, like Git repository, committer counts, etc
 type ProductSearchResult struct {
-	Product Product `json:"product" xml:"product"`
-	Github  Github  `json:"github,omitempty" xml:"github,omitempty"`
+	Product   Product              `json:"product" xml:"product"`
+	Github    Github               `json:"github,omitempty" xml:"github,omitempty"`
+	MeanScore float64              `json:"mean_score" xml:"mean_score"`
+	Scores    []ProductSearchScore `json:"scores" xml:"scores"`
+}
+
+// ProductSearchScore represents the TF;IDF score for a given search result
+// and a given search term
+type ProductSearchScore struct {
+	Term  string  `json:"term" xml:"term"`
+	Score float64 `json:"score" xml:"score"`
 }
 
 // Github represents information from Github about a given repository

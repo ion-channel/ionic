@@ -8,6 +8,7 @@ import (
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
+	"github.com/ion-channel/ionic/products"
 	. "github.com/onsi/gomega"
 )
 
@@ -85,6 +86,49 @@ func TestProducts(t *testing.T) {
 			Expect(hitRecord.Query.Get("vendor")).To(Equal(""))
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
+		})
+		g.It("should unmarshal search results with scores", func() {
+			searchResultJSON := `{"product":{"name":"django","language":"","source":null,"created_at":"2017-02-13T20:02:35.667Z","title":"Django Project Django 1.0-alpha-1","up":"alpha1","updated_at":"2017-02-13T20:02:35.667Z","edition":"","part":"/a","references":[],"version":"1.0","org":"djangoproject","external_id":"cpe:/a:djangoproject:django:1.0:alpha1","id":30955,"aliases":null},"github":{"committer_count":2,"uri":"https://github.com/monsooncommerce/gstats"},"mean_score":0.534,"scores":[{"term":"django","score":0.393},{"term":"1.0","score":0.842}]}`
+			var searchResult products.ProductSearchResult
+			err := json.Unmarshal([]byte(searchResultJSON), &searchResult)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(searchResult.Product.Up).To(Equal("alpha1"))
+			Expect(searchResult.Scores).To(HaveLen(2))
+			Expect(searchResult.Scores[0].Term).To(Equal("django"))
+			Expect(searchResult.Scores[1].Term).To(Equal("1.0"))
+			Expect(fmt.Sprintf("%.3f", searchResult.Scores[0].Score)).To(Equal("0.393"))
+			Expect(fmt.Sprintf("%.3f", searchResult.Scores[1].Score)).To(Equal("0.842"))
+			Expect(fmt.Sprintf("%.3f", searchResult.MeanScore)).To(Equal("0.534"))
+		})
+		g.It("should marshal search results with scores", func() {
+			product := products.Product{
+				ID:         1234,
+				Name:       "product name",
+				Org:        "some org",
+				Version:    "3.1.2",
+				Title:      "mah title",
+				ExternalID: "cpe:/a:djangoproject:django:1.0:alpha1",
+			}
+			github := products.Github{
+				URI:            "https://github.com/some/repo",
+				CommitterCount: 5,
+			}
+			scores := []products.ProductSearchScore{
+				{Term: "foo", Score: 3.2},
+			}
+			searchResult := products.ProductSearchResult{
+				Product:   product,
+				Github:    github,
+				MeanScore: 3.6,
+				Scores:    scores,
+			}
+			b, err := json.Marshal(searchResult)
+			Expect(err).NotTo(HaveOccurred())
+			s := string(b)
+			Expect(s).To(MatchRegexp(`"name":\s*"product name"`))
+			Expect(s).To(MatchRegexp(`"mean_score":\s*3.6`))
+			Expect(s).To(MatchRegexp(`"score":\s*3.2`))
+			Expect(s).To(MatchRegexp(`"term":\s*"foo"`))
 		})
 	})
 }
