@@ -12,10 +12,11 @@ import (
 )
 
 const (
-	createProjectEndpoint = "v1/project/createProject"
-	getProjectEndpoint    = "v1/project/getProject"
-	getProjectsEndpoint   = "v1/project/getProjects"
-	updateProjectEndpoint = "v1/project/updateProject"
+	createProjectEndpoint   = "v1/project/createProject"
+	getProjectEndpoint      = "v1/project/getProject"
+	getProjectByURLEndpoint = "v1/project/getProjectByUrl"
+	getProjectsEndpoint     = "v1/project/getProjects"
+	updateProjectEndpoint   = "v1/project/updateProject"
 )
 
 //CreateProject takes a project object and token to use. It returns the
@@ -94,10 +95,32 @@ func (ic *IonClient) GetProjects(teamID, token string, page *pagination.Paginati
 	var pList []projects.Project
 	err = json.Unmarshal(b, &pList)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal projects: %v", err.Error())
 	}
 
 	return pList, nil
+}
+
+// GetProjectByURL takes a uri, teamID, and API token to request the noted
+// project from the API. It returns the project and any errors it encounters
+// with the API.
+func (ic *IonClient) GetProjectByURL(uri, teamID, token string) (*projects.Project, error) {
+	params := &url.Values{}
+	params.Set("url", uri)
+	params.Set("team_id", teamID)
+
+	b, err := ic.Get(getProjectByURLEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get projects by url: %v", err.Error())
+	}
+
+	var p projects.Project
+	err = json.Unmarshal(b, &p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal projects: %v", err.Error())
+	}
+
+	return &p, nil
 }
 
 //UpdateProject takes a project to update and token to use. It returns the
