@@ -17,9 +17,15 @@ func TestProjects(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Projects", func() {
-		server := bogus.New()
-		h, p := server.HostPort()
-		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+		var server *bogus.Bogus
+		var h, p string
+		var client *IonClient
+
+		g.BeforeEach(func() {
+			server = bogus.New()
+			h, p = server.HostPort()
+			client, _ = New(fmt.Sprintf("http://%v:%v", h, p))
+		})
 
 		g.It("should create a project", func() {
 			project := &projects.Project{}
@@ -84,7 +90,7 @@ func TestProjects(t *testing.T) {
 			hr := server.HitRecords()
 			Expect(len(hr)).To(Equal(1))
 			Expect(hr[0].Query.Get("url")).To(Equal("git@github.com:ion-channel/statler.git"))
-			Expect(hr[0].Query.Get("id")).To(Equal("bef86653-1926-4990-8ef8-5f26cd59d6fc"))
+			Expect(hr[0].Query.Get("team_id")).To(Equal("bef86653-1926-4990-8ef8-5f26cd59d6fc"))
 		})
 	})
 }
