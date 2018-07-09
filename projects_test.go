@@ -80,6 +80,11 @@ func TestProjects(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
 			Expect(project.Name).To(Equal("Statler"))
+
+			hr := server.HitRecords()
+			Expect(len(hr)).To(Equal(1))
+			Expect(hr[0].Query.Get("url")).To(Equal("git@github.com:ion-channel/statler.git"))
+			Expect(hr[0].Query.Get("id")).To(Equal("bef86653-1926-4990-8ef8-5f26cd59d6fc"))
 		})
 	})
 }
