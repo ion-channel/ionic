@@ -1,6 +1,7 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -30,6 +31,39 @@ func (ic *IonClient) GetProducts(idSearch, token string) ([]products.Product, er
 		return nil, fmt.Errorf("failed to get products: %v", err.Error())
 	}
 
+	return ps, nil
+}
+
+// PostProductSearch takes a search query. It returns a new raw json message
+// of all the matching products in the Bunsen dependencies table
+func (ic *IonClient) PostProductSearch(searchType, searchStrategy, productIdentifier, version, token string, terms []string) ([]products.Product, error) {
+	body := products.ProductSearchQuery{
+		SearchType:        searchType,
+		SearchStrategy:    searchStrategy,
+		ProductIdentifier: productIdentifier,
+		Version:           version,
+		Terms:             terms,
+	}
+	if !body.IsValid() {
+		return nil, fmt.Errorf("Product search request not valid")
+	}
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		// log
+		return nil, err
+	}
+	buffer := bytes.NewBuffer(bodyBytes)
+	b, err := ic.Post(productSearchEndpoint, token, nil, *buffer, nil)
+	if err != nil {
+		// log
+		return nil, err
+	}
+	var ps []products.Product
+	err = json.Unmarshal(b, &ps)
+	if err != nil {
+		// log
+		return nil, err
+	}
 	return ps, nil
 }
 
