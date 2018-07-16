@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/ion-channel/ionic/blob/master/LICENSE.md)
 [![Release](https://img.shields.io/github/release/ion-channel/ionic.svg)](https://github.com/ion-channel/ionic/releases/latest)
 
-A Golang SDK for the Ion Channel API
+A Golang SDK for the Ion Channel API.
 
 # Requirements
 Golang Version 1.8 or higher
