@@ -57,3 +57,24 @@ type Github struct {
 	URI            string `json:"uri" xml:"uri"`
 	CommitterCount uint   `json:"committer_count" xml:"committer_count"`
 }
+
+// ProductSearchQuery collects all the various searching options that
+// the productSearchEndpoint supports for use in a POST request
+type ProductSearchQuery struct {
+	SearchType        string   `json:"search_type" xml:"search_type"`
+	SearchStrategy    string   `json:"search_strategy" xml:"search_strategy"`
+	ProductIdentifier string   `json:"product_identifier" xml:"product_identifier"`
+	Version           string   `json:"version" xml:"version"`
+	Terms             []string `json:"terms" xml:"terms"`
+}
+
+// IsValid checks some of the constraints on the ProductSearchQuery to
+// help the programmer determine if productSearchEndpoint will accept it
+func (p *ProductSearchQuery) IsValid() bool {
+	if len(p.SearchStrategy) > 0 {
+		if p.SearchType == "concatenated" || p.SearchType == "deconcatenated" {
+			return true
+		}
+	}
+	return false
+}

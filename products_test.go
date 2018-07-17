@@ -130,6 +130,51 @@ func TestProducts(t *testing.T) {
 			Expect(s).To(MatchRegexp(`"score":\s*3.2`))
 			Expect(s).To(MatchRegexp(`"term":\s*"foo"`))
 		})
+		g.It("should post a product request", func() {
+			server.AddPath("/v1/product/search").
+				SetMethods("POST").
+				SetPayload([]byte(sampleBunsenSearchResponse)).
+				SetStatus(http.StatusOK)
+			products, err := client.PostProductSearch(
+				"concatenated", "searchStrategy", "productIdentifier",
+				"version", "token", []string{"term01", "term02"})
+			Expect(err).NotTo(HaveOccurred())
+			Expect(products).To(HaveLen(5))
+			Expect(products[0].ID).To(Equal(39862))
+			Expect(server.HitRecords()).To(HaveLen(1))
+			hr := server.HitRecords()[0]
+			Expect(hr.Query).To(HaveLen(0))
+			Expect(hr.Header.Get("Authorization")).To(Equal("Bearer token"))
+			Expect(string(hr.Body)).To(Equal(`{"search_type":"concatenated","search_strategy":"searchStrategy","product_identifier":"productIdentifier","version":"version","terms":["term01","term02"]}`))
+		})
+
+		g.It("should validate a good request", func() {
+			search := products.ProductSearchQuery{
+				SearchType:        "concatenated",
+				SearchStrategy:    "strat",
+				ProductIdentifier: "productIdentifier",
+				Version:           "1.0.0",
+				Terms:             []string{"foo"},
+			}
+			Expect(search.IsValid()).To(BeTrue())
+			search.SearchType = "deconcatenated"
+			Expect(search.IsValid()).To(BeTrue())
+		})
+
+		g.It("should validate a bad request", func() {
+			search := products.ProductSearchQuery{
+				SearchType:        "type",
+				SearchStrategy:    "strat",
+				ProductIdentifier: "productIdentifier",
+				Version:           "1.0.0",
+				Terms:             []string{"foo"},
+			}
+			Expect(search.IsValid()).To(BeFalse())
+
+			search.SearchType = "concatenated"
+			search.SearchStrategy = ""
+			Expect(search.IsValid()).To(BeFalse())
+		})
 	})
 }
 
