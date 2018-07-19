@@ -28,6 +28,32 @@ type scan struct {
 	Description string          `json:"description"`
 }
 
+// NewScan creates and returns a new Scan struct
+func NewScan(
+	id, teamID, projectID, analysisID, summary, name, description string,
+	results json.RawMessage,
+	createdAt, updatedAt time.Time,
+	duration float64,
+) *Scan {
+	s := scan{
+		ID:          id,
+		TeamID:      teamID,
+		ProjectID:   projectID,
+		AnalysisID:  analysisID,
+		Summary:     summary,
+		Results:     results,
+		CreatedAt:   createdAt,
+		UpdatedAt:   updatedAt,
+		Duration:    duration,
+		Name:        name,
+		Description: description,
+	}
+
+	return &Scan{
+		scan: &s,
+	}
+}
+
 // Translate performs a one way translation on a scan by translating the
 // UntranslatedResults if they are not nil, putting the output into Translated
 // results, and setting UntranslatedResults to be nil. It returns an error if
