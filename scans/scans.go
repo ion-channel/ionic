@@ -49,9 +49,13 @@ func NewScan(
 		Description: description,
 	}
 
-	return &Scan{
+	bigS := &Scan{
 		scan: &s,
 	}
+
+	bigS.Translate()
+
+	return bigS
 }
 
 // Translate performs a one way translation on a scan by translating the
