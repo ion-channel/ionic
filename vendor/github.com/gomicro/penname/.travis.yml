@@ -1,0 +1,9 @@
+language: go
+go:
+  - 1.2
+  - tip
+script:
+  - go test -v $(go list ./... | grep -v /vendor/)
+notifications:
+  slack:
+    secure: O3TlxqzNaJhnlwciI4fdYqAfuotTL69zZ3pkH+SjHwYw+uOUAidOL1AYZluHFngD1gyt0hbgGhCv23qPJ6xUljN64V1iLy91Uvr8Y3EOox8iUBJ6TwixTJXjgS4yfrBrB3eeIhmbe2EmhmuUJXk4Ayc7Aj/XVUpcZAAQVY7KujtRzvqI/arrxmt4v9MLdj9L0VZ9kAfVXl51Dka1lP7nPUqYxxXYN0sXQRLoQLZ5NklizjE4XkakWbnBshm4DLAV1QBna1TX3vaao1FuDIlnuutkv90q8oM1rhWQqEjl/hVdz8SuT5utpmMBndOjdcmnrNz3Bmuewl3EbOFgi63x0EKhAuWhyoF20ObG3nGlfertLJuWmcrkLrzCrfsBgefhGFj/U4N54gAphA4DLmi9YH6oX3KVJLIAkeu2jCf4hKjI9XkQNfx+q+iqefpwkYhdcYlaq+clUthVxSVEPwwgdzxyy+AN+QQwyC4g4OPmAdbQ9yIURbM+gbiUNSlT44FJnWEQETtpr/av97bQIUaTYn4gitGQ202VaQdn2zQAu2G+okihNKXieyngvvsylsjbN1RrQ/q05ZWKRzd9AJlOfHFWhXVT1ZrpufZIwwvr6ZZT13xLxuD774/I/ilRl8H6aZbn8Ki1LBCV1hgAERRKlKfrRZVoqVV2FyF5KU5S7Kw=
