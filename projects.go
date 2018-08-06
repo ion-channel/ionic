@@ -123,23 +123,29 @@ func (ic *IonClient) GetProjectByURL(uri, teamID, token string) (*projects.Proje
 	return &p, nil
 }
 
+func maybeAdd(params *url.Values, key string, value *string) {
+	if value != nil {
+		params.Set(key, *value)
+	}
+}
+
 //UpdateProject takes a project to update and token to use. It returns the
 // project stored or an error encountered by the API
 func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*projects.Project, error) {
 	params := &url.Values{}
 
-	params.Set("id", project.ID)
-	params.Set("team_id", project.TeamID)
-
-	params.Set("name", project.Name)
-	params.Set("type", project.Type)
 	params.Set("active", strconv.FormatBool(project.Active))
-	params.Set("source", project.Source)
-	params.Set("branch", project.Branch)
-	params.Set("description", project.Description)
-	params.Set("ruleset_id", project.RulesetID)
-	params.Set("chat_channel", project.ChatChannel)
 	params.Set("should_monitor", strconv.FormatBool(project.Monitor))
+
+	maybeAdd(params, "id", project.ID)
+	maybeAdd(params, "team_id", project.TeamID)
+	maybeAdd(params, "name", project.Name)
+	maybeAdd(params, "type", project.Type)
+	maybeAdd(params, "source", project.Source)
+	maybeAdd(params, "branch", project.Branch)
+	maybeAdd(params, "description", project.Description)
+	maybeAdd(params, "ruleset_id", project.RulesetID)
+	maybeAdd(params, "chat_channel", project.ChatChannel)
 
 	b, err := ic.Put(updateProjectEndpoint, token, params, bytes.Buffer{}, nil)
 	if err != nil {
