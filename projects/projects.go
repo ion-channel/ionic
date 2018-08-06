@@ -9,25 +9,25 @@ import (
 
 //Project is a representation of a project within the Ion Channel system
 type Project struct {
-	ID             *string          `json:"id"`
-	TeamID         *string          `json:"team_id"`
-	RulesetID      *string          `json:"ruleset_id"`
-	Name           *string          `json:"name"`
-	Type           *string          `json:"type"`
-	Source         *string          `json:"source"`
-	Branch         *string          `json:"branch"`
-	Description    *string          `json:"description"`
+	ID             *string         `json:"id,omitempty"`
+	TeamID         *string         `json:"team_id,omitempty"`
+	RulesetID      *string         `json:"ruleset_id,omitempty"`
+	Name           *string         `json:"name,omitempty"`
+	Type           *string         `json:"type,omitempty"`
+	Source         *string         `json:"source,omitempty"`
+	Branch         *string         `json:"branch,omitempty"`
+	Description    *string         `json:"description,omitempty"`
 	Active         bool            `json:"active"`
-	ChatChannel    *string          `json:"chat_channel"`
+	ChatChannel    *string         `json:"chat_channel,omitempty"`
 	CreatedAt      time.Time       `json:"created_at"`
 	UpdatedAt      time.Time       `json:"updated_at"`
-	DeployKey      *string          `json:"deploy_key"`
+	DeployKey      *string         `json:"deploy_key,omitempty"`
 	Monitor        bool            `json:"should_monitor"`
-	POCName        *string          `json:"poc_name"`
-	POCEmail       *string          `json:"poc_email"`
-	Username       *string          `json:"username"`
-	Password       *string          `json:"password"`
-	KeyFingerprint *string          `json:"key_fingerprint"`
+	POCName        *string         `json:"poc_name,omitempty"`
+	POCEmail       *string         `json:"poc_email,omitempty"`
+	Username       *string         `json:"username,omitempty"`
+	Password       *string         `json:"password,omitempty"`
+	KeyFingerprint *string         `json:"key_fingerprint,omitempty"`
 	Aliases        []aliases.Alias `json:"aliases"`
 	Tags           []tags.Tag      `json:"tags"`
 }
