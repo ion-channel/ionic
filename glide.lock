@@ -1,6 +1,8 @@
-hash: 2ba3a538f7144e5563e667da6ced47b5ca9a475328e27fa259b8126e1a91a13d
-updated: 2018-05-08T09:28:09.131493-07:00
-imports: []
+hash: a280dbcfe34c8a9cd8a48a3b83e05e32da0f533f2ea1c3e2df93771f423af608
+updated: 2018-08-03T21:45:39.017521-07:00
+imports:
+- name: github.com/gomicro/penname
+  version: 6b7aa4333fbadc13015f856ae2e27ca2c0817cad
 testImports:
 - name: github.com/franela/goblin
   version: 74c9fe110d4bfd04c222a089a309e0a97e258534
@@ -23,13 +25,13 @@ testImports:
   - matchers/support/goraph/util
   - types
 - name: golang.org/x/net
-  version: d11bb6cd8e3c4e60239c9cb20ef68586d74500d0
+  version: f4c29de78a2a91c00474a2e689954305c350adf9
   subpackages:
   - html
   - html/atom
   - html/charset
 - name: golang.org/x/text
-  version: 7922cc490dd5a7dbaa7fd5d6196b49db59ac042f
+  version: 96e34ec0e18a62a1e59880c7bf617b655efecb66
   subpackages:
   - encoding
   - encoding/charmap

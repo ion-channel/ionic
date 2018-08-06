@@ -2,6 +2,7 @@ package ionic
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 )
@@ -9,8 +10,9 @@ import (
 // IonResponse represents the response structure expected back from the Ion
 // Channel API calls
 type IonResponse struct {
-	Data json.RawMessage `json:"data"`
-	Meta Meta            `json:"meta"`
+	Data   json.RawMessage `json:"data"`
+	Meta   Meta            `json:"meta"`
+	status int
 }
 
 // Meta represents the metadata section of an IonResponse
@@ -24,47 +26,53 @@ type Meta struct {
 	Offset     int        `json:"offset"`
 }
 
+// NewResponse takes a data object, meta object, and desired status code to
+// build a new response.  It returns a newly formed Ion Response object with
+// default values applied to the response.
+func NewResponse(data interface{}, meta Meta, status int) (*IonResponse, error) {
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal response data: %v", err.Error())
+	}
+
+	if meta.Copyright == "" {
+		meta.Copyright = "Copyright 2018 Selection Pressure LLC www.selectpress.net"
+	}
+
+	if meta.Authors == nil || len(meta.Authors) < 1 {
+		meta.Authors = append(meta.Authors, "Ion Channel Dev Team")
+	}
+
+	if meta.Version == "" {
+		meta.Version = "v1"
+	}
+
+	return &IonResponse{Data: b, Meta: meta, status: status}, nil
+}
+
+// WriteResponse takes an http ResponseWriter and writes the Ion Response object
+// to the writer. It encodes the object as marshalled JSON. If it encounters any
+// errors while attempt to formulate the response, it will write an Ion Error
+// Response to the writer instead.
+func (ir *IonResponse) WriteResponse(w http.ResponseWriter) {
+	b, err := json.Marshal(ir)
+	if err != nil {
+		errMsg := fmt.Sprintf("failed to marshal response to json: %v", err.Error())
+		er := NewErrorResponse(errMsg, nil, http.StatusInternalServerError)
+		er.WriteResponse(w)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(ir.status)
+	fmt.Fprintln(w, string(b))
+}
+
 // IonErrorResponse represents an error response from the Ion Channel API
 type IonErrorResponse struct {
 	Message string   `json:"message"`
 	Fields  []string `json:"fields,omitempty"`
 	Code    int      `json:"code"`
-}
-
-// makeIonResponse constructs an IonResponse object for eventual return
-func makeIonResponse(data interface{}, meta Meta) (*IonResponse, error) {
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-	if meta.Copyright == "" {
-		meta.Copyright = "Copyright 2018 Selection Pressure LLC www.selectpress.net"
-	}
-	if meta.Authors == nil || len(meta.Authors) < 1 {
-		meta.Authors = append(meta.Authors, "Ion Channel Dev Team")
-	}
-	if meta.Version == "" {
-		meta.Version = "v1"
-	}
-	return &IonResponse{Data: b, Meta: meta}, nil
-}
-
-// NewResponse takes a data object, meta object, and desired status code to
-// build a new response.  It returns a message encoded as a byte slice and a
-// corresponding status code.  The returned message and status code will reflect
-// any errors encountered as part of the encoding process.
-func NewResponse(data interface{}, meta Meta, status int) ([]byte, int) {
-	ionResponse, err := makeIonResponse(data, meta)
-	if err != nil {
-		return NewErrorResponse(err.Error(), nil, http.StatusInternalServerError)
-	}
-
-	b, err := json.Marshal(ionResponse)
-	if err != nil {
-		return NewErrorResponse("failed to marshal response to json", nil, http.StatusInternalServerError)
-	}
-
-	return b, status
 }
 
 // NewErrorResponse takes a message, related fields, and desired status code to
@@ -73,18 +81,28 @@ func NewResponse(data interface{}, meta Meta, status int) ([]byte, int) {
 // same as passed into the status parameter unless an error is encountered when
 // marshalling the error response into JSON, which will then return an Internal
 // Server Error status code.
-func NewErrorResponse(message string, fields []string, status int) ([]byte, int) {
-	errResp := IonErrorResponse{
+func NewErrorResponse(message string, fields []string, status int) *IonErrorResponse {
+	return &IonErrorResponse{
 		Message: message,
 		Fields:  fields,
 		Code:    status,
 	}
+}
 
-	b, err := json.Marshal(errResp)
+// WriteResponse takes an http ResponseWriter and writes the Ion Error Response
+// object to the writer. It encodes the object as marshalled JSON. If it
+// encounters any errors while attempt to formulate the response, it will write
+// a standard message and internal server error status to the writer.
+func (er *IonErrorResponse) WriteResponse(w http.ResponseWriter) {
+	b, err := json.Marshal(er)
 	if err != nil {
-		b = []byte("failed to marshal error response")
-		status = http.StatusInternalServerError
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, "failed to marshal error response")
+		return
 	}
 
-	return b, status
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(er.Code)
+	fmt.Fprintln(w, string(b))
 }
