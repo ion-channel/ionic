@@ -21,7 +21,7 @@ func TestProjectReport(t *testing.T) {
 			expectedSummaryID := "thisanalysis"
 
 			p := &projects.Project{
-				ID: expectedProjectID,
+				ID: &expectedProjectID,
 			}
 
 			ss := []analysis.Summary{
@@ -31,7 +31,7 @@ func TestProjectReport(t *testing.T) {
 			}
 
 			r := NewProjectReport(p, ss)
-			Expect(r.Project.ID).To(Equal(expectedProjectID))
+			Expect(*r.Project.ID).To(Equal(expectedProjectID))
 			Expect(len(r.AnalysisSummaries)).To(Equal(1))
 			Expect(r.AnalysisSummaries[0].ID).To(Equal(expectedSummaryID))
 		})
@@ -44,7 +44,7 @@ func TestProjectReport(t *testing.T) {
 			expectedRulesetName := "super-secure-ruleset"
 
 			p := &projects.Project{
-				ID: expectedProjectID,
+				ID: &expectedProjectID,
 			}
 			s := &analysis.Summary{
 				ID: expectedAnalysisID,
@@ -58,7 +58,7 @@ func TestProjectReport(t *testing.T) {
 			pr := NewProjectReports(p, s, ar)
 			Expect(pr).NotTo(BeNil())
 
-			Expect(pr.Project.ID).To(Equal(expectedProjectID))
+			Expect(*pr.Project.ID).To(Equal(expectedProjectID))
 			Expect(pr.RulesetName).To(Equal(expectedRulesetName))
 
 			Expect(pr.AnalysisSummary.ID).To(Equal(expectedAnalysisID))

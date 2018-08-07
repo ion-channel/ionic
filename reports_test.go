@@ -51,8 +51,8 @@ func TestReports(t *testing.T) {
 
 			report, err := client.GetProjectReport("aprojectid", "ateamid", "atoken")
 			Expect(err).To(BeNil())
-			Expect(report.ID).To(Equal("AB3DC2C7-4BB8-4211-8F42-158C8AD4BAE3"))
-			Expect(report.Name).To(Equal("Pepe"))
+			Expect(*report.ID).To(Equal("AB3DC2C7-4BB8-4211-8F42-158C8AD4BAE3"))
+			Expect(*report.Name).To(Equal("Pepe"))
 		})
 
 		g.It("should get a raw project report", func() {

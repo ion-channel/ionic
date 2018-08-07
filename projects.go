@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"github.com/ion-channel/ionic/pagination"
 	"github.com/ion-channel/ionic/projects"
@@ -128,16 +129,21 @@ func (ic *IonClient) GetProjectByURL(uri, teamID, token string) (*projects.Proje
 func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*projects.Project, error) {
 	params := &url.Values{}
 
-	params.Set("id", project.ID)
-	params.Set("team_id", project.TeamID)
+	fields, err := project.Validate()
+	if err != nil {
+		return nil, fmt.Errorf("%v: %v", projects.ErrInvalidProject, strings.Join(fields, ", "))
+	}
 
-	params.Set("name", project.Name)
-	params.Set("type", project.Type)
+	params.Set("id", *project.ID)
+	params.Set("team_id", *project.TeamID)
+
+	params.Set("name", *project.Name)
+	params.Set("type", *project.Type)
 	params.Set("active", strconv.FormatBool(project.Active))
-	params.Set("source", project.Source)
-	params.Set("branch", project.Branch)
-	params.Set("description", project.Description)
-	params.Set("ruleset_id", project.RulesetID)
+	params.Set("source", *project.Source)
+	params.Set("branch", *project.Branch)
+	params.Set("description", *project.Description)
+	params.Set("ruleset_id", *project.RulesetID)
 	params.Set("chat_channel", project.ChatChannel)
 	params.Set("should_monitor", strconv.FormatBool(project.Monitor))
 

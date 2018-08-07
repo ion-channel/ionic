@@ -36,8 +36,8 @@ func TestProjects(t *testing.T) {
 
 			project, err := client.CreateProject(project, "bef86653-1926-4990-8ef8-5f26cd59d6fc", "")
 			Expect(err).To(BeNil())
-			Expect(project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
-			Expect(project.Name).To(Equal("Statler"))
+			Expect(*project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
+			Expect(*project.Name).To(Equal("Statler"))
 		})
 
 		g.It("should get a project", func() {
@@ -48,8 +48,8 @@ func TestProjects(t *testing.T) {
 
 			project, err := client.GetProject("334c183d-4d37-4515-84c4-0d0ed0fb8db0", "bef86653-1926-4990-8ef8-5f26cd59d6fc", "")
 			Expect(err).To(BeNil())
-			Expect(project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
-			Expect(project.Name).To(Equal("Statler"))
+			Expect(*project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
+			Expect(*project.Name).To(Equal("Statler"))
 		})
 
 		g.It("should get a raw project", func() {
@@ -72,8 +72,8 @@ func TestProjects(t *testing.T) {
 			projects, err := client.GetProjects("bef86653-1926-4990-8ef8-5f26cd59d6fc", "", nil)
 			Expect(err).To(BeNil())
 			Expect(len(projects)).To(Equal(1))
-			Expect(projects[0].ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
-			Expect(projects[0].Name).To(Equal("Statler"))
+			Expect(*projects[0].ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
+			Expect(*projects[0].Name).To(Equal("Statler"))
 		})
 
 		g.It("should get a project by the url", func() {
@@ -84,8 +84,8 @@ func TestProjects(t *testing.T) {
 
 			project, err := client.GetProjectByURL("git@github.com:ion-channel/statler.git", "bef86653-1926-4990-8ef8-5f26cd59d6fc", "")
 			Expect(err).To(BeNil())
-			Expect(project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
-			Expect(project.Name).To(Equal("Statler"))
+			Expect(*project.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
+			Expect(*project.Name).To(Equal("Statler"))
 
 			hr := server.HitRecords()
 			Expect(len(hr)).To(Equal(1))
