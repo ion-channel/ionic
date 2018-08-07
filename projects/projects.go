@@ -43,48 +43,48 @@ type Project struct {
 // be a list of fields that did not pass the validation. An error will only be
 // returned if any of the fields fail their validation.
 func (p *Project) Validate() ([]string, error) {
-	var fields []string
+	var invalidFields []string
 	var err error
 
 	if p.ID == nil {
-		fields = append(fields, "id")
+		invalidFields = append(invalidFields, "id")
 		err = ErrInvalidProject
 	}
 
 	if p.TeamID == nil {
-		fields = append(fields, "team_id")
+		invalidFields = append(invalidFields, "team_id")
 		err = ErrInvalidProject
 	}
 
 	if p.RulesetID == nil {
-		fields = append(fields, "ruleset_id")
+		invalidFields = append(invalidFields, "ruleset_id")
 		err = ErrInvalidProject
 	}
 
 	if p.Name == nil {
-		fields = append(fields, "name")
+		invalidFields = append(invalidFields, "name")
 		err = ErrInvalidProject
 	}
 
 	if p.Type == nil {
-		fields = append(fields, "type")
+		invalidFields = append(invalidFields, "type")
 		err = ErrInvalidProject
 	}
 
 	if p.Source == nil {
-		fields = append(fields, "source")
+		invalidFields = append(invalidFields, "source")
 		err = ErrInvalidProject
 	}
 
 	if p.Branch == nil {
-		fields = append(fields, "branch")
+		invalidFields = append(invalidFields, "branch")
 		err = ErrInvalidProject
 	}
 
 	if p.Description == nil {
-		fields = append(fields, "description")
+		invalidFields = append(invalidFields, "description")
 		err = ErrInvalidProject
 	}
 
-	return fields, err
+	return invalidFields, err
 }
