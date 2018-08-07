@@ -34,20 +34,13 @@ func (ic *IonClient) GetProducts(idSearch, token string) ([]products.Product, er
 	return ps, nil
 }
 
-// PostProductSearch takes a search query. It returns a new raw json message
+// ProductSearch takes a search query. It returns a new raw json message
 // of all the matching products in the Bunsen dependencies table
-func (ic *IonClient) PostProductSearch(searchType, searchStrategy, productIdentifier, version, token string, terms []string) ([]products.Product, error) {
-	body := products.ProductSearchQuery{
-		SearchType:        searchType,
-		SearchStrategy:    searchStrategy,
-		ProductIdentifier: productIdentifier,
-		Version:           version,
-		Terms:             terms,
-	}
-	if !body.IsValid() {
+func (ic *IonClient) ProductSearch(searchInput products.ProductSearchQuery, token string) ([]products.Product, error) {
+	if !searchInput.IsValid() {
 		return nil, fmt.Errorf("Product search request not valid")
 	}
-	bodyBytes, err := json.Marshal(body)
+	bodyBytes, err := json.Marshal(searchInput)
 	if err != nil {
 		// log
 		return nil, err
@@ -65,6 +58,20 @@ func (ic *IonClient) PostProductSearch(searchType, searchStrategy, productIdenti
 		return nil, err
 	}
 	return ps, nil
+}
+
+// PostProductSearch takes a search query. It returns a new raw json message
+// of all the matching products in the Bunsen dependencies table
+func (ic *IonClient) PostProductSearch(searchType, searchStrategy, productIdentifier, version, token string, terms []string) ([]products.Product, error) {
+	searchInput := products.ProductSearchQuery{
+		SearchType:        searchType,
+		SearchStrategy:    searchStrategy,
+		ProductIdentifier: productIdentifier,
+		Version:           version,
+		Terms:             terms,
+	}
+
+	return ic.ProductSearch(searchInput, token)
 }
 
 // GetRawProducts takes a product ID search string and token.  It returns a raw json

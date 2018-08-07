@@ -65,6 +65,7 @@ type ProductSearchQuery struct {
 	SearchStrategy    string   `json:"search_strategy" xml:"search_strategy"`
 	ProductIdentifier string   `json:"product_identifier" xml:"product_identifier"`
 	Version           string   `json:"version" xml:"version"`
+	Vendor            string   `json:"vendor" xml:"vendor"`
 	Terms             []string `json:"terms" xml:"terms"`
 }
 

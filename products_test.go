@@ -135,9 +135,15 @@ func TestProducts(t *testing.T) {
 				SetMethods("POST").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.PostProductSearch(
-				"concatenated", "searchStrategy", "productIdentifier",
-				"version", "token", []string{"term01", "term02"})
+			searchInput := products.ProductSearchQuery{
+				SearchType:        "concatenated",
+				SearchStrategy:    "searchStrategy",
+				ProductIdentifier: "productIdentifier",
+				Version:           "version",
+				Vendor:            "vendor",
+				Terms:             []string{"term01", "term02"},
+			}
+			products, err := client.ProductSearch(searchInput, "token")
 			Expect(err).NotTo(HaveOccurred())
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
@@ -145,7 +151,7 @@ func TestProducts(t *testing.T) {
 			hr := server.HitRecords()[0]
 			Expect(hr.Query).To(HaveLen(0))
 			Expect(hr.Header.Get("Authorization")).To(Equal("Bearer token"))
-			Expect(string(hr.Body)).To(Equal(`{"search_type":"concatenated","search_strategy":"searchStrategy","product_identifier":"productIdentifier","version":"version","terms":["term01","term02"]}`))
+			Expect(string(hr.Body)).To(Equal(`{"search_type":"concatenated","search_strategy":"searchStrategy","product_identifier":"productIdentifier","version":"version","vendor":"vendor","terms":["term01","term02"]}`))
 		})
 
 		g.It("should validate a good request", func() {
