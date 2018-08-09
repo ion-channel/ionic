@@ -23,6 +23,7 @@ type AnalysisReport struct {
 	Risk          string             `json:"risk" xml:"risk"`
 	Summary       string             `json:"summary" xml:"summary"`
 	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
+	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
@@ -50,7 +51,9 @@ func NewAnalysisReport(analysis *analysis.Analysis, project *projects.Project, a
 			appliedRuleset.RuleEvaluationSummary.Ruleresults[i].Translate()
 		}
 
+		// TODO: Remove ScanSummaries field
 		ar.ScanSummaries = appliedRuleset.RuleEvaluationSummary.Ruleresults
+		ar.Evaluations = appliedRuleset.RuleEvaluationSummary.Ruleresults
 	}
 
 	return &ar, nil
