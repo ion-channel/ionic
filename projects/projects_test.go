@@ -66,6 +66,11 @@ func TestAnalysis(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(fs).To(BeNil())
 
+			p.POCEmail = "me+idontbelieveyouwontspamme@gmail.com"
+			fs, err = p.Validate()
+			Expect(err).To(BeNil())
+			Expect(fs).To(BeNil())
+
 			p.POCEmail = "notavalidemail"
 			fs, err = p.Validate()
 			Expect(err).To(Equal(ErrInvalidProjectEmail))
