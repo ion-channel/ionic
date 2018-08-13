@@ -2,16 +2,25 @@ package projects
 
 import (
 	"fmt"
+	"regexp"
 	"time"
 
 	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/tags"
 )
 
+const (
+	validEmailRegex = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`
+)
+
 var (
 	// ErrInvalidProject is returned when a given project does not pass the
 	// standards for a project
 	ErrInvalidProject = fmt.Errorf("project has invalid fields")
+
+	// ErrInvalidProjectEmail is returned when an invalid email is provided on
+	// the project
+	ErrInvalidProjectEmail = fmt.Errorf("poc email is not valid")
 )
 
 //Project is a representation of a project within the Ion Channel system
@@ -84,6 +93,12 @@ func (p *Project) Validate() ([]string, error) {
 	if p.Description == nil {
 		invalidFields = append(invalidFields, "description")
 		err = ErrInvalidProject
+	}
+
+	r := regexp.MustCompile(validEmailRegex)
+	if p.POCEmail != "" && !r.MatchString(p.POCEmail) {
+		invalidFields = append(invalidFields, "poc_email")
+		err = ErrInvalidProjectEmail
 	}
 
 	return invalidFields, err
