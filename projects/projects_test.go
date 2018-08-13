@@ -50,6 +50,32 @@ func TestAnalysis(t *testing.T) {
 			Expect(fs[1]).To(Equal("type"))
 			Expect(fs[2]).To(Equal("branch"))
 		})
+
+		g.It("should say a project is invalid if an email is invalid", func() {
+			var p Project
+			err := json.Unmarshal([]byte(sampleValidProject), &p)
+			Expect(err).To(BeNil())
+
+			p.POCEmail = "dev@ionchannel.io"
+			fs, err := p.Validate()
+			Expect(err).To(BeNil())
+			Expect(fs).To(BeNil())
+
+			p.POCEmail = "dev@howmanyscootersareinthewillamette.science"
+			fs, err = p.Validate()
+			Expect(err).To(BeNil())
+			Expect(fs).To(BeNil())
+
+			p.POCEmail = "me+idontbelieveyouwontspamme@gmail.com"
+			fs, err = p.Validate()
+			Expect(err).To(BeNil())
+			Expect(fs).To(BeNil())
+
+			p.POCEmail = "notavalidemail"
+			fs, err = p.Validate()
+			Expect(err).To(Equal(ErrInvalidProjectEmail))
+			Expect(fs[0]).To(Equal("poc_email"))
+		})
 	})
 }
 
