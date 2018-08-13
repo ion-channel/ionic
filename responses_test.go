@@ -54,7 +54,9 @@ func TestResponses(t *testing.T) {
 		g.Describe("Construction", func() {
 			g.It("should return a new error response", func() {
 				msg := "foo error"
-				fields := []string{"bar"}
+				fields := map[string]string{
+					"bar": "its foo-ed up",
+				}
 				status := http.StatusUnauthorized
 
 				er := NewErrorResponse(msg, fields, status)

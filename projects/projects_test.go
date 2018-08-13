@@ -46,9 +46,9 @@ func TestAnalysis(t *testing.T) {
 			fs, err := p.Validate()
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(len(fs)).To(Equal(3))
-			Expect(fs[0]).To(Equal("name"))
-			Expect(fs[1]).To(Equal("type"))
-			Expect(fs[2]).To(Equal("branch"))
+			Expect(fs["name"]).To(Equal("name"))
+			Expect(fs["type"]).To(Equal("type"))
+			Expect(fs["branch"]).To(Equal("branch"))
 		})
 
 		g.It("should say a project is invalid if an email is invalid", func() {
@@ -73,8 +73,8 @@ func TestAnalysis(t *testing.T) {
 
 			p.POCEmail = "notavalidemail"
 			fs, err = p.Validate()
-			Expect(err).To(Equal(ErrInvalidProjectEmail))
-			Expect(fs[0]).To(Equal("poc_email"))
+			Expect(err).To(Equal(ErrInvalidProject))
+			Expect(fs["poc_email"]).To(Equal("poc_email"))
 		})
 	})
 }
