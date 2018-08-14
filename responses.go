@@ -70,9 +70,9 @@ func (ir *IonResponse) WriteResponse(w http.ResponseWriter) {
 
 // IonErrorResponse represents an error response from the Ion Channel API
 type IonErrorResponse struct {
-	Message string   `json:"message"`
-	Fields  []string `json:"fields,omitempty"`
-	Code    int      `json:"code"`
+	Message string            `json:"message"`
+	Fields  map[string]string `json:"fields,omitempty"`
+	Code    int               `json:"code"`
 }
 
 // NewErrorResponse takes a message, related fields, and desired status code to
@@ -81,7 +81,7 @@ type IonErrorResponse struct {
 // same as passed into the status parameter unless an error is encountered when
 // marshalling the error response into JSON, which will then return an Internal
 // Server Error status code.
-func NewErrorResponse(message string, fields []string, status int) *IonErrorResponse {
+func NewErrorResponse(message string, fields map[string]string, status int) *IonErrorResponse {
 	return &IonErrorResponse{
 		Message: message,
 		Fields:  fields,

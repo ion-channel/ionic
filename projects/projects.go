@@ -17,10 +17,6 @@ var (
 	// ErrInvalidProject is returned when a given project does not pass the
 	// standards for a project
 	ErrInvalidProject = fmt.Errorf("project has invalid fields")
-
-	// ErrInvalidProjectEmail is returned when an invalid email is provided on
-	// the project
-	ErrInvalidProjectEmail = fmt.Errorf("poc email is not valid")
 )
 
 //Project is a representation of a project within the Ion Channel system
@@ -51,54 +47,54 @@ type Project struct {
 // Validate returns a slice of fields as a string and an error. The fields will
 // be a list of fields that did not pass the validation. An error will only be
 // returned if any of the fields fail their validation.
-func (p *Project) Validate() ([]string, error) {
-	var invalidFields []string
+func (p *Project) Validate() (map[string]string, error) {
+	invalidFields := make(map[string]string)
 	var err error
 
 	if p.ID == nil {
-		invalidFields = append(invalidFields, "id")
+		invalidFields["id"] = "missing id"
 		err = ErrInvalidProject
 	}
 
 	if p.TeamID == nil {
-		invalidFields = append(invalidFields, "team_id")
+		invalidFields["team_id"] = "missing team id"
 		err = ErrInvalidProject
 	}
 
 	if p.RulesetID == nil {
-		invalidFields = append(invalidFields, "ruleset_id")
+		invalidFields["ruleset_id"] = "missing ruleset id"
 		err = ErrInvalidProject
 	}
 
 	if p.Name == nil {
-		invalidFields = append(invalidFields, "name")
+		invalidFields["name"] = "missing name"
 		err = ErrInvalidProject
 	}
 
 	if p.Type == nil {
-		invalidFields = append(invalidFields, "type")
+		invalidFields["type"] = "missing type"
 		err = ErrInvalidProject
 	}
 
 	if p.Source == nil {
-		invalidFields = append(invalidFields, "source")
+		invalidFields["source"] = "missing source"
 		err = ErrInvalidProject
 	}
 
 	if p.Branch == nil {
-		invalidFields = append(invalidFields, "branch")
+		invalidFields["branch"] = "missing branch"
 		err = ErrInvalidProject
 	}
 
 	if p.Description == nil {
-		invalidFields = append(invalidFields, "description")
+		invalidFields["description"] = "missing description"
 		err = ErrInvalidProject
 	}
 
 	r := regexp.MustCompile(validEmailRegex)
 	if p.POCEmail != "" && !r.MatchString(p.POCEmail) {
-		invalidFields = append(invalidFields, "poc_email")
-		err = ErrInvalidProjectEmail
+		invalidFields["poc_email"] = "invalid email supplied"
+		err = ErrInvalidProject
 	}
 
 	return invalidFields, err
