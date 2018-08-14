@@ -1,6 +1,8 @@
 package projects
 
 import (
+	"crypto/x509"
+	"encoding/pem"
 	"fmt"
 	"regexp"
 	"time"
@@ -49,53 +51,68 @@ type Project struct {
 // returned if any of the fields fail their validation.
 func (p *Project) Validate() (map[string]string, error) {
 	invalidFields := make(map[string]string)
-	var err error
+	var projErr error
 
 	if p.ID == nil {
 		invalidFields["id"] = "missing id"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	if p.TeamID == nil {
 		invalidFields["team_id"] = "missing team id"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	if p.RulesetID == nil {
 		invalidFields["ruleset_id"] = "missing ruleset id"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	if p.Name == nil {
 		invalidFields["name"] = "missing name"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	if p.Type == nil {
 		invalidFields["type"] = "missing type"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	if p.Source == nil {
 		invalidFields["source"] = "missing source"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	if p.Branch == nil {
 		invalidFields["branch"] = "missing branch"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	if p.Description == nil {
 		invalidFields["description"] = "missing description"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
 	r := regexp.MustCompile(validEmailRegex)
 	if p.POCEmail != "" && !r.MatchString(p.POCEmail) {
 		invalidFields["poc_email"] = "invalid email supplied"
-		err = ErrInvalidProject
+		projErr = ErrInvalidProject
 	}
 
-	return invalidFields, err
+	block, _ := pem.Decode([]byte(p.DeployKey))
+	if block != nil {
+		pkey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+		if err != nil {
+			invalidFields["deploy_key"] = "must be a valid ssh key"
+			projErr = ErrInvalidProject
+		} else {
+			err = pkey.Validate()
+			if err != nil {
+				invalidFields["deploy_key"] = "must be a valid ssh key"
+				projErr = ErrInvalidProject
+			}
+		}
+	}
+
+	return invalidFields, projErr
 }
