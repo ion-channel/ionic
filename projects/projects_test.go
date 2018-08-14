@@ -46,9 +46,9 @@ func TestAnalysis(t *testing.T) {
 			fs, err := p.Validate()
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(len(fs)).To(Equal(3))
-			Expect(fs["name"]).To(Equal("name"))
-			Expect(fs["type"]).To(Equal("type"))
-			Expect(fs["branch"]).To(Equal("branch"))
+			Expect(fs["name"]).To(Equal("missing name"))
+			Expect(fs["type"]).To(Equal("missing type"))
+			Expect(fs["branch"]).To(Equal("missing branch"))
 		})
 
 		g.It("should say a project is invalid if an email is invalid", func() {
@@ -59,22 +59,22 @@ func TestAnalysis(t *testing.T) {
 			p.POCEmail = "dev@ionchannel.io"
 			fs, err := p.Validate()
 			Expect(err).To(BeNil())
-			Expect(fs).To(BeNil())
+			Expect(len(fs)).To(Equal(0))
 
 			p.POCEmail = "dev@howmanyscootersareinthewillamette.science"
 			fs, err = p.Validate()
 			Expect(err).To(BeNil())
-			Expect(fs).To(BeNil())
+			Expect(len(fs)).To(Equal(0))
 
 			p.POCEmail = "me+idontbelieveyouwontspamme@gmail.com"
 			fs, err = p.Validate()
 			Expect(err).To(BeNil())
-			Expect(fs).To(BeNil())
+			Expect(len(fs)).To(Equal(0))
 
 			p.POCEmail = "notavalidemail"
 			fs, err = p.Validate()
 			Expect(err).To(Equal(ErrInvalidProject))
-			Expect(fs["poc_email"]).To(Equal("poc_email"))
+			Expect(fs["poc_email"]).To(Equal("invalid email supplied"))
 		})
 	})
 }

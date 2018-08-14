@@ -131,7 +131,11 @@ func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*pr
 
 	fields, err := project.Validate()
 	if err != nil {
-		return nil, fmt.Errorf("%v: %v", projects.ErrInvalidProject, strings.Join(fields, ", "))
+		var errs []string
+		for _, msg := range fields {
+			errs = append(errs, msg)
+		}
+		return nil, fmt.Errorf("%v: %v", projects.ErrInvalidProject, strings.Join(errs, ", "))
 	}
 
 	params.Set("id", *project.ID)
