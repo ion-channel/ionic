@@ -62,12 +62,17 @@ func TestAnalysis(t *testing.T) {
 			fs, err := p.Validate()
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
+
+			p.DeployKey = "not valid"
+			fs, err = p.Validate()
+			Expect(err).To(Equal(ErrInvalidProject))
+			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
 		})
 
 		g.Describe("Email", func() {
 			g.It("should say a project is valid if an email is valid", func() {
 				var p Project
-				err := json.Unmarshal([]byte(sampleValidProject), &p)
+				err := json.Unmarshal([]byte(sampleValidBlankProject), &p)
 				Expect(err).To(BeNil())
 
 				p.POCEmail = "dev@ionchannel.io"
@@ -88,7 +93,7 @@ func TestAnalysis(t *testing.T) {
 
 			g.It("should say a project is invalid if an email is invalid", func() {
 				var p Project
-				err := json.Unmarshal([]byte(sampleValidProject), &p)
+				err := json.Unmarshal([]byte(sampleValidBlankProject), &p)
 				Expect(err).To(BeNil())
 
 				p.POCEmail = "notavalidemail"
