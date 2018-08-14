@@ -99,7 +99,7 @@ func (p *Project) Validate() (map[string]string, error) {
 		projErr = ErrInvalidProject
 	}
 
-	block, _ := pem.Decode([]byte(p.DeployKey))
+	block, rest := pem.Decode([]byte(p.DeployKey))
 	if block != nil {
 		pkey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 		if err != nil {
@@ -112,6 +112,11 @@ func (p *Project) Validate() (map[string]string, error) {
 				projErr = ErrInvalidProject
 			}
 		}
+	}
+
+	if block == nil && rest != nil && string(rest) != "" {
+		invalidFields["deploy_key"] = "must be a valid ssh key"
+		projErr = ErrInvalidProject
 	}
 
 	return invalidFields, projErr
