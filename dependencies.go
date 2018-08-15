@@ -26,7 +26,7 @@ func (ic *IonClient) GetLatestVersionForDependency(packageName, ecosystem, token
 
 	b, err := ic.Get(getLatestVersionForDependencyEndpoint, token, params, nil, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
+		return nil, fmt.Errorf("failed to get latest version for dependency: %v", err.Error())
 	}
 
 	var dep dependencies.Dependency
