@@ -32,6 +32,12 @@ func TestScanResults(t *testing.T) {
 			// validate the json parsing
 			Expect(err).NotTo(HaveOccurred())
 			Expect(untranslatedVirusResult.Virus).NotTo(BeNil())
+
+			var untranslatedCommunityResult UntranslatedResults
+			err = json.Unmarshal([]byte(SampleValidUntranslatedResultsCommunity), &untranslatedCommunityResult)
+			// validate the json parsing
+			Expect(err).NotTo(HaveOccurred())
+			Expect(untranslatedCommunityResult.Community).NotTo(BeNil())
 		})
 
 		g.It("should translate untranslated scan results", func() {
@@ -247,6 +253,7 @@ const (
 	SampleValidScanResultsDifference    = `{"data": {"checksum": "checksumishere","difference": true},"type": "difference"}`
 	SampleValidExternalVulnerabilities  = `{"type":"external_vulnerability","data":{"critical":1,"high":0,"medium":1,"low": 0}}`
 
+	SampleValidUntranslatedResultsCommunity         = `{"type":"community", "data":{"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}}`
 	SampleValidUntranslatedScanResultsLicense       = `{"license": {"license": {"type": [{"name": "a license"}], "name": "some license"}}}`
 	SampleValidUntranslatedScanResultsVulnerability = `{"vulnerabilities": {"meta": {"vulnerability_count": 0},"vulnerabilities": []}}`
 	SampleValidUntranslatedScanResultsVirus         = `{"clam_av_details":{"clamav_db_version":"Tue Apr 24 12:26:01 2018\n","clamav_version":"ClamAV 0.99.4"},"clamav":{"data_read":"2.78 MB (ratio 1.68:1)","data_scanned":"4.66 MB","engine_version":"0.99.4","file_notes":{"empty_file":["/workspace/851c1261-471c-4713-bdc4-fabb0c2d0f6a/xunit-plugin-1-102/xunit-plugin-master/src/main/resources/util/taglib"]},"infected_files":0,"known_viruses":6480116,"scanned_directories":132,"scanned_files":305,"time":"18.655 sec (0 m 18 s)"}      }`
