@@ -196,6 +196,36 @@ func (r *TranslatedResults) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON is a custom JSON unmarshaller implementation for the standard
+// go json package to know how to properly interpret ScanSummaryResults from
+// JSON.
+func (u *UntranslatedResults) UnmarshalJSON(b []byte) error {
+	fmt.Printf("result: %v\n", string(b))
+	tr := &translatedResults{}
+	err := json.Unmarshal(b, tr)
+	if err != nil {
+		return fmt.Errorf("unable to unmarshal json")
+	}
+
+	if tr.Type == "community" {
+		c := &CommunityResults{}
+		err = json.Unmarshal(tr.RawData, c)
+		if err != nil {
+			return err
+		}
+		u.Community = c
+		return nil
+	}
+
+	type ur2 UntranslatedResults
+	err = json.Unmarshal(b, (*ur2)(u))
+	if err != nil {
+		return fmt.Errorf("unable to unmarshal json")
+	}
+
+	return nil
+}
+
 // AboutYMLResults represents the data collected from the AboutYML scan.  It
 // includes a message and whether or not the About YML file found was valid or
 // not.
