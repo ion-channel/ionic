@@ -153,6 +153,30 @@ func TestProducts(t *testing.T) {
 			Expect(hr.Header.Get("Authorization")).To(Equal("Bearer token"))
 			Expect(string(hr.Body)).To(Equal(`{"search_type":"concatenated","search_strategy":"searchStrategy","product_identifier":"productIdentifier","version":"version","vendor":"vendor","terms":["term01","term02"]}`))
 		})
+		g.It("should post a maven request", func(){
+			server.AddPath("/v1/dependency/search").
+				SetMethods("POST").
+				SetPayload([]byte(sampleMulchResponse)).
+				SetStatus(http.StatusOK)
+			results, err := client.MavenSearch("testartifact001", "testgroup001", "token")
+			Expect(err).NotTo(HaveOccurred())
+			hitRecords := server.HitRecords()
+			Expect(hitRecords).To(HaveLen(1))
+			Expect(len(hitRecords[0].Body)).To(BeNumerically(">", 0))
+			Expect(hitRecords[0].Body).To(ContainSubstring("testartifact001"))
+			Expect(hitRecords[0].Body).To(ContainSubstring("testgroup001"))
+			Expect(results).NotTo(BeNil())
+			Expect(results).To(HaveLen(1))
+			Expect(results[0]).NotTo(BeNil())
+			Expect(results[0].ArtifactID).To(Equal("testartifact001"))
+			Expect(results[0].GroupID).To(Equal("testgroup001"))
+			Expect(results[0].Metadata).NotTo(BeNil())
+			Expect(results[0].Metadata.GroupID).To(Equal("testgroup001"))
+			Expect(results[0].Metadata.ArtifactID).To(Equal("testartifact001"))
+			Expect(results[0].Metadata.Version).To(Equal("1.0"))
+			Expect(results[0].Metadata.Versions).To(HaveLen(20))
+			Expect(results[0].Metadata.Versions[12]).To(Equal("1.2-rc1"))
+		})
 
 		g.It("should validate a good request", func() {
 			search := products.ProductSearchQuery{
@@ -188,4 +212,5 @@ const (
 	SampleValidProduct         = `{"data":[{"id":84647,"name":"jdk","org":"oracle","version":"1.6.0","up":"update_71","edition":"","aliases":null,"created_at":"2017-02-13T20:02:42.600Z","updated_at":"2017-02-13T20:02:42.600Z","title":"Oracle JDK 1.6.0 Update 71","references":[{"April 2014 CPU":"http://www.oracle.com/technetwork/topics/security/cpuapr2014-1972952.html"}],"part":"/a","language":"","external_id":"cpe:/a:oracle:jdk:1.6.0:update_71","source":[{"id":1,"name":"NVD","description":"National Vulnerability Database","created_at":"2017-02-09T20:18:35.385Z","updated_at":"2017-02-13T20:12:05.342Z","attribution":"Copyright © 1999–2017, The MITRE Corporation. CVE and the CVE logo are registered trademarks and CVE-Compatible is a trademark of The MITRE Corporation.","license":"Submissions: For all materials you submit to the Common Vulnerabilities and Exposures (CVE®)","copyright_url":"http://cve.mitre.org/about/termsofuse.html"}]}]}`
 	SampleValidRawProduct      = `[{"id":84647,"name":"jdk","org":"oracle","version":"1.6.0","up":"update_71","edition":"","aliases":null,"created_at":"2017-02-13T20:02:42.600Z","updated_at":"2017-02-13T20:02:42.600Z","title":"Oracle JDK 1.6.0 Update 71","references":[{"April 2014 CPU":"http://www.oracle.com/technetwork/topics/security/cpuapr2014-1972952.html"}],"part":"/a","language":"","external_id":"cpe:/a:oracle:jdk:1.6.0:update_71","source":[{"id":1,"name":"NVD","description":"National Vulnerability Database","created_at":"2017-02-09T20:18:35.385Z","updated_at":"2017-02-13T20:12:05.342Z","attribution":"Copyright © 1999–2017, The MITRE Corporation. CVE and the CVE logo are registered trademarks and CVE-Compatible is a trademark of The MITRE Corporation.","license":"Submissions: For all materials you submit to the Common Vulnerabilities and Exposures (CVE®)","copyright_url":"http://cve.mitre.org/about/termsofuse.html"}]}]`
 	sampleBunsenSearchResponse = `{"data":[{"id":39862,"name":"less","org":"gnu","version":"-","up":"","edition":"","aliases":null,"created_at":"2017-02-13T20:02:36.794Z","updated_at":"2017-02-13T20:02:36.794Z","title":"GNU less","references":[],"part":"/a","language":"","external_id":"cpe:/a:gnu:less:-"},{"id":39863,"name":"less","org":"gnu","version":"358","up":"","edition":"","aliases":null,"created_at":"2017-02-13T20:02:36.794Z","updated_at":"2017-02-13T20:02:36.794Z","title":"GNU less 358","references":[],"part":"/a","language":"","external_id":"cpe:/a:gnu:less:358"},{"id":39864,"name":"less","org":"gnu","version":"381","up":"","edition":"","aliases":null,"created_at":"2017-02-13T20:02:36.794Z","updated_at":"2017-02-13T20:02:36.794Z","title":"GNU less 381","references":[],"part":"/a","language":"","external_id":"cpe:/a:gnu:less:381"},{"id":39865,"name":"less","org":"gnu","version":"382","up":"","edition":"","aliases":null,"created_at":"2017-02-13T20:02:36.794Z","updated_at":"2017-02-13T20:02:36.794Z","title":"GNU less 382","references":[],"part":"/a","language":"","external_id":"cpe:/a:gnu:less:382"},{"id":39866,"name":"less","org":"gnu","version":"471","up":"","edition":"","aliases":null,"created_at":"2017-02-13T20:02:36.794Z","updated_at":"2017-02-13T20:02:36.794Z","title":"GNU less 471","references":[{"Vendor Website":"http://www.gnu.org/software/less/"}],"part":"/a","language":"","external_id":"cpe:/a:gnu:less:471"}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","last_update":"2018-05-03T16:27:42.409Z","total_count":5,"limit":10,"offset":0},"links":{"self":"https://api.ionchannel.io/v1/product/search?user_query=less"}}`
+	sampleMulchResponse        = `{"meta":{"copyright":"Copyright 2017 - Ion Channel Corp (ionchannel.io)","authors":["tlpinney","Matthew Mayer"],"version":"v1","total_count":1},"links":{"self":"http://localhost:9000/v1/dependency/search"},"timestamps":{"created":"2018-08-29T19:23:16.792+00:00","updated":"2018-08-29T19:23:16.792+00:00"},"data":[{"id":1,"group_id":"testgroup001","artifact_id":"testartifact001","metadata":"\u003cmetadata\u003e\n  \u003cgroupId\u003etestgroup001\u003c/groupId\u003e\n  \u003cartifactId\u003etestartifact001\u003c/artifactId\u003e\n  \u003cversion\u003e1.0\u003c/version\u003e\n  \u003cversioning\u003e\n    \u003cversions\u003e\n      \u003cversion\u003e1.0\u003c/version\u003e\n      \u003cversion\u003e1.0-m4\u003c/version\u003e\n      \u003cversion\u003e1.0-rc1\u003c/version\u003e\n      \u003cversion\u003e1.1\u003c/version\u003e\n      \u003cversion\u003e1.1-rc1\u003c/version\u003e\n      \u003cversion\u003e1.1-rc2\u003c/version\u003e\n      \u003cversion\u003e1.1.1\u003c/version\u003e\n      \u003cversion\u003e1.1.2\u003c/version\u003e\n      \u003cversion\u003e1.1.3\u003c/version\u003e\n      \u003cversion\u003e1.1.4\u003c/version\u003e\n      \u003cversion\u003e1.1.5\u003c/version\u003e\n      \u003cversion\u003e1.2\u003c/version\u003e\n      \u003cversion\u003e1.2-rc1\u003c/version\u003e\n      \u003cversion\u003e1.2-rc2\u003c/version\u003e\n      \u003cversion\u003e1.2.1\u003c/version\u003e\n      \u003cversion\u003e1.2.2\u003c/version\u003e\n      \u003cversion\u003e1.2.3\u003c/version\u003e\n      \u003cversion\u003e1.2.4\u003c/version\u003e\n      \u003cversion\u003e1.2.5\u003c/version\u003e\n      \u003cversion\u003e1.2.6\u003c/version\u003e\n    \u003c/versions\u003e\n  \u003c/versioning\u003e\n\u003c/metadata\u003e","created_at":"2018-08-29T19:15:33.045Z","updated_at":"2018-08-29T19:15:33.045Z"}]}`
 )

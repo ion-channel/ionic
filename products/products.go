@@ -1,7 +1,10 @@
 package products
 
 import (
+	"encoding/xml"
+	"strings"
 	"time"
+	"fmt"
 )
 
 // Product represents a software product within the system for identification
@@ -67,6 +70,59 @@ type ProductSearchQuery struct {
 	Version           string   `json:"version" xml:"version"`
 	Vendor            string   `json:"vendor" xml:"vendor"`
 	Terms             []string `json:"terms" xml:"terms"`
+}
+
+// MavenSearchQuery collections all the various searching options that
+// the mavenSearchEndpoint supports for use in a POST request
+type MavenSearchQuery struct {
+	GroupID        string `json:"group_id" xml:"group_id"`
+	ArtifactID     string `json:"artifact_id" xml:"artifact_id"`
+	SearchType     string `json:"search_type" xml:"search_type"`
+	SearchStrategy string `json:"search_strategy", xml:"search_strategy"`
+}
+
+// MavenSearchResult represents information about a maven repo
+type MavenSearchResult struct {
+	GroupID    string        `json:"group_id" xml:"group_id"`
+	ArtifactID string        `json:"artifact_id" xml:"artifact_id"`
+	Metadata   MavenMetadata `json:"metadata" xml:"metadata"`
+}
+type MavenMetadata struct {
+	XMLName   xml.Name `xml:"metadata"`
+	GroupID    string   `xml:"groupId"`
+	ArtifactID string   `xml:"artifactId"`
+	Version    string   `xml:"version"`
+	Versions   []string `xml:"versioning>versions>version"`
+}
+
+func (m *MavenMetadata) UnmarshalJSON(b []byte) error {
+	s := string(b)
+	s = strings.Replace(s, "\n", "\\n", -1)
+	s = strings.Replace(s, "\\u003c", "<", -1)
+	s = strings.Replace(s, "\\u003e", ">", -1)
+	var parsed MavenMetadata
+	err := xml.Unmarshal([]byte(s), &parsed)
+	if err != nil {
+		return err
+	}
+	m.Versions = parsed.Versions
+	m.Version = parsed.Version
+	m.ArtifactID = parsed.ArtifactID
+	m.GroupID = parsed.GroupID
+	return nil
+}
+
+func (m MavenMetadata) MarshalJSON() ([]byte, error) {
+	marshalled, err := xml.MarshalIndent(m, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	s := string(marshalled)
+	//s = strings.Replace(s, "\\n", "\n", -1)
+	s = strings.Replace(s, "\n", "\\n", -1)
+	s = strings.Replace(s, "<", "\\u003c", -1)
+	s = strings.Replace(s, ">", "\\u003e", -1)
+	return []byte(fmt.Sprintf("\"%v\"", s)), nil
 }
 
 // IsValid checks some of the constraints on the ProductSearchQuery to
