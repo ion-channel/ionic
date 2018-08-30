@@ -78,7 +78,7 @@ type MavenSearchQuery struct {
 	GroupID        string `json:"group_id" xml:"group_id"`
 	ArtifactID     string `json:"artifact_id" xml:"artifact_id"`
 	SearchType     string `json:"search_type" xml:"search_type"`
-	SearchStrategy string `json:"search_strategy", xml:"search_strategy"`
+	SearchStrategy string `json:"search_strategy" xml:"search_strategy"`
 }
 
 // MavenSearchResult represents information about a maven repo
@@ -87,6 +87,9 @@ type MavenSearchResult struct {
 	ArtifactID string        `json:"artifact_id" xml:"artifact_id"`
 	Metadata   MavenMetadata `json:"metadata" xml:"metadata"`
 }
+
+// MavenMetadata represents the XML stored in the Mulch database
+// under the column of the same name
 type MavenMetadata struct {
 	XMLName    xml.Name `xml:"metadata"`
 	GroupID    string   `xml:"groupId"`
@@ -95,6 +98,8 @@ type MavenMetadata struct {
 	Versions   []string `xml:"versioning>versions>version"`
 }
 
+// UnmarshalJSON overrides default unmarshaling behavior.
+// We need this because there is XML hiding in the JSON
 func (m *MavenMetadata) UnmarshalJSON(b []byte) error {
 	s := string(b)
 	s = strings.Replace(s, "\n", "\\n", -1)
@@ -112,6 +117,8 @@ func (m *MavenMetadata) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// MarshalJSON overrides default marshaling behavior.
+// We need this because there is XML hiding in the JSON
 func (m MavenMetadata) MarshalJSON() ([]byte, error) {
 	marshalled, err := xml.MarshalIndent(m, "", "  ")
 	if err != nil {
