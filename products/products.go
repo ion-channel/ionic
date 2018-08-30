@@ -2,9 +2,9 @@ package products
 
 import (
 	"encoding/xml"
+	"fmt"
 	"strings"
 	"time"
-	"fmt"
 )
 
 // Product represents a software product within the system for identification
@@ -88,7 +88,7 @@ type MavenSearchResult struct {
 	Metadata   MavenMetadata `json:"metadata" xml:"metadata"`
 }
 type MavenMetadata struct {
-	XMLName   xml.Name `xml:"metadata"`
+	XMLName    xml.Name `xml:"metadata"`
 	GroupID    string   `xml:"groupId"`
 	ArtifactID string   `xml:"artifactId"`
 	Version    string   `xml:"version"`
