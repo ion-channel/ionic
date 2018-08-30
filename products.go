@@ -12,6 +12,7 @@ import (
 const (
 	getProductEndpoint    = "v1/vulnerability/getProducts"
 	productSearchEndpoint = "v1/product/search"
+	mavenSearchEndpoint   = "v1/dependency/search"
 )
 
 // GetProducts takes a product ID search string and token.  It returns the product found,
@@ -58,6 +59,33 @@ func (ic *IonClient) ProductSearch(searchInput products.ProductSearchQuery, toke
 		return nil, err
 	}
 	return ps, nil
+}
+
+// MavenSearch takes an artifactID and a groupID and tries to find
+// something in the public Maven repository to match
+func (ic *IonClient) MavenSearch(artifactID, groupID, token string) ([]products.MavenSearchResult, error) {
+	searchInput := products.MavenSearchQuery{
+		SearchType:     "concatenated",
+		SearchStrategy: "deterministic",
+		ArtifactID:     artifactID,
+		GroupID:        groupID,
+	}
+	bodyBytes, err := json.Marshal(searchInput)
+	if err != nil {
+		// log
+		return nil, err
+	}
+	buffer := bytes.NewBuffer(bodyBytes)
+	b, err := ic.Post(mavenSearchEndpoint, token, nil, *buffer, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get raw maven repos: %v", err.Error())
+	}
+	var results []products.MavenSearchResult
+	err = json.Unmarshal(b, &results)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal from Mulch: %v", err.Error())
+	}
+	return results, nil
 }
 
 // PostProductSearch takes a search query. It returns a new raw json message
