@@ -131,7 +131,7 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("bad response from API: %v", resp.Status)
+		return nil, fmt.Errorf("bad response from API: %v, Body: %v", resp.Status, string(body))
 	}
 
 	var ir IonResponse
