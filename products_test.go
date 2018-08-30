@@ -153,7 +153,7 @@ func TestProducts(t *testing.T) {
 			Expect(hr.Header.Get("Authorization")).To(Equal("Bearer token"))
 			Expect(string(hr.Body)).To(Equal(`{"search_type":"concatenated","search_strategy":"searchStrategy","product_identifier":"productIdentifier","version":"version","vendor":"vendor","terms":["term01","term02"]}`))
 		})
-		g.It("should post a maven request", func(){
+		g.It("should post a maven request", func() {
 			server.AddPath("/v1/dependency/search").
 				SetMethods("POST").
 				SetPayload([]byte(sampleMulchResponse)).
