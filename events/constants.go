@@ -7,46 +7,46 @@ const (
 	AnalysisFinished = "analysis_finished"
 	// AnalysisPassed constant for analysis passed event action
 	AnalysisPassed = "analysis_passed"
-	// DeliveryFailed -
+	// DeliveryFailed constant for delivery failed event action
 	DeliveryFailed = "delivery_failed"
-	// ArtifactDeliveryFailed -
+	// ArtifactDeliveryFailed constant for artifact_delivery failed event action
 	ArtifactDeliveryFailed = "artifact_delivery_failed"
-	// ReportDeliveryFailed -
+	// ReportDeliveryFailed constant for report_delivery failed event action
 	ReportDeliveryFailed = "report_delivery_failed"
-	// SevaDeliveryFailed -
+	// SevaDeliveryFailed constant for seva_delivery failed event action
 	SevaDeliveryFailed = "seva_delivery_failed"
-	// DeliveryFinished -
+	// DeliveryFinished constant for delivery finished event action
 	DeliveryFinished = "delivery_finished"
-	// ArtifactDeliveryFinished -
+	// ArtifactDeliveryFinished constant for artifact_delivery finished event action
 	ArtifactDeliveryFinished = "artifact_delivery_finished"
-	// ReportDeliveryFinished -
+	// ReportDeliveryFinished constant for report_delivery finished event action
 	ReportDeliveryFinished = "report_delivery_finished"
-	// SevaDeliveryFinished -
+	// SevaDeliveryFinished constant for seva_delivery finished event action
 	SevaDeliveryFinished = "seva_delivery_finished"
-	// DeliveryCanceled -
+	// DeliveryCanceled constant for delivery canceled event action
 	DeliveryCanceled = "delivery_canceled"
-	// ArtifactDeliveryCanceled -
+	// ArtifactDeliveryCanceled constant for artifact_delivery canceled event action
 	ArtifactDeliveryCanceled = "artifact_delivery_canceled"
-	// ReportDeliveryCanceled -
+	// ReportDeliveryCanceled constant for report_delivery canceled event action
 	ReportDeliveryCanceled = "report_delivery_canceled"
-	// SevaDeliveryCanceled -
+	// SevaDeliveryCanceled constant for seva_delivery canceled event action
 	SevaDeliveryCanceled = "seva_delivery_canceled"
-	// ProjectAdded -
+	// ProjectAdded constant for project added event action
 	ProjectAdded = "project_added"
-	// VersionAdded -
+	// VersionAdded constant for version added event action
 	VersionAdded = "version_added"
-	// VulnerablityAdded -
+	// VulnerablityAdded constant for vulnerablity added event action
 	VulnerablityAdded = "vulnerablity_added"
-	// AccountCreated -
+	// AccountCreated constant for account created event action
 	AccountCreated = "account_created"
-	// ForgotPassword -
+	// ForgotPassword constant for forgot password event action
 	ForgotPassword = "forgot_password"
-	// PasswordChanged -
+	// PasswordChanged constant for password changed event action
 	PasswordChanged = "password_changed"
-	// UserSignup -
+	// UserSignup constant for user signup event action
 	UserSignup = "user_signup"
-	// VulnerabilityAdded -
+	// VulnerabilityAdded constant for vulnerability added event action
 	VulnerabilityAdded = "vulnerability_added"
-	// VulnerabilityUpdated -
+	// VulnerabilityUpdated constant for vulnerability updated event action
 	VulnerabilityUpdated = "vulnerability_updated"
 )
