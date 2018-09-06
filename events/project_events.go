@@ -6,9 +6,9 @@ import (
 )
 
 var validProjectEventActions = map[string]string{
-	"project_added":      "project_added",
-	"version_added":      "version_added",
-	"vulnerablity_added": "vulnerablity_added",
+	ProjectAdded:      ProjectAdded,
+	VersionAdded:      VersionAdded,
+	VulnerablityAdded: VulnerablityAdded,
 }
 
 // ProjectEventAction represents possible actions related to a project event
