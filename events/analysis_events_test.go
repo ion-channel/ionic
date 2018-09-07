@@ -18,7 +18,7 @@ func TestAnalysisEvents(t *testing.T) {
 			err := json.Unmarshal([]byte(SampleValidAnalysisEvent), &ue)
 
 			Expect(err).To(BeNil())
-			Expect(ue.Action).To(Equal(AnalysisEventAction("analysis_failed")))
+			Expect(ue.Action).To(Equal(AnalysisEventAction(AnalysisFailed)))
 		})
 
 		g.It("should return an error for an invalid action", func() {
