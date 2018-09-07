@@ -4,6 +4,19 @@ import (
 	"time"
 )
 
+const (
+	// AnalysisStatusAccepted denotes a request for analysis has been
+	// accepted and queued
+	AnalysisStatusAccepted = "accepted"
+	// AnalysisStatusFinished denotes a request for analysis has been
+	// completed, view the analysis passed field and scan details for
+	// more information
+	AnalysisStatusFinished = "finished"
+	// AnalysisStatusFailed denotes a request for analysis has failed to
+	// run, the message field will have more details
+	AnalysisStatusFailed = "failed"
+)
+
 //ScanStatus identifies the state of a scan performed by the Ion system
 type ScanStatus struct {
 	ID               string    `json:"id"`
