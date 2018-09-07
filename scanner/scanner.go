@@ -9,7 +9,7 @@ const (
 	// accepted and queued
 	AnalysisStatusAccepted = "accepted"
 	// AnalysisStatusFinished denotes a request for analysis has been
-	// completed, view the analysis passed field and scan details for
+	// completed, view the passed field from an Analysis and the scan details for
 	// more information
 	AnalysisStatusFinished = "finished"
 	// AnalysisStatusFailed denotes a request for analysis has failed to
