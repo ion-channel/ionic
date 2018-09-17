@@ -31,6 +31,17 @@ func TestTeams(t *testing.T) {
 			Expect(team.Name).To(Equal("ion-channel"))
 		})
 
+		g.It("should get teams", func() {
+			server.AddPath("/v1/teams/getTeams").
+				SetMethods("GET").
+				SetPayload([]byte(fmt.Sprintf(`{"data":[%v,%v]}`, SampleValidTeam, SampleValidTeam))).
+				SetStatus(http.StatusOK)
+
+			ts, err := client.GetTeams("atoken")
+			Expect(err).To(BeNil())
+			Expect(len(ts)).To(Equal(2))
+		})
+
 		g.It("should create a team", func() {
 			server.AddPath("/v1/teams/createTeam").
 				SetMethods("POST").

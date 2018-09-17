@@ -12,6 +12,7 @@ import (
 const (
 	teamsCreateTeamEndpoint = "v1/teams/createTeam"
 	teamsGetTeamEndpoint    = "v1/teams/getTeam"
+	teamsGetTeamsEndpoint   = "v1/teams/getTeams"
 )
 
 // CreateTeamOptions represents all the values that can be provided for a team
@@ -74,4 +75,22 @@ func (ic *IonClient) GetTeam(id, token string) (*teams.Team, error) {
 	}
 
 	return &team, nil
+}
+
+// GetTeams returns the Ion Channel representation of that
+// team.  An error is returned for client communications and unmarshalling
+// errors.
+func (ic *IonClient) GetTeams(token string) ([]teams.Team, error) {
+	b, err := ic.Get(teamsGetTeamsEndpoint, token, nil, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get teams: %v", err.Error())
+	}
+
+	var ts []teams.Team
+	err = json.Unmarshal(b, &ts)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse teams: %v", err.Error())
+	}
+
+	return ts, nil
 }
