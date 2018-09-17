@@ -15,6 +15,7 @@ const (
 	usersGetSelfEndpoint            = "v1/users/getSelf"
 	usersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
 	usersGetUserEndpoint            = "v1/users/getUser"
+	usersGetUsers                   = "v1/users/getUsers"
 )
 
 type createUserOptions struct {
@@ -124,4 +125,20 @@ func (ic *IonClient) GetUser(id, token string) (*users.User, error) {
 	}
 
 	return &user, nil
+}
+
+// GetUsers requests and returns all users for a given installation
+func (ic *IonClient) GetUsers(token string) ([]users.User, error) {
+	b, err := ic.Get(usersGetUsers, token, nil, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	var us []users.User
+	err = json.Unmarshal(b, &us)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response from api: %v", err.Error())
+	}
+
+	return us, nil
 }

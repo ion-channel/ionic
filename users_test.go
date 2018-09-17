@@ -47,7 +47,7 @@ func TestUsers(t *testing.T) {
 			Expect(me.SysAdmin).To(Equal(true))
 		})
 
-		g.It("should get a users self", func() {
+		g.It("should get a user", func() {
 			server.AddPath("/v1/users/getUser").
 				SetMethods("GET").
 				SetPayload([]byte(SampleSelfResponse)).
@@ -59,6 +59,17 @@ func TestUsers(t *testing.T) {
 			Expect(me.Email).To(Equal("admin@ion.io"))
 			Expect(me.Username).To(Equal("ion"))
 			Expect(me.SysAdmin).To(Equal(true))
+		})
+
+		g.It("should get all users", func() {
+			server.AddPath("/v1/users/getUsers").
+				SetMethods("GET").
+				SetPayload([]byte(fmt.Sprintf(`{"data": [%v,%v]}`, SampleSelfResponse, SampleSelfResponse))).
+				SetStatus(http.StatusOK)
+
+			us, err := client.GetUsers("atoken")
+			Expect(err).To(BeNil())
+			Expect(len(us)).To(Equal(2))
 		})
 
 		g.It("should create a user", func() {
