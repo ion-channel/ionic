@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/url"
 
 	"github.com/ion-channel/ionic/events"
 	"github.com/ion-channel/ionic/users"
@@ -13,6 +14,7 @@ const (
 	usersCreateUserEndpoint         = "v1/users/createUser"
 	usersGetSelfEndpoint            = "v1/users/getSelf"
 	usersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
+	usersGetUserEndpoint            = "v1/users/getUser"
 )
 
 type createUserOptions struct {
@@ -92,6 +94,27 @@ func (ic *IonClient) GetSelf(token string) (*users.User, error) {
 	b, err := ic.Get(usersGetSelfEndpoint, token, nil, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get self: %v", err.Error())
+	}
+
+	var user users.User
+	err = json.Unmarshal(b, &user)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse user: %v", err.Error())
+	}
+
+	return &user, nil
+}
+
+// GetUser returns the user object associated with the bearer token provided.
+// An error is returned if the client cannot talk to the API or the returned
+// user object is nil or blank
+func (ic *IonClient) GetUser(id, token string) (*users.User, error) {
+	params := &url.Values{}
+	params.Set("id", id)
+
+	b, err := ic.Get(usersGetUserEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %v", err.Error())
 	}
 
 	var user users.User
