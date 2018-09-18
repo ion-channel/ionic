@@ -1,6 +1,7 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -10,10 +11,34 @@ import (
 )
 
 const (
+	createRuleSetEndpoint     = "v1/ruleset/createRuleset"
 	getAppliedRuleSetEndpoint = "v1/ruleset/getAppliedRulesetForProject"
 	getRuleSetEndpoint        = "v1/ruleset/getRuleset"
 	getRuleSetsEndpoint       = "v1/ruleset/getRulesets"
 )
+
+// CreateRuleSet Creates a project attached to the team id supplied
+func (ic *IonClient) CreateRuleSet(opts rulesets.CreateRuleSetOptions, token string) (*rulesets.RuleSet, error) {
+	b, err := json.Marshal(opts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal project: %v", err.Error())
+	}
+
+	buff := bytes.NewBuffer(b)
+
+	b, err = ic.Post(createRuleSetEndpoint, token, nil, *buff, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create ruleset: %v", err.Error())
+	}
+
+	var p rulesets.RuleSet
+	err = json.Unmarshal(b, &p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create ruleset: %v", err.Error())
+	}
+
+	return &p, nil
+}
 
 //GetAppliedRuleSet takes a projectID, teamID, and analysisID and returns the corresponding applied ruleset summary or an error encountered by the API
 func (ic *IonClient) GetAppliedRuleSet(projectID, teamID, analysisID, token string) (*rulesets.AppliedRulesetSummary, error) {

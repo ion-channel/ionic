@@ -10,6 +10,7 @@ import (
 	. "github.com/onsi/gomega"
 
 	"github.com/ion-channel/ionic/pagination"
+	"github.com/ion-channel/ionic/rulesets"
 )
 
 func TestRuleSets(t *testing.T) {
@@ -20,6 +21,27 @@ func TestRuleSets(t *testing.T) {
 		server := bogus.New()
 		h, p := server.HostPort()
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+
+		g.It("should create a ruleset", func() {
+			server.AddPath("/v1/ruleset/createRuleset").
+				SetMethods("POST").
+				SetPayload([]byte(SampleValidRuleSet)).
+				SetStatus(http.StatusOK)
+
+			create := rulesets.CreateRuleSetOptions{
+				Description: "all things",
+				Name:        "all things",
+			}
+
+			ruleset, err := client.CreateRuleSet(create, "sometoken")
+			Expect(err).To(BeNil())
+			Expect(ruleset.ID).To(Equal("c0210380-3d44-495d-9d10-c7d436a63870"))
+			Expect(ruleset.Name).To(Equal("all things"))
+			rec := server.HitRecords()[len(server.HitRecords())-1]
+			Expect(rec.Body).To(Equal([]byte("{\"name\":\"all things\",\"description\":\"all things\",\"team_id\":\"\",\"rule_ids\":null}")))
+			Expect(rec.Path).To(Equal("/v1/ruleset/createRuleset"))
+			Expect(rec.Header.Get("Authorization")).To(Equal("Bearer sometoken"))
+		})
 
 		g.It("should get a ruleset", func() {
 			server.AddPath("/v1/ruleset/getRuleset").
