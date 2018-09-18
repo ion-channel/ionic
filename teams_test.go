@@ -40,6 +40,10 @@ func TestTeams(t *testing.T) {
 			ts, err := client.GetTeams("atoken")
 			Expect(err).To(BeNil())
 			Expect(len(ts)).To(Equal(2))
+			rec := server.HitRecords()[len(server.HitRecords())-1]
+			Expect(rec.Body).To(Equal([]byte("")))
+			Expect(rec.Path).To(Equal("/v1/teams/getTeams"))
+			Expect(rec.Header.Get("Authorization")).To(Equal("Bearer atoken"))
 		})
 
 		g.It("should create a team", func() {
