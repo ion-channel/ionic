@@ -37,6 +37,7 @@ func TestRuleSets(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(ruleset.ID).To(Equal("c0210380-3d44-495d-9d10-c7d436a63870"))
 			Expect(ruleset.Name).To(Equal("all things"))
+			Expect(server.HitRecords()[len(server.HitRecords())-1].Body).To(Equal([]byte("{\"name\":\"all things\",\"description\":\"all things\",\"team_id\":\"\",\"rule_ids\":null}")))
 		})
 
 		g.It("should get a ruleset", func() {
