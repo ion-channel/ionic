@@ -41,6 +41,7 @@ type Source struct {
 type ProductSearchResult struct {
 	Product   Product              `json:"product" xml:"product"`
 	Github    Github               `json:"github,omitempty" xml:"github,omitempty"`
+	Package   Package              `json:"package,omitempty" xml:"package,omitempty"`
 	MeanScore float64              `json:"mean_score" xml:"mean_score"`
 	Scores    []ProductSearchScore `json:"scores" xml:"scores"`
 }
@@ -56,6 +57,14 @@ type ProductSearchScore struct {
 type Github struct {
 	URI            string `json:"uri" xml:"uri"`
 	CommitterCount uint   `json:"committer_count" xml:"committer_count"`
+}
+
+// Package represents information about a package from one of
+// our supported package management systems like pypi, npm or rubygems
+type Package struct {
+	Name    string `json:"name" xml:"name"`
+	Version string `json:"version" xml:"version"`
+	Type    string `json:"type" xml:"type"`
 }
 
 // ProductSearchQuery collects all the various searching options that
