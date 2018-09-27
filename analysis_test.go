@@ -40,6 +40,23 @@ func TestAnalysis(t *testing.T) {
 			Expect(len(analysis.ScanSummaries)).To(Equal(2))
 		})
 
+		g.It("should get the latest public analysis", func() {
+			server.AddPath("/v1/animal/getLatestPublicAnalysisSummary").
+				SetMethods("GET").
+				SetPayload([]byte(SampleValidAnalysis)).
+				SetStatus(http.StatusOK)
+
+			analysis, err := client.GetLatestPublicAnalysis("33ef183d-4d37-4515-84c4-099ed0fb8db0", "master")
+			Expect(err).To(BeNil())
+			Expect(analysis.ProjectID).To(Equal("33ef183d-4d37-4515-84c4-099ed0fb8db0"))
+			Expect(analysis.Status).To(Equal("finished"))
+			Expect(analysis.Type).To(Equal("git"))
+			Expect(analysis.TriggerAuthor).To(Equal("Daniel Hess"))
+			Expect(analysis.Branch).To(Equal("master"))
+			Expect(len(analysis.ScanSummaries)).To(Equal(2))
+			Expect(server.Hits()).To(Equal(1))
+		})
+
 		g.It("should get a public analysis", func() {
 			server.AddPath("/v1/animal/getPublicAnalysis").
 				SetMethods("GET").
