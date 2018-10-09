@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	getLatestVersionForDependencyEndpoint  = "v1/dependency/getLatestVersionForDependency"
-	getLatestVersionsForDependencyEndpoint = "v1/dependency/getLatestVersionsForDependency"
+	getLatestVersionForDependencyEndpoint = "v1/dependency/getLatestVersionForDependency"
+	getVersionsForDependencyEndpoint      = "v1/dependency/getVersionsForDependency"
 
 	// RubyEcosystem represents the ruby ecosystem for resolving dependencies
 	RubyEcosystem = "ruby"
@@ -40,16 +40,16 @@ func (ic *IonClient) GetLatestVersionForDependency(packageName, ecosystem, token
 	return &dep, nil
 }
 
-// GetLatestVersionsForDependency takes a package name, an ecosystem to find the
+// GetVersionsForDependency takes a package name, an ecosystem to find the
 // package in, and a token for accessing the API. It returns a dependency
 // representation of the latest versions and any errors it encounters with the
 // API.
-func (ic *IonClient) GetLatestVersionsForDependency(packageName, ecosystem, token string) ([]dependencies.Dependency, error) {
+func (ic *IonClient) GetVersionsForDependency(packageName, ecosystem, token string) ([]dependencies.Dependency, error) {
 	params := &url.Values{}
 	params.Set("name", packageName)
 	params.Set("type", ecosystem)
 
-	b, err := ic.Get(getLatestVersionsForDependencyEndpoint, token, params, nil, nil)
+	b, err := ic.Get(getVersionsForDependencyEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest version for dependency: %v", err.Error())
 	}
