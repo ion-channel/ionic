@@ -38,9 +38,24 @@ func TestDependencies(t *testing.T) {
 			hrs := server.HitRecords()
 			Expect(len(hrs)).To(Equal(1))
 		})
+
+		g.It("should get the latest version of a dependency", func() {
+			server.AddPath("/v1/dependency/getLatestVersionsForDependency").
+				SetMethods("GET").
+				SetPayload([]byte(sampleLatestVersionsResponse)).
+				SetStatus(http.StatusOK)
+			deps, err := client.GetLatestVersionsForDependency("bundler", RubyEcosystem, "atoken")
+
+			Expect(err).To(BeNil())
+			Expect(deps[0].Version).To(Equal("1.16.3"))
+
+			hrs := server.HitRecords()
+			Expect(len(hrs)).To(Equal(1))
+		})
 	})
 }
 
 const (
-	sampleLatestVersionResponse = `{"data":{"version":"1.16.3"}}`
+	sampleLatestVersionResponse  = `{"data":{"version":"1.16.3"}}`
+	sampleLatestVersionsResponse = `{"data":["1.16.3","1.16.2"]}`
 )
