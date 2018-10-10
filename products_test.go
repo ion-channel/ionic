@@ -89,7 +89,7 @@ func TestProducts(t *testing.T) {
 		})
 		g.It("should unmarshal search results with scores", func() {
 			searchResultJSON := `{"product":{"name":"django","language":"","source":null,"created_at":"2017-02-13T20:02:35.667Z","title":"Django Project Django 1.0-alpha-1","up":"alpha1","updated_at":"2017-02-13T20:02:35.667Z","edition":"","part":"/a","references":[],"version":"1.0","org":"djangoproject","external_id":"cpe:/a:djangoproject:django:1.0:alpha1","id":30955,"aliases":null},"github":{"committer_count":2,"uri":"https://github.com/monsooncommerce/gstats"},"mean_score":0.534,"scores":[{"term":"django","score":0.393},{"term":"1.0","score":0.842}]}`
-			var searchResult products.ProductSearchResult
+			var searchResult products.SoftwareEntity
 			err := json.Unmarshal([]byte(searchResultJSON), &searchResult)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(searchResult.Product.Up).To(Equal("alpha1"))
@@ -116,9 +116,9 @@ func TestProducts(t *testing.T) {
 			scores := []products.ProductSearchScore{
 				{Term: "foo", Score: 3.2},
 			}
-			searchResult := products.ProductSearchResult{
-				Product:   product,
-				Github:    github,
+			searchResult := products.SoftwareEntity{
+				Product:   &product,
+				Github:    &github,
 				MeanScore: 3.6,
 				Scores:    scores,
 			}
@@ -132,7 +132,7 @@ func TestProducts(t *testing.T) {
 		})
 		g.It("should unmarshal search results with packages", func() {
 			searchResultJSON := `{"product":{"id":1234,"name":"product name","org":"some org","version":"3.1.2","up":"","edition":"","aliases":null,"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z","title":"mah title","references":null,"part":"","language":"","external_id":"cpe:/a:djangoproject:django:1.0:alpha1","source":null},"github":{"uri":"https://github.com/some/repo","committer_count":5},"package":{"name":"mahProject","version":"2.3.6","type":"pypi"},"mean_score":3.6,"scores":[{"term":"foo","score":3.2}]}`
-			var searchResult products.ProductSearchResult
+			var searchResult products.SoftwareEntity
 			err := json.Unmarshal([]byte(searchResultJSON), &searchResult)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(searchResult.Package).NotTo(BeNil())
@@ -161,10 +161,10 @@ func TestProducts(t *testing.T) {
 			scores := []products.ProductSearchScore{
 				{Term: "foo", Score: 3.2},
 			}
-			searchResult := products.ProductSearchResult{
-				Product:   product,
-				Github:    github,
-				Package:   pkg,
+			searchResult := products.SoftwareEntity{
+				Product:   &product,
+				Github:    &github,
+				Package:   &pkg,
 				MeanScore: 3.6,
 				Scores:    scores,
 			}

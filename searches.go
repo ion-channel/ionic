@@ -16,7 +16,7 @@ const (
 // GetSearchProductIdentifiers takes a product identifier, version and vendor to perform
 // a productidentifier search against the Ion API, assembling a slice of Ionic
 // products.ProductSearchResponse objects
-func (ic *IonClient) GetSearchProductIdentifiers(productIdentifer, version, vendor, token string) ([]products.ProductSearchResult, error) {
+func (ic *IonClient) GetSearchProductIdentifiers(productIdentifer, version, vendor, token string) ([]products.SoftwareEntity, error) {
 	params := &url.Values{}
 	params.Set("productidentifiers", productIdentifer)
 	params.Set("vendor", vendor)
@@ -27,7 +27,7 @@ func (ic *IonClient) GetSearchProductIdentifiers(productIdentifer, version, vend
 		return nil, fmt.Errorf("failed to get productidentifiers search: %v", err.Error())
 	}
 
-	var results []products.ProductSearchResult
+	var results []products.SoftwareEntity
 	err = json.Unmarshal(b, &results)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal product search results: %v", err.Error())
@@ -39,7 +39,7 @@ func (ic *IonClient) GetSearchProductIdentifiers(productIdentifer, version, vend
 // GetSearchRepositories takes a repository string and performs
 // a repository search against the Ion API, assembling a slice of Ionic
 // products.ProductSearchResponse objects
-func (ic *IonClient) GetSearchRepositories(repo, token string) ([]products.ProductSearchResult, error) {
+func (ic *IonClient) GetSearchRepositories(repo, token string) ([]products.SoftwareEntity, error) {
 	params := &url.Values{}
 	params.Set("github", repo)
 
@@ -47,7 +47,7 @@ func (ic *IonClient) GetSearchRepositories(repo, token string) ([]products.Produ
 	if err != nil {
 		return nil, fmt.Errorf("failed to get repo search: %v", err.Error())
 	}
-	var results []products.ProductSearchResult
+	var results []products.SoftwareEntity
 	err = json.Unmarshal(b, &results)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal repo search results: %v", err.Error())
