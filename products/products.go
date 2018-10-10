@@ -36,14 +36,14 @@ type Source struct {
 	CopyrightURL string    `json:"copyright_url" xml:"copyright_url"`
 }
 
-// ProductSearchResult represents information about a product as well as
+// SoftwareEntity represents information about a product as well as
 // other info, like Git repository, committer counts, etc
-type ProductSearchResult struct {
-	Product   Product              `json:"product" xml:"product"`
-	Github    Github               `json:"github,omitempty" xml:"github,omitempty"`
-	Package   Package              `json:"package,omitempty" xml:"package,omitempty"`
+type SoftwareEntity struct {
+	Product   *Product              `json:"product,omitempty" xml:"product"`
+	Github    *Github               `json:"github,omitempty" xml:"github,omitempty"`
+	Package   *Package              `json:"package,omitempty" xml:"package,omitempty"`
 	MeanScore float64              `json:"mean_score" xml:"mean_score"`
-	Scores    []ProductSearchScore `json:"scores" xml:"scores"`
+	Scores    []ProductSearchScore `json:"scores,omitempty" xml:"scores"`
 }
 
 // ProductSearchScore represents the TF;IDF score for a given search result
