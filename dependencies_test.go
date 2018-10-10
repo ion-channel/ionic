@@ -40,11 +40,11 @@ func TestDependencies(t *testing.T) {
 		})
 
 		g.It("should get the latest version of a dependency", func() {
-			server.AddPath("/v1/dependency/getLatestVersionsForDependency").
+			server.AddPath("/v1/dependency/getVersionsForDependency").
 				SetMethods("GET").
 				SetPayload([]byte(sampleLatestVersionsResponse)).
 				SetStatus(http.StatusOK)
-			deps, err := client.GetLatestVersionsForDependency("bundler", RubyEcosystem, "atoken")
+			deps, err := client.GetVersionsForDependency("bundler", RubyEcosystem, "atoken")
 
 			Expect(err).To(BeNil())
 			Expect(deps[0].Version).To(Equal("1.16.3"))
