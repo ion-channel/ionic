@@ -39,10 +39,10 @@ type Source struct {
 // SoftwareEntity represents information about a product as well as
 // other info, like Git repository, committer counts, etc
 type SoftwareEntity struct {
-	Product    *Product              `json:"product,omitempty" xml:"product"`
-	Github     *Github               `json:"github,omitempty" xml:"github,omitempty"`
-	Package    *Package              `json:"package,omitempty" xml:"package,omitempty"`
-	Confidence float64              `json:"mean_score" xml:"mean_score"`
+	Product    *Product             `json:"product,omitempty" xml:"product"`
+	Github     *Github              `json:"github,omitempty" xml:"github,omitempty"`
+	Package    *Package             `json:"package,omitempty" xml:"package,omitempty"`
+	Confidence float64              `json:"confidence" xml:"confidence"`
 	Scores     []ProductSearchScore `json:"scores,omitempty" xml:"scores"`
 }
 
