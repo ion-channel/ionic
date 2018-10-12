@@ -26,7 +26,7 @@ travis_setup: ## Setup the travis environmnet
 	@wget --quiet https://s3.amazonaws.com/public.ionchannel.io/files/ionize/linux/bin/ionize
 	@chmod +x ionize && mkdir -p $$HOME/.local/bin && mv ionize $$HOME/.local/bin
 	@echo "Installing Go Linter"
-	@go get -u github.com/golang/lint/golint
+	@go get -u golang.org/x/lint/golint
 
 .PHONY: analyze
 analyze:  ## Perform an analysis of the project
