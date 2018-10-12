@@ -98,7 +98,7 @@ func TestProducts(t *testing.T) {
 			Expect(searchResult.Scores[1].Term).To(Equal("1.0"))
 			Expect(fmt.Sprintf("%.3f", searchResult.Scores[0].Score)).To(Equal("0.393"))
 			Expect(fmt.Sprintf("%.3f", searchResult.Scores[1].Score)).To(Equal("0.842"))
-			Expect(fmt.Sprintf("%.3f", searchResult.MeanScore)).To(Equal("0.534"))
+			Expect(fmt.Sprintf("%.3f", searchResult.Confidence)).To(Equal("0.534"))
 		})
 		g.It("should marshal search results with scores", func() {
 			product := products.Product{
@@ -117,10 +117,10 @@ func TestProducts(t *testing.T) {
 				{Term: "foo", Score: 3.2},
 			}
 			searchResult := products.SoftwareEntity{
-				Product:   &product,
-				Github:    &github,
-				MeanScore: 3.6,
-				Scores:    scores,
+				Product:    &product,
+				Github:     &github,
+				Confidence: 3.6,
+				Scores:     scores,
 			}
 			b, err := json.Marshal(searchResult)
 			Expect(err).NotTo(HaveOccurred())
@@ -162,11 +162,11 @@ func TestProducts(t *testing.T) {
 				{Term: "foo", Score: 3.2},
 			}
 			searchResult := products.SoftwareEntity{
-				Product:   &product,
-				Github:    &github,
-				Package:   &pkg,
-				MeanScore: 3.6,
-				Scores:    scores,
+				Product:    &product,
+				Github:     &github,
+				Package:    &pkg,
+				Confidence: 3.6,
+				Scores:     scores,
 			}
 			b, err := json.Marshal(searchResult)
 			Expect(err).NotTo(HaveOccurred())
