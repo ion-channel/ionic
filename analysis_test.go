@@ -40,6 +40,15 @@ func TestAnalysis(t *testing.T) {
 			Expect(len(analysis.ScanSummaries)).To(Equal(2))
 		})
 
+		g.It("should return an error when backing service is unavailable", func(){
+			server.AddPath("/v1/animal/getAnalysis").
+				SetMethods("GET").
+				SetPayload([]byte("Fake 503 error as if from ALB")).
+				SetStatus(http.StatusServiceUnavailable)
+			_, err := client.GetAnalysis("f9bca953-80ac-46c4-b195-d37f3bc4f498", "ateamid", "aprojectid", "sometoken")
+			Expect(err).To(HaveOccurred())
+		})
+
 		g.It("should get the latest public analysis", func() {
 			server.AddPath("/v1/animal/getLatestPublicAnalysisSummary").
 				SetMethods("GET").
@@ -85,6 +94,16 @@ func TestAnalysis(t *testing.T) {
 			Expect(string(analysis)).To(ContainSubstring("finished"))
 			Expect(string(analysis)).To(ContainSubstring("git"))
 			Expect(string(analysis)).To(ContainSubstring("Daniel Hess"))
+		})
+
+		g.It("should error when unable to contact sister-service", func() {
+			server.AddPath("/v1/animal/getLatestAnalysisSummary").
+				SetMethods("GET").
+				SetPayload([]byte("503 error as if from ALB")).
+				SetStatus(http.StatusServiceUnavailable)
+
+			_, err := client.GetLatestAnalysisSummary("ateamid", "aprojectid", "sometoken")
+			Expect(err).To(HaveOccurred())
 		})
 
 		g.It("should get the latest analysis summary", func() {
