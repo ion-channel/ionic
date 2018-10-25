@@ -12,7 +12,7 @@ type Analysis struct {
 	ID            string       `json:"id" xml:"id"`
 	TeamID        string       `json:"team_id" xml:"team_id"`
 	ProjectID     string       `json:"project_id" xml:"project_id"`
-	BuildNumber   string       `json:"build_number" xml:"build_number"`
+	BuildNumber   int64        `json:"build_number" xml:"build_number"`
 	Name          string       `json:"name" xml:"name"`
 	Text          *string      `json:"text" xml:"text"`
 	Type          string       `json:"type" xml:"type"`
@@ -28,6 +28,7 @@ type Analysis struct {
 	TriggerText   string       `json:"trigger_text" xml:"trigger_text"`
 	TriggerAuthor string       `json:"trigger_author" xml:"trigger_author"`
 	ScanSummaries []scans.Scan `json:"scan_summaries" xml:"scan_summaries"`
+	Public        bool         `json:"public" xml:"public"`
 }
 
 // Summary is a representation of a summarized Ion Channel Analysis
@@ -36,7 +37,7 @@ type Summary struct {
 	ID            string    `json:"id"`
 	AnalysisID    string    `json:"analysis_id"`
 	TeamID        string    `json:"team_id"`
-	BuildNumber   string    `json:"build_number"`
+	BuildNumber   int64     `json:"build_number"`
 	Branch        string    `json:"branch"`
 	Description   string    `json:"description"`
 	Risk          string    `json:"risk"`
