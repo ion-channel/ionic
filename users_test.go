@@ -80,7 +80,7 @@ func TestUsers(t *testing.T) {
 
 			email := "testuser@test.com"
 			username := "tester"
-			u, err := client.CreateUser(email, username, "123456")
+			u, err := client.CreateUser(email, username, "123456", "token")
 			Expect(err).To(BeNil())
 			Expect(u.Email).To(Equal(email))
 			Expect(u.Username).To(Equal(username))
