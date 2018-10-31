@@ -29,7 +29,7 @@ type createUserOptions struct {
 // are not required, and can be left blank if so chosen.  It will return the
 // instantiated user object from the API or an error if it encounters one with
 // the API.
-func (ic *IonClient) CreateUser(email, username, password string) (*users.User, error) {
+func (ic *IonClient) CreateUser(email, username, password, token string) (*users.User, error) {
 	if email == "" {
 		return nil, fmt.Errorf("email is required")
 	}
@@ -48,7 +48,7 @@ func (ic *IonClient) CreateUser(email, username, password string) (*users.User, 
 
 	buff := bytes.NewBuffer(b)
 
-	b, err = ic.Post(usersCreateUserEndpoint, "", nil, *buff, nil)
+	b, err = ic.Post(usersCreateUserEndpoint, token, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create user: %v", err.Error())
 	}
