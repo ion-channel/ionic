@@ -4,6 +4,8 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"net/http"
+	"net/url"
 	"regexp"
 	"time"
 
@@ -46,10 +48,11 @@ type Project struct {
 	Tags           []tags.Tag      `json:"tags"`
 }
 
-// Validate returns a slice of fields as a string and an error. The fields will
-// be a list of fields that did not pass the validation. An error will only be
-// returned if any of the fields fail their validation.
-func (p *Project) Validate() (map[string]string, error) {
+// Validate takes an http client and returns a slice of fields as a string and
+// an error. The fields will be a list of fields that did not pass the
+// validation. An error will only be returned if any of the fields fail their
+// validation.
+func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 	invalidFields := make(map[string]string)
 	var projErr error
 
@@ -117,6 +120,22 @@ func (p *Project) Validate() (map[string]string, error) {
 	if block == nil && rest != nil && string(rest) != "" {
 		invalidFields["deploy_key"] = "must be a valid ssh key"
 		projErr = ErrInvalidProject
+	}
+
+	u, err := url.Parse(*p.Source)
+	if err != nil {
+		invalidFields["source"] = fmt.Sprintf("source must be a valid url: %v", err.Error())
+	}
+
+	if u != nil {
+		res, err := client.Head(u.String())
+		if err != nil {
+			invalidFields["source"] = "source failed to return a response"
+		}
+
+		if res != nil && res.StatusCode == http.StatusNotFound {
+			invalidFields["source"] = "source returned a not found"
+		}
 	}
 
 	return invalidFields, projErr
