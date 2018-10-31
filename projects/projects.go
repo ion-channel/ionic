@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/ion-channel/ionic/aliases"
@@ -122,19 +123,24 @@ func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 		projErr = ErrInvalidProject
 	}
 
-	u, err := url.Parse(*p.Source)
-	if err != nil {
-		invalidFields["source"] = fmt.Sprintf("source must be a valid url: %v", err.Error())
-	}
+	if p.Type != nil {
+		switch strings.ToLower(*p.Type) {
+		case "artifact":
+			u, err := url.Parse(*p.Source)
+			if err != nil {
+				invalidFields["source"] = fmt.Sprintf("source must be a valid url: %v", err.Error())
+			}
 
-	if u != nil {
-		res, err := client.Head(u.String())
-		if err != nil {
-			invalidFields["source"] = "source failed to return a response"
-		}
+			if u != nil {
+				res, err := client.Head(u.String())
+				if err != nil {
+					invalidFields["source"] = "source failed to return a response"
+				}
 
-		if res != nil && res.StatusCode == http.StatusNotFound {
-			invalidFields["source"] = "source returned a not found"
+				if res != nil && res.StatusCode == http.StatusNotFound {
+					invalidFields["source"] = "source returned a not found"
+				}
+			}
 		}
 	}
 

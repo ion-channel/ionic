@@ -71,11 +71,10 @@ func TestAnalysis(t *testing.T) {
 
 			fs, err := p.Validate(client)
 			Expect(err).To(Equal(ErrInvalidProject))
-			Expect(len(fs)).To(Equal(4))
+			Expect(len(fs)).To(Equal(3))
 			Expect(fs["name"]).To(Equal("missing name"))
 			Expect(fs["type"]).To(Equal("missing type"))
 			Expect(fs["branch"]).To(Equal("missing branch"))
-			Expect(fs["source"]).To(Equal("source returned a not found"))
 		})
 
 		g.It("should say a project is invalid if a deploy key is invalid", func() {
