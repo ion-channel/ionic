@@ -129,16 +129,19 @@ func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 			u, err := url.Parse(*p.Source)
 			if err != nil {
 				invalidFields["source"] = fmt.Sprintf("source must be a valid url: %v", err.Error())
+				projErr = ErrInvalidProject
 			}
 
 			if u != nil {
 				res, err := client.Head(u.String())
 				if err != nil {
 					invalidFields["source"] = "source failed to return a response"
+					projErr = ErrInvalidProject
 				}
 
 				if res != nil && res.StatusCode == http.StatusNotFound {
 					invalidFields["source"] = "source returned a not found"
+					projErr = ErrInvalidProject
 				}
 			}
 		}
