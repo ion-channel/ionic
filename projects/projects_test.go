@@ -2,9 +2,13 @@ package projects
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"testing"
+	"time"
 
 	. "github.com/franela/goblin"
+	"github.com/gomicro/bogus"
 	. "github.com/onsi/gomega"
 )
 
@@ -13,39 +17,59 @@ func TestAnalysis(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Project Validation", func() {
+		var client *http.Client
+		var server *bogus.Bogus
+		var host, port string
+
+		g.Before(func() {
+			server = bogus.New()
+			host, port = server.HostPort()
+
+			server.AddPath("/goodurl").
+				SetMethods("HEAD")
+
+			server.AddPath("/badurl").
+				SetMethods("HEAD").
+				SetStatus(http.StatusNotFound)
+
+			client = &http.Client{
+				Timeout: time.Second * 1,
+			}
+		})
+
 		g.It("should return no error if a project is valid", func() {
 			var p Project
-			err := json.Unmarshal([]byte(sampleValidProject), &p)
+			err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidProject, host, port)), &p)
 			Expect(err).To(BeNil())
 
 			p.DeployKey = sampleValidKey
 
-			fs, err := p.Validate()
+			fs, err := p.Validate(client)
 			Expect(err).To(BeNil())
 			Expect(len(fs)).To(Equal(0))
 		})
 
 		g.It("should return no errors for a blank field", func() {
 			var p Project
-			err := json.Unmarshal([]byte(sampleValidBlankProject), &p)
+			err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
 			Expect(err).To(BeNil())
 			Expect(p.ID).NotTo(BeNil())
 			Expect(*p.ID).To(Equal(""))
 
-			fs, err := p.Validate()
+			fs, err := p.Validate(client)
 			Expect(err).To(BeNil())
 			Expect(len(fs)).To(Equal(0))
 		})
 
 		g.It("should return missing fields as a list and error", func() {
 			var p Project
-			err := json.Unmarshal([]byte(sampleInvalidProject), &p)
+			err := json.Unmarshal([]byte(fmt.Sprintf(sampleInvalidProject, host, port)), &p)
 			Expect(err).To(BeNil())
 			Expect(p.Name).To(BeNil())
 			Expect(p.Type).To(BeNil())
 			Expect(p.Branch).To(BeNil())
 
-			fs, err := p.Validate()
+			fs, err := p.Validate(client)
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(len(fs)).To(Equal(3))
 			Expect(fs["name"]).To(Equal("missing name"))
@@ -55,16 +79,16 @@ func TestAnalysis(t *testing.T) {
 
 		g.It("should say a project is invalid if a deploy key is invalid", func() {
 			var p Project
-			err := json.Unmarshal([]byte(sampleValidProject), &p)
+			err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidProject, host, port)), &p)
 			Expect(err).To(BeNil())
 
 			p.DeployKey = sampleInvalidKey
-			fs, err := p.Validate()
+			fs, err := p.Validate(client)
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
 
 			p.DeployKey = "not valid"
-			fs, err = p.Validate()
+			fs, err = p.Validate(client)
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
 		})
@@ -72,32 +96,32 @@ func TestAnalysis(t *testing.T) {
 		g.Describe("Email", func() {
 			g.It("should say a project is valid if an email is valid", func() {
 				var p Project
-				err := json.Unmarshal([]byte(sampleValidBlankProject), &p)
+				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
 				Expect(err).To(BeNil())
 
 				p.POCEmail = "dev@ionchannel.io"
-				fs, err := p.Validate()
+				fs, err := p.Validate(client)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 
 				p.POCEmail = "dev@howmanyscootersareinthewillamette.science"
-				fs, err = p.Validate()
+				fs, err = p.Validate(client)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 
 				p.POCEmail = "me+idontbelieveyouwontspamme@gmail.com"
-				fs, err = p.Validate()
+				fs, err = p.Validate(client)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 			})
 
 			g.It("should say a project is invalid if an email is invalid", func() {
 				var p Project
-				err := json.Unmarshal([]byte(sampleValidBlankProject), &p)
+				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
 				Expect(err).To(BeNil())
 
 				p.POCEmail = "notavalidemail"
-				fs, err := p.Validate()
+				fs, err := p.Validate(client)
 				Expect(err).To(Equal(ErrInvalidProject))
 				Expect(fs["poc_email"]).To(Equal("invalid email supplied"))
 			})
@@ -106,9 +130,9 @@ func TestAnalysis(t *testing.T) {
 }
 
 const (
-	sampleValidProject      = `{"id":"someid","team_id":"someteamid","ruleset_id":"someruleset","name":"coolproject","type":"git","source":"github","branch":"master","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-08-07T13:42:47.258415155-07:00","updated_at":"2018-08-07T13:42:47.258415176-07:00","deploy_key":"thekey","should_monitor":false,"poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","aliases":null,"tags":null}`
-	sampleInvalidProject    = `{"id":"someid","team_id":"someteamid","ruleset_id":"someruleset","source":"github","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-08-07T13:46:06.529187652-07:00","updated_at":"2018-08-07T13:46:06.529187674-07:00","deploy_key":"","should_monitor":false,"poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","aliases":null,"tags":null}`
-	sampleValidBlankProject = `{"id":"","team_id":"someteamid","ruleset_id":"someruleset","name":"coolproject","type":"git","source":"github","branch":"master","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-08-07T13:42:47.258415155-07:00","updated_at":"2018-08-07T13:42:47.258415176-07:00","deploy_key":"","should_monitor":false,"poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","aliases":null,"tags":null}`
+	sampleValidProject      = `{"id":"someid","team_id":"someteamid","ruleset_id":"someruleset","name":"coolproject","type":"artifact","source":"http://%v:%v/goodurl","branch":"master","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-08-07T13:42:47.258415155-07:00","updated_at":"2018-08-07T13:42:47.258415176-07:00","deploy_key":"thekey","should_monitor":false,"poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","aliases":null,"tags":null}`
+	sampleInvalidProject    = `{"id":"someid","team_id":"someteamid","ruleset_id":"someruleset","source":"http://%v:%v/badurl","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-08-07T13:46:06.529187652-07:00","updated_at":"2018-08-07T13:46:06.529187674-07:00","deploy_key":"","should_monitor":false,"poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","aliases":null,"tags":null}`
+	sampleValidBlankProject = `{"id":"","team_id":"someteamid","ruleset_id":"someruleset","name":"coolproject","type":"artifact","source":"http://%v:%v/goodurl","branch":"master","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-08-07T13:42:47.258415155-07:00","updated_at":"2018-08-07T13:42:47.258415176-07:00","deploy_key":"","should_monitor":false,"poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","aliases":null,"tags":null}`
 
 	sampleValidKey = `-----BEGIN RSA PRIVATE KEY-----
 MIIJKAIBAAKCAgEAn3PJ6JFW9mG5ryvZ7TA3k6lSaxe2kSL9cyBoo9aK7FV94bET
