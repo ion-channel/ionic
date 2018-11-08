@@ -126,6 +126,60 @@ func TestAnalysis(t *testing.T) {
 				Expect(fs["poc_email"]).To(Equal("invalid email supplied"))
 			})
 		})
+
+		g.Describe("Source", func() {
+			g.It("should permit valid urls", func() {
+				var p Project
+				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				Expect(err).To(BeNil())
+
+				us := []string{
+					"svn+ssh://foo@svn.bar.com/project",
+					"svn://svn.code.sf.net/p/regshot/code/trunk",
+					"http://www.google.com",
+					"https://www.google.com?y=b",
+					"git@github.com:foo/bar.git",
+				}
+
+				for _, val := range us {
+					s := val
+					t := "git"
+
+					p.Source = &s
+					p.Type = &t
+
+					fs, err := p.Validate(client)
+					Expect(err).To(BeNil())
+					Expect(len(fs)).To(Equal(0))
+				}
+			})
+
+			g.It("should detect bad urls", func() {
+				var p Project
+				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				Expect(err).To(BeNil())
+
+				us := []string{
+					"svn://svn.code.sf.net/p/regshot/code/trunk blah",
+					"www.google.com",
+					"somebody@google.com",
+					"mailto:somebody@google.com",
+					"www.url-with-querystring.com/?url=has-querystring",
+				}
+
+				for _, val := range us {
+					s := val
+					t := "git"
+
+					p.Source = &s
+					p.Type = &t
+
+					fs, err := p.Validate(client)
+					Expect(err).NotTo(BeNil())
+					Expect(len(fs)).To(Equal(1))
+				}
+			})
+		})
 	})
 }
 
