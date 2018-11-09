@@ -26,15 +26,6 @@ type CreateTeamUserOptions struct {
 	UpdatedAt string `json:"updated_at"`
 }
 
-// UpdateTeamUserOptions represents all the values that can be provided to update a team user
-type UpdateTeamUserOptions struct {
-	Status    string `json:"status"`
-	Role      string `json:"role"`
-	UserID    string `json:"user_id"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
-}
-
 // CreateTeamUser takes a create team options, validates the minimum info is
 // present, and makes the calls to create the team. It returns the team created
 // and any errors it encounters with the API.
@@ -81,17 +72,19 @@ func (ic *IonClient) GetTeamUser(teamID, userID, token string) (*teamusers.TeamU
 	return &teamU, nil
 }
 
-// UpdateTeamUser takes a teamusers options, validates the minimum info is
-// present, and makes the calls to update the teamuser. It returns the team created
-// and any errors it encounters with the API.
-func (ic *IonClient) UpdateTeamUser(opts UpdateTeamUserOptions, token string) (*teamusers.TeamUser, error) {
-	b, err := json.Marshal(opts)
+// UpdateTeamUser takes a teamUser object in the desired state and then makes the calls to update the teamUser.
+// It returns the update teamUser and any errors it encounters with the API.
+func (ic *IonClient) UpdateTeamUser(teamuser *teamusers.TeamUser, token string) (*teamusers.TeamUser, error) {
+	params := &url.Values{}
+	params.Set("someid", teamuser.ID)
+
+	b, err := json.Marshal(teamuser)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.Post(teamsUpdateTeamUserEndpoint, token, nil, *buff, nil)
+	b, err = ic.Put(teamsUpdateTeamUserEndpoint, token, params, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to update team user: %v", err.Error())
 	}
