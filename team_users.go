@@ -12,6 +12,7 @@ import (
 const (
 	teamsCreateTeamUserEndpoint = "v1/teamUsers/createTeamUser"
 	teamsGetTeamUserEndpoint    = "v1/teamUsers/getTeamUser"
+	teamsUpdateTeamUserEndpoint = "v1/teamUsers/updateTeamUser"
 )
 
 // CreateTeamUserOptions represents all the values that can be provided for a team
@@ -69,4 +70,30 @@ func (ic *IonClient) GetTeamUser(teamID, userID, token string) (*teamusers.TeamU
 	}
 
 	return &teamU, nil
+}
+
+// UpdateTeamUser takes a teamUser object in the desired state and then makes the calls to update the teamUser.
+// It returns the update teamUser and any errors it encounters with the API.
+func (ic *IonClient) UpdateTeamUser(teamuser *teamusers.TeamUser, token string) (*teamusers.TeamUser, error) {
+	params := &url.Values{}
+	params.Set("someid", teamuser.ID)
+
+	b, err := json.Marshal(teamuser)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	buff := bytes.NewBuffer(b)
+	b, err = ic.Put(teamsUpdateTeamUserEndpoint, token, params, *buff, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update team user: %v", err.Error())
+	}
+
+	var tu teamusers.TeamUser
+	err = json.Unmarshal(b, &tu)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse team user from response: %v", err.Error())
+	}
+
+	return &tu, nil
 }
