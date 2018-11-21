@@ -151,9 +151,14 @@ func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*pr
 	params.Set("chat_channel", project.ChatChannel)
 	params.Set("should_monitor", strconv.FormatBool(project.Monitor))
 
-	b, err := ic.Put(updateProjectEndpoint, token, params, bytes.Buffer{}, nil)
+	b, err := json.Marshal(project)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
+		return nil, fmt.Errorf("failed to marshall project: %v", err.Error())
+	}
+
+	b, err = ic.Put(updateProjectEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update projects: %v", err.Error())
 	}
 
 	var p projects.Project
