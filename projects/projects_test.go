@@ -134,11 +134,32 @@ func TestAnalysis(t *testing.T) {
 				Expect(err).To(BeNil())
 
 				us := []string{
+					"file:///path/to/repo.git/",
+					"file://~/path/to/repo.git/",
+					"git://host.xz/path/to/repo.git/",
+					"git://host.xz/~user/path/to/repo.git/",
+					"git@github.com:foo/bar.git",
+					"git@host.xz:/path/to/repo.git/",
+					"git@host.xz:path/to/repo.git",
+					"git@host.xz:~user/path/to/repo.git/",
+					"git@host.xz@~user/path/to/repo.git/",
+					"http://host.xz/path/to/repo.git/",
+					"http://www.google.com",
+					"https://host.xz/path/to/repo.git/",
+					"https://www.google.com?y=b",
+					"rsync://host.xz/path/to/repo.git/",
+					"ssh://host.xz/path/to/repo.git/",
+					"ssh://host.xz/path/to/repo.git/",
+					"ssh://host.xz/~/path/to/repo.git",
+					"ssh://host.xz/~user/path/to/repo.git/",
+					"ssh://host.xz:port/path/to/repo.git/",
+					"ssh://user@host.xz/path/to/repo.git/",
+					"ssh://user@host.xz/path/to/repo.git/",
+					"ssh://user@host.xz/~/path/to/repo.git",
+					"ssh://user@host.xz/~user/path/to/repo.git/",
+					"ssh://user@host.xz:port/path/to/repo.git/",
 					"svn+ssh://foo@svn.bar.com/project",
 					"svn://svn.code.sf.net/p/regshot/code/trunk",
-					"http://www.google.com",
-					"https://www.google.com?y=b",
-					"git@github.com:foo/bar.git",
 				}
 
 				for _, val := range us {
@@ -149,7 +170,7 @@ func TestAnalysis(t *testing.T) {
 					p.Type = &t
 
 					fs, err := p.Validate(client)
-					Expect(err).To(BeNil())
+					Expect(err).To(BeNil(), fmt.Sprintf("Expected\n%v\nto be nil for repo\n%v\n", err, *p.Source))
 					Expect(len(fs)).To(Equal(0))
 				}
 			})
