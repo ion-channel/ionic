@@ -22,6 +22,7 @@ type Product struct {
 	Language   string        `json:"language" xml:"language"`
 	ExternalID string        `json:"external_id" xml:"external_id"`
 	Sources    []Source      `json:"source" xml:"source"`
+	Confidence float64       `json:"confidence" xml:"confidence"`
 }
 
 // Source represents information about where the product data came from

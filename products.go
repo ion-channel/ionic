@@ -11,7 +11,7 @@ import (
 
 const (
 	getProductEndpoint    = "v1/vulnerability/getProducts"
-	productSearchEndpoint = "v1/product/search"
+	productSearchEndpoint = "v1/product/search2"
 )
 
 // GetProducts takes a product ID search string and token.  It returns the product found,
@@ -60,20 +60,6 @@ func (ic *IonClient) ProductSearch(searchInput products.ProductSearchQuery, toke
 	return ps, nil
 }
 
-// PostProductSearch takes a search query. It returns a new raw json message
-// of all the matching products in the Bunsen dependencies table
-func (ic *IonClient) PostProductSearch(searchType, searchStrategy, productIdentifier, version, token string, terms []string) ([]products.Product, error) {
-	searchInput := products.ProductSearchQuery{
-		SearchType:        searchType,
-		SearchStrategy:    searchStrategy,
-		ProductIdentifier: productIdentifier,
-		Version:           version,
-		Terms:             terms,
-	}
-
-	return ic.ProductSearch(searchInput, token)
-}
-
 // GetRawProducts takes a product ID search string and token.  It returns a raw json
 // message of the product found, and any API errors it may encounters.
 func (ic *IonClient) GetRawProducts(idSearch, token string) (json.RawMessage, error) {
@@ -90,15 +76,13 @@ func (ic *IonClient) GetRawProducts(idSearch, token string) (json.RawMessage, er
 
 // GetProductSearch takes a search query. It returns a new raw json message of
 // all the matching products in the Bunsen dependencies table
-func (ic *IonClient) GetProductSearch(productIdentifier, version, vendor, token string) ([]products.Product, error) {
+func (ic *IonClient) GetProductSearch(name, version, token string) ([]products.Product, error) {
 	params := &url.Values{}
-	params.Set("product_identifier", productIdentifier)
+	params.Set("q", name)
 	if version != "" {
-		params.Set("version", version)
+		params.Set("q", fmt.Sprintf("%s+%s", name, version))
 	}
-	if vendor != "" {
-		params.Set("vendor", vendor)
-	}
+
 	b, err := ic.Get(productSearchEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to GetProductSearch: %v", err.Error())

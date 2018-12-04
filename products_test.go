@@ -54,11 +54,11 @@ func TestProducts(t *testing.T) {
 		})
 
 		g.It("should search for a product", func() {
-			server.AddPath("/v1/product/search").
+			server.AddPath("/v1/product/search2").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "mahVersion", "mahVendor", "someapikey")
+			products, err := client.GetProductSearch("less", "mahVersion", "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
@@ -71,11 +71,11 @@ func TestProducts(t *testing.T) {
 			Expect(products[0].ID).To(Equal(39862))
 		})
 		g.It("should omit version and vendor from product search when it is not given", func() {
-			server.AddPath("/v1/product/search").
+			server.AddPath("/v1/product/search2").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "", "", "someapikey")
+			products, err := client.GetProductSearch("less", "", "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
@@ -177,29 +177,6 @@ func TestProducts(t *testing.T) {
 			Expect(s).To(MatchRegexp(`"term":\s*"foo"`))
 			Expect(s).To(MatchRegexp(`"package":\s*{`))
 			Expect(s).To(MatchRegexp(`"name":\s*"mahProject"`))
-		})
-		g.It("should post a product request", func() {
-			server.AddPath("/v1/product/search").
-				SetMethods("POST").
-				SetPayload([]byte(sampleBunsenSearchResponse)).
-				SetStatus(http.StatusOK)
-			searchInput := products.ProductSearchQuery{
-				SearchType:        "concatenated",
-				SearchStrategy:    "searchStrategy",
-				ProductIdentifier: "productIdentifier",
-				Version:           "version",
-				Vendor:            "vendor",
-				Terms:             []string{"term01", "term02"},
-			}
-			products, err := client.ProductSearch(searchInput, "token")
-			Expect(err).NotTo(HaveOccurred())
-			Expect(products).To(HaveLen(5))
-			Expect(products[0].ID).To(Equal(39862))
-			Expect(server.HitRecords()).To(HaveLen(1))
-			hr := server.HitRecords()[0]
-			Expect(hr.Query).To(HaveLen(0))
-			Expect(hr.Header.Get("Authorization")).To(Equal("Bearer token"))
-			Expect(string(hr.Body)).To(Equal(`{"search_type":"concatenated","search_strategy":"searchStrategy","product_identifier":"productIdentifier","version":"version","vendor":"vendor","terms":["term01","term02"]}`))
 		})
 
 		g.It("should validate a good request", func() {
