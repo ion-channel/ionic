@@ -64,13 +64,11 @@ func TestProducts(t *testing.T) {
 			Expect(hitRecords).To(HaveLen(1))
 			hitRecord := hitRecords[0]
 			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
-			Expect(hitRecord.Query.Get("product_identifier")).To(Equal("less"))
-			Expect(hitRecord.Query.Get("version")).To(Equal("mahVersion"))
-			Expect(hitRecord.Query.Get("vendor")).To(Equal("mahVendor"))
+			Expect(hitRecord.Query.Get("q")).To(Equal("less+mahVersion"))
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
 		})
-		g.It("should omit version and vendor from product search when it is not given", func() {
+		g.It("should omit version from product search when it is not given", func() {
 			server.AddPath("/v1/product/search2").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
@@ -81,9 +79,7 @@ func TestProducts(t *testing.T) {
 			Expect(hitRecords).To(HaveLen(1))
 			hitRecord := hitRecords[0]
 			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
-			Expect(hitRecord.Query.Get("product_identifier")).To(Equal("less"))
-			Expect(hitRecord.Query.Get("version")).To(Equal(""))
-			Expect(hitRecord.Query.Get("vendor")).To(Equal(""))
+			Expect(hitRecord.Query.Get("q")).To(Equal("less"))
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
 		})
