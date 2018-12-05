@@ -58,7 +58,7 @@ func TestProducts(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "mahVersion", "someapikey")
+			products, err := client.GetProductSearch("less+mahVersion", "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
@@ -73,7 +73,7 @@ func TestProducts(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "", "someapikey")
+			products, err := client.GetProductSearch("less", "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
