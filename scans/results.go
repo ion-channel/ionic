@@ -266,6 +266,7 @@ type Dependency struct {
 	Package       string `json:"package" xml:"package"`
 	Version       string `json:"version" xml:"version"`
 	Scope         string `json:"scope" xml:"scope"`
+	Requirement   string `json:"requirement" xml:"requirement"`
 }
 
 // DependencyMeta represents data for a summary of all dependencies resolved
