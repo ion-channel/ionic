@@ -43,4 +43,5 @@ type AnalysisStatus struct {
 	CreatedAt   time.Time    `json:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at"`
 	ScanStatus  []ScanStatus `json:"scan_status"`
+	Deliveries  []string     `json:"deliveries"`
 }
