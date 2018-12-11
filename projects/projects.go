@@ -88,7 +88,7 @@ func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 		projErr = ErrInvalidProject
 	}
 
-	if p.Branch == nil {
+	if p.Branch == nil && p.Type != nil && strings.ToLower(*p.Type) == "git" {
 		invalidFields["branch"] = "missing branch"
 		projErr = ErrInvalidProject
 	}
