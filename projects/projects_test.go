@@ -12,7 +12,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestAnalysis(t *testing.T) {
+func TestProject(t *testing.T) {
 	g := Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
@@ -71,10 +71,9 @@ func TestAnalysis(t *testing.T) {
 
 			fs, err := p.Validate(client)
 			Expect(err).To(Equal(ErrInvalidProject))
-			Expect(len(fs)).To(Equal(3))
+			Expect(len(fs)).To(Equal(2))
 			Expect(fs["name"]).To(Equal("missing name"))
 			Expect(fs["type"]).To(Equal("missing type"))
-			Expect(fs["branch"]).To(Equal("missing branch"))
 		})
 
 		g.It("should say a project is invalid if a deploy key is invalid", func() {
