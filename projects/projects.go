@@ -110,7 +110,6 @@ func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 	}
 
 	if isFinger {
-		fmt.Printf("is finger! %s", p.DeployKey)
 		p.DeployKey = ""
 	}
 
