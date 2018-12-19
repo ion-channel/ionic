@@ -104,6 +104,15 @@ func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 		projErr = ErrInvalidProject
 	}
 
+	isFinger, err := regexp.MatchString("[a-f0-9]{2}\\:[a-f0-9]{2}\\:[a-f0-9]{2}\\:", p.DeployKey)
+	if err != nil {
+		return nil, fmt.Errorf("failed to detect deploy key fingerprint: %v", err.Error())
+	}
+
+	if isFinger {
+		p.DeployKey = ""
+	}
+
 	block, rest := pem.Decode([]byte(p.DeployKey))
 	if block != nil {
 		pkey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
