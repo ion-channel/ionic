@@ -29,12 +29,7 @@ type scan struct {
 }
 
 // NewScan creates and returns a new Scan struct
-func NewScan(
-	id, teamID, projectID, analysisID, summary, name, description string,
-	results json.RawMessage,
-	createdAt, updatedAt time.Time,
-	duration float64,
-) (*Scan, error) {
+func NewScan(id, teamID, projectID, analysisID, summary, name, description string, results json.RawMessage, createdAt, updatedAt time.Time, duration float64) (*Scan, error) {
 	s := scan{
 		ID:          id,
 		TeamID:      teamID,
@@ -48,24 +43,26 @@ func NewScan(
 		Name:        name,
 		Description: description,
 	}
-	var tr TranslatedResults
 
-	var ur UntranslatedResults
-	err := json.Unmarshal(results, &ur)
+	var tr TranslatedResults
+	err := json.Unmarshal(results, &tr)
 	if err != nil {
-		err = json.Unmarshal(results, &tr)
+		var ur UntranslatedResults
+		err = json.Unmarshal(results, &ur)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get valid results: %v", err.Error())
 		}
-	} else {
-		tr = *ur.Translate()
-	}
-	bigS := &Scan{
-		scan:              &s,
-		TranslatedResults: &tr,
+
+		return &Scan{
+			scan:              &s,
+			TranslatedResults: ur.Translate(),
+		}, nil
 	}
 
-	return bigS, nil
+	return &Scan{
+		scan:              &s,
+		TranslatedResults: &tr,
+	}, nil
 }
 
 // Translate performs a one way translation on a scan by translating the

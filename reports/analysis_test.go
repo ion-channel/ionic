@@ -77,8 +77,8 @@ func TestAnalysisReport(t *testing.T) {
 				Expect(ar.ScanSummaries[0].Results).NotTo(BeNil())
 				Expect(len(ar.ScanSummaries[0].Results)).NotTo(Equal(0))
 
-				lr, ok := ar.ScanSummaries[0].TranslatedResults.Data.(*scans.LicenseResults)
-				Expect(ok).To(BeTrue())
+				lr, ok := ar.ScanSummaries[0].TranslatedResults.Data.(scans.LicenseResults)
+				Expect(ok).To(BeTrue(), "Expected LicenseResults type")
 				Expect(lr.Type).To(HaveLen(1))
 				Expect(lr.Type[0].Name).To(Equal("apache-2.0"))
 				Expect(lr.Name).To(Equal("LICENSE.md"))

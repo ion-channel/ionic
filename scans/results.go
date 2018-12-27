@@ -34,43 +34,43 @@ func (u *UntranslatedResults) Translate() *TranslatedResults {
 	// out in the name of explicit, easily-readable code.
 	if u.AboutYML != nil {
 		tr.Type = "about_yml"
-		tr.Data = u.AboutYML
+		tr.Data = *u.AboutYML
 	}
 	if u.Community != nil {
 		tr.Type = "community"
-		tr.Data = u.Community
+		tr.Data = *u.Community
 	}
 	if u.Coverage != nil {
 		tr.Type = "coverage"
-		tr.Data = u.Coverage
+		tr.Data = *u.Coverage
 	}
 	if u.Dependency != nil {
 		tr.Type = "dependency"
-		tr.Data = u.Dependency
+		tr.Data = *u.Dependency
 	}
 	if u.Difference != nil {
 		tr.Type = "difference"
-		tr.Data = u.Difference
+		tr.Data = *u.Difference
 	}
 	if u.Ecosystem != nil {
 		tr.Type = "ecosystems"
-		tr.Data = u.Ecosystem
+		tr.Data = *u.Ecosystem
 	}
 	if u.ExternalVulnerabilities != nil {
 		tr.Type = "external_vulnerability"
-		tr.Data = u.ExternalVulnerabilities
+		tr.Data = *u.ExternalVulnerabilities
 	}
 	if u.License != nil {
 		tr.Type = "license"
-		tr.Data = u.License
+		tr.Data = *u.License
 	}
 	if u.Virus != nil {
 		tr.Type = "virus"
-		tr.Data = u.Virus
+		tr.Data = *u.Virus
 	}
 	if u.Vulnerability != nil {
 		tr.Type = "vulnerability"
-		tr.Data = u.Vulnerability
+		tr.Data = *u.Vulnerability
 	}
 	return &tr
 }
