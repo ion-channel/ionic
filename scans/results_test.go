@@ -73,13 +73,9 @@ func TestScanResults(t *testing.T) {
 			Expect(translatedResult).NotTo(BeNil())
 			Expect(translatedResult.Type).To(Equal("license"))
 			Expect(translatedResult.Data).NotTo(BeNil())
-			wasLicenseResults := false
-			switch translatedResult.Data.(type) {
-			case *LicenseResults:
-				wasLicenseResults = true
-			}
-			Expect(wasLicenseResults).To(BeTrue())
-			licenseResults := translatedResult.Data.(*LicenseResults)
+
+			licenseResults, ok := translatedResult.Data.(LicenseResults)
+			Expect(ok).To(BeTrue(), "Expected LicenseResults type")
 			Expect(licenseResults.Type).To(HaveLen(1))
 			Expect(licenseResults.Type[0].Name).To(Equal("a license"))
 			Expect(licenseResults.Name).To(Equal("some license"))
