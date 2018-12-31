@@ -97,9 +97,9 @@ func TestTeamUsers(t *testing.T) {
 			Expect(tu.ID).To(Equal("someid"))
 
 			hr := server.HitRecords()
-			Expect(len(hr)).To(Equal(1))
-			Expect(hr[0].Verb).To(Equal("delete"))
-			Expect(string(hr[0].Body)).To(Equal(`{}`))
+			Expect(len(hr)).To(Equal(2))
+			Expect(hr[0].Verb).To(Equal("DELETE"))
+			Expect(string(hr[0].Body)).To(Equal(``))
 		})
 	})
 

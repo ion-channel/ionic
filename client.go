@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/ion-channel/ionic/pagination"
 )
@@ -135,6 +136,26 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 	}
 
 	var ir IonResponse
+	if resp.StatusCode == 204 && len(body) == 0 {
+
+		var iResponse IonResponse
+		var meta Meta
+		var now = time.Now()
+		meta.Copyright = "Ion Channel 2018"
+		meta.Authors = make([]string, 1)
+		meta.Version = ""
+		meta.LastUpdate = &now
+		meta.TotalCount = 0
+		meta.Limit = 0
+		meta.Offset = 0
+
+		iResponse.status = 204
+		iResponse.Data = []byte(`{"data": []}`)
+		iResponse.Meta = meta
+
+		return &iResponse, nil
+	}
+
 	err = json.Unmarshal(body, &ir)
 	if err != nil {
 		return nil, fmt.Errorf("malformed response: %v", err.Error())
