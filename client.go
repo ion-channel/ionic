@@ -137,24 +137,8 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 
 	var ir IonResponse
 	if resp.StatusCode == 204 && len(body) == 0 {
-
-		var now = time.Now()
-		meta := Meta{
-			Copyright:  "Ion Channel 2018",
-			Authors:    make([]string, 1),
-			Version:    "",
-			LastUpdate: &now,
-			TotalCount: 0,
-			Limit:      0,
-			Offset:     0,
-		}
-		iResponse := IonResponse{
-			status: 204,
-			Data:   []byte(`{"data": []}`),
-			Meta:   meta,
-		}
-
-		return &iResponse, nil
+		ir = emptyIonResponse()
+		return &ir, nil
 	}
 
 	err = json.Unmarshal(body, &ir)
@@ -163,6 +147,25 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 	}
 
 	return &ir, nil
+}
+
+func emptyIonResponse() IonResponse {
+	var now = time.Now()
+	meta := Meta{
+		Copyright:  "Ion Channel 2018",
+		Authors:    make([]string, 1),
+		Version:    "",
+		LastUpdate: &now,
+		TotalCount: 0,
+		Limit:      0,
+		Offset:     0,
+	}
+	ir := IonResponse{
+		status: 204,
+		Data:   []byte(`{"data": []}`),
+		Meta:   meta,
+	}
+	return ir
 }
 
 // Delete takes an endpoint, token, params, and headers to pass as a delete call to the
