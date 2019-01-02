@@ -92,14 +92,14 @@ func TestTeamUsers(t *testing.T) {
 				ID: "someid",
 			}
 
-			_, err := client.DeleteTeamUser(tu, "atoken")
+			response, err := client.DeleteTeamUser(tu, "atoken")
 			Expect(err).To(BeNil())
 			Expect(tu.ID).To(Equal("someid"))
 
 			hr := server.HitRecords()
 			Expect(len(hr)).To(Equal(2))
 			Expect(hr[0].Verb).To(Equal("DELETE"))
-			Expect(string(hr[0].Body)).To(Equal(`{"data":{"message": "Deleted Team User: someid"}}`))
+			Expect(string(response)).To(ContainSubstring(`{"message": "Deleted Team User: someid"}`))
 		})
 	})
 }
