@@ -107,7 +107,7 @@ func TestTeamUsers(t *testing.T) {
 			Expect(string(response)).To(ContainSubstring(`{"message": "Deleted Team User: someid"}`))
 		})
 
-		g.It("should fail to delete a team user if the team user persists", func() {
+		g.It("should return an error if it fails to validate the user was deleted", func() {
 			server.AddPath("/v1/teamUsers/deleteTeamUser").
 				SetMethods("DELETE").
 				SetPayload([]byte(SampleDeleteTeamUser)).
