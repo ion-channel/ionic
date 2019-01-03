@@ -101,6 +101,30 @@ func TestTeamUsers(t *testing.T) {
 			Expect(hr[0].Verb).To(Equal("DELETE"))
 			Expect(string(response)).To(ContainSubstring(`{"message": "Deleted Team User: someid"}`))
 		})
+
+		g.It("should fail to delete a team user if the team user persists", func() {
+			server.AddPath("/v1/teamUsers/deleteTeamUser").
+				SetMethods("DELETE").
+				SetPayload([]byte(SampleDeleteTeamUser)).
+				SetStatus(http.StatusOK)
+
+			server.AddPath("/v1/teamUsers/getTeamUser").
+				SetMethods("GET").
+				SetPayload([]byte(SampleValidTeamUser)).
+				SetStatus(http.StatusOK)
+
+			tu := &teamusers.TeamUser{
+				ID: "someid",
+			}
+
+			response, err := client.DeleteTeamUser(tu, "atoken")
+			Expect(response).To(BeNil())
+
+			hr := server.HitRecords()
+			Expect(len(hr)).To(Equal(2))
+			Expect(hr[0].Verb).To(Equal("DELETE"))
+			Expect(err.Error()).To(ContainSubstring("failed to validate team user deletion:"))
+		})
 	})
 }
 

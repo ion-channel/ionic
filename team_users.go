@@ -99,8 +99,9 @@ func (ic *IonClient) UpdateTeamUser(teamuser *teamusers.TeamUser, token string) 
 	return &tu, nil
 }
 
-// DeleteTeamUser takes a teamUser object and then makes the calls to delete the teamUser.
-// It returns a string and any errors it encounters with the API.
+// DeleteTeamUser takes a teamUser object and then makes the call to delete the teamUser.
+// Once the delete call has been made, a GetTeamUser call is made to validate the deletion.
+// It returns a string or any errors it encounters with the API.
 func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("someid", teamuser.ID)
@@ -112,7 +113,7 @@ func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) 
 
 	response, err := ic.Delete(teamsDeleteTeamUserEndpoint, token, params, nil)
 	if err != nil {
-		return response, fmt.Errorf("failed to delete team user: %v", err.Error())
+		return nil, fmt.Errorf("failed to delete team user: %v", err.Error())
 	}
 
 	params = &url.Values{}
