@@ -88,6 +88,10 @@ func TestTeamUsers(t *testing.T) {
 				SetPayload([]byte(SampleDeleteTeamUser)).
 				SetStatus(http.StatusOK)
 
+			server.AddPath("/v1/teamUsers/getTeamUser").
+				SetMethods("GET").
+				SetStatus(http.StatusUnprocessableEntity)
+
 			tu := &teamusers.TeamUser{
 				ID: "someid",
 			}
@@ -99,6 +103,7 @@ func TestTeamUsers(t *testing.T) {
 			hr := server.HitRecords()
 			Expect(len(hr)).To(Equal(2))
 			Expect(hr[0].Verb).To(Equal("DELETE"))
+			Expect(hr[1].Verb).To(Equal("GET"))
 			Expect(string(response)).To(ContainSubstring(`{"message": "Deleted Team User: someid"}`))
 		})
 
