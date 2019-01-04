@@ -33,6 +33,11 @@ type evaluation struct {
 	Passed      bool            `json:"passed"`
 }
 
+// NewEval returns an Evaluation that wont throw nil pointer exceptions
+func NewEval() *Evaluation {
+	return &Evaluation{evaluation: &evaluation{}}
+}
+
 // Translate performs a one way translation on an evaluation by translating the
 // UntranslatedResults if they are not nil, putting the output into Translated
 // results, and setting UntranslatedResults to be nil. It returns an error if
