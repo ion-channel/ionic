@@ -21,6 +21,7 @@ type evaluation struct {
 	TeamID      string          `json:"team_id"`
 	ProjectID   string          `json:"project_id"`
 	AnalysisID  string          `json:"analysis_id"`
+	RuleID      string          `json:"rule_id"`
 	Summary     string          `json:"summary"`
 	Results     json.RawMessage `json:"results"`
 	CreatedAt   time.Time       `json:"created_at"`
