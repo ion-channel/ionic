@@ -15,7 +15,7 @@ func TestErrors(t *testing.T) {
 	g.Describe("Errors", func() {
 		g.It("return a new ion error", func() {
 			err := fmt.Errorf("json: invalid key")
-			ierr := Errorf("a response body", 404, "something went wrong: %v", err.Error())
+			ierr := Errors("a response body", 404, "something went wrong: %v", err.Error())
 
 			Expect(ierr.ResponseBody).To(Equal("a response body"))
 			Expect(ierr.ResponseStatus).To(Equal(404))

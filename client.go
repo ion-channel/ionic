@@ -109,7 +109,7 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 
 	req, err := http.NewRequest(strings.ToUpper(method), u.String(), &payload)
 	if err != nil {
-		return nil, errors.Errorf("no body", 0, "failed to create request: %v", err.Error())
+		return nil, errors.Errors("no body", 0, "failed to create request: %v", err.Error())
 	}
 
 	if headers != nil {
@@ -122,23 +122,23 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 
 	resp, err := ic.client.Do(req)
 	if err != nil {
-		return nil, errors.Errorf("no body", 0, "failed http request: %v", err.Error())
+		return nil, errors.Errors("no body", 0, "failed http request: %v", err.Error())
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, errors.Errorf("no body", resp.StatusCode, "failed to read response body: %v", err.Error())
+		return nil, errors.Errors("no body", resp.StatusCode, "failed to read response body: %v", err.Error())
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, errors.Errorf(string(body), resp.StatusCode, "error response from API")
+		return nil, errors.Errors(string(body), resp.StatusCode, "error response from API")
 	}
 
 	var ir IonResponse
 	err = json.Unmarshal(body, &ir)
 	if err != nil {
-		return nil, errors.Errorf(string(body), resp.StatusCode, "malformed response: %v", err.Error())
+		return nil, errors.Errors(string(body), resp.StatusCode, "malformed response: %v", err.Error())
 	}
 
 	return &ir, nil

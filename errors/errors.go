@@ -12,9 +12,9 @@ type IonError struct {
 	ResponseStatus int    `json:"response_status"`
 }
 
-// Errorf takes a body, status, format, and any additional arguments to create
+// Errors takes a body, status, format, and any additional arguments to create
 // an IonError that includes details from the API
-func Errorf(body string, status int, format string, a ...interface{}) *IonError {
+func Errors(body string, status int, format string, a ...interface{}) *IonError {
 	return &IonError{fmt.Errorf(format, a...), body, status}
 }
 
