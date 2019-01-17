@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/ion-channel/ionic/errors"
 	"github.com/ion-channel/ionic/pagination"
 )
 
@@ -103,12 +104,12 @@ func (ic *IonClient) do(method, endpoint, token string, params *url.Values, payl
 	return data, nil
 }
 
-func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (*IonResponse, error) {
+func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (*IonResponse, *errors.IonError) {
 	u := ic.createURL(endpoint, params, page)
 
 	req, err := http.NewRequest(strings.ToUpper(method), u.String(), &payload)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create request: %v", err.Error())
+		return nil, errors.Errors("no body", 0, "failed to create request: %v", err.Error())
 	}
 
 	if headers != nil {
@@ -121,23 +122,23 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 
 	resp, err := ic.client.Do(req)
 	if err != nil {
-		return nil, fmt.Errorf("failed http request: %v", err.Error())
+		return nil, errors.Errors("no body", 0, "failed http request: %v", err.Error())
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read response body: %v", err.Error())
+		return nil, errors.Errors("no body", resp.StatusCode, "failed to read response body: %v", err.Error())
 	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("error response from API: %v", resp.Status)
+		return nil, errors.Errors(string(body), resp.StatusCode, "error response from API")
 	}
 
 	var ir IonResponse
 	err = json.Unmarshal(body, &ir)
 	if err != nil {
-		return nil, fmt.Errorf("malformed response: %v", err.Error())
+		return nil, errors.Errors(string(body), resp.StatusCode, "malformed response: %v", err.Error())
 	}
 
 	return &ir, nil
