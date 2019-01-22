@@ -1,10 +1,12 @@
 package reports
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/digests"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/scans"
@@ -24,6 +26,7 @@ type AnalysisReport struct {
 	Summary       string             `json:"summary" xml:"summary"`
 	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
 	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
+	Digests       []digests.Digest   `json:"digests" xml:"digests"`
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
@@ -54,6 +57,13 @@ func NewAnalysisReport(analysis *analysis.Analysis, project *projects.Project, a
 		// TODO: Remove ScanSummaries field
 		ar.ScanSummaries = appliedRuleset.RuleEvaluationSummary.Ruleresults
 		ar.Evaluations = appliedRuleset.RuleEvaluationSummary.Ruleresults
+
+		ds, err := digests.NewDigests(appliedRuleset)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get digests: %v", err.Error())
+		}
+
+		ar.Digests = ds
 	}
 
 	return &ar, nil
