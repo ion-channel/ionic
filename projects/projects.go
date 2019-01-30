@@ -46,6 +46,7 @@ type Project struct {
 	Username       string          `json:"username"`
 	Password       string          `json:"password"`
 	KeyFingerprint string          `json:"key_fingerprint"`
+	Private        bool            `json:"private"`
 	Aliases        []aliases.Alias `json:"aliases"`
 	Tags           []tags.Tag      `json:"tags"`
 }
