@@ -18,7 +18,7 @@ import (
 // given analysis
 type AnalysisReport struct {
 	*analysis.Analysis
-	Statuses      *scanner.AnalysisStatus `json:"status" xml:"status"`
+	Statuses      *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
 	RulesetName   string                  `json:"ruleset_name" xml:"ruleset_name"`
 	Passed        bool                    `json:"passed" xml:"passed"`
 	Aliases       []aliases.Alias         `json:"aliases"`
