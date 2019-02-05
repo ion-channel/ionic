@@ -9,6 +9,7 @@ import (
 	"github.com/ion-channel/ionic/digests"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
+	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 	"github.com/ion-channel/ionic/tags"
 )
@@ -17,24 +18,26 @@ import (
 // given analysis
 type AnalysisReport struct {
 	*analysis.Analysis
-	RulesetName   string             `json:"ruleset_name" xml:"ruleset_name"`
-	Passed        bool               `json:"passed" xml:"passed"`
-	Aliases       []aliases.Alias    `json:"aliases"`
-	Tags          []tags.Tag         `json:"tags"`
-	Trigger       string             `json:"trigger" xml:"trigger"`
-	Risk          string             `json:"risk" xml:"risk"`
-	Summary       string             `json:"summary" xml:"summary"`
-	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
-	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
-	Digests       []digests.Digest   `json:"digests" xml:"digests"`
+	Statuses      *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
+	RulesetName   string                  `json:"ruleset_name" xml:"ruleset_name"`
+	Passed        bool                    `json:"passed" xml:"passed"`
+	Aliases       []aliases.Alias         `json:"aliases"`
+	Tags          []tags.Tag              `json:"tags"`
+	Trigger       string                  `json:"trigger" xml:"trigger"`
+	Risk          string                  `json:"risk" xml:"risk"`
+	Summary       string                  `json:"summary" xml:"summary"`
+	ScanSummaries []scans.Evaluation      `json:"scan_summaries" xml:"scan_summaries"`
+	Evaluations   []scans.Evaluation      `json:"evaluations" xml:"evaluations"`
+	Digests       []digests.Digest        `json:"digests" xml:"digests"`
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
-func NewAnalysisReport(analysis *analysis.Analysis, project *projects.Project, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
+func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analysis.Analysis, project *projects.Project, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
 	ar := AnalysisReport{
 		Analysis: analysis,
 		Trigger:  "source commit",
 		Risk:     "high",
+		Statuses: status,
 	}
 
 	// Project Details

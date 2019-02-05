@@ -8,6 +8,7 @@ import (
 	"github.com/ion-channel/ionic/analysis"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
+	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 	"github.com/ion-channel/ionic/tags"
 
@@ -22,6 +23,11 @@ func TestAnalysisReport(t *testing.T) {
 	g.Describe("Analysis Report", func() {
 		g.Describe("New Analysis Report", func() {
 			g.It("should return a new analysis report", func() {
+				s := &scanner.AnalysisStatus{
+					Status:  "finished",
+					Message: "analysis finished",
+				}
+
 				// Note: Once the scans and other objects no longer have the private
 				// anonymous fields, this can be changed to use a struct literal
 				// initialization of the analysis instead of from json
@@ -53,12 +59,12 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(&a, p, app)
+				ar, err := NewAnalysisReport(s, &a, p, app)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
 				Expect(ar.RulesetName).To(Equal("super cool ruleset"))
-				Expect(ar.Status).To(Equal("finished"))
+				Expect(ar.Statuses.Status).To(Equal("finished"))
 				Expect(ar.Risk).To(Equal("low"))
 				Expect(ar.Passed).To(Equal(true))
 				Expect(len(ar.Aliases)).To(Equal(1))
@@ -85,6 +91,11 @@ func TestAnalysisReport(t *testing.T) {
 			})
 
 			g.It("should return a new analysis report even if the analysis contains translated results", func() {
+				s := &scanner.AnalysisStatus{
+					Status:  "finished",
+					Message: "analysis finished",
+				}
+
 				// Note: Once the scans and other objects no longer have the private
 				// anonymous fields, this can be changed to use a struct literal
 				// initialization of the analysis instead of from json
@@ -116,12 +127,12 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(&a, p, app)
+				ar, err := NewAnalysisReport(s, &a, p, app)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
 				Expect(ar.RulesetName).To(Equal("super cool ruleset"))
-				Expect(ar.Status).To(Equal("finished"))
+				Expect(ar.Statuses.Status).To(Equal("finished"))
 				Expect(ar.Risk).To(Equal("low"))
 				Expect(ar.Passed).To(Equal(true))
 				Expect(len(ar.Aliases)).To(Equal(1))
