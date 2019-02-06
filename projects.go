@@ -4,7 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 	"strings"
 
@@ -13,12 +17,23 @@ import (
 )
 
 const (
-	createProjectEndpoint   = "v1/project/createProject"
-	getProjectEndpoint      = "v1/project/getProject"
-	getProjectByURLEndpoint = "v1/project/getProjectByUrl"
-	getProjectsEndpoint     = "v1/project/getProjects"
-	updateProjectEndpoint   = "v1/project/updateProject"
+	createProjectEndpoint         = "v1/project/createProject"
+	createProjectsFromCSVEndpoint = "v1/project/createProjectsCSV"
+	getProjectEndpoint            = "v1/project/getProject"
+	getProjectByURLEndpoint       = "v1/project/getProjectByUrl"
+	getProjectsEndpoint           = "v1/project/getProjects"
+	updateProjectEndpoint         = "v1/project/updateProject"
 )
+
+// CreateProjectsResponse represents the response from the API when sending a
+// list of projects to be created. It contains the details of each project
+// created, and a list of any errors that were encountered.
+type CreateProjectsResponse struct {
+	Projects []projects.Project `json:"projects"`
+	Errors   []struct {
+		Message string `json:"message"`
+	} `json:"errors"`
+}
 
 //CreateProject takes a project object and token to use. It returns the
 // project stored or an error encountered by the API
@@ -43,6 +58,51 @@ func (ic *IonClient) CreateProject(project *projects.Project, teamID, token stri
 	}
 
 	return &p, nil
+}
+
+// CreateProjectsFromCSV takes a csv file location, team ID, and token to send
+// the specified file to the API. All projects that are able to be created will
+// be with their info returned, and a list of any errors encountered during the
+// process.
+func (ic *IonClient) CreateProjectsFromCSV(csvFile, teamID, token string) (*CreateProjectsResponse, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	var buf bytes.Buffer
+	w := multipart.NewWriter(&buf)
+
+	fw, err := w.CreateFormFile("file", csvFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create form file: %v", err.Error())
+	}
+
+	fh, err := os.Open(csvFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %v", err.Error())
+	}
+
+	_, err = io.Copy(fw, fh)
+	if err != nil {
+		return nil, fmt.Errorf("failed to copy file contents: %v", err.Error())
+	}
+
+	w.Close()
+
+	h := http.Header{}
+	h.Set("Content-Type", w.FormDataContentType())
+
+	b, err := ic.Post(createProjectsFromCSVEndpoint, token, params, buf, h)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create projects: %v", err.Error())
+	}
+
+	var resp CreateProjectsResponse
+	err = json.Unmarshal(b, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response: %v", err.Error())
+	}
+
+	return &resp, nil
 }
 
 // GetProject takes a project ID, team ID, and token. It returns the project and
