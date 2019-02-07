@@ -3,7 +3,7 @@ package reports
 import (
 	"testing"
 
-	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
 
@@ -24,8 +24,8 @@ func TestProjectReport(t *testing.T) {
 				ID: &expectedProjectID,
 			}
 
-			ss := []analysis.Summary{
-				analysis.Summary{
+			ss := []analyses.Summary{
+				analyses.Summary{
 					ID: expectedSummaryID,
 				},
 			}
@@ -46,7 +46,7 @@ func TestProjectReport(t *testing.T) {
 			p := &projects.Project{
 				ID: &expectedProjectID,
 			}
-			s := &analysis.Summary{
+			s := &analyses.Summary{
 				ID: expectedAnalysisID,
 			}
 			ar := &rulesets.AppliedRulesetSummary{

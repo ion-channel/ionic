@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/ion-channel/ionic/aliases"
-	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/digests"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
@@ -17,7 +17,7 @@ import (
 // AnalysisReport is a Ion Channel representation of a report output from a
 // given analysis
 type AnalysisReport struct {
-	*analysis.Analysis
+	*analyses.Analysis
 	Statuses      *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
 	RulesetName   string                  `json:"ruleset_name" xml:"ruleset_name"`
 	Passed        bool                    `json:"passed" xml:"passed"`
@@ -32,7 +32,7 @@ type AnalysisReport struct {
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
-func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analysis.Analysis, project *projects.Project, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
+func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
 	ar := AnalysisReport{
 		Analysis: analysis,
 		Trigger:  "source commit",
