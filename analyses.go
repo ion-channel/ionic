@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/pagination"
 )
 
@@ -20,7 +20,7 @@ const (
 // GetAnalysis takes an analysis ID, team ID, project ID, and token.  It returns the
 // analysis found.  If the analysis is not found it will return an error, and
 // will return an error for any other API issues it encounters.
-func (ic *IonClient) GetAnalysis(id, teamID, projectID, token string) (*analysis.Analysis, error) {
+func (ic *IonClient) GetAnalysis(id, teamID, projectID, token string) (*analyses.Analysis, error) {
 	params := &url.Values{}
 	params.Set("id", id)
 	params.Set("team_id", teamID)
@@ -31,7 +31,7 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID, token string) (*analysis
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
 
-	var a analysis.Analysis
+	var a analyses.Analysis
 	err = json.Unmarshal(b, &a)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal analysis: %v", err.Error())
@@ -42,7 +42,7 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID, token string) (*analysis
 
 // GetAnalyses takes a team ID, project ID, and token. It returns a slice of
 // analyses for the project or an error for any API issues it encounters.
-func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *pagination.Pagination) ([]analysis.Analysis, error) {
+func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *pagination.Pagination) ([]analyses.Analysis, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
@@ -52,7 +52,7 @@ func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *paginati
 		return nil, fmt.Errorf("failed to get analyses: %v", err.Error())
 	}
 
-	var as []analysis.Analysis
+	var as []analyses.Analysis
 	err = json.Unmarshal(b, &as)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal analyses: %v", err.Error())
@@ -64,7 +64,7 @@ func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *paginati
 // GetLatestPublicAnalysis takes a project ID and branch.  It returns the
 // analysis found.  If the analysis is not found it will return an error, and
 // will return an error for any other API issues it encounters.
-func (ic *IonClient) GetLatestPublicAnalysis(projectID, branch string) (*analysis.Analysis, error) {
+func (ic *IonClient) GetLatestPublicAnalysis(projectID, branch string) (*analyses.Analysis, error) {
 	params := &url.Values{}
 	params.Set("project_id", projectID)
 	params.Set("branch", branch)
@@ -74,7 +74,7 @@ func (ic *IonClient) GetLatestPublicAnalysis(projectID, branch string) (*analysi
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
 
-	var a analysis.Analysis
+	var a analyses.Analysis
 	err = json.Unmarshal(b, &a)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal analysis: %v", err.Error())
@@ -86,7 +86,7 @@ func (ic *IonClient) GetLatestPublicAnalysis(projectID, branch string) (*analysi
 // GetPublicAnalysis takes an analysis ID.  It returns the
 // analysis found.  If the analysis is not found it will return an error, and
 // will return an error for any other API issues it encounters.
-func (ic *IonClient) GetPublicAnalysis(id string) (*analysis.Analysis, error) {
+func (ic *IonClient) GetPublicAnalysis(id string) (*analyses.Analysis, error) {
 	params := &url.Values{}
 	params.Set("id", id)
 
@@ -95,7 +95,7 @@ func (ic *IonClient) GetPublicAnalysis(id string) (*analysis.Analysis, error) {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}
 
-	var a analysis.Analysis
+	var a analyses.Analysis
 	err = json.Unmarshal(b, &a)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal analysis: %v", err.Error())
@@ -138,7 +138,7 @@ func (ic *IonClient) GetRawAnalyses(teamID, projectID, token string, page *pagin
 // GetLatestAnalysisSummary takes a team ID, project ID, and token. It returns the
 // latest analysis summary for the project. It returns an error for any API
 // issues it encounters.
-func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID, token string) (*analysis.Summary, error) {
+func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID, token string) (*analyses.Summary, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
@@ -148,7 +148,7 @@ func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID, token string) (
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())
 	}
 
-	var a analysis.Summary
+	var a analyses.Summary
 	err = json.Unmarshal(b, &a)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest analysis: %v", err.Error())

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/ion-channel/ionic/aliases"
-	"github.com/ion-channel/ionic/analysis"
+	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/scanner"
@@ -31,7 +31,7 @@ func TestAnalysisReport(t *testing.T) {
 				// Note: Once the scans and other objects no longer have the private
 				// anonymous fields, this can be changed to use a struct literal
 				// initialization of the analysis instead of from json
-				var a analysis.Analysis
+				var a analyses.Analysis
 				json.Unmarshal([]byte(sampleAnalysisPayload), &a)
 				Expect(a.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 
@@ -99,7 +99,7 @@ func TestAnalysisReport(t *testing.T) {
 				// Note: Once the scans and other objects no longer have the private
 				// anonymous fields, this can be changed to use a struct literal
 				// initialization of the analysis instead of from json
-				var a analysis.Analysis
+				var a analyses.Analysis
 				json.Unmarshal([]byte(sampleAnalysisPayload), &a)
 				Expect(a.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 
