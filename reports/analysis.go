@@ -33,6 +33,15 @@ type AnalysisReport struct {
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
 func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
+	if analysis == nil {
+		analysis = &analyses.Analysis{
+			ID:        status.ID,
+			ProjectID: status.ProjectID,
+			TeamID:    status.TeamID,
+			Status:    status.Status,
+		}
+	}
+
 	ar := AnalysisReport{
 		Analysis: analysis,
 		Trigger:  "source commit",
