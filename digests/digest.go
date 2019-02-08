@@ -6,6 +6,7 @@ import (
 	"math"
 	"strings"
 
+	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 )
 
@@ -58,10 +59,10 @@ type percent struct {
 	Percent float64 `json:"percent"`
 }
 
-// NewFromEval takes a title, data type and value to attempt constructing a digest. It
-// returns a digest and any error that it encounters while trying to construct
-// the digest.
-func NewFromEval(index int, title string, dataType string, value interface{}, eval *scans.Evaluation) (*Digest, error) {
+// NewDigest takes a title, data type,value, evaluation, and status to attempt
+// constructing a digest. It returns a digest and any error that it encounters
+// while trying to construct the digest.
+func NewDigest(index int, title string, dataType string, value interface{}, eval *scans.Evaluation, status *scanner.ScanStatus) (*Digest, error) {
 	var data []byte
 	var err error
 
@@ -109,6 +110,14 @@ func NewFromEval(index int, title string, dataType string, value interface{}, ev
 		return nil, fmt.Errorf("failed to marshal digest data: %v", err.Error())
 	}
 
+	var errored bool
+	var erroredMsg string
+
+	if status != nil && strings.ToLower(status.Status) == "errored" {
+		errored = true
+		erroredMsg = status.Message
+	}
+
 	d := &Digest{
 		Index: index,
 		Title: title,
@@ -118,9 +127,12 @@ func NewFromEval(index int, title string, dataType string, value interface{}, ev
 		RuleID:    eval.RuleID,
 		RulesetID: eval.RulesetID,
 
-		Evaluated:     (strings.ToLower(eval.Type) != "not evaluated"),
-		Passed:        eval.Passed,
-		PassedMessage: eval.Description,
+		Evaluated:      (strings.ToLower(eval.Type) != "not evaluated"),
+		Passed:         eval.Passed,
+		PassedMessage:  eval.Description,
+		Pending:        status == nil,
+		Errored:        errored,
+		ErroredMessage: erroredMsg,
 	}
 
 	return d, nil

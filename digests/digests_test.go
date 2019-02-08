@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 
 	"github.com/franela/goblin"
@@ -18,6 +19,10 @@ func TestDigests(t *testing.T) {
 	g.Describe("Digests", func() {
 		g.Describe("Ecosystems", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{
+					Status:  "finished",
+					Message: "completed scan",
+				}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "ecosystems",
@@ -30,10 +35,12 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := ecosystemsDigests(e)
+				ds, err := ecosystemsDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 				Expect(string(ds[0].Data)).To(Equal(`{"list":["C#"]}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 
 			g.It("should return a single dominant language", func() {
@@ -64,6 +71,7 @@ func TestDigests(t *testing.T) {
 
 		g.Describe("Dependencies", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "dependency",
@@ -78,25 +86,34 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := dependencyDigests(e)
+				ds, err := dependencyDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(4))
 				Expect(ds[0].Title).To(Equal("dependencies outdated"))
 				Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 
 				Expect(ds[1].Title).To(Equal("dependency no version specified"))
 				Expect(string(ds[1].Data)).To(Equal(`{"count":1}`))
+				Expect(ds[1].Pending).To(BeFalse())
+				Expect(ds[1].Errored).To(BeFalse())
 
 				Expect(ds[2].Title).To(Equal("direct dependencies"))
 				Expect(string(ds[2].Data)).To(Equal(`{"count":2}`))
+				Expect(ds[2].Pending).To(BeFalse())
+				Expect(ds[2].Errored).To(BeFalse())
 
 				Expect(ds[3].Title).To(Equal("transitive dependencies"))
 				Expect(string(ds[3].Data)).To(Equal(`{"count":113}`))
+				Expect(ds[3].Pending).To(BeFalse())
+				Expect(ds[3].Errored).To(BeFalse())
 			})
 		})
 
 		g.Describe("Vulnerabilities", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 
 				var r scans.VulnerabilityResults
@@ -109,20 +126,25 @@ func TestDigests(t *testing.T) {
 					Data: r,
 				}
 
-				ds, err := vulnerabilityDigests(e)
+				ds, err := vulnerabilityDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(2))
 
 				Expect(ds[0].Title).To(Equal("total vulnerabilities"))
 				Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 
 				Expect(ds[1].Title).To(Equal("unique vulnerability"))
 				Expect(string(ds[1].Data)).To(Equal(`{"count":1}`))
+				Expect(ds[1].Pending).To(BeFalse())
+				Expect(ds[1].Errored).To(BeFalse())
 			})
 		})
 
 		g.Describe("Viruses", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "virus",
@@ -132,18 +154,23 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := virusDigests(e)
+				ds, err := virusDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(2))
 
 				Expect(ds[0].Title).To(Equal("total files scanned"))
 				Expect(string(ds[0].Data)).To(Equal(`{"count":622}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 
 				Expect(ds[1].Title).To(Equal("viruses found"))
 				Expect(string(ds[1].Data)).To(Equal(`{"count":0}`))
+				Expect(ds[1].Pending).To(BeFalse())
+				Expect(ds[1].Errored).To(BeFalse())
 			})
 
 			g.It("should warn when no files are seen", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "virus",
@@ -153,7 +180,7 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := virusDigests(e)
+				ds, err := virusDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(2))
 
@@ -161,9 +188,12 @@ func TestDigests(t *testing.T) {
 				Expect(string(ds[0].Data)).To(Equal(`{"count":0}`))
 				Expect(ds[0].Warning).To(BeTrue())
 				Expect(ds[0].WarningMessage).To(Equal("no files were seen"))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 
 			g.It("should warn when viruses are seen", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "virus",
@@ -173,7 +203,7 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := virusDigests(e)
+				ds, err := virusDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(2))
 
@@ -181,11 +211,14 @@ func TestDigests(t *testing.T) {
 				Expect(string(ds[1].Data)).To(Equal(`{"count":1}`))
 				Expect(ds[1].Warning).To(BeTrue())
 				Expect(ds[1].WarningMessage).To(Equal("infected files were seen"))
+				Expect(ds[1].Pending).To(BeFalse())
+				Expect(ds[1].Errored).To(BeFalse())
 			})
 		})
 
 		g.Describe("Community", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "community",
@@ -194,15 +227,18 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := communityDigests(e)
+				ds, err := communityDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
 				Expect(ds[0].Title).To(Equal("unique committers"))
 				Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 
 			g.It("should warn about single committer repos", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "community",
@@ -211,7 +247,7 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := communityDigests(e)
+				ds, err := communityDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
@@ -219,11 +255,14 @@ func TestDigests(t *testing.T) {
 				Expect(string(ds[0].Data)).To(Equal(`{"count":1}`))
 				Expect(ds[0].Warning).To(BeTrue())
 				Expect(ds[0].WarningMessage).To(Equal("single committer repository"))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 		})
 
 		g.Describe("Licenses", func() {
 			g.It("should produce digests with count when more than one", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "license",
@@ -237,15 +276,18 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := licenseDigests(e)
+				ds, err := licenseDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
 				Expect(ds[0].Title).To(Equal("licenses"))
 				Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 
 			g.It("should produce digests with license name when single", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "license",
@@ -258,15 +300,18 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := licenseDigests(e)
+				ds, err := licenseDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
 				Expect(ds[0].Title).To(Equal("license"))
 				Expect(string(ds[0].Data)).To(Equal(`{"chars":"mit"}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 
 			g.It("should warn when no licenses are found", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "license",
@@ -277,7 +322,7 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := licenseDigests(e)
+				ds, err := licenseDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
@@ -285,11 +330,14 @@ func TestDigests(t *testing.T) {
 				Expect(string(ds[0].Data)).To(Equal(`{"count":0}`))
 				Expect(ds[0].Warning).To(BeTrue())
 				Expect(ds[0].WarningMessage).To(Equal("no licenses found"))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 		})
 
 		g.Describe("Coverage", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "coverage",
@@ -298,17 +346,20 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := coveragDigests(e)
+				ds, err := coveragDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
 				Expect(ds[0].Title).To(Equal("code coverage"))
 				Expect(string(ds[0].Data)).To(Equal(`{"percent":93.88}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 		})
 
 		g.Describe("About YML", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "about_yml",
@@ -317,17 +368,20 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := aboutYMLDigests(e)
+				ds, err := aboutYMLDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
 				Expect(ds[0].Title).To(Equal("valid about yaml"))
 				Expect(string(ds[0].Data)).To(Equal(`{"bool":true}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 		})
 
 		g.Describe("Difference", func() {
 			g.It("should produce digests", func() {
+				s := &scanner.ScanStatus{}
 				e := scans.NewEval()
 				e.TranslatedResults = &scans.TranslatedResults{
 					Type: "difference",
@@ -336,12 +390,14 @@ func TestDigests(t *testing.T) {
 					},
 				}
 
-				ds, err := differenceDigests(e)
+				ds, err := differenceDigests(e, s)
 				Expect(err).To(BeNil())
 				Expect(len(ds)).To(Equal(1))
 
 				Expect(ds[0].Title).To(Equal("difference detected"))
 				Expect(string(ds[0].Data)).To(Equal(`{"bool":true}`))
+				Expect(ds[0].Pending).To(BeFalse())
+				Expect(ds[0].Errored).To(BeFalse())
 			})
 		})
 	})
