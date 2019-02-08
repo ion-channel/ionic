@@ -70,7 +70,7 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 		ar.ScanSummaries = appliedRuleset.RuleEvaluationSummary.Ruleresults
 		ar.Evaluations = appliedRuleset.RuleEvaluationSummary.Ruleresults
 
-		ds, err := digests.NewDigests(appliedRuleset)
+		ds, err := digests.NewDigests(appliedRuleset, status.ScanStatus)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get digests: %v", err.Error())
 		}
