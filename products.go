@@ -11,7 +11,7 @@ import (
 
 const (
 	getProductEndpoint    = "v1/vulnerability/getProducts"
-	productSearchEndpoint = "v1/product/search2"
+	productSearchEndpoint = "v1/product/search"
 )
 
 // GetProducts takes a product ID search string and token.  It returns the product found,
