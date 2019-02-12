@@ -54,7 +54,7 @@ func TestProducts(t *testing.T) {
 		})
 
 		g.It("should search for a product", func() {
-			server.AddPath("/v1/product/search2").
+			server.AddPath("/v1/product/search").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
@@ -69,7 +69,7 @@ func TestProducts(t *testing.T) {
 			Expect(products[0].ID).To(Equal(39862))
 		})
 		g.It("should omit version from product search when it is not given", func() {
-			server.AddPath("/v1/product/search2").
+			server.AddPath("/v1/product/search").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
