@@ -44,7 +44,7 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 			}
 		}
 
-		d, err := _newDigests(e, &s)
+		d, err := _newDigests(&s, e)
 		if err != nil {
 			errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
 			continue
@@ -62,41 +62,43 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 	return ds, nil
 }
 
-func _newDigests(eval *scans.Evaluation, status *scanner.ScanStatus) ([]Digest, error) {
-	err := eval.Translate()
-	if err != nil {
-		return nil, fmt.Errorf("evaluation translate error: %v", err.Error())
+func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
+	if eval != nil {
+		err := eval.Translate()
+		if err != nil {
+			return nil, fmt.Errorf("evaluation translate error: %v", err.Error())
+		}
 	}
 
-	switch strings.ToLower(eval.TranslatedResults.Type) {
+	switch strings.ToLower(status.Name) {
 	case "ecosystems":
-		return ecosystemsDigests(eval, status)
+		return ecosystemsDigests(status, eval)
 
 	case "dependency":
-		return dependencyDigests(eval, status)
+		return dependencyDigests(status, eval)
 
 	case "vulnerability":
-		return vulnerabilityDigests(eval, status)
+		return vulnerabilityDigests(status, eval)
 
 	case "virus":
-		return virusDigests(eval, status)
+		return virusDigests(status, eval)
 
 	case "community":
-		return communityDigests(eval, status)
+		return communityDigests(status, eval)
 
 	case "license":
-		return licenseDigests(eval, status)
+		return licenseDigests(status, eval)
 
 	case "coverage":
-		return coveragDigests(eval, status)
+		return coveragDigests(status, eval)
 
 	case "about_yml":
-		return aboutYMLDigests(eval, status)
+		return aboutYMLDigests(status, eval)
 
 	case "difference":
-		return differenceDigests(eval, status)
+		return differenceDigests(status, eval)
 
 	default:
-		return nil, fmt.Errorf("Couldn't figure out how to map '%v' to a digest", eval.TranslatedResults.Type)
+		return nil, fmt.Errorf("Couldn't figure out how to map '%v' to a digest", status.Name)
 	}
 }

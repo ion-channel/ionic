@@ -7,7 +7,7 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-func communityDigests(eval *scans.Evaluation, status *scanner.ScanStatus) ([]Digest, error) {
+func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
 	d := NewDigest(status, uniqueCommittersIndex, "unique committer", "unique committers")

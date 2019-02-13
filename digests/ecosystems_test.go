@@ -33,7 +33,7 @@ func TestEcosystemsDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := ecosystemsDigests(e, s)
+			ds, err := ecosystemsDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 			Expect(string(ds[0].Data)).To(Equal(`{"list":["C#"]}`))

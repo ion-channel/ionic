@@ -7,7 +7,7 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-func aboutYMLDigests(eval *scans.Evaluation, status *scanner.ScanStatus) ([]Digest, error) {
+func aboutYMLDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
 	d := NewDigest(status, aboutYMLIndex, "valid about yaml", "valid about yaml")

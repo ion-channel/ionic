@@ -31,7 +31,7 @@ func TestDependenciesDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := dependencyDigests(e, s)
+			ds, err := dependencyDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(4))
 			Expect(ds[0].Title).To(Equal("dependencies outdated"))

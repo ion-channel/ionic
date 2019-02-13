@@ -7,7 +7,7 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-func coveragDigests(eval *scans.Evaluation, status *scanner.ScanStatus) ([]Digest, error) {
+func coveragDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
 	d := NewDigest(status, codeCoverageIndex, "code coverage", "code coverage")

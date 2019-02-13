@@ -30,7 +30,7 @@ func TestLicensesDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := licenseDigests(e, s)
+			ds, err := licenseDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 
@@ -52,7 +52,7 @@ func TestLicensesDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := licenseDigests(e, s)
+			ds, err := licenseDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 

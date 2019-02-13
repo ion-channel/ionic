@@ -7,7 +7,7 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-func virusDigests(eval *scans.Evaluation, status *scanner.ScanStatus) ([]Digest, error) {
+func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
 	var scannedFiles, infectedFiles int

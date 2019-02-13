@@ -26,7 +26,7 @@ func TestVirusesDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := virusDigests(e, s)
+			ds, err := virusDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 
@@ -52,7 +52,7 @@ func TestVirusesDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := virusDigests(e, s)
+			ds, err := virusDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 
@@ -75,7 +75,7 @@ func TestVirusesDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := virusDigests(e, s)
+			ds, err := virusDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 

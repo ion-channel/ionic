@@ -30,7 +30,7 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 				Data: r,
 			}
 
-			ds, err := vulnerabilityDigests(e, s)
+			ds, err := vulnerabilityDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 

@@ -25,7 +25,7 @@ func TestCommunityDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := communityDigests(e, s)
+			ds, err := communityDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 
@@ -45,7 +45,7 @@ func TestCommunityDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := communityDigests(e, s)
+			ds, err := communityDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 

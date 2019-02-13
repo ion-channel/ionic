@@ -25,7 +25,7 @@ func TestDifferencesDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := differenceDigests(e, s)
+			ds, err := differenceDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 

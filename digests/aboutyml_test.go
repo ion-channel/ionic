@@ -25,7 +25,7 @@ func TestAboutYMLDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := aboutYMLDigests(e, s)
+			ds, err := aboutYMLDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 
