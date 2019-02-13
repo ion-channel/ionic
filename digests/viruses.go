@@ -10,22 +10,28 @@ import (
 func virusDigests(eval *scans.Evaluation, status *scanner.ScanStatus) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
-	d := NewDigest(status, filesScannedIndex, "total file scanned", "total files scanned")
-
+	var scannedFiles, infectedFiles int
 	if eval != nil {
 		b, ok := eval.TranslatedResults.Data.(scans.VirusResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into virus")
 		}
 
-		err := d.AppendEval(eval, "count", b.ScannedFiles)
+		scannedFiles = b.ScannedFiles
+		infectedFiles = b.InfectedFiles
+	}
+
+	d := NewDigest(status, filesScannedIndex, "total file scanned", "total files scanned")
+
+	if eval != nil {
+		err := d.AppendEval(eval, "count", scannedFiles)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create total files scanned digest: %v", err.Error())
 		}
 
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 
-		if b.ScannedFiles < 1 {
+		if scannedFiles < 1 {
 			d.Warning = true
 			d.WarningMessage = "no files were seen"
 		}
@@ -36,23 +42,14 @@ func virusDigests(eval *scans.Evaluation, status *scanner.ScanStatus) ([]Digest,
 	d = NewDigest(status, virusFoundIndex, "virus found", "viruses found")
 
 	if eval != nil {
-		b, ok := eval.TranslatedResults.Data.(scans.VirusResults)
-		if !ok {
-			return nil, fmt.Errorf("error coercing evaluation translated results into virus")
-		}
-
-		err := d.AppendEval(eval, "count", b.InfectedFiles)
+		err := d.AppendEval(eval, "count", infectedFiles)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create total files scanned digest: %v", err.Error())
 		}
 
-		if b.InfectedFiles > 0 {
+		if infectedFiles > 0 {
 			d.Warning = true
 			d.WarningMessage = "infected files were seen"
-
-			if b.InfectedFiles == 1 {
-				d.WarningMessage = "infected files were seen"
-			}
 		}
 	}
 
