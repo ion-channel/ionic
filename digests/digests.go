@@ -89,7 +89,7 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 	case "license":
 		return licenseDigests(status, eval)
 
-	case "coverage":
+	case "external_coverage", "code_coverage", "coverage":
 		return coveragDigests(status, eval)
 
 	case "about_yml":
