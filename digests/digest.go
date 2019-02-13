@@ -62,9 +62,13 @@ type percent struct {
 	Percent float64 `json:"percent"`
 }
 
-// NewDigest takes a title, data type,value, evaluation, and status to attempt
-// constructing a digest. It returns a digest and any error that it encounters
-// while trying to construct the digest.
+// NewDigest takes a scan status, ordering index, and a singular and plural
+// version of the digest title. The status is leveraged to determine the first
+// levels of a digest status. The index provides an ordered location if a list
+// of Digests are sorted. The singular and plural titles are used to display as
+// singular title if data is added that warrants a singular title, and otherwise
+// will favor a plural title. A newly constructed Digest with the appropriate
+// settings is returned.
 func NewDigest(status *scanner.ScanStatus, index int, singular, plural string) *Digest {
 	var errored bool
 	var erroredMsg string
