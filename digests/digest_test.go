@@ -16,48 +16,6 @@ func TestDigest(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Digest", func() {
-		g.Describe("Constructor", func() {
-			g.It("should return an error for an unsupported digest type", func() {
-				s := &scanner.ScanStatus{}
-				e := scans.NewEval()
-				ds, err := NewDigest(0, "A title", "badtype", 10, e, s)
-				Expect(err).To(Equal(ErrUnsupportedType))
-				Expect(ds).To(BeNil())
-			})
-
-			g.It("should return an error when the value doesn't match the type", func() {
-				s := &scanner.ScanStatus{}
-				e := scans.NewEval()
-				ds, err := NewDigest(0, "Another title", "bool", "not a bool", e, s)
-				Expect(err).To(Equal(ErrFailedValueAssertion))
-				Expect(ds).To(BeNil())
-
-				s = &scanner.ScanStatus{}
-				e = scans.NewEval()
-				ds, err = NewDigest(1, "Another title", "count", "not a count", e, s)
-				Expect(err).To(Equal(ErrFailedValueAssertion))
-				Expect(ds).To(BeNil())
-
-				s = &scanner.ScanStatus{}
-				e = scans.NewEval()
-				ds, err = NewDigest(2, "Another title", "list", "not a list", e, s)
-				Expect(err).To(Equal(ErrFailedValueAssertion))
-				Expect(ds).To(BeNil())
-
-				s = &scanner.ScanStatus{}
-				e = scans.NewEval()
-				ds, err = NewDigest(3, "Another title", "percent", "not a percent", e, s)
-				Expect(err).To(Equal(ErrFailedValueAssertion))
-				Expect(ds).To(BeNil())
-
-				s = &scanner.ScanStatus{}
-				e = scans.NewEval()
-				ds, err = NewDigest(3, "Another title", "chars", true, e, s)
-				Expect(err).To(Equal(ErrFailedValueAssertion))
-				Expect(ds).To(BeNil())
-			})
-		})
-
 		g.Describe("Sorting", func() {
 			g.It("should be sortable by index", func() {
 				ds := []Digest{
@@ -83,11 +41,10 @@ func TestDigest(t *testing.T) {
 
 		g.Describe("States", func() {
 			g.It("should be marked as pending when no status is provided", func() {
-				e := scans.NewEval()
-				ds, err := NewDigest(0, "Another title", "chars", "some thing", e, nil)
-				Expect(err).To(BeNil())
+				ds := NewDigest(nil, 0, "", "")
 				Expect(ds).NotTo(BeNil())
 				Expect(ds.Pending).To(BeTrue())
+				Expect(ds.Errored).To(BeFalse())
 			})
 
 			g.It("should show an error if present", func() {
@@ -95,9 +52,7 @@ func TestDigest(t *testing.T) {
 					Status:  "errored",
 					Message: "failed to perform the scan for a reason",
 				}
-				e := scans.NewEval()
-				ds, err := NewDigest(0, "Another title", "chars", "some thing", e, s)
-				Expect(err).To(BeNil())
+				ds := NewDigest(s, 0, "", "")
 				Expect(ds).NotTo(BeNil())
 				Expect(ds.Pending).To(BeFalse())
 				Expect(ds.Errored).To(BeTrue())
@@ -107,13 +62,119 @@ func TestDigest(t *testing.T) {
 					Status:  "finished",
 					Message: "completed scan",
 				}
-				e = scans.NewEval()
-				ds, err = NewDigest(0, "Another title", "chars", "some thing", e, s)
-				Expect(err).To(BeNil())
+				ds = NewDigest(s, 0, "", "")
 				Expect(ds).NotTo(BeNil())
 				Expect(ds.Pending).To(BeFalse())
 				Expect(ds.Errored).To(BeFalse())
 				Expect(ds.ErroredMessage).To(Equal(""))
+			})
+		})
+
+		g.Describe("Pluralization", func() {
+			g.It("should return a singular title when appropriate", func() {
+				ds := Digest{
+					singularTitle: "vulnerability",
+					pluralTitle:   "vulnerabilities",
+				}
+				e := scans.NewEval()
+
+				err := ds.AppendEval(e, "count", 1)
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerability"))
+
+				err = ds.AppendEval(e, "list", []string{"something"})
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerability"))
+
+				err = ds.AppendEval(e, "chars", "true")
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+
+				err = ds.AppendEval(e, "bool", true)
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+
+				err = ds.AppendEval(e, "percent", float64(10))
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+			})
+
+			g.It("should return a plural title when appropriate", func() {
+				ds := Digest{
+					singularTitle: "vulnerability",
+					pluralTitle:   "vulnerabilities",
+				}
+				e := scans.NewEval()
+
+				err := ds.AppendEval(e, "count", 10)
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+
+				err = ds.AppendEval(e, "list", []string{"something", "another"})
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+
+				err = ds.AppendEval(e, "chars", "true")
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+
+				err = ds.AppendEval(e, "bool", true)
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+
+				err = ds.AppendEval(e, "percent", float64(10))
+				Expect(err).To(BeNil())
+				Expect(ds.Title).To(Equal("vulnerabilities"))
+			})
+		})
+
+		g.Describe("Evaluation", func() {
+			g.It("should return an error for an unsupported digest type", func() {
+				ds := Digest{}
+				e := scans.NewEval()
+
+				err := ds.AppendEval(e, "badtype", 10)
+				Expect(err).To(Equal(ErrUnsupportedType))
+			})
+
+			g.It("should return an error when the value doesn't match the type", func() {
+				ds := Digest{}
+				e := scans.NewEval()
+
+				err := ds.AppendEval(e, "bool", "not a bool")
+				Expect(err).To(Equal(ErrFailedValueAssertion))
+
+				err = ds.AppendEval(e, "count", "not a count")
+				Expect(err).To(Equal(ErrFailedValueAssertion))
+
+				err = ds.AppendEval(e, "list", "not a list")
+				Expect(err).To(Equal(ErrFailedValueAssertion))
+
+				err = ds.AppendEval(e, "percent", "not a percent")
+				Expect(err).To(Equal(ErrFailedValueAssertion))
+
+				err = ds.AppendEval(e, "chars", true)
+				Expect(err).To(Equal(ErrFailedValueAssertion))
+			})
+
+			g.It("should append added evaluation info", func() {
+				ds := &Digest{}
+				e := scans.NewEval()
+
+				e.ID = "someevalid"
+				e.RuleID = "someruleid"
+				e.RulesetID = "somerulesetid"
+				e.Type = "someeval"
+				e.Passed = true
+				e.Description = "we evaluated a thing"
+
+				err := ds.AppendEval(e, "count", 10)
+				Expect(err).To(BeNil())
+				Expect(ds.ScanID).To(Equal("someevalid"))
+				Expect(ds.RuleID).To(Equal("someruleid"))
+				Expect(ds.RulesetID).To(Equal("somerulesetid"))
+				Expect(ds.Evaluated).To(BeTrue())
+				Expect(ds.Passed).To(BeTrue())
 			})
 		})
 	})
