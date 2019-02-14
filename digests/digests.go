@@ -37,10 +37,12 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 		s := statuses[i]
 
 		var e *scans.Evaluation
-		for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
-			if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
-				e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
-				break
+		if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
+			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
+				if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
+					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
+					break
+				}
 			}
 		}
 
