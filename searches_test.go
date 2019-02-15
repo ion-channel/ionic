@@ -38,12 +38,11 @@ func TestSearches(t *testing.T) {
 			Expect(hitRecords[0].Query.Get("q")).To(Equal("query"))
 			Expect(hitRecords[0].Header.Get("Authorization")).To(Equal("Bearer sometoken"))
 
-			Expect(searchResults[0].Product.Name).To(Equal("jdk"))
-			Expect(searchResults[1].Github.CommitterCount).To(Equal(uint(31337)))
+			Expect(searchResults[0].Name).To(Equal("jdk"))
 		})
 	})
 }
 
 const (
-	sampleValidProdIDSearch = `{"data": [{"product": {"name": "jdk", "language": "", "title": "IBM Jdk 1.4.2", "created_at": "2017-02-13T20:02:38.33Z", "up": "", "updated_at": "2017-02-13T20:02:38.33Z", "edition": "", "version": "1.4.2", "references": [], "source": null, "org": "ibm", "part": "/a", "external_id": "cpe:/a:ibm:jdk:1.4.2", "id": 52994, "aliases": null}, "github": {"committer_count": 31337, "uri": "https://github.com/ibm/jdk"}}, {"product": {"name": "jdk", "language": "", "title": "IBM Jdk 5.0", "created_at": "2017-02-13T20:02:38.33Z", "up": "", "updated_at": "2017-02-13T20:02:38.33Z", "edition": "", "version": "5.0", "references": [], "source": null, "org": "ibm", "part": "/a", "external_id": "cpe:/a:ibm:jdk:5.0", "id": 52995, "aliases": null}, "github": {"committer_count": 31337, "uri": "https://github.com/ibm/jdk"}}], "meta": { "authors": [ "Ion Channel Dev Team" ], "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net", "offset": 0, "total_count": 2, "version": "v1"}}`
+	sampleValidProdIDSearch = `{"data": [{"name": "jdk", "language": "", "title": "IBM Jdk 1.4.2", "created_at": "2017-02-13T20:02:38.33Z", "up": "", "updated_at": "2017-02-13T20:02:38.33Z", "edition": "", "version": "1.4.2", "references": [], "source": null, "org": "ibm", "part": "/a", "external_id": "cpe:/a:ibm:jdk:1.4.2", "id": 52994, "aliases": null}, "github": {"committer_count": 31337, "uri": "https://github.com/ibm/jdk"}, {"name": "jdk", "language": "", "title": "IBM Jdk 5.0", "created_at": "2017-02-13T20:02:38.33Z", "up": "", "updated_at": "2017-02-13T20:02:38.33Z", "edition": "", "version": "5.0", "references": [], "source": null, "org": "ibm", "part": "/a", "external_id": "cpe:/a:ibm:jdk:5.0", "id": 52995, "aliases": null}], "meta": { "authors": [ "Ion Channel Dev Team" ], "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net", "offset": 0, "total_count": 2, "version": "v1"}}`
 )
