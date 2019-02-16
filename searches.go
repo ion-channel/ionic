@@ -9,48 +9,26 @@ import (
 )
 
 const (
-	searchByProductIdentifiersEndpoint = "v1/search/productidentifiers"
-	searchByRepositoriesEndpoint       = "v1/search/repositories"
+	searchEndpoint = "v1/search"
 )
 
-// GetSearchProductIdentifiers takes a product identifier, version and vendor to perform
+// GetSearch takes a query to perform
 // a productidentifier search against the Ion API, assembling a slice of Ionic
 // products.ProductSearchResponse objects
-func (ic *IonClient) GetSearchProductIdentifiers(productIdentifer, version, vendor, token string) ([]products.SoftwareEntity, error) {
+func (ic *IonClient) GetSearch(query, token string) ([]products.Product, error) {
 	params := &url.Values{}
-	params.Set("productidentifiers", productIdentifer)
-	params.Set("vendor", vendor)
-	params.Set("version", version)
+	params.Set("q", query)
 
-	b, err := ic.Get(searchByProductIdentifiersEndpoint, token, params, nil, nil)
+	b, err := ic.Get(searchEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get productidentifiers search: %v", err.Error())
 	}
 
-	var results []products.SoftwareEntity
+	var results []products.Product
 	err = json.Unmarshal(b, &results)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal product search results: %v", err.Error())
 	}
 
-	return results, nil
-}
-
-// GetSearchRepositories takes a repository string and performs
-// a repository search against the Ion API, assembling a slice of Ionic
-// products.ProductSearchResponse objects
-func (ic *IonClient) GetSearchRepositories(repo, token string) ([]products.SoftwareEntity, error) {
-	params := &url.Values{}
-	params.Set("github", repo)
-
-	b, err := ic.Get(searchByRepositoriesEndpoint, token, params, nil, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get repo search: %v", err.Error())
-	}
-	var results []products.SoftwareEntity
-	err = json.Unmarshal(b, &results)
-	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal repo search results: %v", err.Error())
-	}
 	return results, nil
 }
