@@ -10,6 +10,7 @@ import (
 // Analysis is a representation of an Ion Channel Analysis within the system
 type Analysis struct {
 	ID            string       `json:"id" xml:"id"`
+	LatestID      string       `json:"latest_id" xml:"latest_id"`
 	TeamID        string       `json:"team_id" xml:"team_id"`
 	ProjectID     string       `json:"project_id" xml:"project_id"`
 	BuildNumber   int64        `json:"build_number" xml:"build_number"`
