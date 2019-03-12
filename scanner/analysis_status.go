@@ -25,17 +25,16 @@ const (
 
 // AnalysisStatus is a representation of an Ion Channel Analysis Status within the system
 type AnalysisStatus struct {
-	ID          string       `json:"id"`
-	TeamID      string       `json:"team_id"`
-	ProjectID   string       `json:"project_id"`
-	BuildNumber string       `json:"build_number"`
-	Message     string       `json:"message"`
-	Branch      string       `json:"branch"`
-	Status      string       `json:"status"`
-	CreatedAt   time.Time    `json:"created_at"`
-	UpdatedAt   time.Time    `json:"updated_at"`
-	ScanStatus  []ScanStatus `json:"scan_status"`
-	Deliveries  []Delivery   `json:"deliveries"`
+	ID         string       `json:"id"`
+	TeamID     string       `json:"team_id"`
+	ProjectID  string       `json:"project_id"`
+	Message    string       `json:"message"`
+	Branch     string       `json:"branch"`
+	Status     string       `json:"status"`
+	CreatedAt  time.Time    `json:"created_at"`
+	UpdatedAt  time.Time    `json:"updated_at"`
+	ScanStatus []ScanStatus `json:"scan_status"`
+	Deliveries []Delivery   `json:"deliveries"`
 }
 
 // Done indicates an analyse has stopped processing

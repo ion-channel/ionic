@@ -12,7 +12,6 @@ type Analysis struct {
 	ID            string       `json:"id" xml:"id"`
 	TeamID        string       `json:"team_id" xml:"team_id"`
 	ProjectID     string       `json:"project_id" xml:"project_id"`
-	BuildNumber   int64        `json:"build_number" xml:"build_number"`
 	Name          string       `json:"name" xml:"name"`
 	Text          *string      `json:"text" xml:"text"`
 	Type          string       `json:"type" xml:"type"`
@@ -37,7 +36,6 @@ type Summary struct {
 	ID            string    `json:"id"`
 	AnalysisID    string    `json:"analysis_id"`
 	TeamID        string    `json:"team_id"`
-	BuildNumber   int64     `json:"build_number"`
 	Branch        string    `json:"branch"`
 	Description   string    `json:"description"`
 	Risk          string    `json:"risk"`
@@ -73,7 +71,6 @@ func NewSummary(a *Analysis, appliedRuleset *rulesets.AppliedRulesetSummary) *Su
 			ID:            a.ID,
 			AnalysisID:    a.ID,
 			TeamID:        a.TeamID,
-			BuildNumber:   a.BuildNumber,
 			Branch:        a.Branch,
 			Description:   a.Description,
 			Risk:          risk,
