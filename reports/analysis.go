@@ -18,17 +18,26 @@ import (
 // given analysis
 type AnalysisReport struct {
 	*analyses.Analysis
-	Statuses      *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
-	RulesetName   string                  `json:"ruleset_name" xml:"ruleset_name"`
-	Passed        bool                    `json:"passed" xml:"passed"`
-	Aliases       []aliases.Alias         `json:"aliases"`
-	Tags          []tags.Tag              `json:"tags"`
-	Trigger       string                  `json:"trigger" xml:"trigger"`
-	Risk          string                  `json:"risk" xml:"risk"`
-	Summary       string                  `json:"summary" xml:"summary"`
-	ScanSummaries []scans.Evaluation      `json:"scan_summaries" xml:"scan_summaries"`
-	Evaluations   []scans.Evaluation      `json:"evaluations" xml:"evaluations"`
-	Digests       []digests.Digest        `json:"digests" xml:"digests"`
+	Trigger  string                  `json:"trigger" xml:"trigger"`
+	Statuses *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
+	Summary  string                  `json:"summary" xml:"summary"`
+	Digests  []digests.Digest        `json:"digests" xml:"digests"`
+
+	// Evaluation Details
+	RulesetName   string             `json:"ruleset_name" xml:"ruleset_name"`
+	Passed        bool               `json:"passed" xml:"passed"`
+	Risk          string             `json:"risk" xml:"risk"`
+	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
+	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
+
+	// Project Details
+	Active   bool            `json:"active"`
+	Monitor  bool            `json:"should_monitor"`
+	Private  bool            `json:"private"`
+	POCName  string          `json:"poc_name"`
+	POCEmail string          `json:"poc_email"`
+	Aliases  []aliases.Alias `json:"aliases"`
+	Tags     []tags.Tag      `json:"tags"`
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
@@ -50,6 +59,11 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 	}
 
 	// Project Details
+	ar.Active = project.Active
+	ar.Monitor = project.Monitor
+	ar.Private = project.Private
+	ar.POCName = project.POCName
+	ar.POCEmail = project.POCEmail
 	ar.Aliases = project.Aliases
 	ar.Tags = project.Tags
 
