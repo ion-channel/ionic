@@ -48,20 +48,20 @@ func TestCommunity(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(sampleValidSearchRepoResponse)).
 				SetStatus(http.StatusOK)
-			searchResults, err := client.SearchRepo("monsooncommerce", "gstats", "blaToken")
+			searchResults, err := client.SearchRepo("monsooncommerce", "blaToken")
 			Expect(err).NotTo(HaveOccurred())
 
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
 			Expect(hitRecords[0].Header.Get("Authorization")).To(Equal("Bearer blaToken"))
-			Expect(hitRecords[0].Query.Get("org")).To(Equal("monsooncommerce"))
-			Expect(hitRecords[0].Query.Get("project")).To(Equal("gstats"))
+			Expect(hitRecords[0].Query.Get("q")).To(Equal("monsooncommerce"))
 
 			Expect(searchResults).NotTo(BeNil())
 			Expect(searchResults).To(HaveLen(1))
 			Expect(searchResults[0].Name).To(Equal("monsooncommerce/gstats"))
 			Expect(searchResults[0].URL).To(Equal("https://github.com/monsooncommerce/gstats"))
 			Expect(searchResults[0].Committers).To(Equal(2))
+			Expect(searchResults[0].Confidence).To(Equal(0.99999))
 
 		})
 	})
@@ -69,5 +69,5 @@ func TestCommunity(t *testing.T) {
 
 const (
 	sampleValidGetRepoResponse    = `{"data":{"name":"monsooncommerce/gstats","url":"https://github.com/monsooncommerce/gstats","committers":2},"meta":{"copyright":"","authors":null,"version":"","last_update":"0001-01-01T00:00:00Z","total_count":1}}`
-	sampleValidSearchRepoResponse = `{"meta": {"total_count": 1, "version": "", "last_update": "0001-01-01T00:00:00Z", "copyright": "", "authors": null}, "data": [{"url": "https://github.com/monsooncommerce/gstats", "committers": 2, "name": "monsooncommerce/gstats"}]}`
+	sampleValidSearchRepoResponse = `{"meta": {"total_count": 1, "version": "", "last_update": "0001-01-01T00:00:00Z", "copyright": "", "authors": null}, "data": [{"confidence":0.99999, "url": "https://github.com/monsooncommerce/gstats", "committers": 2, "name": "monsooncommerce/gstats"}]}`
 )
