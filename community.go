@@ -31,7 +31,7 @@ func (ic *IonClient) GetRepo(repo, token string) (*community.Repo, error) {
 	return &resultRepo, nil
 }
 
-// SearchRepo takes an organization name (org) and a project name (project) and
+// SearchRepo takes a query `org AND name` and
 // calls the Ion API to retrieve the information, then forms a slice of
 // Ionic community.Repo objects
 func (ic *IonClient) SearchRepo(q, token string) ([]community.Repo, error) {
