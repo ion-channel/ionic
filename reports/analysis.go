@@ -20,7 +20,6 @@ type AnalysisReport struct {
 	*analyses.Analysis
 	Trigger  string                  `json:"trigger" xml:"trigger"`
 	Statuses *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
-	Summary  string                  `json:"summary" xml:"summary"`
 	Digests  []digests.Digest        `json:"digests" xml:"digests"`
 
 	// Evaluation Details
