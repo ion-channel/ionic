@@ -18,7 +18,6 @@ import (
 // given analysis
 type AnalysisReport struct {
 	*analyses.Analysis
-	Trigger  string                  `json:"trigger" xml:"trigger"`
 	Statuses *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
 	Digests  []digests.Digest        `json:"digests" xml:"digests"`
 
@@ -52,7 +51,6 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 
 	ar := AnalysisReport{
 		Analysis: analysis,
-		Trigger:  "source commit",
 		Risk:     "high",
 		Statuses: status,
 	}
