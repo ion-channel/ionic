@@ -1,6 +1,7 @@
 package rulesets
 
 import (
+	"strings"
 	"time"
 
 	"github.com/ion-channel/ionic/scans"
@@ -15,6 +16,17 @@ type AppliedRulesetSummary struct {
 	RuleEvaluationSummary *RuleEvaluationSummary `json:"rule_evaluation_summary"`
 	CreatedAt             time.Time              `json:"created_at"`
 	UpdatedAt             time.Time              `json:"updated_at"`
+}
+
+// SummarizeEvaluation returns the calculated risk and passing values for the
+// AppliedRulsetSummary. Only if the RuleEvalutionSummary has passed, will it
+// return low risk and passing.
+func (ar *AppliedRulesetSummary) SummarizeEvaluation() (string, bool) {
+	if ar.RuleEvaluationSummary != nil && strings.ToLower(ar.RuleEvaluationSummary.Summary) == "pass" {
+		return "low", true
+	}
+
+	return "high", false
 }
 
 // RuleEvaluationSummary represents the ruleset and the scans that were
