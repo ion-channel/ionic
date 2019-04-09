@@ -2,7 +2,6 @@ package reports
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/analyses"
@@ -17,17 +16,10 @@ import (
 // AnalysisReport is a Ion Channel representation of a report output from a
 // given analysis
 type AnalysisReport struct {
+	// Retire anonymous analysis field once the UI is no longer using this
 	*analyses.Analysis
-	Statuses *scanner.AnalysisStatus `json:"statuses" xml:"statuses"`
-	Digests  []digests.Digest        `json:"digests" xml:"digests"`
 
-	// Evaluation Details
-	RulesetName   string             `json:"ruleset_name" xml:"ruleset_name"`
-	Passed        bool               `json:"passed" xml:"passed"`
-	Risk          string             `json:"risk" xml:"risk"`
-	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
-	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
-
+	// Retire the project details once the UI is no longer using this
 	// Project Details
 	Active   bool            `json:"active"`
 	Monitor  bool            `json:"should_monitor"`
@@ -36,6 +28,21 @@ type AnalysisReport struct {
 	POCEmail string          `json:"poc_email"`
 	Aliases  []aliases.Alias `json:"aliases"`
 	Tags     []tags.Tag      `json:"tags"`
+
+	// Retire the evaluation details once the UI is no longer using this
+	// Evaluation Details
+	RulesetName   string             `json:"ruleset_name" xml:"ruleset_name"`
+	Passed        bool               `json:"passed" xml:"passed"`
+	Risk          string             `json:"risk" xml:"risk"`
+	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
+	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
+
+	// Rename field name to `Analysis` once the UI is using the new field
+	NewAnalysis       *analyses.Analysis              `json:"analysis" xml:"analysis"`
+	Project           *projects.Project               `json:"project" xml:"project"`
+	Statuses          *scanner.AnalysisStatus         `json:"statuses" xml:"statuses"`
+	Digests           []digests.Digest                `json:"digests" xml:"digests"`
+	RulesetEvaluation *rulesets.AppliedRulesetSummary `json:"ruleset_evaluation" xml:"ruleset_evaluation"`
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
@@ -49,10 +56,25 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 		}
 	}
 
+	ds, err := digests.NewDigests(appliedRuleset, status.ScanStatus)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get digests: %v", err.Error())
+	}
+
+	if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
+		for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
+			appliedRuleset.RuleEvaluationSummary.Ruleresults[i].Translate()
+		}
+	}
+
 	ar := AnalysisReport{
 		Analysis: analysis,
-		Risk:     "high",
-		Statuses: status,
+
+		NewAnalysis:       analysis,
+		Project:           project,
+		Statuses:          status,
+		Digests:           ds,
+		RulesetEvaluation: appliedRuleset,
 	}
 
 	// Project Details
@@ -67,27 +89,13 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 	// RulesetEval Details
 	if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
 		ar.RulesetName = appliedRuleset.RuleEvaluationSummary.RulesetName
-
-		if strings.ToLower(appliedRuleset.RuleEvaluationSummary.Summary) == "pass" {
-			ar.Risk = "low"
-			ar.Passed = true
-		}
-
-		for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
-			appliedRuleset.RuleEvaluationSummary.Ruleresults[i].Translate()
-		}
+		ar.Risk = appliedRuleset.RuleEvaluationSummary.Risk
+		ar.Passed = appliedRuleset.RuleEvaluationSummary.Passed
 
 		// TODO: Remove ScanSummaries field
 		ar.ScanSummaries = appliedRuleset.RuleEvaluationSummary.Ruleresults
 		ar.Evaluations = appliedRuleset.RuleEvaluationSummary.Ruleresults
 	}
-
-	ds, err := digests.NewDigests(appliedRuleset, status.ScanStatus)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get digests: %v", err.Error())
-	}
-
-	ar.Digests = ds
 
 	return &ar, nil
 }

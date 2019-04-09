@@ -55,6 +55,8 @@ func TestAnalysisReport(t *testing.T) {
 					RuleEvaluationSummary: &rulesets.RuleEvaluationSummary{
 						RulesetName: "super cool ruleset",
 						Summary:     "pass",
+						Risk:        "low",
+						Passed:      true,
 						Ruleresults: []scans.Evaluation{eval},
 					},
 				}
@@ -123,6 +125,8 @@ func TestAnalysisReport(t *testing.T) {
 					RuleEvaluationSummary: &rulesets.RuleEvaluationSummary{
 						RulesetName: "super cool ruleset",
 						Summary:     "pass",
+						Risk:        "low",
+						Passed:      true,
 						Ruleresults: []scans.Evaluation{eval},
 					},
 				}
