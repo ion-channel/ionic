@@ -16,10 +16,6 @@ const (
 	DeliveryCanceled = "delivery_canceled"
 )
 
-// Deliveries represents a key value pair set of what was delivered to the
-// delivery status
-type Deliveries map[string]DeliveryStatus
-
 // Delivery represents the delivery information of a singular artifact
 // associated with an analysis status
 type DeliveryStatus struct {
