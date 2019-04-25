@@ -82,7 +82,7 @@ func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID, token stri
 	return &a, nil
 }
 
-//GetLatestAnalysisStatus takes an analysisID, teamID, and projectID and returns the latest analysis status or an error encountered by the API
+//GetLatestAnalysisStatus takes a teamID, and projectID and returns the latest analysis status or an error encountered by the API
 func (ic *IonClient) GetLatestAnalysisStatus(teamID, projectID, token string) (*scanner.AnalysisStatus, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
