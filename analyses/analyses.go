@@ -10,7 +10,6 @@ import (
 // Analysis is a representation of an Ion Channel Analysis within the system
 type Analysis struct {
 	ID            string       `json:"id" xml:"id"`
-	LatestID      string       `json:"latest_id" xml:"latest_id"`
 	TeamID        string       `json:"team_id" xml:"team_id"`
 	ProjectID     string       `json:"project_id" xml:"project_id"`
 	Name          string       `json:"name" xml:"name"`
@@ -50,6 +49,12 @@ type Summary struct {
 	TriggerText   string    `json:"trigger_text"`
 	TriggerAuthor string    `json:"trigger_author"`
 	Trigger       string    `json:"trigger"`
+}
+
+// Navigation represents a navigational meta data reference to given analysis
+type Navigation struct {
+	Analysis       *Analysis `json:"analysis"`
+	LatestAnalysis *Analysis `json:"latest_analysis"`
 }
 
 // NewSummary takes an Analysis and AppliedRulesetSummary to calculate and
