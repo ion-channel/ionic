@@ -37,8 +37,11 @@ type AnalysisReport struct {
 	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
 	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
 
-	// Rename field name to `Analysis` once the UI is using the new field
-	NewAnalysis       *analyses.Analysis              `json:"analysis" xml:"analysis"`
+	NewAnalysis *analyses.Analysis `json:"analysis" xml:"analysis"`
+	Report      *analysisReport    `json:"report" xml:"report"`
+}
+
+type analysisReport struct {
 	Project           *projects.Project               `json:"project" xml:"project"`
 	Statuses          *scanner.AnalysisStatus         `json:"statuses" xml:"statuses"`
 	Digests           []digests.Digest                `json:"digests" xml:"digests"`
@@ -68,13 +71,14 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 	}
 
 	ar := AnalysisReport{
-		Analysis: analysis,
-
-		NewAnalysis:       analysis,
-		Project:           project,
-		Statuses:          status,
-		Digests:           ds,
-		RulesetEvaluation: appliedRuleset,
+		Analysis:    analysis,
+		NewAnalysis: analysis,
+		Report: &analysisReport{
+			Project:           project,
+			Statuses:          status,
+			Digests:           ds,
+			RulesetEvaluation: appliedRuleset,
+		},
 	}
 
 	// Project Details
