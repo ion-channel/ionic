@@ -43,3 +43,9 @@ func (a *AnalysisStatus) Done() bool {
 		a.Status == AnalysisStatusFailed ||
 		a.Status == AnalysisStatusFinished
 }
+
+// Navigation represents a navigational meta data reference to given analysis
+type Navigation struct {
+	Analysis       *AnalysisStatus `json:"analysis"`
+	LatestAnalysis *AnalysisStatus `json:"latest_analysis"`
+}

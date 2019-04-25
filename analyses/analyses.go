@@ -51,12 +51,6 @@ type Summary struct {
 	Trigger       string    `json:"trigger"`
 }
 
-// Navigation represents a navigational meta data reference to given analysis
-type Navigation struct {
-	Analysis       *Analysis `json:"analysis"`
-	LatestAnalysis *Analysis `json:"latest_analysis"`
-}
-
 // NewSummary takes an Analysis and AppliedRulesetSummary to calculate and
 // return a Summary of the Analysis
 func NewSummary(a *Analysis, appliedRuleset *rulesets.AppliedRulesetSummary) *Summary {
