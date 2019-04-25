@@ -4,9 +4,25 @@ import (
 	"time"
 )
 
+const (
+	// DeliveryFinished is the status returned when a delivery has been
+	// successfully handed off to the delivery location
+	DeliveryFinished = "delivery_finished"
+	// DeliveryFailed is the status returned when a delivery encountered issues
+	// while trying to deliver
+	DeliveryFailed = "delivery_failed"
+	// DeliveryCanceled is the status returned when a delivery is purposefully
+	// halted from going through
+	DeliveryCanceled = "delivery_canceled"
+)
+
+// Deliveries represents a key value pair set of what was delivered to the
+// delivery status
+type Deliveries map[string]DeliveryStatus
+
 // Delivery represents the delivery information of a singular artifact
 // associated with an analysis status
-type Delivery struct {
+type DeliveryStatus struct {
 	ID          string    `json:"id"`
 	TeamID      string    `json:"team_id"`
 	ProjectID   string    `json:"project_id"`
