@@ -13,7 +13,6 @@ const (
 	scannerAnalyzeProjectEndpoint          = "v1/scanner/analyzeProject"
 	scannerGetAnalysisStatusEndpoint       = "v1/scanner/getAnalysisStatus"
 	scannerGetLatestAnalysisStatusEndpoint = "v1/scanner/getLatestAnalysisStatus"
-	scannerGetAnalysisNavigationEndpoint   = "v1/scanner/getAnalysisNav"
 	scannerAddScanEndpoint                 = "v1/scanner/addScanResult"
 )
 
@@ -133,27 +132,4 @@ func (ic *IonClient) AddScanResult(scanResultID, teamID, projectID, status, scan
 	}
 
 	return &a, nil
-}
-
-// GetAnalysisNavigation takes an analysisID, teamID, projectID, and a token. It
-// returns the related/tangential analyses to the analysis provided or returns
-// any errors encountered with the API.
-func (ic *IonClient) GetAnalysisNavigation(analysisID, teamID, projectID, token string) (*scanner.Navigation, error) {
-	params := &url.Values{}
-	params.Set("analysis_id", analysisID)
-	params.Set("team_id", teamID)
-	params.Set("project_id", projectID)
-
-	b, err := ic.Get(scannerGetAnalysisNavigationEndpoint, token, params, nil, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get analysis navigation: %v", err.Error())
-	}
-
-	var n scanner.Navigation
-	err = json.Unmarshal(b, &n)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
-	}
-
-	return &n, nil
 }
