@@ -31,7 +31,8 @@ type addScanRequest struct {
 	Type      string               `json:"scan_type"`
 }
 
-//AnalyzeProject takes a projectID, teamID, and project branch, performs an analysis, and returns the result status or an error encountered by the API
+// AnalyzeProject takes a projectID, teamID, and project branch, performs an
+// analysis, and returns the result status or an error encountered by the API
 func (ic *IonClient) AnalyzeProject(projectID, teamID, branch, token string) (*scanner.AnalysisStatus, error) {
 	request := &analyzeRequest{}
 	request.TeamID = teamID

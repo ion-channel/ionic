@@ -48,7 +48,7 @@ func TestScanner(t *testing.T) {
 
 		g.It("should get an analysis status for analysis", func() {
 			server.AddPath("/v1/scanner/getAnalysisStatus").
-				SetMethods("Get").
+				SetMethods("GET").
 				SetPayload([]byte(SampleValidAnalysisScanStatus)).
 				SetStatus(http.StatusOK)
 
