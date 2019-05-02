@@ -54,5 +54,5 @@ type DeliveryEvent struct {
 	Timestamp string              `json:"timestamp"`
 	URL       string              `json:"url"`
 	Filename  string              `json:"filename"`
-	Type      string              `json:"type"`
+	Label     string              `json:"label"`
 }
