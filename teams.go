@@ -27,6 +27,16 @@ type CreateTeamOptions struct {
 	DeliveryRegion   string `json:"delivery_region"`
 }
 
+// UpdateTeamDeliveryDetailsOptions represents the values necessary to update
+// team delivery options, DeliveryLocation: s3 bucket URL, access key / secret key: AWS keys,
+// DeliveryRegion: an AWS region
+type UpdateTeamDeliveryDetailsOptions struct {
+	DeliveryLocation string `json:"delivery_location"`
+	AccessKey        string `json:"access_key"`
+	SecretKey        string `json:"secret_key"`
+	DeliveryRegion   string `json:"delivery_region"`
+}
+
 // CreateTeam takes a create team options, validates the minimum info is
 // present, and makes the calls to create the team. It returns the team created
 // and any errors it encounters with the API.
