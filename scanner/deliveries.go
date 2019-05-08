@@ -29,6 +29,7 @@ type Delivery struct {
 	AnalysisID  string    `json:"analysis_id"`
 	Destination string    `json:"destination"`
 	Status      string    `json:"status"`
+	Label       string    `json:"label"`
 	Filename    string    `json:"filename"`
 	Message     string    `json:"message"`
 	CreatedAt   time.Time `json:"created_at"`
