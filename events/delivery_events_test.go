@@ -52,7 +52,7 @@ func TestDeliveryEvents(t *testing.T) {
 }
 
 const (
-	SampleMarshalledDeliveryEvent = `{"action":"delivery_finished","analysis":"","project_id":"","team_id":"","timestamp":"","url":"","filename":""}`
+	SampleMarshalledDeliveryEvent = `{"action":"delivery_finished","analysis":"","project_id":"","team_id":"","timestamp":"","url":"","filename":"","label":"","hash":"","message":""}`
 	SampleValidDeliveryEvent      = `{"delivery":"foodelivery", "action":"delivery_failed"}`
 	SampleInvalidDeliveryEvent    = `{"delivery":"foodelivery", "action":"foo_action"}`
 )
