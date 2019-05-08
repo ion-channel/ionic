@@ -30,7 +30,9 @@ type Delivery struct {
 	Destination string    `json:"destination"`
 	Status      string    `json:"status"`
 	Filename    string    `json:"filename"`
+	Hash        string    `json:"hash"`
 	Message     string    `json:"message"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
+	DeliveredAt time.Time `json:"delivered_at"`
 }

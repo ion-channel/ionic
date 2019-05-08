@@ -55,4 +55,6 @@ type DeliveryEvent struct {
 	URL       string              `json:"url"`
 	Filename  string              `json:"filename"`
 	Label     string              `json:"label"`
+	Hash      string              `json:"hash"`
+	Message   string              `json:"message"`
 }
