@@ -12,9 +12,9 @@ const (
 	// completed, view the passed field from an Delivery and the scan details for
 	// more information
 	DeliveryStatusFinished = "finished"
-	// DeliveryStatusFailed denotes a request for delivery has failed to
-	// run, the message field will have more details
-	DeliveryStatusFailed = "failed"
+	// DeliveryStatusCanceled denotes a request for delivery has been canceled
+	// the message field will have more details
+	DeliveryStatusCanceled = "canceled"
 	// DeliveryStatusNotConfigured denotes a request for delivery has been
 	// rejected due to no delivery details
 	DeliveryStatusNotConfigured = "not_configured"
