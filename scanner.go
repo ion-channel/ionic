@@ -71,13 +71,13 @@ func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID, token stri
 
 	b, err := ic.Get(scannerGetAnalysisStatusEndpoint, token, params, nil, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+		return nil, fmt.Errorf("failed to get analysis status: %v", err.Error())
 	}
 
 	var a scanner.AnalysisStatus
 	err = json.Unmarshal(b, &a)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+		return nil, fmt.Errorf("failed to get analysis status: %v", err.Error())
 	}
 
 	return &a, nil
