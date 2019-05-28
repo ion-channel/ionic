@@ -92,6 +92,50 @@ func TestProject(t *testing.T) {
 			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
 		})
 
+		g.Describe("Type", func() {
+			g.It("should say a project is valid if the type is valid", func() {
+				var p Project
+				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				Expect(err).To(BeNil())
+
+				t := "git"
+				p.Type = &t
+				fs, err := p.Validate(client)
+				Expect(err).To(BeNil())
+				Expect(len(fs)).To(Equal(0))
+
+				t = "svn"
+				p.Type = &t
+				fs, err = p.Validate(client)
+				Expect(err).To(BeNil())
+				Expect(len(fs)).To(Equal(0))
+
+				t = "artifact"
+				p.Type = &t
+				fs, err = p.Validate(client)
+				Expect(err).To(BeNil())
+				Expect(len(fs)).To(Equal(0))
+
+				t = "GiT"
+				p.Type = &t
+				fs, err = p.Validate(client)
+				Expect(err).To(BeNil())
+				Expect(len(fs)).To(Equal(0))
+			})
+
+			g.It("should say a project is invalid if the type is invalid", func() {
+				var p Project
+				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				Expect(err).To(BeNil())
+
+				t := "gahhhbage"
+				p.Type = &t
+				fs, err := p.Validate(client)
+				Expect(err).NotTo(BeNil())
+				Expect(len(fs)).To(Equal(1))
+			})
+		})
+
 		g.Describe("Email", func() {
 			g.It("should say a project is valid if an email is valid", func() {
 				var p Project
