@@ -161,6 +161,9 @@ func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 				invalidFields["source"] = "source must be a valid uri"
 				projErr = ErrInvalidProject
 			}
+		default:
+			invalidFields["type"] = fmt.Sprintf("invalid type value")
+			projErr = ErrInvalidProject
 		}
 	}
 
