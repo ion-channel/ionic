@@ -17,5 +17,6 @@ type User struct {
 	ExternallyManaged bool              `json:"externally_managed"`
 	Metadata          json.RawMessage   `json:"metadata"`
 	SysAdmin          bool              `json:"sys_admin"`
+	System            bool              `json:"system"`
 	Teams             map[string]string `json:"teams"`
 }
