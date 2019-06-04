@@ -92,8 +92,9 @@ func (ic *IonClient) do(method, endpoint, token string, params *url.Values, payl
 	for page.Offset < total {
 		ir, err := ic._do(method, endpoint, token, params, payload, headers, page)
 		if err != nil {
-			return nil, fmt.Errorf("trouble paging from API: %v", err.Error())
+			return nil, errors.Errors(err.ResponseBody, err.ResponseStatus, "trouble paging from API: %v", err.Error())
 		}
+
 		data = append(data, ir.Data[1:len(ir.Data)-1]...)
 		data = append(data, []byte(",")...)
 		page.Up()
