@@ -1,6 +1,7 @@
 package ionic
 
 import (
+	"fmt"
 	"net/http"
 	"testing"
 
@@ -80,6 +81,24 @@ func TestResponses(t *testing.T) {
 				Expect(string(mw.WrittenHeaders())).To(ContainSubstring("Header: 401"))
 				Expect(string(mw.Written())).To(ContainSubstring(`"message":"something went wrong"`))
 				Expect(string(mw.Written())).To(ContainSubstring(`"code":401`))
+			})
+		})
+
+		g.Describe("Fields", func() {
+			g.It("should format the fields nicely", func() {
+				fields := map[string]string{
+					"source": "required field",
+					"type":   "invalid type",
+					"name":   "required field",
+				}
+				er := NewErrorResponse("something went wrong", fields, http.StatusUnauthorized)
+
+				str := fmt.Sprint(er.Fields)
+				Expect(str[0:1]).To(Equal("["))
+				Expect(str[len(str)-1:]).To(Equal("]"))
+				Expect(str).To(ContainSubstring("source: required field"))
+				Expect(str).To(ContainSubstring("type: invalid type"))
+				Expect(str).To(ContainSubstring("name: required field"))
 			})
 		})
 	})

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -70,9 +71,22 @@ func (ir *IonResponse) WriteResponse(w http.ResponseWriter) {
 
 // IonErrorResponse represents an error response from the Ion Channel API
 type IonErrorResponse struct {
-	Message string            `json:"message"`
-	Fields  map[string]string `json:"fields,omitempty"`
-	Code    int               `json:"code"`
+	Message string      `json:"message"`
+	Fields  ErrorFields `json:"fields,omitempty"`
+	Code    int         `json:"code"`
+}
+
+// ErrorFields is a representation of field name and error message
+type ErrorFields map[string]string
+
+func (ef ErrorFields) String() string {
+	var fields []string
+
+	for k, v := range ef {
+		fields = append(fields, fmt.Sprintf("%v: %v", k, v))
+	}
+
+	return fmt.Sprintf("[%v]", strings.Join(fields, ", "))
 }
 
 // NewErrorResponse takes a message, related fields, and desired status code to
