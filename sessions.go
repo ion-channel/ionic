@@ -37,19 +37,19 @@ func (ic *IonClient) Login(username, password string) (*Session, error) {
 	login := loginRequest{username, password}
 	b, err := json.Marshal(login)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal login body to JSON: %v", err.Error())
+		return nil, fmt.Errorf("session: failed to marshal login body: %v", err.Error())
 	}
 
 	buff := bytes.NewBuffer(b)
 	b, err = ic.Post(sessionsLoginEndpoint, "", nil, *buff, headers)
 	if err != nil {
-		return nil, fmt.Errorf("failed to login: %v", err.Error())
+		return nil, fmt.Errorf("session: failed login request: %v", err.Error())
 	}
 
 	var resp Session
 	err = json.Unmarshal(b, &resp)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal login response: %v", err.Error())
+		return nil, fmt.Errorf("session: failed to unmarshal response: %v", err.Error())
 	}
 
 	return &resp, nil
