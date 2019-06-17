@@ -161,3 +161,13 @@ func (d *Digest) AppendEval(eval *scans.Evaluation, dataType string, value inter
 
 	return nil
 }
+
+// UseSingularTitle forcibly sets the title to be singular
+func (d *Digest) UseSingularTitle() {
+	d.Title = d.singularTitle
+}
+
+// UsePluralTitle forcibly sets the title to be plural
+func (d *Digest) UsePluralTitle() {
+	d.Title = d.pluralTitle
+}
