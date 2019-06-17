@@ -41,6 +41,7 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[1].Title).To(Equal("dependency no version specified"))
 			Expect(string(ds[1].Data)).To(Equal(`{"count":1}`))
+			Expect(ds[1].Warning).To(BeTrue())
 			Expect(ds[1].Pending).To(BeFalse())
 			Expect(ds[1].Errored).To(BeFalse())
 
