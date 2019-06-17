@@ -21,7 +21,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 		ids := make(map[int]bool, 0)
 		for i := range b.Vulnerabilities {
-			ids[b.Vulnerabilities[i].ID] = true
+			for j := range b.Vulnerabilities[i].Vulnerabilities {
+				ids[b.Vulnerabilities[i].Vulnerabilities[j].ID] = true
+			}
 		}
 
 		uniqVulnCount = len(ids)
