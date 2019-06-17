@@ -47,6 +47,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		uniqVulnCount = len(ids)
 	}
 
+	// total vulns
 	d := NewDigest(status, totalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
 
 	if eval != nil {
@@ -67,6 +68,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	digests = append(digests, *d)
 
+	// unique vulns
 	d = NewDigest(status, uniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
 
 	if eval != nil {
@@ -78,7 +80,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	digests = append(digests, *d)
 
-	// high
+	// high vulns
 	d = NewDigest(status, uniqueVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
 
 	if eval != nil {
@@ -90,7 +92,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	digests = append(digests, *d)
 
-	// critical
+	// critical vulns
 	d = NewDigest(status, uniqueVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
 
 	if eval != nil {
