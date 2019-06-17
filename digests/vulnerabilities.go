@@ -11,6 +11,8 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	digests := make([]Digest, 0)
 
 	var vulnCount, uniqVulnCount int
+	var highs int
+	var crits int
 	if eval != nil {
 		b, ok := eval.TranslatedResults.Data.(scans.VulnerabilityResults)
 		if !ok {
@@ -20,8 +22,26 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		vulnCount = b.Meta.VulnerabilityCount
 
 		ids := make(map[int]bool, 0)
+
 		for i := range b.Vulnerabilities {
-			ids[b.Vulnerabilities[i].ID] = true
+			for j := range b.Vulnerabilities[i].Vulnerabilities {
+				v := b.Vulnerabilities[i].Vulnerabilities[j]
+				ids[v.ID] = true
+
+				switch v.ScoreVersion {
+				case "3.0":
+					if v.ScoreDetails.CVSSv3 != nil && v.ScoreDetails.CVSSv3.BaseScore >= 9.0 {
+						crits++
+					} else if v.ScoreDetails.CVSSv3 != nil && v.ScoreDetails.CVSSv3.BaseScore >= 7.0 {
+						highs++
+					}
+				case "2.0":
+					if v.ScoreDetails.CVSSv2 != nil && v.ScoreDetails.CVSSv2.BaseScore >= 7.0 {
+						highs++
+					}
+				default:
+				}
+			}
 		}
 
 		uniqVulnCount = len(ids)
@@ -51,6 +71,30 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	if eval != nil {
 		err := d.AppendEval(eval, "count", uniqVulnCount)
+		if err != nil {
+			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
+		}
+	}
+
+	digests = append(digests, *d)
+
+	// high
+	d = NewDigest(status, uniqueVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
+
+	if eval != nil {
+		err := d.AppendEval(eval, "count", highs)
+		if err != nil {
+			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
+		}
+	}
+
+	digests = append(digests, *d)
+
+	// critical
+	d = NewDigest(status, uniqueVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
+
+	if eval != nil {
+		err := d.AppendEval(eval, "count", crits)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
