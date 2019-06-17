@@ -64,6 +64,8 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 				d.WarningMessage = "vulnerability found"
 			}
 		}
+
+		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
 	digests = append(digests, *d)
@@ -76,6 +78,8 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
+
+		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
 	digests = append(digests, *d)
