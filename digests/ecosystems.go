@@ -10,7 +10,7 @@ import (
 func ecosystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
-	d := NewDigest(status, dominantLanguagesIndex, "dominant language", "dominant languages")
+	d := NewDigest(status, languagesIndex, "language", "languages")
 
 	if eval != nil {
 		b, ok := eval.TranslatedResults.Data.(scans.EcosystemResults)
@@ -18,11 +18,26 @@ func ecosystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 			return nil, fmt.Errorf("error coercing evaluation translated results into languages bytes")
 		}
 
-		dom := getDominantLanguages(b.Ecosystems)
+		switch len(b.Ecosystems) {
+		case 0:
+			err := d.AppendEval(eval, "chars", "none detected")
+			if err != nil {
+				return nil, fmt.Errorf("failed to create language digest: %v", err.Error())
+			}
+		case 1:
+			lang := ""
+			for lang = range b.Ecosystems {
+			}
 
-		err := d.AppendEval(eval, "list", dom)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create dominant language digest: %v", err.Error())
+			err := d.AppendEval(eval, "chars", lang)
+			if err != nil {
+				return nil, fmt.Errorf("failed to create language digest: %v", err.Error())
+			}
+		default:
+			err := d.AppendEval(eval, "count", len(b.Ecosystems))
+			if err != nil {
+				return nil, fmt.Errorf("failed to create language digest: %v", err.Error())
+			}
 		}
 
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
@@ -31,46 +46,4 @@ func ecosystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	digests = append(digests, *d)
 
 	return digests, nil
-}
-
-func getDominantLanguages(languages map[string]int) []string {
-	dom := []string{}
-
-	total := 0
-	for _, lines := range languages {
-		total += lines
-	}
-
-	majority := float64(len(languages)-1) / float64(len(languages)) * 100.0
-
-	h := 0.0
-	h2 := 0.0
-	top := ""
-	top2 := ""
-	dominant := ""
-	for lang, lines := range languages {
-		p := float64(lines) / float64(total) * 100.0
-
-		if p > h {
-			h = p
-			top = lang
-		} else {
-			if p > h2 {
-				h2 = p
-				top2 = lang
-			}
-		}
-
-		if p >= majority {
-			dominant = lang
-		}
-	}
-
-	if dominant != "" {
-		dom = append(dom, dominant)
-	} else {
-		dom = append(dom, top, top2)
-	}
-
-	return dom
 }
