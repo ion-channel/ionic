@@ -47,6 +47,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		uniqVulnCount = len(ids)
 	}
 
+	// total vulns
 	d := NewDigest(status, totalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
 
 	if eval != nil {
@@ -63,10 +64,13 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 				d.WarningMessage = "vulnerability found"
 			}
 		}
+
+		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
 	digests = append(digests, *d)
 
+	// unique vulns
 	d = NewDigest(status, uniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
 
 	if eval != nil {
@@ -74,12 +78,14 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
+
+		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
 	digests = append(digests, *d)
 
-	// high
-	d = NewDigest(status, uniqueVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
+	// high vulns
+	d = NewDigest(status, highVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
 
 	if eval != nil {
 		err := d.AppendEval(eval, "count", highs)
@@ -90,8 +96,8 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	digests = append(digests, *d)
 
-	// critical
-	d = NewDigest(status, uniqueVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
+	// critical vulns
+	d = NewDigest(status, criticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
 
 	if eval != nil {
 		err := d.AppendEval(eval, "count", crits)
