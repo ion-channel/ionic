@@ -22,7 +22,7 @@ const (
 	dependencyOutdatedIndex
 	noVersionIndex
 	aboutYMLIndex
-	dominantLanguagesIndex
+	languagesIndex
 	uniqueCommittersIndex
 	codeCoverageIndex
 )

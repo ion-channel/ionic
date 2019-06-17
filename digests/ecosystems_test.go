@@ -1,7 +1,6 @@
 package digests
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/ion-channel/ionic/scanner"
@@ -16,7 +15,28 @@ func TestEcosystemsDigests(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Ecosystems", func() {
-		g.It("should produce digests", func() {
+		g.It("should say so when no languages are detected", func() {
+			s := &scanner.ScanStatus{
+				Status:  "finished",
+				Message: "completed scan",
+			}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "ecosystems",
+				Data: scans.EcosystemResults{
+					Ecosystems: map[string]int{},
+				},
+			}
+
+			ds, err := ecosystemsDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(1))
+			Expect(string(ds[0].Data)).To(Equal(`{"chars":"none detected"}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+		})
+
+		g.It("should produce a chars digests when one language is present", func() {
 			s := &scanner.ScanStatus{
 				Status:  "finished",
 				Message: "completed scan",
@@ -26,9 +46,7 @@ func TestEcosystemsDigests(t *testing.T) {
 				Type: "ecosystems",
 				Data: scans.EcosystemResults{
 					Ecosystems: map[string]int{
-						"Makefile": 771,
-						"C#":       430056,
-						"Shell":    328,
+						"C#": 430056,
 					},
 				},
 			}
@@ -36,34 +54,35 @@ func TestEcosystemsDigests(t *testing.T) {
 			ds, err := ecosystemsDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
-			Expect(string(ds[0].Data)).To(Equal(`{"list":["C#"]}`))
+			Expect(string(ds[0].Data)).To(Equal(`{"chars":"C#"}`))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
 		})
 
-		g.It("should return a single dominant language", func() {
-			languages := map[string]int{
-				"Makefile": 100,
-				"Go":       300000,
-				"Ruby":     10000,
+		g.It("should produce a count digests when more than one language is present", func() {
+			s := &scanner.ScanStatus{
+				Status:  "finished",
+				Message: "completed scan",
+			}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "ecosystems",
+				Data: scans.EcosystemResults{
+					Ecosystems: map[string]int{
+						"Makefile": 4400,
+						"Golang":   43000,
+						"Shell":    43000,
+						"C#":       43000,
+					},
+				},
 			}
 
-			dom := getDominantLanguages(languages)
-			Expect(len(dom)).To(Equal(1))
-			Expect(dom[0]).To(Equal("Go"))
-		})
-
-		g.It("should return the top two languages if there is no majority", func() {
-			languages := map[string]int{
-				"Makefile": 100,
-				"Go":       300,
-				"Ruby":     300,
-			}
-
-			dom := getDominantLanguages(languages)
-			Expect(len(dom)).To(Equal(2))
-			Expect(fmt.Sprintf("%v", dom)).To(ContainSubstring("Go"))
-			Expect(fmt.Sprintf("%v", dom)).To(ContainSubstring("Ruby"))
+			ds, err := ecosystemsDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(1))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":4}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
 		})
 	})
 }
