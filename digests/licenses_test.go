@@ -15,6 +15,30 @@ func TestLicensesDigests(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Licenses", func() {
+		g.It("should produce digests with license name when only one", func() {
+			s := &scanner.ScanStatus{}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "license",
+				Data: scans.LicenseResults{
+					License: &scans.License{
+						Type: []scans.LicenseType{
+							scans.LicenseType{Name: "apache-2.0"},
+						},
+					},
+				},
+			}
+
+			ds, err := licenseDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(1))
+
+			Expect(ds[0].Title).To(Equal("license found"))
+			Expect(string(ds[0].Data)).To(Equal(`{"char":"apache-2.0"}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+		})
+
 		g.It("should produce digests with count when more than one", func() {
 			s := &scanner.ScanStatus{}
 			e := scans.NewEval()
