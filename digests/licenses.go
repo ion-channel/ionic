@@ -23,14 +23,23 @@ func licenseDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Diges
 			licenseList = append(licenseList, b.Type[i].Name)
 		}
 
-		err := d.AppendEval(eval, "count", len(licenseList))
-		if err != nil {
-			return nil, fmt.Errorf("failed to create license list digest: %v", err.Error())
-		}
+		switch len(licenseList) {
+		case 1:
+			err := d.AppendEval(eval, "chars", licenseList[0])
+			if err != nil {
+				return nil, fmt.Errorf("failed to create license list digest: %v", err.Error())
+			}
 
-		if len(licenseList) < 1 {
+			d.UseSingularTitle()
+		case 0:
 			d.Warning = true
 			d.WarningMessage = "no licenses found"
+			fallthrough
+		default:
+			err := d.AppendEval(eval, "count", len(licenseList))
+			if err != nil {
+				return nil, fmt.Errorf("failed to create license list digest: %v", err.Error())
+			}
 		}
 	}
 

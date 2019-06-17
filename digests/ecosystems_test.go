@@ -54,6 +54,7 @@ func TestEcosystemsDigests(t *testing.T) {
 			ds, err := ecosystemsDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
+			Expect(ds[0].Title).To(Equal("language"))
 			Expect(string(ds[0].Data)).To(Equal(`{"chars":"C#"}`))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())

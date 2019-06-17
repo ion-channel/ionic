@@ -33,6 +33,8 @@ func ecosystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 			if err != nil {
 				return nil, fmt.Errorf("failed to create language digest: %v", err.Error())
 			}
+
+			d.UseSingularTitle()
 		default:
 			err := d.AppendEval(eval, "count", len(b.Ecosystems))
 			if err != nil {

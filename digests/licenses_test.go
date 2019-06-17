@@ -34,7 +34,7 @@ func TestLicensesDigests(t *testing.T) {
 			Expect(len(ds)).To(Equal(1))
 
 			Expect(ds[0].Title).To(Equal("license found"))
-			Expect(string(ds[0].Data)).To(Equal(`{"char":"apache-2.0"}`))
+			Expect(string(ds[0].Data)).To(Equal(`{"chars":"apache-2.0"}`))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
 		})
