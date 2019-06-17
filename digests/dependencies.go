@@ -43,6 +43,15 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependencies no version digest: %v", err.Error())
 		}
+
+		if noVersions > 0 {
+			d.Warning = true
+			d.WarningMessage = "dependencies with no version specified"
+
+			if noVersions == 1 {
+				d.WarningMessage = "dependency with no version specified"
+			}
+		}
 	}
 
 	digests = append(digests, *d)

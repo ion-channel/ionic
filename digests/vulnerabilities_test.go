@@ -36,11 +36,13 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 
 			Expect(ds[0].Title).To(Equal("total vulnerabilities"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":3}`))
+			Expect(ds[0].Warning).To(BeTrue())
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
 
 			Expect(ds[1].Title).To(Equal("unique vulnerabilities"))
 			Expect(string(ds[1].Data)).To(Equal(`{"count":3}`))
+			Expect(ds[1].Warning).To(BeTrue())
 			Expect(ds[1].Pending).To(BeFalse())
 			Expect(ds[1].Errored).To(BeFalse())
 
