@@ -70,8 +70,9 @@ type percent struct {
 // will favor a plural title. A newly constructed Digest with the appropriate
 // settings is returned.
 func NewDigest(status *scanner.ScanStatus, index int, singular, plural string) *Digest {
-	var errored bool
-	var erroredMsg string
+	// A digest is in an error state until an evaluation is appended into it
+	errored := true
+	erroredMsg := "evaluation not received"
 
 	if status != nil && strings.ToLower(status.Status) == "errored" {
 		errored = true
@@ -86,6 +87,10 @@ func NewDigest(status *scanner.ScanStatus, index int, singular, plural string) *
 		Title:          plural,
 		singularTitle:  singular,
 		pluralTitle:    plural,
+	}
+
+	if status != nil {
+		d.ScanID = status.ID
 	}
 
 	return d
@@ -152,6 +157,8 @@ func (d *Digest) AppendEval(eval *scans.Evaluation, dataType string, value inter
 
 	d.Data = data
 	d.Title = title
+	d.Errored = false
+	d.ErroredMessage = ""
 	d.ScanID = eval.ID
 	d.RuleID = eval.RuleID
 	d.RulesetID = eval.RulesetID
