@@ -101,6 +101,10 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
+
+		if highs == 0 {
+			d.Passed = true
+		}
 	}
 
 	digests = append(digests, *d)
@@ -112,6 +116,10 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		err := d.AppendEval(eval, "count", crits)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
+		}
+
+		if crits == 0 {
+			d.Passed = true
 		}
 	}
 
