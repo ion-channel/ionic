@@ -137,6 +137,10 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 		return nil, errors.Errors(string(body), resp.StatusCode, "api: error response")
 	}
 
+	if strings.ToUpper(method) == "HEAD" {
+		return &IonResponse{}, nil
+	}
+
 	var ir IonResponse
 	err = json.Unmarshal(body, &ir)
 	if err != nil {
@@ -158,6 +162,13 @@ func (ic *IonClient) Delete(endpoint, token string, params *url.Values, headers 
 // any errors it encounters with the API.
 func (ic *IonClient) Get(endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
 	return ic.do("GET", endpoint, token, params, bytes.Buffer{}, headers, page)
+}
+
+// Head takes an endpoint, token, params, headers, and pagination params to pass as a
+// head call to the API.  It will return any errors it encounters with the API.
+func (ic *IonClient) Head(endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) error {
+	_, err := ic.do("HEAD", endpoint, token, params, bytes.Buffer{}, headers, page)
+	return err
 }
 
 // Post takes an endpoint, token, params, payload, and headers to pass as a post call
