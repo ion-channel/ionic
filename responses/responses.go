@@ -1,4 +1,4 @@
-package ionic
+package responses
 
 import (
 	"encoding/json"

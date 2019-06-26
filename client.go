@@ -13,6 +13,7 @@ import (
 
 	"github.com/ion-channel/ionic/errors"
 	"github.com/ion-channel/ionic/pagination"
+	"github.com/ion-channel/ionic/responses"
 )
 
 const (
@@ -106,7 +107,7 @@ func (ic *IonClient) do(method, endpoint, token string, params *url.Values, payl
 	return data, nil
 }
 
-func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (*IonResponse, *errors.IonError) {
+func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (*responses.IonResponse, *errors.IonError) {
 	u := ic.createURL(endpoint, params, page)
 
 	req, err := http.NewRequest(strings.ToUpper(method), u.String(), &payload)
@@ -138,10 +139,10 @@ func (ic *IonClient) _do(method, endpoint, token string, params *url.Values, pay
 	}
 
 	if strings.ToUpper(method) == "HEAD" {
-		return &IonResponse{}, nil
+		return &responses.IonResponse{}, nil
 	}
 
-	var ir IonResponse
+	var ir responses.IonResponse
 	err = json.Unmarshal(body, &ir)
 	if err != nil {
 		return nil, errors.Errors(string(body), resp.StatusCode, "api: malformed response: %v", err.Error())
