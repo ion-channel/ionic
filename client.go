@@ -3,11 +3,14 @@
 package ionic
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
 
 	"github.com/ion-channel/ionic/pagination"
+	"github.com/ion-channel/ionic/requests"
 )
 
 const (
@@ -52,21 +55,36 @@ func NewWithClient(baseURL string, client *http.Client) (*IonClient, error) {
 	return ic, nil
 }
 
-func (ic *IonClient) createURL(endpoint string, params *url.Values, page *pagination.Pagination) *url.URL {
-	u := *ic.baseURL
-	u.Path = endpoint
-
-	vals := &url.Values{}
-	if params != nil {
-		vals = params
-	}
-
-	if page != nil {
-		page.AddParams(vals)
-	}
-
-	u.RawQuery = vals.Encode()
-	return &u
+// Delete takes an endpoint, token, params, and headers to pass as a delete call to the
+// API.  It will return a json RawMessage for the response and any errors it
+// encounters with the API.
+func (ic *IonClient) Delete(endpoint, token string, params *url.Values, headers http.Header) (json.RawMessage, error) {
+	return requests.Delete(*ic.client, ic.baseURL, endpoint, token, params, headers)
 }
 
-//func (ic *IonClient) funcName....etc
+// Head takes an endpoint, token, params, headers, and pagination params to pass as a
+// head call to the API.  It will return any errors it encounters with the API.
+func (ic *IonClient) Head(endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) error {
+	return requests.Head(*ic.client, ic.baseURL, endpoint, token, params, headers, page)
+}
+
+// Get takes an endpoint, token, params, headers, and pagination params to pass as a
+// get call to the API.  It will return a json RawMessage for the response and
+// any errors it encounters with the API.
+func (ic *IonClient) Get(endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
+	return requests.Get(*ic.client, ic.baseURL, endpoint, token, params, headers, page)
+}
+
+// Post takes an endpoint, token, params, payload, and headers to pass as a post call
+// to the API.  It will return a json RawMessage for the response and any errors
+// it encounters with the API.
+func (ic *IonClient) Post(endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
+	return requests.Post(*ic.client, ic.baseURL, endpoint, token, params, payload, headers)
+}
+
+// Put takes an endpoint, token, params, payload, and headers to pass as a put call to
+// the request.Put function.  It will return a json RawMessage for the response and any errors it
+// encounters with the API.
+func (ic *IonClient) Put(endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
+	return requests.Put(*ic.client, ic.baseURL, endpoint, token, params, payload, headers)
+}
