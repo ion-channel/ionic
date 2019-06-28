@@ -43,13 +43,14 @@ type AnalysisReport struct {
 
 type analysisReport struct {
 	Project           *projects.Project               `json:"project" xml:"project"`
+	ProjectRuleset    *rulesets.RuleSet               `json:"project_ruleset" xml:"project_ruleset"`
 	Statuses          *scanner.AnalysisStatus         `json:"statuses" xml:"statuses"`
 	Digests           []digests.Digest                `json:"digests" xml:"digests"`
 	RulesetEvaluation *rulesets.AppliedRulesetSummary `json:"ruleset_evaluation" xml:"ruleset_evaluation"`
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
-func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
+func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, projectRuleset *rulesets.RuleSet, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
 	if analysis == nil {
 		analysis = &analyses.Analysis{
 			ID:        status.ID,
@@ -75,6 +76,7 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 		NewAnalysis: analysis,
 		Report: &analysisReport{
 			Project:           project,
+			ProjectRuleset:    projectRuleset,
 			Statuses:          status,
 			Digests:           ds,
 			RulesetEvaluation: appliedRuleset,

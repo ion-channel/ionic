@@ -35,7 +35,9 @@ func TestAnalysisReport(t *testing.T) {
 				json.Unmarshal([]byte(sampleAnalysisPayload), &a)
 				Expect(a.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 
+				rulsetID := "someruleset"
 				p := &projects.Project{
+					RulesetID: &rulsetID,
 					Aliases: []aliases.Alias{
 						aliases.Alias{
 							Name: "bar",
@@ -46,6 +48,11 @@ func TestAnalysisReport(t *testing.T) {
 							Name: "foo",
 						},
 					},
+				}
+
+				pr := &rulesets.RuleSet{
+					ID:   rulsetID,
+					Name: "this ruleset",
 				}
 
 				var eval scans.Evaluation
@@ -61,7 +68,7 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(s, &a, p, app)
+				ar, err := NewAnalysisReport(s, &a, p, pr, app)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
@@ -105,7 +112,9 @@ func TestAnalysisReport(t *testing.T) {
 				json.Unmarshal([]byte(sampleAnalysisPayload), &a)
 				Expect(a.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 
+				rulsetID := "someruleset"
 				p := &projects.Project{
+					RulesetID: &rulsetID,
 					Aliases: []aliases.Alias{
 						aliases.Alias{
 							Name: "bar",
@@ -116,6 +125,11 @@ func TestAnalysisReport(t *testing.T) {
 							Name: "foo",
 						},
 					},
+				}
+
+				pr := &rulesets.RuleSet{
+					ID:   rulsetID,
+					Name: "this ruleset",
 				}
 
 				var eval scans.Evaluation
@@ -131,7 +145,7 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(s, &a, p, app)
+				ar, err := NewAnalysisReport(s, &a, p, pr, app)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
