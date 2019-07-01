@@ -5,9 +5,13 @@ import (
 )
 
 const (
+	// TeamsCreateTeamUserEndpoint is a string representation of the current endpoint for getting projects
 	TeamsCreateTeamUserEndpoint = "v1/teamUsers/createTeamUser"
-	TeamsGetTeamUserEndpoint    = "v1/teamUsers/getTeamUser"
+	// TeamsGetTeamUserEndpoint is a string representation of the current endpoint for getting projects
+	TeamsGetTeamUserEndpoint = "v1/teamUsers/getTeamUser"
+	// TeamsUpdateTeamUserEndpoint is a string representation of the current endpoint for getting projects
 	TeamsUpdateTeamUserEndpoint = "v1/teamUsers/updateTeamUser"
+	// TeamsDeleteTeamUserEndpoint is a string representation of the current endpoint for getting projects
 	TeamsDeleteTeamUserEndpoint = "v1/teamUsers/deleteTeamUser"
 )
 

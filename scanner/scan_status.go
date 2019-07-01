@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	// ScannerAddScanEndpoint is a string representation of the current endpoint for getting projects
 	ScannerAddScanEndpoint = "v1/scanner/addScanResult"
 )
 

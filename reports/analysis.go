@@ -14,7 +14,9 @@ import (
 )
 
 const (
-	ReportGetAnalysisReportEndpoint     = "v1/report/getAnalysis"
+	// ReportGetAnalysisReportEndpoint is a string representation of the current endpoint for getting projects
+	ReportGetAnalysisReportEndpoint = "v1/report/getAnalysis"
+	// ReportGetAnalysisNavigationEndpoint is a string representation of the current endpoint for getting projects
 	ReportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
 )
 

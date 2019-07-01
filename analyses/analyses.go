@@ -8,11 +8,16 @@ import (
 )
 
 const (
-	AnalysisGetAnalysisEndpoint              = "v1/animal/getAnalysis"
-	AnalysisGetAnalysesEndpoint              = "v1/animal/getAnalyses"
+	// AnalysisGetAnalysisEndpoint is a string representation of the current endpoint for getting projects
+	AnalysisGetAnalysisEndpoint = "v1/animal/getAnalysis"
+	// AnalysisGetAnalysesEndpoint is a string representation of the current endpoint for getting projects
+	AnalysisGetAnalysesEndpoint = "v1/animal/getAnalyses"
+	// AnalysisGetLatestAnalysisSummaryEndpoint is a string representation of the current endpoint for getting projects
 	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
-	AnalysisGetPublicAnalysisEndpoint        = "v1/animal/getPublicAnalysis"
-	AnalysisGetLatestPublicAnalysisEndpoint  = "v1/animal/getLatestPublicAnalysisSummary"
+	// AnalysisGetPublicAnalysisEndpoint is a string representation of the current endpoint for getting projects
+	AnalysisGetPublicAnalysisEndpoint = "v1/animal/getPublicAnalysis"
+	//A nalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting projects
+	AnalysisGetLatestPublicAnalysisEndpoint = "v1/animal/getLatestPublicAnalysisSummary"
 )
 
 // Analysis is a representation of an Ion Channel Analysis within the system

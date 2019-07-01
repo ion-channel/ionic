@@ -7,10 +7,14 @@ import (
 )
 
 const (
-	CreateRuleSetEndpoint     = "v1/ruleset/createRuleset"
+	// CreateRuleSetEndpoint is a string representation of the current endpoint for getting projects
+	CreateRuleSetEndpoint = "v1/ruleset/createRuleset"
+	// GetAppliedRuleSetEndpoint is a string representation of the current endpoint for getting projects
 	GetAppliedRuleSetEndpoint = "v1/ruleset/getAppliedRulesetForProject"
-	GetRuleSetEndpoint        = "v1/ruleset/getRuleset"
-	GetRuleSetsEndpoint       = "v1/ruleset/getRulesets"
+	// GetRuleSetEndpoint is a string representation of the current endpoint for getting projects
+	GetRuleSetEndpoint = "v1/ruleset/getRuleset"
+	// GetRuleSetsEndpoint is a string representation of the current endpoint for getting projects
+	GetRuleSetsEndpoint = "v1/ruleset/getRulesets"
 )
 
 // CreateRuleSetOptions struct for creating a ruleset

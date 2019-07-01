@@ -13,5 +13,6 @@ type Alias struct {
 }
 
 const (
+	// AddAliasEndpoint is a string representation of the current endpoint for getting projects
 	AddAliasEndpoint = "v1/project/addAlias"
 )

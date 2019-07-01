@@ -1,7 +1,9 @@
 package community
 
 const (
-	GetRepoEndpoint    = `v1/repo/getRepo`
+	// GetRepoEndpoint is a string representation of the current endpoint for getting projects
+	GetRepoEndpoint = `v1/repo/getRepo`
+	// SearchRepoEndpoint is a string representation of the current endpoint for getting projects
 	SearchRepoEndpoint = `v1/repo/search`
 )
 

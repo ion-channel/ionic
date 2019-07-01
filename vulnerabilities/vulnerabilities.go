@@ -9,10 +9,14 @@ import (
 )
 
 const (
-	GetVulnerabilitiesEndpoint       = "v1/vulnerability/getVulnerabilities"
+	// GetVulnerabilitiesEndpoint is a string representation of the current endpoint for getting projects
+	GetVulnerabilitiesEndpoint = "v1/vulnerability/getVulnerabilities"
+	// GetVulnerabilitiesInFileEndpoint is a string representation of the current endpoint for getting projects
 	GetVulnerabilitiesInFileEndpoint = "v1/vulnerability/getVulnerabilitiesInFile"
-	GetVulnerabilityEndpoint         = "v1/vulnerability/getVulnerability"
-	PostVulnerabilityEndpoint        = "v1/internal/vulnerability/addVulnerability"
+	// GetVulnerabilityEndpoint is a string representation of the current endpoint for getting projects
+	GetVulnerabilityEndpoint = "v1/vulnerability/getVulnerability"
+	// PostVulnerabilityEndpoint is a string representation of the current endpoint for getting projects
+	PostVulnerabilityEndpoint = "v1/internal/vulnerability/addVulnerability"
 )
 
 // Vulnerability represents a singular vulnerability record in the Ion Channel

@@ -3,9 +3,13 @@ package tags
 import "time"
 
 const (
+	// CreateTagEndpoint is a string representation of the current endpoint for getting projects
 	CreateTagEndpoint = "v1/tag/createTag"
-	GetTagEndpoint    = "v1/tag/getTag"
-	GetTagsEndpoint   = "v1/tag/getTags"
+	// GetTagEndpoint is a string representation of the current endpoint for getting projects
+	GetTagEndpoint = "v1/tag/getTag"
+	// GetTagsEndpoint is a string representation of the current endpoint for getting projects
+	GetTagsEndpoint = "v1/tag/getTags"
+	// UpdateTagEndpoint is a string representation of the current endpoint for getting projects
 	UpdateTagEndpoint = "v1/tag/updateTag"
 )
 

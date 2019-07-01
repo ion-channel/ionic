@@ -5,9 +5,12 @@ import (
 )
 
 const (
+	// TeamsCreateTeamEndpoint is a string representation of the current endpoint for getting projects
 	TeamsCreateTeamEndpoint = "v1/teams/createTeam"
-	TeamsGetTeamEndpoint    = "v1/teams/getTeam"
-	TeamsGetTeamsEndpoint   = "v1/teams/getTeams"
+	// TeamsGetTeamEndpoint  is a string representation of the current endpoint for getting projects
+	TeamsGetTeamEndpoint = "v1/teams/getTeam"
+	// TeamsGetTeamsEndpoint is a string representation of the current endpoint for getting projects
+	TeamsGetTeamsEndpoint = "v1/teams/getTeams"
 )
 
 // Team is a representation of an Ion Channel Team within the system

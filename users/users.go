@@ -6,11 +6,16 @@ import (
 )
 
 const (
-	UsersCreateUserEndpoint         = "v1/users/createUser"
-	UsersGetSelfEndpoint            = "v1/users/getSelf"
+	// UsersCreateUserEndpoint is a string representation of the current endpoint for getting projects
+	UsersCreateUserEndpoint = "v1/users/createUser"
+	// UsersGetSelfEndpoint is a string representation of the current endpoint for getting projects
+	UsersGetSelfEndpoint = "v1/users/getSelf"
+	// UsersSubscribedForEventEndpoint is a string representation of the current endpoint for getting projects
 	UsersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
-	UsersGetUserEndpoint            = "v1/users/getUser"
-	UsersGetUsers                   = "v1/users/getUsers"
+	// UsersGetUserEndpoint is a string representation of the current endpoint for getting projects
+	UsersGetUserEndpoint = "v1/users/getUser"
+	// UsersGetUsers is a string representation of the current endpoint for getting projects
+	UsersGetUsers = "v1/users/getUsers"
 )
 
 // User is a representation of an Ion Channel User within the system

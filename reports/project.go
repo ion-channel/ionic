@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	// ReportGetProjectReportEndpoint is a string representation of the current endpoint for getting projects
 	ReportGetProjectReportEndpoint = "v1/report/getProject"
 )
 
