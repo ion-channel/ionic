@@ -9,13 +9,6 @@ import (
 	"github.com/ion-channel/ionic/teamusers"
 )
 
-const (
-	teamsCreateTeamUserEndpoint = "v1/teamUsers/createTeamUser"
-	teamsGetTeamUserEndpoint    = "v1/teamUsers/getTeamUser"
-	teamsUpdateTeamUserEndpoint = "v1/teamUsers/updateTeamUser"
-	teamsDeleteTeamUserEndpoint = "v1/teamUsers/deleteTeamUser"
-)
-
 // CreateTeamUserOptions represents all the values that can be provided for a team
 // user at the time of creation
 type CreateTeamUserOptions struct {
@@ -37,7 +30,7 @@ func (ic *IonClient) CreateTeamUser(opts CreateTeamUserOptions, token string) (*
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.Post(teamsCreateTeamUserEndpoint, token, nil, *buff, nil)
+	b, err = ic.Post(teamusers.TeamsCreateTeamUserEndpoint, token, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create team user: %v", err.Error())
 	}
@@ -59,7 +52,7 @@ func (ic *IonClient) GetTeamUser(teamID, userID, token string) (*teamusers.TeamU
 	params.Set("team_id", teamID)
 	params.Set("user_id", userID)
 
-	b, err := ic.Get(teamsGetTeamUserEndpoint, token, params, nil, nil)
+	b, err := ic.Get(teamusers.TeamsGetTeamUserEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team: %v", err.Error())
 	}
@@ -85,7 +78,7 @@ func (ic *IonClient) UpdateTeamUser(teamuser *teamusers.TeamUser, token string) 
 	}
 
 	buff := bytes.NewBuffer(b)
-	b, err = ic.Put(teamsUpdateTeamUserEndpoint, token, params, *buff, nil)
+	b, err = ic.Put(teamusers.TeamsUpdateTeamUserEndpoint, token, params, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to update team user: %v", err.Error())
 	}
@@ -111,7 +104,7 @@ func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) 
 		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
 
-	response, err := ic.Delete(teamsDeleteTeamUserEndpoint, token, params, nil)
+	response, err := ic.Delete(teamusers.TeamsDeleteTeamUserEndpoint, token, params, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to delete team user: %v", err.Error())
 	}
@@ -120,7 +113,7 @@ func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) 
 	params.Set("team_id", teamuser.TeamID)
 	params.Set("user_id", teamuser.UserID)
 
-	t, err := ic.Get(teamsGetTeamUserEndpoint, token, params, nil, nil)
+	t, err := ic.Get(teamusers.TeamsGetTeamUserEndpoint, token, params, nil, nil)
 	if err == nil {
 		var teamU teamusers.TeamUser
 		err = json.Unmarshal(t, &teamU)

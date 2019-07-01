@@ -2,6 +2,17 @@ package tags
 
 import "time"
 
+const (
+	// CreateTagEndpoint is a string representation of the current endpoint for creating tag
+	CreateTagEndpoint = "v1/tag/createTag"
+	// GetTagEndpoint is a string representation of the current endpoint for getting tag
+	GetTagEndpoint = "v1/tag/getTag"
+	// GetTagsEndpoint is a string representation of the current endpoint for getting tags
+	GetTagsEndpoint = "v1/tag/getTags"
+	// UpdateTagEndpoint is a string representation of the current endpoint for update tag
+	UpdateTagEndpoint = "v1/tag/updateTag"
+)
+
 //Tag is a client provided identifier to group projects
 type Tag struct {
 	ID          string    `json:"id"`

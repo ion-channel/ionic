@@ -4,6 +4,11 @@ import (
 	"time"
 )
 
+const (
+	// ScannerAddScanEndpoint is a string representation of the current endpoint for scanner add scan
+	ScannerAddScanEndpoint = "v1/scanner/addScanResult"
+)
+
 //ScanStatus identifies the state of a scan performed by the Ion system
 type ScanStatus struct {
 	ID               string    `json:"id"`

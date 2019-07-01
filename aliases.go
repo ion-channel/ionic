@@ -9,10 +9,6 @@ import (
 	"github.com/ion-channel/ionic/aliases"
 )
 
-const (
-	addAliasEndpoint = "v1/project/addAlias"
-)
-
 type createAliasOptions struct {
 	Name      string `json:"name"`
 	ProjectID string `json:"project_id"`
@@ -37,7 +33,7 @@ func (ic *IonClient) AddAlias(projectID, teamID, name, version, token string) (*
 		return nil, fmt.Errorf("failed to marshall alias: %v", err.Error())
 	}
 
-	b, err = ic.Post(addAliasEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	b, err = ic.Post(aliases.AddAliasEndpoint, token, params, *bytes.NewBuffer(b), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create alias: %v", err.Error())
 	}

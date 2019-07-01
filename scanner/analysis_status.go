@@ -23,6 +23,15 @@ const (
 	AnalysisStatusStarted = "started"
 )
 
+const (
+	// ScannerAnalyzeProjectEndpoint is a string representation of the current endpoint for analyzing project
+	ScannerAnalyzeProjectEndpoint = "v1/scanner/analyzeProject"
+	// ScannerGetAnalysisStatusEndpoint is a string representation of the current endpoint for getting analysis status
+	ScannerGetAnalysisStatusEndpoint = "v1/scanner/getAnalysisStatus"
+	// ScannerGetLatestAnalysisStatusEndpoint is a string representation of the current endpoint for getting latest analysis status
+	ScannerGetLatestAnalysisStatusEndpoint = "v1/scanner/getLatestAnalysisStatus"
+)
+
 // AnalysisStatus is a representation of an Ion Channel Analysis Status within the system
 type AnalysisStatus struct {
 	ID         string              `json:"id"`

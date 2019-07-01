@@ -11,3 +11,8 @@ type Alias struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	Version   string    `json:"version"`
 }
+
+const (
+	// AddAliasEndpoint is a string representation of the current endpoint for getting aliases
+	AddAliasEndpoint = "v1/project/addAlias"
+)

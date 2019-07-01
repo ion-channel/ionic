@@ -9,12 +9,6 @@ import (
 	"github.com/ion-channel/ionic/teams"
 )
 
-const (
-	teamsCreateTeamEndpoint = "v1/teams/createTeam"
-	teamsGetTeamEndpoint    = "v1/teams/getTeam"
-	teamsGetTeamsEndpoint   = "v1/teams/getTeams"
-)
-
 // CreateTeamOptions represents all the values that can be provided for a team
 // at the time of creation
 type CreateTeamOptions struct {
@@ -42,7 +36,7 @@ func (ic *IonClient) CreateTeam(opts CreateTeamOptions, token string) (*teams.Te
 
 	buff := bytes.NewBuffer(b)
 
-	b, err = ic.Post(teamsCreateTeamEndpoint, token, nil, *buff, nil)
+	b, err = ic.Post(teams.TeamsCreateTeamEndpoint, token, nil, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create team: %v", err.Error())
 	}
@@ -63,7 +57,7 @@ func (ic *IonClient) GetTeam(id, token string) (*teams.Team, error) {
 	params := &url.Values{}
 	params.Set("someid", id)
 
-	b, err := ic.Get(teamsGetTeamEndpoint, token, params, nil, nil)
+	b, err := ic.Get(teams.TeamsGetTeamEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team: %v", err.Error())
 	}
@@ -81,7 +75,7 @@ func (ic *IonClient) GetTeam(id, token string) (*teams.Team, error) {
 // team.  An error is returned for client communications and unmarshalling
 // errors.
 func (ic *IonClient) GetTeams(token string) ([]teams.Team, error) {
-	b, err := ic.Get(teamsGetTeamsEndpoint, token, nil, nil, nil)
+	b, err := ic.Get(teams.TeamsGetTeamsEndpoint, token, nil, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get teams: %v", err.Error())
 	}

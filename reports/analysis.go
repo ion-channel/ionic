@@ -13,6 +13,13 @@ import (
 	"github.com/ion-channel/ionic/tags"
 )
 
+const (
+	// ReportGetAnalysisReportEndpoint is a string representation of the current endpoint for getting report analysis
+	ReportGetAnalysisReportEndpoint = "v1/report/getAnalysis"
+	// ReportGetAnalysisNavigationEndpoint is a string representation of the current endpoint for getting report analysis navigation
+	ReportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
+)
+
 // AnalysisReport is a Ion Channel representation of a report output from a
 // given analysis
 type AnalysisReport struct {

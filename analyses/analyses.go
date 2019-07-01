@@ -7,6 +7,19 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
+const (
+	// AnalysisGetAnalysisEndpoint is a string representation of the current endpoint for getting analysis
+	AnalysisGetAnalysisEndpoint = "v1/animal/getAnalysis"
+	// AnalysisGetAnalysesEndpoint is a string representation of the current endpoint for getting analyses
+	AnalysisGetAnalysesEndpoint = "v1/animal/getAnalyses"
+	// AnalysisGetLatestAnalysisSummaryEndpoint is a string representation of the current endpoint for getting latest analysis summary
+	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
+	// AnalysisGetPublicAnalysisEndpoint is a string representation of the current endpoint for getting public analysis
+	AnalysisGetPublicAnalysisEndpoint = "v1/animal/getPublicAnalysis"
+	// AnalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting latesting public analysis
+	AnalysisGetLatestPublicAnalysisEndpoint = "v1/animal/getLatestPublicAnalysisSummary"
+)
+
 // Analysis is a representation of an Ion Channel Analysis within the system
 type Analysis struct {
 	ID            string       `json:"id" xml:"id"`

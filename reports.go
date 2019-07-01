@@ -9,12 +9,6 @@ import (
 	"github.com/ion-channel/ionic/scanner"
 )
 
-const (
-	reportGetAnalysisReportEndpoint     = "v1/report/getAnalysis"
-	reportGetProjectReportEndpoint      = "v1/report/getProject"
-	reportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
-)
-
 //GetAnalysisReport takes an analysisID, teamID, projectID, and token. It
 // returns the corresponding analysis report or an error encountered by the API
 func (ic *IonClient) GetAnalysisReport(analysisID, teamID, projectID, token string) (*reports.AnalysisReport, error) {
@@ -23,7 +17,7 @@ func (ic *IonClient) GetAnalysisReport(analysisID, teamID, projectID, token stri
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(reportGetAnalysisReportEndpoint, token, params, nil, nil)
+	b, err := ic.Get(reports.ReportGetAnalysisReportEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis report: %v", err.Error())
 	}
@@ -46,7 +40,7 @@ func (ic *IonClient) GetRawAnalysisReport(analysisID, teamID, projectID, token s
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(reportGetAnalysisReportEndpoint, token, params, nil, nil)
+	b, err := ic.Get(reports.ReportGetAnalysisReportEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis report: %v", err.Error())
 	}
@@ -61,7 +55,7 @@ func (ic *IonClient) GetProjectReport(projectID, teamID, token string) (*reports
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(reportGetProjectReportEndpoint, token, params, nil, nil)
+	b, err := ic.Get(reports.ReportGetProjectReportEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project report: %v", err.Error())
 	}
@@ -82,7 +76,7 @@ func (ic *IonClient) GetRawProjectReport(projectID, teamID, token string) (json.
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(reportGetProjectReportEndpoint, token, params, nil, nil)
+	b, err := ic.Get(reports.ReportGetProjectReportEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project report: %v", err.Error())
 	}
@@ -99,7 +93,7 @@ func (ic *IonClient) GetAnalysisNavigation(analysisID, teamID, projectID, token 
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(reportGetAnalysisNavigationEndpoint, token, params, nil, nil)
+	b, err := ic.Get(reports.ReportGetAnalysisNavigationEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis navigation: %v", err.Error())
 	}
