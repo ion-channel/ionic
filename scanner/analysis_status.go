@@ -24,8 +24,11 @@ const (
 )
 
 const (
-	ScannerAnalyzeProjectEndpoint          = "v1/scanner/analyzeProject"
-	ScannerGetAnalysisStatusEndpoint       = "v1/scanner/getAnalysisStatus"
+	// ScannerAnalyzeProjectEndpoint is a string representation of the current endpoint for analyzing project
+	ScannerAnalyzeProjectEndpoint = "v1/scanner/analyzeProject"
+	// ScannerGetAnalysisStatusEndpoint is a string representation of the current endpoint for getting analysis status
+	ScannerGetAnalysisStatusEndpoint = "v1/scanner/getAnalysisStatus"
+	// ScannerGetLatestAnalysisStatusEndpoint is a string representation of the current endpoint for getting latest analysis status
 	ScannerGetLatestAnalysisStatusEndpoint = "v1/scanner/getLatestAnalysisStatus"
 )
 

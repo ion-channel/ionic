@@ -16,7 +16,7 @@ const (
 	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
 	// AnalysisGetPublicAnalysisEndpoint is a string representation of the current endpoint for getting public analysis
 	AnalysisGetPublicAnalysisEndpoint = "v1/animal/getPublicAnalysis"
-	//A nalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting latesting public analysis
+	// AnalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting latesting public analysis
 	AnalysisGetLatestPublicAnalysisEndpoint = "v1/animal/getLatestPublicAnalysisSummary"
 )
 
