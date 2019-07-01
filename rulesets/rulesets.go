@@ -25,3 +25,10 @@ type RuleSet struct {
 	UpdatedAt   time.Time    `json:"updated_at"`
 	Rules       []rules.Rule `json:"rules"`
 }
+
+const (
+	CreateRuleSetEndpoint     = "v1/ruleset/createRuleset"
+	GetAppliedRuleSetEndpoint = "v1/ruleset/getAppliedRulesetForProject"
+	GetRuleSetEndpoint        = "v1/ruleset/getRuleset"
+	GetRuleSetsEndpoint       = "v1/ruleset/getRulesets"
+)

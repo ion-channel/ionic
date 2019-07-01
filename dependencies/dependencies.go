@@ -6,3 +6,8 @@ type Dependency struct {
 	Name    string `json:"name,omitempty"`
 	Version string `json:"version"`
 }
+
+const (
+	GetLatestVersionForDependencyEndpoint = "v1/dependency/getLatestVersionForDependency"
+	GetVersionsForDependencyEndpoint      = "v1/dependency/getVersionsForDependency"
+)

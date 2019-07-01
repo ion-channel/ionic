@@ -49,6 +49,11 @@ type analysisReport struct {
 	RulesetEvaluation *rulesets.AppliedRulesetSummary `json:"ruleset_evaluation" xml:"ruleset_evaluation"`
 }
 
+const (
+	ReportGetAnalysisReportEndpoint     = "v1/report/getAnalysis"
+	ReportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
+)
+
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
 func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, projectRuleset *rulesets.RuleSet, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
 	if analysis == nil {

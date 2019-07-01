@@ -13,6 +13,10 @@ type ProjectReport struct {
 	AnalysisSummaries []analyses.Summary `json:"analysis_summaries"`
 }
 
+const (
+	ReportGetProjectReportEndpoint = "v1/report/getProject"
+)
+
 // NewProjectReport takes a project and analysis summaries to return a
 // constructed Project Report
 func NewProjectReport(project *projects.Project, summaries []analyses.Summary) *ProjectReport {

@@ -51,6 +51,14 @@ type Summary struct {
 	Trigger       string    `json:"trigger"`
 }
 
+const (
+	AnalysisGetAnalysisEndpoint              = "v1/animal/getAnalysis"
+	AnalysisGetAnalysesEndpoint              = "v1/animal/getAnalyses"
+	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
+	AnalysisGetPublicAnalysisEndpoint        = "v1/animal/getPublicAnalysis"
+	AnalysisGetLatestPublicAnalysisEndpoint  = "v1/animal/getLatestPublicAnalysisSummary"
+)
+
 // NewSummary takes an Analysis and AppliedRulesetSummary to calculate and
 // return a Summary of the Analysis
 func NewSummary(a *Analysis, appliedRuleset *rulesets.AppliedRulesetSummary) *Summary {
