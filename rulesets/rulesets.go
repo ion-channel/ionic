@@ -41,7 +41,7 @@ type RuleSet struct {
 	Rules       []rules.Rule `json:"rules"`
 }
 
-// RuleSetExists takes a ruleSetID, teamId and token string and checks against api to see if ruleset exists.
+// RuleSetExists takes a client, baseURL, ruleSetID, teamId and token string and checks against api to see if ruleset exists.
 // It returns whether or not ruleset exists and any errors it encounters with the API.
 // This is used internally in the SDK
 func RuleSetExists(client *http.Client, baseURL *url.URL, ruleSetID, teamID, token string) (bool, error) {
