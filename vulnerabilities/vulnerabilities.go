@@ -8,6 +8,13 @@ import (
 	"github.com/ion-channel/ionic/products"
 )
 
+const (
+	GetVulnerabilitiesEndpoint       = "v1/vulnerability/getVulnerabilities"
+	GetVulnerabilitiesInFileEndpoint = "v1/vulnerability/getVulnerabilitiesInFile"
+	GetVulnerabilityEndpoint         = "v1/vulnerability/getVulnerability"
+	PostVulnerabilityEndpoint        = "v1/internal/vulnerability/addVulnerability"
+)
+
 // Vulnerability represents a singular vulnerability record in the Ion Channel
 // Platform
 type Vulnerability struct {

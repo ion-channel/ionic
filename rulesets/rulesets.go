@@ -6,6 +6,13 @@ import (
 	"github.com/ion-channel/ionic/rules"
 )
 
+const (
+	CreateRuleSetEndpoint     = "v1/ruleset/createRuleset"
+	GetAppliedRuleSetEndpoint = "v1/ruleset/getAppliedRulesetForProject"
+	GetRuleSetEndpoint        = "v1/ruleset/getRuleset"
+	GetRuleSetsEndpoint       = "v1/ruleset/getRulesets"
+)
+
 // CreateRuleSetOptions struct for creating a ruleset
 type CreateRuleSetOptions struct {
 	Name        string   `json:"name"`
@@ -25,10 +32,3 @@ type RuleSet struct {
 	UpdatedAt   time.Time    `json:"updated_at"`
 	Rules       []rules.Rule `json:"rules"`
 }
-
-const (
-	CreateRuleSetEndpoint     = "v1/ruleset/createRuleset"
-	GetAppliedRuleSetEndpoint = "v1/ruleset/getAppliedRulesetForProject"
-	GetRuleSetEndpoint        = "v1/ruleset/getRuleset"
-	GetRuleSetsEndpoint       = "v1/ruleset/getRulesets"
-)

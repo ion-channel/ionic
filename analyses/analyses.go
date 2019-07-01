@@ -7,6 +7,14 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
+const (
+	AnalysisGetAnalysisEndpoint              = "v1/animal/getAnalysis"
+	AnalysisGetAnalysesEndpoint              = "v1/animal/getAnalyses"
+	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
+	AnalysisGetPublicAnalysisEndpoint        = "v1/animal/getPublicAnalysis"
+	AnalysisGetLatestPublicAnalysisEndpoint  = "v1/animal/getLatestPublicAnalysisSummary"
+)
+
 // Analysis is a representation of an Ion Channel Analysis within the system
 type Analysis struct {
 	ID            string       `json:"id" xml:"id"`
@@ -50,14 +58,6 @@ type Summary struct {
 	TriggerAuthor string    `json:"trigger_author"`
 	Trigger       string    `json:"trigger"`
 }
-
-const (
-	AnalysisGetAnalysisEndpoint              = "v1/animal/getAnalysis"
-	AnalysisGetAnalysesEndpoint              = "v1/animal/getAnalyses"
-	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
-	AnalysisGetPublicAnalysisEndpoint        = "v1/animal/getPublicAnalysis"
-	AnalysisGetLatestPublicAnalysisEndpoint  = "v1/animal/getLatestPublicAnalysisSummary"
-)
 
 // NewSummary takes an Analysis and AppliedRulesetSummary to calculate and
 // return a Summary of the Analysis

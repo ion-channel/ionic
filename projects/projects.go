@@ -19,6 +19,15 @@ const (
 	validGitURIRegex = `^(?:(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync)+\+ssh\:\/\/|git\+https?:\/\/|git\@|(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync|ssh|file)+s?:\/\/)[^\s]+$`
 )
 
+const (
+	CreateProjectEndpoint         = "v1/project/createProject"
+	CreateProjectsFromCSVEndpoint = "v1/project/createProjectsCSV"
+	GetProjectEndpoint            = "v1/project/getProject"
+	GetProjectByURLEndpoint       = "v1/project/getProjectByUrl"
+	GetProjectsEndpoint           = "v1/project/getProjects"
+	UpdateProjectEndpoint         = "v1/project/updateProject"
+)
+
 var (
 	// ErrInvalidProject is returned when a given project does not pass the
 	// standards for a project

@@ -4,6 +4,13 @@ import (
 	"time"
 )
 
+const (
+	TeamsCreateTeamUserEndpoint = "v1/teamUsers/createTeamUser"
+	TeamsGetTeamUserEndpoint    = "v1/teamUsers/getTeamUser"
+	TeamsUpdateTeamUserEndpoint = "v1/teamUsers/updateTeamUser"
+	TeamsDeleteTeamUserEndpoint = "v1/teamUsers/deleteTeamUser"
+)
+
 // TeamUser is a representation of an Ion Channel Team User relationship within the system
 type TeamUser struct {
 	ID        string    `json:"id"`

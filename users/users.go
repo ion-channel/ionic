@@ -5,6 +5,14 @@ import (
 	"time"
 )
 
+const (
+	UsersCreateUserEndpoint         = "v1/users/createUser"
+	UsersGetSelfEndpoint            = "v1/users/getSelf"
+	UsersSubscribedForEventEndpoint = "v1/users/subscribedForEvent"
+	UsersGetUserEndpoint            = "v1/users/getUser"
+	UsersGetUsers                   = "v1/users/getUsers"
+)
+
 // User is a representation of an Ion Channel User within the system
 type User struct {
 	ID                string            `json:"id"`

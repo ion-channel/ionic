@@ -4,6 +4,11 @@ import (
 	"time"
 )
 
+const (
+	GetProductEndpoint    = "v1/vulnerability/getProducts"
+	ProductSearchEndpoint = "v1/product/search"
+)
+
 // Product represents a software product within the system for identification
 // across multiple sources
 type Product struct {

@@ -9,18 +9,13 @@ import (
 	"github.com/ion-channel/ionic/products"
 )
 
-const (
-	getProductEndpoint    = "v1/vulnerability/getProducts"
-	productSearchEndpoint = "v1/product/search"
-)
-
 // GetProducts takes a product ID search string and token.  It returns the product found,
 // and any API errors it may encounters.
 func (ic *IonClient) GetProducts(idSearch, token string) ([]products.Product, error) {
 	params := &url.Values{}
 	params.Set("external_id", idSearch)
 
-	b, err := ic.Get(getProductEndpoint, token, params, nil, nil)
+	b, err := ic.Get(products.GetProductEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get raw product: %v", err.Error())
 	}
@@ -46,7 +41,7 @@ func (ic *IonClient) ProductSearch(searchInput products.ProductSearchQuery, toke
 		return nil, err
 	}
 	buffer := bytes.NewBuffer(bodyBytes)
-	b, err := ic.Post(productSearchEndpoint, token, nil, *buffer, nil)
+	b, err := ic.Post(products.ProductSearchEndpoint, token, nil, *buffer, nil)
 	if err != nil {
 		// log
 		return nil, err
@@ -66,7 +61,7 @@ func (ic *IonClient) GetRawProducts(idSearch, token string) (json.RawMessage, er
 	params := &url.Values{}
 	params.Set("external_id", idSearch)
 
-	b, err := ic.Get(getProductEndpoint, token, params, nil, nil)
+	b, err := ic.Get(products.GetProductEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get raw product: %v", err.Error())
 	}
@@ -80,7 +75,7 @@ func (ic *IonClient) GetProductSearch(query, token string) ([]products.Product, 
 	params := &url.Values{}
 	params.Set("q", query)
 
-	b, err := ic.Get(productSearchEndpoint, token, params, nil, nil)
+	b, err := ic.Get(products.ProductSearchEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to GetProductSearch: %v", err.Error())
 	}

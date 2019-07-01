@@ -14,13 +14,6 @@ import (
 	"github.com/ion-channel/ionic/vulnerabilities"
 )
 
-const (
-	getVulnerabilitiesEndpoint       = "v1/vulnerability/getVulnerabilities"
-	getVulnerabilitiesInFileEndpoint = "v1/vulnerability/getVulnerabilitiesInFile"
-	getVulnerabilityEndpoint         = "v1/vulnerability/getVulnerability"
-	postVulnerabilityEndpoint        = "v1/internal/vulnerability/addVulnerability"
-)
-
 // AddVulnerability takes in a vulnerability object populated with the desired
 // data to send to the API and a token to use. It will return the inserted
 // vulnerability and any errors it encounters with the API.
@@ -32,7 +25,7 @@ func (ic *IonClient) AddVulnerability(newVuln *vulnerabilities.Vulnerability, to
 
 	p := bytes.NewBuffer(nv)
 
-	b, err := ic.Post(postVulnerabilityEndpoint, token, nil, *p, nil)
+	b, err := ic.Post(vulnerabilities.PostVulnerabilityEndpoint, token, nil, *p, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to add vulnerability: %v", err.Error())
 	}
@@ -57,7 +50,7 @@ func (ic *IonClient) GetVulnerabilities(product, version, token string, page *pa
 		params.Set("version", version)
 	}
 
-	b, err := ic.Get(getVulnerabilitiesEndpoint, token, params, nil, page)
+	b, err := ic.Get(vulnerabilities.GetVulnerabilitiesEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
 	}
@@ -99,7 +92,7 @@ func (ic *IonClient) GetVulnerabilitiesInFile(filePath, token string) ([]vulnera
 	h.Set("Content-Type", bw.FormDataContentType())
 	bw.Close()
 
-	b, err := ic.Post(getVulnerabilitiesInFileEndpoint, token, nil, *buff, h)
+	b, err := ic.Post(vulnerabilities.GetVulnerabilitiesInFileEndpoint, token, nil, *buff, h)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerabilities: %v", err.Error())
 	}
@@ -119,7 +112,7 @@ func (ic *IonClient) GetVulnerability(id, token string) (*vulnerabilities.Vulner
 	params := &url.Values{}
 	params.Set("external_id", id)
 
-	b, err := ic.Get(getVulnerabilityEndpoint, token, params, nil, nil)
+	b, err := ic.Get(vulnerabilities.GetVulnerabilityEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerability: %v", err.Error())
 	}
@@ -139,7 +132,7 @@ func (ic *IonClient) GetRawVulnerability(id, token string) (json.RawMessage, err
 	params := &url.Values{}
 	params.Set("external_id", id)
 
-	b, err := ic.Get(getVulnerabilityEndpoint, token, params, nil, nil)
+	b, err := ic.Get(vulnerabilities.GetVulnerabilityEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get vulnerability: %v", err.Error())
 	}

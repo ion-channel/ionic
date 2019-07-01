@@ -16,15 +16,6 @@ import (
 	"github.com/ion-channel/ionic/projects"
 )
 
-const (
-	createProjectEndpoint         = "v1/project/createProject"
-	createProjectsFromCSVEndpoint = "v1/project/createProjectsCSV"
-	getProjectEndpoint            = "v1/project/getProject"
-	getProjectByURLEndpoint       = "v1/project/getProjectByUrl"
-	getProjectsEndpoint           = "v1/project/getProjects"
-	updateProjectEndpoint         = "v1/project/updateProject"
-)
-
 // CreateProjectsResponse represents the response from the API when sending a
 // list of projects to be created. It contains the details of each project
 // created, and a list of any errors that were encountered.
@@ -46,7 +37,7 @@ func (ic *IonClient) CreateProject(project *projects.Project, teamID, token stri
 		return nil, fmt.Errorf("failed to marshall project: %v", err.Error())
 	}
 
-	b, err = ic.Post(createProjectEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	b, err = ic.Post(projects.CreateProjectEndpoint, token, params, *bytes.NewBuffer(b), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create project: %v", err.Error())
 	}
@@ -91,7 +82,7 @@ func (ic *IonClient) CreateProjectsFromCSV(csvFile, teamID, token string) (*Crea
 	h := http.Header{}
 	h.Set("Content-Type", w.FormDataContentType())
 
-	b, err := ic.Post(createProjectsFromCSVEndpoint, token, params, buf, h)
+	b, err := ic.Post(projects.CreateProjectsFromCSVEndpoint, token, params, buf, h)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create projects: %v", err.Error())
 	}
@@ -113,7 +104,7 @@ func (ic *IonClient) GetProject(id, teamID, token string) (*projects.Project, er
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(getProjectEndpoint, token, params, nil, nil)
+	b, err := ic.Get(projects.GetProjectEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -134,7 +125,7 @@ func (ic *IonClient) GetRawProject(id, teamID, token string) (json.RawMessage, e
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(getProjectEndpoint, token, params, nil, nil)
+	b, err := ic.Get(projects.GetProjectEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -148,7 +139,7 @@ func (ic *IonClient) GetProjects(teamID, token string, page *pagination.Paginati
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(getProjectsEndpoint, token, params, nil, page)
+	b, err := ic.Get(projects.GetProjectsEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
 	}
@@ -170,7 +161,7 @@ func (ic *IonClient) GetProjectByURL(uri, teamID, token string) (*projects.Proje
 	params.Set("url", uri)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(getProjectByURLEndpoint, token, params, nil, nil)
+	b, err := ic.Get(projects.GetProjectByURLEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects by url: %v", err.Error())
 	}
@@ -216,7 +207,7 @@ func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*pr
 		return nil, fmt.Errorf("failed to marshall project: %v", err.Error())
 	}
 
-	b, err = ic.Put(updateProjectEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	b, err = ic.Put(projects.UpdateProjectEndpoint, token, params, *bytes.NewBuffer(b), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to update projects: %v", err.Error())
 	}

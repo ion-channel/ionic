@@ -6,16 +6,16 @@ import (
 	"github.com/ion-channel/ionic/rulesets"
 )
 
+const (
+	ReportGetProjectReportEndpoint = "v1/report/getProject"
+)
+
 // ProjectReport gives the details of a project including past analyses
 type ProjectReport struct {
 	*projects.Project
 	RulesetName       string             `json:"ruleset_name"`
 	AnalysisSummaries []analyses.Summary `json:"analysis_summaries"`
 }
-
-const (
-	ReportGetProjectReportEndpoint = "v1/report/getProject"
-)
 
 // NewProjectReport takes a project and analysis summaries to return a
 // constructed Project Report

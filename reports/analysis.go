@@ -13,6 +13,11 @@ import (
 	"github.com/ion-channel/ionic/tags"
 )
 
+const (
+	ReportGetAnalysisReportEndpoint     = "v1/report/getAnalysis"
+	ReportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
+)
+
 // AnalysisReport is a Ion Channel representation of a report output from a
 // given analysis
 type AnalysisReport struct {
@@ -48,11 +53,6 @@ type analysisReport struct {
 	Digests           []digests.Digest                `json:"digests" xml:"digests"`
 	RulesetEvaluation *rulesets.AppliedRulesetSummary `json:"ruleset_evaluation" xml:"ruleset_evaluation"`
 }
-
-const (
-	ReportGetAnalysisReportEndpoint     = "v1/report/getAnalysis"
-	ReportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
-)
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
 func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, projectRuleset *rulesets.RuleSet, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
