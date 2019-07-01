@@ -8,15 +8,15 @@ import (
 )
 
 const (
-	// AnalysisGetAnalysisEndpoint is a string representation of the current endpoint for getting projects
+	// AnalysisGetAnalysisEndpoint is a string representation of the current endpoint for getting analysis
 	AnalysisGetAnalysisEndpoint = "v1/animal/getAnalysis"
-	// AnalysisGetAnalysesEndpoint is a string representation of the current endpoint for getting projects
+	// AnalysisGetAnalysesEndpoint is a string representation of the current endpoint for getting analyses
 	AnalysisGetAnalysesEndpoint = "v1/animal/getAnalyses"
-	// AnalysisGetLatestAnalysisSummaryEndpoint is a string representation of the current endpoint for getting projects
+	// AnalysisGetLatestAnalysisSummaryEndpoint is a string representation of the current endpoint for getting latest analysis summary
 	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
-	// AnalysisGetPublicAnalysisEndpoint is a string representation of the current endpoint for getting projects
+	// AnalysisGetPublicAnalysisEndpoint is a string representation of the current endpoint for getting public analysis
 	AnalysisGetPublicAnalysisEndpoint = "v1/animal/getPublicAnalysis"
-	//A nalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting projects
+	//A nalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting latesting public analysis
 	AnalysisGetLatestPublicAnalysisEndpoint = "v1/animal/getLatestPublicAnalysisSummary"
 )
 

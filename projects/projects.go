@@ -20,17 +20,17 @@ const (
 )
 
 const (
-	// CreateProjectEndpoint is a string representation of the current endpoint for getting projects
+	// CreateProjectEndpoint is a string representation of the current endpoint for creating project
 	CreateProjectEndpoint = "v1/project/createProject"
-	// CreateProjectsFromCSVEndpoint is a string representation of the current endpoint for getting projects
+	// CreateProjectsFromCSVEndpoint is a string representation of the current endpoint for creating projects from CSV
 	CreateProjectsFromCSVEndpoint = "v1/project/createProjectsCSV"
-	// GetProjectEndpoint is a string representation of the current endpoint for getting projects
+	// GetProjectEndpoint is a string representation of the current endpoint for getting project
 	GetProjectEndpoint = "v1/project/getProject"
-	// GetProjectByURLEndpoint is a string representation of the current endpoint for getting projects
+	// GetProjectByURLEndpoint is a string representation of the current endpoint for getting project by URL
 	GetProjectByURLEndpoint = "v1/project/getProjectByUrl"
 	// GetProjectsEndpoint is a string representation of the current endpoint for getting projects
 	GetProjectsEndpoint = "v1/project/getProjects"
-	// UpdateProjectEndpoint is a string representation of the current endpoint for getting projects
+	// UpdateProjectEndpoint is a string representation of the current endpoint for updating project
 	UpdateProjectEndpoint = "v1/project/updateProject"
 )
 

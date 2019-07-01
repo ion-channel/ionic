@@ -5,9 +5,9 @@ import (
 )
 
 const (
-	// GetProductEndpoint is a string representation of the current endpoint for getting projects
+	// GetProductEndpoint is a string representation of the current endpoint for getting product
 	GetProductEndpoint = "v1/vulnerability/getProducts"
-	// ProductSearchEndpoint is a string representation of the current endpoint for getting projects
+	// ProductSearchEndpoint is a string representation of the current endpoint for product search
 	ProductSearchEndpoint = "v1/product/search"
 )
 
