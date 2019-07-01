@@ -115,14 +115,5 @@ func (ic *IonClient) GetRuleSets(teamID, token string, page *pagination.Paginati
 // RuleSetExists takes a ruleSetID, teamId and token string and checks against api to see if ruleset exists.
 // It returns whether or not ruleset exists and any errors it encounters with the API.
 func (ic *IonClient) RuleSetExists(ruleSetID, teamID, token string) (bool, error) {
-	params := &url.Values{}
-	params.Set("id", ruleSetID)
-	params.Set("team_id", teamID)
-
-	err := ic.Head(rulesets.GetRuleSetEndpoint, token, params, nil, nil)
-	if err != nil {
-		return false, fmt.Errorf("failed to find ruleset: %v", err.Error())
-	}
-
-	return true, nil
+	return rulesets.RuleSetExists(ic.client, ic.baseURL, ruleSetID, teamID, token)
 }
