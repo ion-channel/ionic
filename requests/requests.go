@@ -111,37 +111,42 @@ func createURL(baseURL *url.URL, endpoint string, params *url.Values, page *pagi
 	return &u
 }
 
-// Delete takes an endpoint, token, params, and headers to pass as a delete call to the
+// Delete takes a client, baseURL, endpoint, token, params, and headers to pass as a delete call to the
 // API.  It will return a json RawMessage for the response and any errors it
 // encounters with the API.
+// It is used internally by the SDK
 func Delete(client http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, headers http.Header) (json.RawMessage, error) {
 	return do(client, "DELETE", baseURL, endpoint, token, params, bytes.Buffer{}, headers, nil)
 }
 
-// Head takes an endpoint, token, params, headers, and pagination params to pass as a
+// Head takes a client, baseURL, endpoint, token, params, headers, and pagination params to pass as a
 // head call to the API.  It will return any errors it encounters with the API.
+// It is used internally by the SDK
 func Head(client http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) error {
 	_, err := do(client, "HEAD", baseURL, endpoint, token, params, bytes.Buffer{}, headers, page)
 	return err
 }
 
-// Get takes an endpoint, token, params, headers, and pagination params to pass as a
+// Get takes a client, baseURL, endpoint, token, params, headers, and pagination params to pass as a
 // get call to the API.  It will return a json RawMessage for the response and
 // any errors it encounters with the API.
+// It is used internally by the SDK
 func Get(client http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
 	return do(client, "GET", baseURL, endpoint, token, params, bytes.Buffer{}, headers, page)
 }
 
-// Post takes an endpoint, token, params, payload, and headers to pass as a post call
+// Post takes a client, baseURL, endpoint, token, params, payload, and headers to pass as a post call
 // to the API.  It will return a json RawMessage for the response and any errors
 // it encounters with the API.
+// It is used internally by the SDK
 func Post(client http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return do(client, "POST", baseURL, endpoint, token, params, payload, headers, nil)
 }
 
-// Put takes an endpoint, token, params, payload, and headers to pass as a put call to
+// Put takes a client, baseURL, endpoint, token, params, payload, and headers to pass as a put call to
 // the API.  It will return a json RawMessage for the response and any errors it
 // encounters with the API.
+// It is used internally by the SDK
 func Put(client http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return do(client, "PUT", baseURL, endpoint, token, params, payload, headers, nil)
 }

@@ -83,7 +83,7 @@ func (ic *IonClient) Post(endpoint, token string, params *url.Values, payload by
 }
 
 // Put takes an endpoint, token, params, payload, and headers to pass as a put call to
-// the request.Put function.  It will return a json RawMessage for the response and any errors it
+// the API.  It will return a json RawMessage for the response and any errors it
 // encounters with the API.
 func (ic *IonClient) Put(endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return requests.Put(*ic.client, ic.baseURL, endpoint, token, params, payload, headers)
