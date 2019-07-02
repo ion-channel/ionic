@@ -67,7 +67,7 @@ type Project struct {
 	Tags           []tags.Tag      `json:"tags"`
 }
 
-// Validate takes an http client and returns a slice of fields as a string and
+// Validate takes an http client, baseURL, and token; returns a slice of fields as a string and
 // an error. The fields will be a list of fields that did not pass the
 // validation. An error will only be returned if any of the fields fail their
 // validation.
