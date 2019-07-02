@@ -122,6 +122,7 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 
 	if !exists {
 		invalidFields["ruleset_id"] = "ruleset id does not match to a valid ruleset"
+		projErr = ErrInvalidProject
 	}
 
 	r := regexp.MustCompile(validEmailRegex)

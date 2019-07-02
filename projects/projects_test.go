@@ -307,7 +307,7 @@ func TestProject(t *testing.T) {
 
 				fs, err := p.Validate(client, b, testToken)
 				Expect(err).To(Equal(ErrInvalidProject))
-				Expect(fs["ruleset_id"]).To(Equal("invalid email supplied"))
+				Expect(fs["ruleset_id"]).To(Equal("ruleset id does not match to a valid ruleset"))
 			})
 		})
 	})
