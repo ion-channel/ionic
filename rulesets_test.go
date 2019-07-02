@@ -71,6 +71,16 @@ func TestRuleSets(t *testing.T) {
 				SetStatus(http.StatusNotFound)
 
 			exists, err := client.RuleSetExists("c0210380-3d44-495d-9d10-c7d436a63870", "a2d2a3e5-e274-bb88-aef2-1d47f029c289", "sometoken")
+			Expect(err).To(BeNil())
+			Expect(exists).To(Equal(false))
+		})
+
+		g.It("should tell if a ruleset gives a status internal server error", func() {
+			server.AddPath("/v1/ruleset/getRuleset").
+				SetMethods("HEAD").
+				SetStatus(http.StatusInternalServerError)
+
+			exists, err := client.RuleSetExists("c0210380-3d44-495d-9d10-c7d436a63870", "a2d2a3e5-e274-bb88-aef2-1d47f029c289", "sometoken")
 			Expect(err).NotTo(BeNil())
 			Expect(exists).To(Equal(false))
 		})
