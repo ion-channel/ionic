@@ -4,12 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"testing"
 	"time"
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	. "github.com/onsi/gomega"
+)
+
+const (
+	testToken = "token"
 )
 
 func TestProject(t *testing.T) {
@@ -38,38 +43,53 @@ func TestProject(t *testing.T) {
 		})
 
 		g.It("should return no error if a project is valid", func() {
+			server.AddPath("/v1/ruleset/getRuleset").
+				SetMethods("HEAD").
+				SetStatus(http.StatusOK)
+
 			var p Project
 			err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidProject, host, port)), &p)
+			b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 			Expect(err).To(BeNil())
 
 			p.DeployKey = sampleValidKey
 
-			fs, err := p.Validate(client)
+			fs, err := p.Validate(client, b, testToken)
 			Expect(err).To(BeNil())
 			Expect(len(fs)).To(Equal(0))
 		})
 
 		g.It("should return no errors for a blank field", func() {
+			server.AddPath("/v1/ruleset/getRuleset").
+				SetMethods("HEAD").
+				SetStatus(http.StatusOK)
+
 			var p Project
 			err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+			b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 			Expect(err).To(BeNil())
 			Expect(p.ID).NotTo(BeNil())
 			Expect(*p.ID).To(Equal(""))
 
-			fs, err := p.Validate(client)
+			fs, err := p.Validate(client, b, testToken)
 			Expect(err).To(BeNil())
 			Expect(len(fs)).To(Equal(0))
 		})
 
 		g.It("should return missing fields as a list and error", func() {
+			server.AddPath("/v1/ruleset/getRuleset").
+				SetMethods("HEAD").
+				SetStatus(http.StatusOK)
+
 			var p Project
 			err := json.Unmarshal([]byte(fmt.Sprintf(sampleInvalidProject, host, port)), &p)
+			b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 			Expect(err).To(BeNil())
 			Expect(p.Name).To(BeNil())
 			Expect(p.Type).To(BeNil())
 			Expect(p.Branch).To(BeNil())
 
-			fs, err := p.Validate(client)
+			fs, err := p.Validate(client, b, testToken)
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(len(fs)).To(Equal(2))
 			Expect(fs["name"]).To(Equal("missing name"))
@@ -77,48 +97,60 @@ func TestProject(t *testing.T) {
 		})
 
 		g.It("should say a project is invalid if a deploy key is invalid", func() {
+			server.AddPath("/v1/ruleset/getRuleset").
+				SetMethods("HEAD").
+				SetStatus(http.StatusOK)
+
 			var p Project
 			err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidProject, host, port)), &p)
+			b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 			Expect(err).To(BeNil())
 
 			p.DeployKey = sampleInvalidKey
-			fs, err := p.Validate(client)
+			fs, err := p.Validate(client, b, testToken)
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
 
 			p.DeployKey = "not valid"
-			fs, err = p.Validate(client)
+			fs, err = p.Validate(client, b, testToken)
 			Expect(err).To(Equal(ErrInvalidProject))
 			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
 		})
 
 		g.Describe("Type", func() {
+			g.BeforeEach(func() {
+				server.AddPath("/v1/ruleset/getRuleset").
+					SetMethods("HEAD").
+					SetStatus(http.StatusOK)
+			})
+
 			g.It("should say a project is valid if the type is valid", func() {
 				var p Project
 				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 				Expect(err).To(BeNil())
 
 				t := "git"
 				p.Type = &t
-				fs, err := p.Validate(client)
+				fs, err := p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 
 				t = "svn"
 				p.Type = &t
-				fs, err = p.Validate(client)
+				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 
 				t = "artifact"
 				p.Type = &t
-				fs, err = p.Validate(client)
+				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 
 				t = "GiT"
 				p.Type = &t
-				fs, err = p.Validate(client)
+				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 			})
@@ -126,34 +158,42 @@ func TestProject(t *testing.T) {
 			g.It("should say a project is invalid if the type is invalid", func() {
 				var p Project
 				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 				Expect(err).To(BeNil())
 
 				t := "gahhhbage"
 				p.Type = &t
-				fs, err := p.Validate(client)
+				fs, err := p.Validate(client, b, testToken)
 				Expect(err).NotTo(BeNil())
 				Expect(len(fs)).To(Equal(1))
 			})
 		})
 
 		g.Describe("Email", func() {
+			g.BeforeEach(func() {
+				server.AddPath("/v1/ruleset/getRuleset").
+					SetMethods("HEAD").
+					SetStatus(http.StatusOK)
+			})
+
 			g.It("should say a project is valid if an email is valid", func() {
 				var p Project
 				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 				Expect(err).To(BeNil())
 
 				p.POCEmail = "dev@ionchannel.io"
-				fs, err := p.Validate(client)
+				fs, err := p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 
 				p.POCEmail = "dev@howmanyscootersareinthewillamette.science"
-				fs, err = p.Validate(client)
+				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 
 				p.POCEmail = "me+idontbelieveyouwontspamme@gmail.com"
-				fs, err = p.Validate(client)
+				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
 			})
@@ -161,19 +201,27 @@ func TestProject(t *testing.T) {
 			g.It("should say a project is invalid if an email is invalid", func() {
 				var p Project
 				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 				Expect(err).To(BeNil())
 
 				p.POCEmail = "notavalidemail"
-				fs, err := p.Validate(client)
+				fs, err := p.Validate(client, b, testToken)
 				Expect(err).To(Equal(ErrInvalidProject))
 				Expect(fs["poc_email"]).To(Equal("invalid email supplied"))
 			})
 		})
 
 		g.Describe("Source", func() {
+			g.BeforeEach(func() {
+				server.AddPath("/v1/ruleset/getRuleset").
+					SetMethods("HEAD").
+					SetStatus(http.StatusOK)
+			})
+
 			g.It("should permit valid urls", func() {
 				var p Project
 				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 				Expect(err).To(BeNil())
 
 				us := []string{
@@ -212,7 +260,7 @@ func TestProject(t *testing.T) {
 					p.Source = &s
 					p.Type = &t
 
-					fs, err := p.Validate(client)
+					fs, err := p.Validate(client, b, testToken)
 					Expect(err).To(BeNil(), fmt.Sprintf("Expected\n%v\nto be nil for repo\n%v\n", err, *p.Source))
 					Expect(len(fs)).To(Equal(0))
 				}
@@ -221,6 +269,7 @@ func TestProject(t *testing.T) {
 			g.It("should detect bad urls", func() {
 				var p Project
 				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
 				Expect(err).To(BeNil())
 
 				us := []string{
@@ -238,10 +287,27 @@ func TestProject(t *testing.T) {
 					p.Source = &s
 					p.Type = &t
 
-					fs, err := p.Validate(client)
+					fs, err := p.Validate(client, b, testToken)
 					Expect(err).NotTo(BeNil())
 					Expect(len(fs)).To(Equal(1))
 				}
+			})
+		})
+
+		g.Describe("Ruleset", func() {
+			g.It("should return an error if ruleset is not valid", func() {
+				server.AddPath("/v1/ruleset/getRuleset").
+					SetMethods("HEAD").
+					SetStatus(http.StatusNotFound)
+
+				var p Project
+				err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidBlankProject, host, port)), &p)
+				b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
+				Expect(err).To(BeNil())
+
+				fs, err := p.Validate(client, b, testToken)
+				Expect(err).To(Equal(ErrInvalidProject))
+				Expect(fs["ruleset_id"]).To(Equal("invalid email supplied"))
 			})
 		})
 	})
