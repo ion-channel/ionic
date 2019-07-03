@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/ion-channel/ionic/aliases"
+	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/tags"
 )
 
@@ -66,11 +67,11 @@ type Project struct {
 	Tags           []tags.Tag      `json:"tags"`
 }
 
-// Validate takes an http client and returns a slice of fields as a string and
+// Validate takes an http client, baseURL, and token; returns a slice of fields as a string and
 // an error. The fields will be a list of fields that did not pass the
 // validation. An error will only be returned if any of the fields fail their
 // validation.
-func (p *Project) Validate(client *http.Client) (map[string]string, error) {
+func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) (map[string]string, error) {
 	invalidFields := make(map[string]string)
 	var projErr error
 
@@ -111,6 +112,16 @@ func (p *Project) Validate(client *http.Client) (map[string]string, error) {
 
 	if p.Description == nil {
 		invalidFields["description"] = "missing description"
+		projErr = ErrInvalidProject
+	}
+
+	exists, err := rulesets.RuleSetExists(client, baseURL, *p.RulesetID, *p.TeamID, token)
+	if err != nil {
+		return nil, fmt.Errorf("failed to determine if ruleset exists: %v", err.Error())
+	}
+
+	if !exists {
+		invalidFields["ruleset_id"] = "ruleset id does not match to a valid ruleset"
 		projErr = ErrInvalidProject
 	}
 
