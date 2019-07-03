@@ -115,14 +115,16 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 		projErr = ErrInvalidProject
 	}
 
-	exists, err := rulesets.RuleSetExists(client, baseURL, *p.RulesetID, *p.TeamID, token)
-	if err != nil {
-		return nil, fmt.Errorf("failed to determine if ruleset exists: %v", err.Error())
-	}
+	if p.RulesetID != nil && p.TeamID != nil {
+		exists, err := rulesets.RuleSetExists(client, baseURL, *p.RulesetID, *p.TeamID, token)
+		if err != nil {
+			return nil, fmt.Errorf("failed to determine if ruleset exists: %v", err.Error())
+		}
 
-	if !exists {
-		invalidFields["ruleset_id"] = "ruleset id does not match to a valid ruleset"
-		projErr = ErrInvalidProject
+		if !exists {
+			invalidFields["ruleset_id"] = "ruleset id does not match to a valid ruleset"
+			projErr = ErrInvalidProject
+		}
 	}
 
 	r := regexp.MustCompile(validEmailRegex)
