@@ -33,6 +33,9 @@ func TestProjects(t *testing.T) {
 				SetMethods("POST").
 				SetPayload([]byte(SampleValidProject)).
 				SetStatus(http.StatusCreated)
+			server.AddPath("/v1/ruleset/getRuleset").
+				SetMethods("HEAD").
+				SetStatus(http.StatusOK)
 
 			project, err := client.CreateProject(project, "bef86653-1926-4990-8ef8-5f26cd59d6fc", "")
 			Expect(err).To(BeNil())
