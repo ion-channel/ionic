@@ -26,7 +26,7 @@ type CreateProjectsResponse struct {
 	} `json:"errors"`
 }
 
-//CreateProject takes a project object and token to use. It returns the
+//CreateProject takes a project object, teamId, and token to use. It returns the
 // project stored or an error encountered by the API
 func (ic *IonClient) CreateProject(project *projects.Project, teamID, token string) (*projects.Project, error) {
 	params := &url.Values{}
@@ -46,6 +46,15 @@ func (ic *IonClient) CreateProject(project *projects.Project, teamID, token stri
 	err = json.Unmarshal(b, &p)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response from create: %v", err.Error())
+	}
+
+	fields, err := p.Validate(ic.client, ic.baseURL, token)
+	if err != nil {
+		var errs []string
+		for _, msg := range fields {
+			errs = append(errs, msg)
+		}
+		return nil, fmt.Errorf("%v: %v", projects.ErrInvalidProject, strings.Join(errs, ", "))
 	}
 
 	return &p, nil
