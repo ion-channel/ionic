@@ -117,6 +117,46 @@ func TestProject(t *testing.T) {
 			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
 		})
 
+		g.It("should return string in JSON", func() {
+			id := "someid"
+			teamID := "someteamiD"
+			rulesetID := "someruleset"
+			name := "coolproject"
+			projectType := "artifact"
+			source := "http://%v:%v/goodurl"
+			branch := "master"
+			desc := "the coolest project around"
+			createdAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+			updatedAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+
+			p := Project{
+				ID:             &id,
+				TeamID:         &teamID,
+				RulesetID:      &rulesetID,
+				Name:           &name,
+				Type:           &projectType,
+				Source:         &source,
+				Branch:         &branch,
+				Description:    &desc,
+				Active:         true,
+				ChatChannel:    "#thechan",
+				CreatedAt:      createdAt,
+				UpdatedAt:      updatedAt,
+				DeployKey:      "thekey",
+				Monitor:        false,
+				POCName:        "youknowit",
+				POCEmail:       "you@know.it",
+				Username:       "knowit",
+				Password:       "supersecret",
+				KeyFingerprint: "supersecret",
+				Private:        true,
+				Aliases:        nil,
+				Tags:           nil,
+			}
+			Expect(fmt.Sprintf("%v", p)).To(Equal(`{"id":"someid","team_id":"someteamiD","ruleset_id":"someruleset","name":"coolproject","type":"artifact","source":"http://%v:%v/goodurl","branch":"master","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","deploy_key":"thekey","should_monitor":false,"poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","private":true,"aliases":null,"tags":null}`))
+
+		})
+
 		g.Describe("Type", func() {
 			g.BeforeEach(func() {
 				server.AddPath("/v1/ruleset/getRuleset").
