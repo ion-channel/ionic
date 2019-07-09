@@ -126,7 +126,6 @@ func TestProject(t *testing.T) {
 			source := "http://%v:%v/goodurl"
 			branch := "master"
 			desc := "the coolest project around"
-			//func Date(year int, month Month, day, hour, min, sec, nsec int, loc *Location) Time
 			createdAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
 			updatedAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
 

@@ -39,7 +39,7 @@ type User struct {
 func (u User) String() string {
 	b, err := json.Marshal(u)
 	if err != nil {
-		return fmt.Sprintf("failed to format project: %v", err.Error())
+		return fmt.Sprintf("failed to format user: %v", err.Error())
 	}
 	return string(b)
 }

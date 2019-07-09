@@ -32,7 +32,7 @@ type Team struct {
 func (t Team) String() string {
 	b, err := json.Marshal(t)
 	if err != nil {
-		return fmt.Sprintf("failed to format project: %v", err.Error())
+		return fmt.Sprintf("failed to format team: %v", err.Error())
 	}
 	return string(b)
 }

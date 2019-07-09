@@ -1,6 +1,7 @@
 package rulesets
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -40,6 +41,15 @@ type RuleSet struct {
 	CreatedAt   time.Time    `json:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at"`
 	Rules       []rules.Rule `json:"rules"`
+}
+
+// String returns a JSON formatted string of the project object
+func (r RuleSet) String() string {
+	b, err := json.Marshal(r)
+	if err != nil {
+		return fmt.Sprintf("failed to format ruleset: %v", err.Error())
+	}
+	return string(b)
 }
 
 // RuleSetExists takes a client, baseURL, ruleSetID, teamId and token string and checks against api to see if ruleset exists.
