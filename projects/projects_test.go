@@ -201,6 +201,11 @@ func TestProject(t *testing.T) {
 				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
+
+				p.POCEmail = "  ivegotspaces@gmail.com  "
+				fs, err = p.Validate(client, b, testToken)
+				Expect(err).To(BeNil())
+				Expect(len(fs)).To(Equal(0))
 			})
 
 			g.It("should say a project is invalid if an email is invalid", func() {

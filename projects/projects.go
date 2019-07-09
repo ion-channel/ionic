@@ -127,6 +127,8 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 		}
 	}
 
+	p.POCEmail = strings.TrimSpace(p.POCEmail)
+
 	r := regexp.MustCompile(validEmailRegex)
 	if p.POCEmail != "" && !r.MatchString(p.POCEmail) {
 		invalidFields["poc_email"] = "invalid email supplied"
