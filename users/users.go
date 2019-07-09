@@ -2,6 +2,7 @@ package users
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 )
 
@@ -32,4 +33,13 @@ type User struct {
 	SysAdmin          bool              `json:"sys_admin"`
 	System            bool              `json:"system"`
 	Teams             map[string]string `json:"teams"`
+}
+
+// String returns a JSON formatted string of the project object
+func (u User) String() string {
+	b, err := json.Marshal(u)
+	if err != nil {
+		return fmt.Sprintf("failed to format project: %v", err.Error())
+	}
+	return string(b)
 }
