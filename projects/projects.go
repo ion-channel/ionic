@@ -2,6 +2,7 @@ package projects
 
 import (
 	"crypto/x509"
+	"encoding/json"
 	"encoding/pem"
 	"fmt"
 	"net/http"
@@ -65,6 +66,15 @@ type Project struct {
 	Private        bool            `json:"private"`
 	Aliases        []aliases.Alias `json:"aliases"`
 	Tags           []tags.Tag      `json:"tags"`
+}
+
+// String returns a JSON formatted string of the project object
+func (p Project) String() string {
+	b, err := json.Marshal(p)
+	if err != nil {
+		return fmt.Sprintf("failed to format project: %v", err.Error())
+	}
+	return string(b)
 }
 
 // Validate takes an http client, baseURL, and token; returns a slice of fields as a string and
