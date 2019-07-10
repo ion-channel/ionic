@@ -28,6 +28,16 @@ type scan struct {
 	Description string          `json:"description"`
 }
 
+// String returns a JSON formatted string of the scan object
+func (s Scan) String() string {
+	fmt.Println("Here!!!!")
+	b, err := json.Marshal(s)
+	if err != nil {
+		return fmt.Sprintf("failed to format user: %v", err.Error())
+	}
+	return string(b)
+}
+
 // NewScan creates and returns a new Scan struct
 func NewScan(id, teamID, projectID, analysisID, summary, name, description string, results json.RawMessage, createdAt, updatedAt time.Time, duration float64) (*Scan, error) {
 	s := scan{

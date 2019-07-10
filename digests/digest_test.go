@@ -1,6 +1,7 @@
 package digests
 
 import (
+	"fmt"
 	"sort"
 	"testing"
 
@@ -36,6 +37,30 @@ func TestDigest(t *testing.T) {
 				Expect(ds[1].Index).To(Equal(1))
 				Expect(ds[2].Index).To(Equal(2))
 				Expect(ds[3].Index).To(Equal(3))
+			})
+		})
+
+		g.Describe("Strings", func() {
+			g.It("should return string in JSON", func() {
+				d := Digest{
+					Index:          12,
+					Title:          "sometitle",
+					Data:           nil,
+					ScanID:         "somescanid",
+					RuleID:         "someruleid",
+					RulesetID:      "somerulesetid",
+					Evaluated:      true,
+					Pending:        false,
+					Passed:         true,
+					PassedMessage:  "somepassedmessage",
+					Warning:        false,
+					WarningMessage: "somewarningmessage",
+					Errored:        false,
+					ErroredMessage: "someerroredmessage",
+					singularTitle:  "somesingulartitle",
+					pluralTitle:    "somepluraltitle",
+				}
+				Expect(fmt.Sprintf("%v", d)).To(Equal(`{"index":12,"title":"sometitle","data":null,"scan_id":"somescanid","rule_id":"someruleid","ruleset_id":"somerulesetid","evaluated":true,"pending":false,"passed":true,"passed_message":"somepassedmessage","warning":false,"warning_message":"somewarningmessage","errored":false,"errored_message":"someerroredmessage"}`))
 			})
 		})
 

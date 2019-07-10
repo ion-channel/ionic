@@ -2,6 +2,7 @@ package scans
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 	"time"
 
@@ -57,6 +58,15 @@ func TestScan(t *testing.T) {
 				Expect(s.TranslatedResults.Type).To(Equal("license"))
 				Expect(s.Results).NotTo(BeNil())
 				Expect(len(s.Results)).NotTo(Equal(0))
+			})
+
+			g.It("should return string in JSON", func() {
+				createdAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+				updatedAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+				r := json.RawMessage(`{"result": "someresult"}`)
+
+				s, _ := NewScan("someid", "someteamid", "someprojectid", "someanalysisid", "somesummary", "somename", "somedesc", r, createdAt, updatedAt, 19.22)
+				Expect(fmt.Sprintf("%v", s)).To(Equal(`{"id":"someid","team_id":"someteamid","project_id":"someprojectid","analysis_id":"someanalysisid","summary":"somesummary","results":{"result":"someresult"},"created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","duration":19.22,"name":"somename","description":"somedesc"}`))
 			})
 		})
 

@@ -62,6 +62,15 @@ type percent struct {
 	Percent float64 `json:"percent"`
 }
 
+// String returns a JSON formatted string of the digest object
+func (d Digest) String() string {
+	b, err := json.Marshal(d)
+	if err != nil {
+		return fmt.Sprintf("failed to format user: %v", err.Error())
+	}
+	return string(b)
+}
+
 // NewDigest takes a scan status, ordering index, and a singular and plural
 // version of the digest title. The status is leveraged to determine the first
 // levels of a digest status. The index provides an ordered location if a list

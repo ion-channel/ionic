@@ -1,6 +1,8 @@
 package analyses
 
 import (
+	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/ion-channel/ionic/rulesets"
@@ -62,6 +64,15 @@ type Summary struct {
 	TriggerText   string    `json:"trigger_text"`
 	TriggerAuthor string    `json:"trigger_author"`
 	Trigger       string    `json:"trigger"`
+}
+
+// String returns a JSON formatted string of the analysis object
+func (a Analysis) String() string {
+	b, err := json.Marshal(a)
+	if err != nil {
+		return fmt.Sprintf("failed to format user: %v", err.Error())
+	}
+	return string(b)
 }
 
 // NewSummary takes an Analysis and AppliedRulesetSummary to calculate and
