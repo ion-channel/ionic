@@ -28,7 +28,7 @@ type Team struct {
 	POCEmail   string    `json:"poc_email"`
 }
 
-// String returns a JSON formatted string of the project object
+// String returns a JSON formatted string of the team object
 func (t Team) String() string {
 	b, err := json.Marshal(t)
 	if err != nil {

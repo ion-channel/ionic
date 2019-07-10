@@ -35,7 +35,7 @@ type User struct {
 	Teams             map[string]string `json:"teams"`
 }
 
-// String returns a JSON formatted string of the project object
+// String returns a JSON formatted string of the user object
 func (u User) String() string {
 	b, err := json.Marshal(u)
 	if err != nil {

@@ -43,7 +43,7 @@ type RuleSet struct {
 	Rules       []rules.Rule `json:"rules"`
 }
 
-// String returns a JSON formatted string of the project object
+// String returns a JSON formatted string of the ruleset object
 func (r RuleSet) String() string {
 	b, err := json.Marshal(r)
 	if err != nil {
