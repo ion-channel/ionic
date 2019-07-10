@@ -1,7 +1,9 @@
 package analyses
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/ion-channel/ionic/rulesets"
 
@@ -40,6 +42,36 @@ func TestAnalysis(t *testing.T) {
 			Expect(s.RulesetName).To(Equal("N/A"))
 			Expect(s.Passed).To(Equal(false))
 			Expect(s.Risk).To(Equal("high"))
+		})
+
+		g.It("should return string in JSON", func() {
+			createdAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+			updatedAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+
+			text := "sometext"
+
+			a := Analysis{
+				ID:            "someid",
+				TeamID:        "someteamid",
+				ProjectID:     "someproject",
+				Name:          "somename",
+				Text:          &text,
+				Type:          "sometype",
+				Source:        "somesource",
+				Branch:        "somebranch",
+				Description:   "somedesc",
+				Status:        "somestatus",
+				RulesetID:     "somerulesetid",
+				CreatedAt:     createdAt,
+				UpdatedAt:     updatedAt,
+				Duration:      4.242,
+				TriggerHash:   "sometriggerhas",
+				TriggerText:   "sometriggertext",
+				TriggerAuthor: "sometriggerauthor",
+				ScanSummaries: nil,
+				Public:        true,
+			}
+			Expect(fmt.Sprintf("%v", a)).To(Equal(`{"id":"someid","team_id":"someteamid","project_id":"someproject","name":"somename","text":"sometext","type":"sometype","source":"somesource","branch":"somebranch","description":"somedesc","status":"somestatus","ruleset_id":"somerulesetid","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","duration":4.242,"trigger_hash":"sometriggerhas","trigger_text":"sometriggertext","trigger_author":"sometriggerauthor","scan_summaries":null,"public":true}`))
 		})
 	})
 }
