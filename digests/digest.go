@@ -64,7 +64,7 @@ type percent struct {
 
 // String returns a JSON formatted string of the digest object
 func (d Digest) String() string {
-	b, err := json.Marshal()
+	b, err := json.Marshal(d)
 	if err != nil {
 		return fmt.Sprintf("failed to format user: %v", err.Error())
 	}
