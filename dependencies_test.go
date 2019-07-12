@@ -86,7 +86,6 @@ func TestDependencies(t *testing.T) {
 
 			hrs := server.HitRecords()
 			Expect(len(hrs)).To(Equal(1))
-			fmt.Printf("asdfaf:::: %v\n", string(hrs[0].Body))
 			Expect(string(hrs[0].Body)).To(ContainSubstring(samplePomSnippet))
 		})
 	})
