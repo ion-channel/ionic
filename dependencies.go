@@ -14,10 +14,6 @@ import (
 )
 
 const (
-	getLatestVersionForDependencyEndpoint = "v1/dependency/getLatestVersionForDependency"
-	getVersionsForDependencyEndpoint      = "v1/dependency/getVersionsForDependency"
-	resolveDependenciesInFileEndpoint     = "v1/dependency/resolveDependenciesInFile"
-
 	// RubyEcosystem represents the ruby ecosystem for resolving dependencies
 	RubyEcosystem = "ruby"
 )
@@ -59,7 +55,7 @@ func (ic *IonClient) resolveDependencies(fh io.Reader, o dependencies.Dependency
 	h := http.Header{}
 	h.Set("Content-Type", w.FormDataContentType())
 
-	b, err := ic.Post(resolveDependenciesInFileEndpoint, token, params, buf, h)
+	b, err := ic.Post(dependencies.ResolveDependenciesInFileEndpoint, token, params, buf, h)
 	if err != nil {
 		return nil, fmt.Errorf("failed to resolve dependencies: %v", err.Error())
 	}
@@ -82,7 +78,7 @@ func (ic *IonClient) GetLatestVersionForDependency(packageName, ecosystem, token
 	params.Set("name", packageName)
 	params.Set("type", ecosystem)
 
-	b, err := ic.Get(getLatestVersionForDependencyEndpoint, token, params, nil, nil)
+	b, err := ic.Get(dependencies.GetLatestVersionForDependencyEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest version for dependency: %v", err.Error())
 	}
@@ -106,7 +102,7 @@ func (ic *IonClient) GetVersionsForDependency(packageName, ecosystem, token stri
 	params.Set("name", packageName)
 	params.Set("type", ecosystem)
 
-	b, err := ic.Get(getVersionsForDependencyEndpoint, token, params, nil, nil)
+	b, err := ic.Get(dependencies.GetVersionsForDependencyEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest version for dependency: %v", err.Error())
 	}

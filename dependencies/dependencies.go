@@ -1,5 +1,17 @@
 package dependencies
 
+const (
+	// GetLatestVersionForDependencyEndpoint - returns the latest single version for a
+	// dependency
+	GetLatestVersionForDependencyEndpoint = "v1/dependency/getLatestVersionForDependency"
+	// GetVersionsForDependencyEndpoint - returns the list of known versions for a
+	// dependency
+	GetVersionsForDependencyEndpoint = "v1/dependency/getVersionsForDependency"
+	// ResolveDependenciesInFileEndpoint - given a dependency file and ecosystem name
+	// returns the full tree of known dependencies
+	ResolveDependenciesInFileEndpoint = "v1/dependency/resolveDependenciesInFile"
+)
+
 // Dependency represents all the known information for a dependency object
 // within the Ion Channel API
 type Dependency struct {
