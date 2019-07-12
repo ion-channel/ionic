@@ -23,34 +23,31 @@ const (
 // be with their info returned, and a list of any errors encountered during the
 // process.
 func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
-	fh, err := os.Open(o.File)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %v", err.Error())
-	}
-
-	return ic.resolveDependencies(fh, o, token)
-}
-
-func (ic *IonClient) resolveDependencies(fh io.Reader, o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
-	var buf bytes.Buffer
-	w := multipart.NewWriter(&buf)
-	defer w.Close()
-
 	params := &url.Values{}
 	params.Set("type", o.Ecosystem)
 	if o.Flatten {
 		params.Set("flatten", "true")
 	}
 
+	var buf bytes.Buffer
+	w := multipart.NewWriter(&buf)
+
 	fw, err := w.CreateFormFile("file", o.File)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create form file: %v", err.Error())
+	}
+
+	fh, err := os.Open(o.File)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %v", err.Error())
 	}
 
 	_, err = io.Copy(fw, fh)
 	if err != nil {
 		return nil, fmt.Errorf("failed to copy file contents: %v", err.Error())
 	}
+
+	w.Close()
 
 	h := http.Header{}
 	h.Set("Content-Type", w.FormDataContentType())

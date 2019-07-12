@@ -2,8 +2,10 @@ package ionic
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
-	"strings"
+	"os"
 	"testing"
 
 	. "github.com/franela/goblin"
@@ -60,19 +62,31 @@ func TestDependencies(t *testing.T) {
 				SetMethods("POST").
 				SetPayload([]byte(sampleResolutionResponse)).
 				SetStatus(http.StatusOK)
+
+			tf, err := ioutil.TempFile("", "test")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer os.Remove(tf.Name()) // clean up
+
+			tf.Write([]byte(samplePomSnippet))
+			tf.Close()
+
 			o := dependencies.DependencyResolutionRequest{
-				File:      "some/pom/file.xml",
+				File:      tf.Name(),
 				Flatten:   true,
 				Ecosystem: "maven",
 			}
-			r := strings.NewReader(samplePomSnippet)
-			deps, err := client.resolveDependencies(r, o, "atoken")
+
+			deps, err := client.ResolveDependenciesInFile(o, "atoken")
 
 			Expect(err).To(BeNil())
 			Expect(deps.Dependencies[0].Version).To(Equal("1.16.3"))
 
 			hrs := server.HitRecords()
 			Expect(len(hrs)).To(Equal(1))
+			Expect(string(hrs[0].Body)).To(ContainSubstring(samplePomSnippet))
 		})
 	})
 }
