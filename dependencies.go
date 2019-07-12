@@ -31,7 +31,7 @@ func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResoluti
 	return ic.resolveDependencies(fh, o, token)
 }
 
-func (ic *IonClient) resolveDependencies(fh io.Reader, o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
+func (ic *IonClient) resolveDependencies(fh *os.File, o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
 	defer w.Close()
