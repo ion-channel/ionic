@@ -23,15 +23,6 @@ const (
 // be with their info returned, and a list of any errors encountered during the
 // process.
 func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
-	fh, err := os.Open(o.File)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %v", err.Error())
-	}
-
-	return ic.resolveDependencies(fh, o, token)
-}
-
-func (ic *IonClient) resolveDependencies(fh *os.File, o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
 	var buf bytes.Buffer
 	w := multipart.NewWriter(&buf)
 	defer w.Close()
@@ -40,6 +31,11 @@ func (ic *IonClient) resolveDependencies(fh *os.File, o dependencies.DependencyR
 	params.Set("type", o.Ecosystem)
 	if o.Flatten {
 		params.Set("flatten", "true")
+	}
+
+	fh, err := os.Open(o.File)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %v", err.Error())
 	}
 
 	fw, err := w.CreateFormFile("file", o.File)
