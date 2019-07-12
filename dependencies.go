@@ -1,17 +1,77 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
 	"net/url"
+	"os"
 
 	"github.com/ion-channel/ionic/dependencies"
 )
 
 const (
+	getLatestVersionForDependencyEndpoint = "v1/dependency/getLatestVersionForDependency"
+	getVersionsForDependencyEndpoint      = "v1/dependency/getVersionsForDependency"
+	resolveDependenciesInFileEndpoint     = "v1/dependency/resolveDependenciesInFile"
+
 	// RubyEcosystem represents the ruby ecosystem for resolving dependencies
 	RubyEcosystem = "ruby"
 )
+
+// ResolveDependenciesInFile takes a dependency file location and token to send
+// the specified file to the API. All dependencies that are able to be resolved will
+// be with their info returned, and a list of any errors encountered during the
+// process.
+func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
+	fh, err := os.Open(o.File)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %v", err.Error())
+	}
+
+	return ic.resolveDependencies(fh, o, token)
+}
+
+func (ic *IonClient) resolveDependencies(fh io.Reader, o dependencies.DependencyResolutionRequest, token string) (*dependencies.DependencyResolutionResponse, error) {
+	var buf bytes.Buffer
+	w := multipart.NewWriter(&buf)
+	defer w.Close()
+
+	params := &url.Values{}
+	params.Set("type", o.Ecosystem)
+	if o.Flatten {
+		params.Set("flatten", "true")
+	}
+
+	fw, err := w.CreateFormFile("file", o.File)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create form file: %v", err.Error())
+	}
+
+	_, err = io.Copy(fw, fh)
+	if err != nil {
+		return nil, fmt.Errorf("failed to copy file contents: %v", err.Error())
+	}
+
+	h := http.Header{}
+	h.Set("Content-Type", w.FormDataContentType())
+
+	b, err := ic.Post(resolveDependenciesInFileEndpoint, token, params, buf, h)
+	if err != nil {
+		return nil, fmt.Errorf("failed to resolve dependencies: %v", err.Error())
+	}
+
+	var resp dependencies.DependencyResolutionResponse
+	err = json.Unmarshal(b, &resp)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response: %v", err.Error())
+	}
+
+	return &resp, nil
+}
 
 // GetLatestVersionForDependency takes a package name, an ecosystem to find the
 // package in, and a token for accessing the API. It returns a dependency
@@ -22,7 +82,7 @@ func (ic *IonClient) GetLatestVersionForDependency(packageName, ecosystem, token
 	params.Set("name", packageName)
 	params.Set("type", ecosystem)
 
-	b, err := ic.Get(dependencies.GetLatestVersionForDependencyEndpoint, token, params, nil, nil)
+	b, err := ic.Get(getLatestVersionForDependencyEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest version for dependency: %v", err.Error())
 	}
@@ -46,7 +106,7 @@ func (ic *IonClient) GetVersionsForDependency(packageName, ecosystem, token stri
 	params.Set("name", packageName)
 	params.Set("type", ecosystem)
 
-	b, err := ic.Get(dependencies.GetVersionsForDependencyEndpoint, token, params, nil, nil)
+	b, err := ic.Get(getVersionsForDependencyEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get latest version for dependency: %v", err.Error())
 	}
