@@ -1,14 +1,15 @@
 #! /bin/bash
-a = $("")
 
+# build the string
 for f in */*
 do
   if [ -f $f ] ; then
-    s=$(cat $f | grep -B1 'Endpoint =')
-    a+=$s
+    t=$(cat $f | grep -B1 'Endpoint =')
+    s+=$t
   fi
 done
 
-a=${a//\`/\"}  # replace all instances of tick mark with double quotes
-a=${a//--/}    # remove the double dashes the cat put in sometimes
-echo -e ${a//\/\/ /\\n}
+# clean up the string out output
+s=${s//\`/\"}  # replace all instances of tick mark with double quotes
+s=${s//--/}    # remove the double dashes the cat put in sometimes
+echo -e ${s//\/\/ /\\n}
