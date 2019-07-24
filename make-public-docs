@@ -9,8 +9,6 @@ do
   fi
 done
 
-echo $a
-echo "-----------"
 a=${a//\`/\"}  # replace all instances of tick mark with double quotes
 a=${a//--/}    # remove the double dashes the cat put in sometimes
 echo -e ${a//\/\/ /\\n}
