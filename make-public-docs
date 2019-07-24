@@ -1,7 +1,16 @@
 #! /bin/bash
+a = $("")
+
 for f in */*
 do
   if [ -f $f ] ; then
-    cat $f | grep -B1 'Endpoint ='
+    s=$(cat $f | grep -B1 'Endpoint =')
+    a+=$s
   fi
 done
+
+echo $a
+echo "-----------"
+a=${a//\`/\"}  # replace all instances of tick mark with double quotes
+a=${a//--/}    # remove the double dashes the cat put in sometimes
+echo -e ${a//\/\/ /\\n}
