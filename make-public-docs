@@ -4,8 +4,7 @@
 for f in */*
 do
   if [ -f $f ] ; then
-    t=$(cat $f | grep -B1 'Endpoint =')
-    s+=$t
+    s+=$(cat $f | grep -B1 'Endpoint =')
   fi
 done
 
