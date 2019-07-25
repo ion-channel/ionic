@@ -18,7 +18,7 @@ do
           desc=${desc/\/\/ /""}         # strips the // from the comment line
           desc=$(sed -e 's/^\s*//' <<< $desc) # removes leading white spaces
           desc=$(sed -e 's/\s*$//' <<< $desc) # removes trailing white spaces
-          desc=$(sed -e 's/Endpoint//' <<< $desc)
+          desc=$(sed -e 's/Endpoint//' <<< $desc) # removes "Endpoint" from the description
         fi
 
         # if line starts with any letter, it's the name and the endpoint
@@ -30,12 +30,14 @@ do
 
           name=$(sed -e 's/^\s*//' <<< $name) # removes leading white spaces
           name=$(sed -E 's/\s*$//' <<< $name) # removes trailing white spaces
+          name=$(sed -e 's/Endpoint//' <<< $name) # removes "Endpoint" from the name
 
           endpoint=$(sed -e 's/^\s*//' <<< $endpoint) # removes leading white spaces
           endpoint=$(sed -e 's/\s*$//' <<< $endpoint) # removes trailing white spaces
 
           endpoint=${endpoint//$'\"'/""} # remove quotes from endpoint
-          endpoint=${endpoint//$'`'/""} # remove quotes from endpoint
+          endpoint=${endpoint//$'`'/""} # remove back tick from endpoint
+          
 
           IFS=$prevIFS
         fi
