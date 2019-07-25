@@ -1,21 +1,41 @@
 #! /bin/bash
 
 # build the string
+oldIFS = $IFS
 for f in $(ls */*.go | grep -v _test.go)
 do
   if [ -f $f ] ; then
     s=$(cat $f | grep -B1 'Endpoint =')
     if [[ -n "$s" ]] ; then
-      s=${s//\`/\"}                   # replace all instances of tick mark with double quotes
-      s=${s//--/}                     # remove the double dashes the cat put in sometimes
-      s=${s/\/\/ /""}                 # strips first set of // without creating a new line for it
-      s=${s//\/\//$'\n'}              # convert all remaining // to new lines
-      s=${s//$'\t'/""}                # removes tabs
-      s=${s//$'\n' /$'\n'}            # removes leading spaces
-      s=${s//$'\n'$'\n'$'\n'/$'\n'}   # replaces 3 new lines to 1 TODO: change this to 2 or more replaced with 1
-      s=${s//$'\n'$'\n'/$'\n'}        # replaces 2 new lines to 1. TODO: remove this when 3to1 is done.
-      echo "$s"
+      #s=${s//\`/\"}           # replace all instances of tick mark with double quotes
+      #s=${s//--/}             # remove the double dashes the cat put in sometimes
+      #s=${s/\/\/ /""}         # strips first set of // without creating a new line for it
+      #s=${s//\/\//|}          # convert all remaining // to new lines to '|' as a delimeter
+      s=${s//$'\n'/|}         # convert all new lines to '|'
+      #s=${s//$'\t'/""}        # removes tabs
+      #s=$(sed 's/||*/|/g' <<< $s) # replaces multiple new line delimeters (|) in a row to a single one
+      s=$(sed 's/|  */|/g' <<< $s)  # remove spaces after each line delimeter
+
+      IFS='|' read -r -a array <<< "$s"
+      for element in "${array[@]}"; do
+        # if line starts with // grab it for description
+        if [[ $element == //* ]] ; then
+          desc="${element}"
+          #echo -e "$desc"
+        fi
+
+        # if line starts with any letter or number, it's the name and the endpoint
+        if [[ $element =~ ^[a-zA-Z0-9].* ]] ; then
+          temp=$element
+        fi
+
+      done
+      echo -e "desc: $desc"
+      echo -e "      $temp"
+
+      echo "------"
     fi
   fi
 done
+IFS=$oldIFS
 
