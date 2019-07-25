@@ -1,19 +1,13 @@
 #! /bin/bash
 
 # build the string
-oldIFS = $IFS
+oldIFS=$IFS
 for f in $(ls */*.go | grep -v _test.go)
 do
   if [ -f $f ] ; then
     s=$(cat $f | grep -B1 'Endpoint =')
     if [[ -n "$s" ]] ; then
-      #s=${s//\`/\"}           # replace all instances of tick mark with double quotes
-      #s=${s//--/}             # remove the double dashes the cat put in sometimes
-      
-      #s=${s//\/\//|}          # convert all remaining // to new lines to '|' as a delimeter
       s=${s//$'\n'/|}         # convert all new lines to '|'
-      #s=${s//$'\t'/""}        # removes tabs
-      #s=$(sed 's/||*/|/g' <<< $s) # replaces multiple new line delimeters (|) in a row to a single one
       s=$(sed 's/|  */|/g' <<< $s)  # remove spaces after each line delimeter
 
       IFS='|' read -r -a array <<< "$s"
@@ -22,24 +16,42 @@ do
         if [[ $element == //* ]] ; then
           desc="${element}"
           desc=${desc/\/\/ /""}         # strips the // from the comment line
-          #echo -e "$desc"
+          desc=$(sed -e 's/^\s*//' <<< $desc) # removes leading white spaces
+          desc=$(sed -e 's/\s*$//' <<< $desc) # removes trailing white spaces
+          desc=$(sed -e 's/Endpoint//' <<< $desc)
         fi
 
-        # if line starts with any letter or number, it's the name and the endpoint
-        if [[ $element =~ ^[a-zA-Z0-9].* ]] ; then
+        # if line starts with any letter, it's the name and the endpoint
+        if [[ $element =~ ^[a-zA-Z].* ]] ; then
           prevIFS=$IFS
           IFS='=' read -r -a arr2 <<< "$element"
           name=${arr2[0]}
           endpoint=${arr2[1]}
+
+          name=$(sed -e 's/^\s*//' <<< $name) # removes leading white spaces
+          name=$(sed -E 's/\s*$//' <<< $name) # removes trailing white spaces
+
+          endpoint=$(sed -e 's/^\s*//' <<< $endpoint) # removes leading white spaces
+          endpoint=$(sed -e 's/\s*$//' <<< $endpoint) # removes trailing white spaces
+
+          endpoint=${endpoint//$'\"'/""} # remove quotes from endpoint
+          endpoint=${endpoint//$'`'/""} # remove quotes from endpoint
+
           IFS=$prevIFS
         fi
 
       done
-      echo -e "desc: $desc"
-      echo -e "name: $name"
-      echo -e "ep:   $endpoint"
+      
+      # output to markdown
+      echo -e "# $name"
+      echo ""
+      echo -e "$desc"
+      echo ""
+      echo -e "\`\`\`"
+      echo -e "$endpoint"
+      echo "\`\`\`"
+      echo ""
 
-      echo "------"
     fi
   fi
 done
