@@ -4,23 +4,18 @@
 for f in $(ls */*.go | grep -v _test.go)
 do
   if [ -f $f ] ; then
-    s+=$(cat $f | grep -B1 'Endpoint =')
-    #if [[ -n "$s" ]] ; then
-    #  "echo $s" | sed 's@--@\n\n@g'
-    #fi
+    s=$(cat $f | grep -B1 'Endpoint =')
+    if [[ -n "$s" ]] ; then
+      s=${s//\`/\"}                   # replace all instances of tick mark with double quotes
+      s=${s//--/}                     # remove the double dashes the cat put in sometimes
+      s=${s/\/\/ /""}                 # strips first set of // without creating a new line for it
+      s=${s//\/\//$'\n'}              # convert all remaining // to new lines
+      s=${s//$'\t'/""}                # removes tabs
+      s=${s//$'\n' /$'\n'}            # removes leading spaces
+      s=${s//$'\n'$'\n'$'\n'/$'\n'}   # replaces 3 new lines to 1 TODO: change this to 2 or more replaced with 1
+      s=${s//$'\n'$'\n'/$'\n'}        # replaces 2 new lines to 1. TODO: remove this when 3to1 is done.
+      echo "$s"
+    fi
   fi
 done
 
-# clean up the string out output
-s=${s//\`/\"}  # replace all instances of tick mark with double quotes
-s=${s//--/}    # remove the double dashes the cat put in sometimes
-s=${s/\/\/ /""}  # strips first set of // without creating a new line for it
-s=${s//\/\//$'\n'}
-s=${s//$'\t'/""}
-s=${s//$'\n' /$'\n'}
-s=${s//$'\n'$'\n'$'\n'/$'\n'}
-s=${s//$'\n'$'\n'/$'\n'}
-#s=$s/\s*|\s*/|/g;
-echo "$s"
-
-#echo -e ${s//\/\/ /\\n}
