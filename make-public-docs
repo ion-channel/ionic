@@ -26,12 +26,17 @@ do
 
         # if line starts with any letter or number, it's the name and the endpoint
         if [[ $element =~ ^[a-zA-Z0-9].* ]] ; then
-          temp=$element
+          prevIFS=$IFS
+          IFS='=' read -r -a arr2 <<< "$element"
+          name=${arr2[0]}
+          endpoint=${arr2[1]}
+          IFS=$prevIFS
         fi
 
       done
       echo -e "desc: $desc"
-      echo -e "      $temp"
+      echo -e "name: $name"
+      echo -e "ep:   $endpoint"
 
       echo "------"
     fi
