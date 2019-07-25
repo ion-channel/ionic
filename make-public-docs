@@ -9,7 +9,7 @@ do
     if [[ -n "$s" ]] ; then
       #s=${s//\`/\"}           # replace all instances of tick mark with double quotes
       #s=${s//--/}             # remove the double dashes the cat put in sometimes
-      #s=${s/\/\/ /""}         # strips first set of // without creating a new line for it
+      
       #s=${s//\/\//|}          # convert all remaining // to new lines to '|' as a delimeter
       s=${s//$'\n'/|}         # convert all new lines to '|'
       #s=${s//$'\t'/""}        # removes tabs
@@ -21,6 +21,7 @@ do
         # if line starts with // grab it for description
         if [[ $element == //* ]] ; then
           desc="${element}"
+          desc=${desc/\/\/ /""}         # strips the // from the comment line
           #echo -e "$desc"
         fi
 
