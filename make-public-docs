@@ -9,7 +9,6 @@ do
     if [[ -n "$s" ]] ; then
       s=${s//$'\n'/|}         # convert all new lines to '|'
       s=$(sed 's/|  */|/g' <<< $s)  # remove spaces after each line delimeter
-
       IFS='|' read -r -a array <<< "$s"
       for element in "${array[@]}"; do
         # if line starts with // grab it for description
@@ -37,25 +36,23 @@ do
 
           endpoint=${endpoint//$'\"'/""} # remove quotes from endpoint
           endpoint=${endpoint//$'`'/""} # remove back tick from endpoint
-          
+
+          # output to markdown
+          if [ -n "$name" ]; then
+            echo -e "# $name"
+            echo ""
+            echo -e "$desc"
+            echo ""
+            echo -e "\`\`\`"
+            echo -e "$endpoint"
+            echo "\`\`\`"
+            echo ""
+          fi
 
           IFS=$prevIFS
         fi
-
       done
-      
-      # output to markdown
-      echo -e "# $name"
-      echo ""
-      echo -e "$desc"
-      echo ""
-      echo -e "\`\`\`"
-      echo -e "$endpoint"
-      echo "\`\`\`"
-      echo ""
-
     fi
   fi
 done
 IFS=$oldIFS
-
