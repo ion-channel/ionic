@@ -1,15 +1,14 @@
 package dependencies
 
 const (
-	// GetLatestVersionForDependencyEndpoint - returns the latest single version for a
-	// dependency
+	// GetLatestVersionForDependencyEndpoint - returns the latest single version for a dependency
 	GetLatestVersionForDependencyEndpoint = "v1/dependency/getLatestVersionForDependency"
-	// GetVersionsForDependencyEndpoint - returns the list of known versions for a
-	// dependency
+	// GetVersionsForDependencyEndpoint - returns the list of known versions for a dependency
 	GetVersionsForDependencyEndpoint = "v1/dependency/getVersionsForDependency"
-	// ResolveDependenciesInFileEndpoint - given a dependency file and ecosystem name
-	// returns the full tree of known dependencies
+	// ResolveDependenciesInFileEndpoint - given a dependency file and ecosystem name returns the full tree of known dependencies
 	ResolveDependenciesInFileEndpoint = "v1/dependency/resolveDependenciesInFile"
+	// ResolveDependencySearchEndpoint is a string representation of the current endpoint for searching dependencies
+	ResolveDependencySearchEndpoint = "v1/dependency/search"
 )
 
 // Dependency represents all the known information for a dependency object
