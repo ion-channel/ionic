@@ -18,8 +18,16 @@ const (
 	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
 	// AnalysisGetPublicAnalysisEndpoint is a string representation of the current endpoint for getting public analysis
 	AnalysisGetPublicAnalysisEndpoint = "v1/animal/getPublicAnalysis"
-	// AnalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting latesting public analysis
+	// AnalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting latest public analysis
 	AnalysisGetLatestPublicAnalysisEndpoint = "v1/animal/getLatestPublicAnalysisSummary"
+	// AnalysisGetLatestAnalysisEndpoint is a string representation of the current endpoint for getting the latest analysis
+	AnalysisGetLatestAnalysisEndpoint = "v1/animal/getLatestAnalysis"
+	// AnalysisGetScanEndpoint is a string representation of the current endpoint for getting a scan
+	AnalysisGetScanEndpoint = "v1/animal/getScan"
+	// AnalysisCreateAnalysisEndpoint is a string representation of creating an analysis
+	AnalysisCreateAnalysisEndpoint = "v1/animal/createAnalysis"
+	// AnalysisCreateScanEndpoint is a string representation of creating a scan
+	AnalysisCreateScanEndpoint = "v1/animal/createScan"
 )
 
 // Analysis is a representation of an Ion Channel Analysis within the system
