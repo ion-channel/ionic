@@ -9,6 +9,8 @@ const (
 	GetProductEndpoint = "v1/vulnerability/getProducts"
 	// ProductSearchEndpoint is a string representation of the current endpoint for product search
 	ProductSearchEndpoint = "v1/product/search"
+	// ProductGetProductEndpoint is a string representation of the current endpoint for getting a product
+	ProductGetProductEndpoint = "v1/product/getProduct"
 )
 
 // Product represents a software product within the system for identification
