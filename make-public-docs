@@ -1,5 +1,7 @@
 #! /bin/bash
 
+echo "# Ion Channel Endpoints"
+
 # build the string
 oldIFS=$IFS
 for f in $(ls */*.go | grep -v _test.go)
@@ -39,7 +41,7 @@ do
 
           # output to markdown
           if [ -n "$name" ]; then
-            echo -e "# $name"
+            echo -e "## $name"
             echo ""
             echo -e "$desc"
             echo ""
