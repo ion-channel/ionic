@@ -11,8 +11,7 @@ script:
   - make fmt vet lint
   - go test -v $(go list ./... | grep -v /vendor/)
   - make coverage analyze
-  - mkdir -p docs
-  - ./make-public-docs > docs/endpoints.md
+  - make docs
 
 env:
   global:
