@@ -10,13 +10,13 @@ import (
 )
 
 const (
-	// AnalysisGetAnalysisEndpoint is a string representation of the current endpoint for getting analysis
+	// AnalysisGetAnalysisEndpoint Returns a single raw analysis. Requires team id, project id and analysis id.
 	AnalysisGetAnalysisEndpoint = "v1/animal/getAnalysis"
-	// AnalysisGetAnalysesEndpoint is a string representation of the current endpoint for getting analyses
+	// AnalysisGetAnalysesEndpoint Returns multiple raw analyses. Requires team id and project id.
 	AnalysisGetAnalysesEndpoint = "v1/animal/getAnalyses"
-	// AnalysisGetLatestAnalysisSummaryEndpoint is a string representation of the current endpoint for getting latest analysis summary
+	// AnalysisGetLatestAnalysisSummaryEndpoint Returns the latest analysis summary. Requires team id and project id.
 	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
-	// AnalysisGetPublicAnalysisEndpoint is a string representation of the current endpoint for getting public analysis
+	// AnalysisGetPublicAnalysisEndpoint Returns a public analysis.  Requires an analysis id.
 	AnalysisGetPublicAnalysisEndpoint = "v1/animal/getPublicAnalysis"
 	// AnalysisGetLatestPublicAnalysisEndpoint is a string representation of the current endpoint for getting latest public analysis
 	AnalysisGetLatestPublicAnalysisEndpoint = "v1/animal/getLatestPublicAnalysisSummary"
