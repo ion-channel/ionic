@@ -9,6 +9,11 @@ const (
 	ResolveDependenciesInFileEndpoint = "v1/dependency/resolveDependenciesInFile"
 	// ResolveDependencySearchEndpoint is a string representation of the current endpoint for searching dependencies
 	ResolveDependencySearchEndpoint = "v1/dependency/search"
+
+	// TODO: The following endpoints will need to have functions attached to them
+
+	// UpdateDependencyEndpoint is a string representation of the current endpoint for updating a dependency
+	UpdateDependencyEndpoint = "v1/dependency/updateDependency"
 )
 
 // Dependency represents all the known information for a dependency object
