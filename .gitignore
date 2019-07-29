@@ -1,3 +1,5 @@
 coverage/
 coverage.out
 coverage.txt
+docs/index.html
+docs/*.md

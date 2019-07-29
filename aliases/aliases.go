@@ -13,6 +13,6 @@ type Alias struct {
 }
 
 const (
-	// AddAliasEndpoint is a string representation of the current endpoint for getting aliases
+	// AddAliasEndpoint allows the user to attach an alias to a project.  Consists of org, name, version. Requires team id and project id.
 	AddAliasEndpoint = "v1/project/addAlias"
 )
