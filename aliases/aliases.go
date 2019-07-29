@@ -15,4 +15,11 @@ type Alias struct {
 const (
 	// AddAliasEndpoint is a string representation of the current endpoint for getting aliases
 	AddAliasEndpoint = "v1/project/addAlias"
+
+	// TODO: The following will need to have functions attached to them:
+
+	// DeleteAliasEndpoint is a string representation of the current endpoint for deleting an alias
+	DeleteAliasEndpoint = "v1/project/deleteAlias"
+	// UpdateAliasEndpoint is a string representation of the current endpoint for updating an alias
+	UpdateAliasEndpoint = "v1/project/updateAlias"
 )
