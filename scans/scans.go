@@ -7,6 +7,17 @@ import (
 	"time"
 )
 
+const (
+	// TODO: The following endpoints need to have functions attached to them:
+
+	// ScanGetScanEndpoint is a string representation of the current endpoint for getting a scan
+	ScanGetScanEndpoint = "v1/animal/getScan"
+	// ScanCreateScanEndpoint is a string representation of creating a scan
+	ScanCreateScanEndpoint = "v1/animal/createScan"
+	// ScanDeleteTestScansEndpoint is a string representation of the current endpoint for deleting a test scan
+	ScanDeleteTestScansEndpoint = "/v1/animal/deleteTestScans"
+)
+
 // Scan represents the data collected from an individual scan on a project.
 type Scan struct {
 	*scan
