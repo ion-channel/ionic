@@ -11,6 +11,23 @@ script:
   - make fmt vet lint
   - go test -v $(go list ./... | grep -v /vendor/)
   - make coverage analyze
+  - make docs
+
+env:
+  global:
+    secure: iMQmyEIZ1I2V5JgeKtYSdVS3XNoRBHcycHP7jF9vqaUeWRtwdbJOvaeLxhn5apSXjHGCbbPRiH1+AmHLk0Lop/vG2co/MKutJLbgMrsIH4yCG8sSdKQOh6Tc/qxKYO+zeH+HLpYn0m5GtM5Khj2iQTqn4+kBASEGiZF2KblU7Mr7LeI7FU9qo7298I3O21RYQvNZSLs/iv8qIKgEkO2CgtVO7aZQpuiAZNp9NpbFPtA0uyNyy/WQfs6PBOA3u4i9fpgvXe/K2p4aHECDY1xnt2YHzDywp8+8xRISeIQ/RdKtSH79wQC25WN6lWBBsrDh6QGaTjtQrFcR8PNqKzDvqRYs4lcLmmkFVJEfQyIPXgz64gmQ0I34GMDy4beXl6tczGrTGPzv8fWvN9kL2mzDmpiOQj3tq7bhsWue/LWXKDR6TQ97xlVAN1tkM5BPakrKzpqx8SjJKz2pzkr+vsaFhvndFPu4WS4uoFCXlrQOJHBWvonLzVWqOY14miksgmOhOIwdkxFilY4K4SRvy3NTMVUHH1Hx/lPYuc5vUKAvI5xF+dYBfdbCTopFf+PpeBRnCErtS6qUf71agSt/AaiEO2F87/YH15lKtChlv4/xK5hFS2I/jGuIXG7kOPuLQPK9FisTCEbzKoneq9l+IAWNdpXguKNnd1H13so8E51XkIM=
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_TEST_DEPLOY_ACCESS_KEY # declared in Travis repo settings
+    secret_access_key: $AWS_TEST_DEPLOY_SECRET_KEY
+    bucket: docs.ionchannel.io
+    region: us-east-1
+    skip_cleanup: true
+    local_dir: docs
+    acl: public_read
+    on:
+      branch: master
 
 notifications:
   email: false
