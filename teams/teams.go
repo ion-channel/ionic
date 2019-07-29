@@ -9,10 +9,19 @@ import (
 const (
 	// TeamsCreateTeamEndpoint is a string representation of the current endpoint for creating team
 	TeamsCreateTeamEndpoint = "v1/teams/createTeam"
-	// TeamsGetTeamEndpoint  is a string representation of the current endpoint for getting team
+	// TeamsGetTeamEndpoint is a string representation of the current endpoint for getting team
 	TeamsGetTeamEndpoint = "v1/teams/getTeam"
 	// TeamsGetTeamsEndpoint is a string representation of the current endpoint for getting teams
 	TeamsGetTeamsEndpoint = "v1/teams/getTeams"
+
+	// TODO: the following endpoints need functions attached to them
+
+	// TeamsEstablishTeamEndpoint is a string representation of the current endpoint for establishing a team
+	TeamsEstablishTeamEndpoint = "v1/teams/establishTeam"
+	// TeamsUpdateTeamEndpoint is a string representation of the current endpoint for updating a team
+	TeamsUpdateTeamEndpoint = "v1/teams/updateTeam"
+	// TeamsDeleteTeamEndpoint is a string representation of the current endpoint for deleting a team
+	TeamsDeleteTeamEndpoint = "v1/teams/deleteTeam"
 )
 
 // Team is a representation of an Ion Channel Team within the system
