@@ -4,6 +4,10 @@ go:
   - "1.10"
   - master
 
+addons:
+  apt_packages:
+    - pandoc
+
 install:
   - make travis_setup
 
