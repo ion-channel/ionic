@@ -21,6 +21,7 @@ const (
 	GetRuleSetEndpoint = "v1/ruleset/getRuleset"
 	// GetRuleSetsEndpoint is a string representation of the current endpoint for getting rulesets (plural)
 	GetRuleSetsEndpoint = "v1/ruleset/getRulesets"
+
 	//RulesetsGetRulesEndpoint is a string representation of the current endpoint for getting rules.
 	RulesetsGetRulesEndpoint = "v1/ruleset/getRules"
 )
