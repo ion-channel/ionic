@@ -34,6 +34,13 @@ const (
 	GetProjectsEndpoint = "v1/project/getProjects"
 	// UpdateProjectEndpoint is a string representation of the current endpoint for updating project
 	UpdateProjectEndpoint = "v1/project/updateProject"
+
+	// TODO: The following will need functions attached to them:
+
+	// GetProjectsByURLEndpoint is a string representation of the current endpoint for getting projects by a url
+	GetProjectsByURLEndpoint = "v1/project/getProjectsByUrl"
+	// DeleteProjectsByURLEndpoint is a string representation of the current endpoint for getting projects by URL
+	DeleteProjectsByURLEndpoint = "v1/project/deleteProject"
 )
 
 var (
