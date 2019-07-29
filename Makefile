@@ -83,5 +83,5 @@ lint: ## Run golint
 .PHONY: docs
 docs: ## exports documents from the source code
 	@echo "creating documentation..."
-	-@mkdir -p docs
 	@./make-public-docs > docs/endpoints.md
+	@pandoc -f markdown docs/endpoints.md -c endpoints.css -s --highlight-style monochrome --metadata pagetitle="Endpoints" -o docs/index.html
