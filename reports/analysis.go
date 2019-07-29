@@ -15,6 +15,15 @@ const (
 	ReportGetAnalysisReportEndpoint = "v1/report/getAnalysis"
 	// ReportGetAnalysisNavigationEndpoint is a string representation of the current endpoint for getting report analysis navigation
 	ReportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
+
+	// TODO: The following endpoints need to have functions attached to them:
+
+	// ReportGetPublicAnalysis is a string representation of the current endpoint for getting public analysis
+	ReportGetPublicAnalysis = "v1/report/getPublicAnalysis"
+	// ReportGetBadge is a string representation of the current endpoint for getting a badge
+	ReportGetBadge = "v1/report/getBadge"
+	// ReportGetDigests is a string representation of the current endpoint for getting digests
+	ReportGetDigests = "v1/report/getDigests"
 )
 
 // AnalysisReport is a Ion Channel representation of a report output from a
