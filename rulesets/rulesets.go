@@ -22,8 +22,16 @@ const (
 	// GetRuleSetsEndpoint is a string representation of the current endpoint for getting rulesets (plural)
 	GetRuleSetsEndpoint = "v1/ruleset/getRulesets"
 
+	// TODO: The following endpoints will need to have functions attached to them:
+
 	//RulesetsGetRulesEndpoint is a string representation of the current endpoint for getting rules.
 	RulesetsGetRulesEndpoint = "v1/ruleset/getRules"
+	// RulesetsGetRulesetNamesEndpoint is a string representation of the current endpoint for getting ruleset names
+	RulesetsGetRulesetNamesEndpoint = "v1/ruleset/getRulesetNames"
+	// RulesetsDeleteTestRulesetsEndpoint is a string representation of the current endpoint for deleting a test ruleset
+	RulesetsDeleteTestRulesetsEndpoint = "v1/ruleset/deleteTestRulesets"
+	// RulesetsApplyRulesetEndpoint is a string representation of the current endpoint for applying a ruleset
+	RulesetsApplyRulesetEndpoint = "v1/ruleset/applyRuleset"
 )
 
 // CreateRuleSetOptions struct for creating a ruleset
