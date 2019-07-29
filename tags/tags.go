@@ -11,6 +11,11 @@ const (
 	GetTagsEndpoint = "v1/tag/getTags"
 	// UpdateTagEndpoint is a string representation of the current endpoint for update tag
 	UpdateTagEndpoint = "v1/tag/updateTag"
+
+	// TODO: The following endpoints will need to have functions attached to them
+
+	// DeleteTagsEndpoint is a string representation of the current endpoint for deleting tags
+	DeleteTagsEndpoint = "/v1/tag/deleteTags"
 )
 
 //Tag is a client provided identifier to group projects
