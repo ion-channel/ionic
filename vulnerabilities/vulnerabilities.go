@@ -17,6 +17,11 @@ const (
 	GetVulnerabilityEndpoint = "v1/vulnerability/getVulnerability"
 	// PostVulnerabilityEndpoint is a string representation of the current endpoint for adding vulnerability
 	PostVulnerabilityEndpoint = "v1/internal/vulnerability/addVulnerability"
+
+	// TODO: The following endpoints will need to have functions attached to them
+
+	// PostCreateInviteTokenEndpoint is a string representation of the current endpoint for adding vulnerability
+	PostCreateInviteTokenEndpoint = "v1/vulnerability/addVulnerability"
 )
 
 // Vulnerability represents a singular vulnerability record in the Ion Channel
