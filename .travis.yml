@@ -27,7 +27,7 @@ deploy:
     local_dir: docs
     acl: public_read
     on:
-      branch: doc-deploy
+      branch: master
 
 notifications:
   email: false
