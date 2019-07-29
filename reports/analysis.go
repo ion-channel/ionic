@@ -3,14 +3,11 @@ package reports
 import (
 	"fmt"
 
-	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/digests"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/scanner"
-	"github.com/ion-channel/ionic/scans"
-	"github.com/ion-channel/ionic/tags"
 )
 
 const (
@@ -23,29 +20,8 @@ const (
 // AnalysisReport is a Ion Channel representation of a report output from a
 // given analysis
 type AnalysisReport struct {
-	// Retire anonymous analysis field once the UI is no longer using this
-	*analyses.Analysis
-
-	// Retire the project details once the UI is no longer using this
-	// Project Details
-	Active   bool            `json:"active"`
-	Monitor  bool            `json:"should_monitor"`
-	Private  bool            `json:"private"`
-	POCName  string          `json:"poc_name"`
-	POCEmail string          `json:"poc_email"`
-	Aliases  []aliases.Alias `json:"aliases"`
-	Tags     []tags.Tag      `json:"tags"`
-
-	// Retire the evaluation details once the UI is no longer using this
-	// Evaluation Details
-	RulesetName   string             `json:"ruleset_name" xml:"ruleset_name"`
-	Passed        bool               `json:"passed" xml:"passed"`
-	Risk          string             `json:"risk" xml:"risk"`
-	ScanSummaries []scans.Evaluation `json:"scan_summaries" xml:"scan_summaries"`
-	Evaluations   []scans.Evaluation `json:"evaluations" xml:"evaluations"`
-
-	NewAnalysis *analyses.Analysis `json:"analysis" xml:"analysis"`
-	Report      *analysisReport    `json:"report" xml:"report"`
+	Analysis *analyses.Analysis `json:"analysis" xml:"analysis"`
+	Report   *analysisReport    `json:"report" xml:"report"`
 }
 
 type analysisReport struct {
@@ -79,8 +55,7 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 	}
 
 	ar := AnalysisReport{
-		Analysis:    analysis,
-		NewAnalysis: analysis,
+		Analysis: analysis,
 		Report: &analysisReport{
 			Project:           project,
 			ProjectRuleset:    projectRuleset,
@@ -88,26 +63,6 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 			Digests:           ds,
 			RulesetEvaluation: appliedRuleset,
 		},
-	}
-
-	// Project Details
-	ar.Active = project.Active
-	ar.Monitor = project.Monitor
-	ar.Private = project.Private
-	ar.POCName = project.POCName
-	ar.POCEmail = project.POCEmail
-	ar.Aliases = project.Aliases
-	ar.Tags = project.Tags
-
-	// RulesetEval Details
-	if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
-		ar.RulesetName = appliedRuleset.RuleEvaluationSummary.RulesetName
-		ar.Risk = appliedRuleset.RuleEvaluationSummary.Risk
-		ar.Passed = appliedRuleset.RuleEvaluationSummary.Passed
-
-		// TODO: Remove ScanSummaries field
-		ar.ScanSummaries = appliedRuleset.RuleEvaluationSummary.Ruleresults
-		ar.Evaluations = appliedRuleset.RuleEvaluationSummary.Ruleresults
 	}
 
 	return &ar, nil
