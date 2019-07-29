@@ -81,6 +81,7 @@ lint: ## Run golint
 	@$(GOLINTCMD) -set_exit_status $(shell $(GOLIST) ./... | grep -v '/vendor/')
 
 .PHONY: docs
-docs: ## exports documents from the source and deploy to s3 bucket
+docs: ## exports documents from the source code
+	@echo "creating documentation..."
 	-@mkdir -p docs
 	@./make-public-docs > docs/endpoints.md
