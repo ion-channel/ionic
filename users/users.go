@@ -17,6 +17,25 @@ const (
 	UsersGetUserEndpoint = "v1/users/getUser"
 	// UsersGetUsers is a string representation of the current endpoint for getting users
 	UsersGetUsers = "v1/users/getUsers"
+
+	// TODO: the following endpoints need functions attached to them
+
+	// UsersSignupEndpoint is a string representation of the current endpoint for user signup
+	UsersSignupEndpoint = "v1/users/signup"
+	// UsersSubscribeMeToEndpoint is a string representation of the current endpoint for adding my subscription
+	UsersSubscribeMeToEndpoint = "v1/users/subscribeMeTo"
+	//UsersAmISubscribedToEndpoint is a string representation of the current endpoint for my subscription
+	UsersAmISubscribedToEndpoint = "v1/users/amISubscribedTo"
+	//UsersUnsubscribeMeFromEndpoint is a string representation of the current endpoint for unsubscribe me
+	UsersUnsubscribeMeFromEndpoint = "v1/users/unsubscribeMeFrom"
+	//UsersMySubscriptionsEndpoint is a string representation of the current endpoint for getting my subscription
+	UsersMySubscriptionsEndpoint = "v1/users/mySubscriptions"
+	// UsersResetPasswordEndpoint is a string representation of the current endpoint for resetting user password
+	UsersResetPasswordEndpoint = "v1/users/resetPassword"
+	// UsersUpdateUserEndpoint is a string representation of the current endpoint for updating user
+	UsersUpdateUserEndpoint = "v1/users/updateUser"
+	// UsersDeleteUserEndpoint is a string representation of the current endpoint for deleting user
+	UsersDeleteUserEndpoint = "v1/users/deleteUser"
 )
 
 // User is a representation of an Ion Channel User within the system
