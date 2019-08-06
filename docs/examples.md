@@ -58,4 +58,38 @@ Ok!  You are all set to begin `POST`ing, `GET`ting and `DELETE`ing data from Ion
 
 ## Creating a ruleset
 
-Now that you have your token and seen some simple requests for Ion Channel you should be ready to create a
+Now that you have your token and seen some simple requests for Ion Channel you should be ready to get underway with a git repository analysis workflow.
+
+Assuming you have an API token from above you should also have a team.  You can view your teams with the `GET /v1/teams/getTeams` call.
+
+You response should look something like:
+
+```
+{
+  "data": [
+    {
+      "id": "5fc9af6e-ddc2-42e1-8646-3c3bf5efcc5b",
+      "created_at": "2019-08-06T22:20:49.54772Z",
+      "updated_at": "2019-08-06T22:20:49.54772Z",
+      "name": "yourteam",
+      "delivering": false,
+      "sys_admin": false,
+      "poc_name": "you",
+      "poc_email": "email@gmail.com",
+      "role": "admin",
+      "status": "active"
+    }
+  ],
+  "meta": {
+    "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net",
+    "authors": [
+      "Ion Channel Dev Team"
+    ],
+    "version": "v1",
+    "total_count": 1,
+    "offset": 0
+  }
+}
+```
+
+The team's `id` above is needed for creating a ruleset as it will be attached and only usable on the given team.
