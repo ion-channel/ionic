@@ -50,7 +50,7 @@ Making the same request with your token will respond with all of the languages d
 curl -H 'Authorization: Bearer yourtokenhere' "https://api.ionchannel.io/v1/metadata/getLanguages?text=hello+ion+channel"
 ```
 
-with a response something like:
+with a response similar to:
 
 ```
 {
@@ -82,7 +82,7 @@ Now that you have your token and seen some simple requests for Ion Channel you s
 
 Assuming you have an API token from above you should also have a team.  You can view your teams with the `GET /v1/teams/getTeams` call.
 
-You response should look something like:
+You response should look similar to:
 
 ```
 {
@@ -149,7 +149,7 @@ You can view all of the rules by making a request to `GET /v1/ruleset/getRules`.
     ...
 ```
 
-Putting together the rule ids and team id you can create a Ruleset using `POST /v1/ruleset/createRuleset` using a similar payload to the  following:
+Putting together the rule ids and team id you can create a Ruleset using `POST /v1/ruleset/createRuleset` using a similar payload to the following:
 
 ```
 {
