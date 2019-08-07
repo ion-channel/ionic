@@ -1,5 +1,5 @@
 coverage/
 coverage.out
 coverage.txt
-docs/index.html
-docs/*.md
+docs/*.html
+docs/endpoints.md
