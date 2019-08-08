@@ -189,6 +189,10 @@ func (ic *IonClient) GetProjectByURL(uri, teamID, token string) (*projects.Proje
 func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*projects.Project, error) {
 	params := &url.Values{}
 
+	if project.ID == nil {
+		return nil, fmt.Errorf("%v: %v", projects.ErrInvalidProject, "missing id")
+	}
+
 	fields, err := project.Validate(ic.client, ic.baseURL, token)
 	if err != nil {
 		var errs []string

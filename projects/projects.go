@@ -85,11 +85,6 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 	invalidFields := make(map[string]string)
 	var projErr error
 
-	if p.ID == nil {
-		invalidFields["id"] = "missing id"
-		projErr = ErrInvalidProject
-	}
-
 	if p.TeamID == nil {
 		invalidFields["team_id"] = "missing team id"
 		projErr = ErrInvalidProject
