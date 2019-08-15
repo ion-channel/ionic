@@ -32,19 +32,20 @@ func TestGetDeliveryDestinations(t *testing.T) {
 			deliveries, err := client.GetDeliveryDestinations("7660D469-45DA-4AA3-A421-4F65E9C0CEE9", "token")
 			Expect(err).To(BeNil())
 			Expect(deliveries).NotTo(BeNil())
-			//Expect(alias.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
-			//Expect(alias.Name).To(Equal("name"))
-			//Expect(alias.Version).To(Equal("version"))
-
+			Expect(deliveries[0].ID).To(Equal("B3DFA2C7-6DE6-4629-9F19-B493BBE6F2DC"))
+			Expect(deliveries[1].Name).To(Equal("location2Name"))
 		})
 
-		//g.It("should return an error for an invalid action", func() {
-		//	var ue AnalysisEvent
-		//	err := json.Unmarshal([]byte(SampleInvalidAnalysisEvent), &ue)
+		g.It("should return an error for an invalid action", func() {
+			server.AddPath("/v1/teams/getDeliveryDestinations").
+				SetMethods("GET").
+				SetPayload([]byte(SampleInvalidDeliveryDestinations)).
+				SetStatus(http.StatusOK)
 
-		//	Expect(err).NotTo(BeNil())
-		//	Expect(err.Error()).To(ContainSubstring("invalid analysis event action"))
-		//})
+			deliveries, err := client.GetDeliveryDestinations("7660D469-45DA-4AA3-A421-4F65E9C0CEE9", "token")
+			Expect(err).NotTo(BeNil())
+			Expect(deliveries).To(BeNil())
+		})
 	})
 }
 
@@ -69,18 +70,9 @@ const (
 			"type": "s3",
 			"deleted_at": "2019-08-10T20:00:00.840678Z"
 		  }
-		],
-		"meta": {
-		  "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net",
-		  "authors": [
-			"Ion Channel Dev Team"
-		  ],
-		  "version": "v1",
-		  "total_count": 1,
-		  "offset": 0
-		}
+		]
 	  }
 	`
 
-	//SampleInvalidAnalysisEvent = `{"analysis":"fooanalysis", "action":"foo_action"}`
+	SampleInvalidDeliveryDestinations = `{"analysis":"fooanalysis", "action":"foo_action"}`
 )
