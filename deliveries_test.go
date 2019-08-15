@@ -58,7 +58,7 @@ func TestDeleteDeliveryDestination(t *testing.T) {
 		h, p := server.HostPort()
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
-		g.It("should get get no error when sucessful", func() {
+		g.It("should get no error when sucessful", func() {
 			server.AddPath("/v1/teams/deleteDeliveryDestination").
 				SetMethods("DELETE").
 				SetStatus(http.StatusNoContent)
