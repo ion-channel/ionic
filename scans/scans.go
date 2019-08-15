@@ -30,7 +30,6 @@ type scan struct {
 
 // String returns a JSON formatted string of the scan object
 func (s Scan) String() string {
-	fmt.Println("Here!!!!")
 	b, err := json.Marshal(s)
 	if err != nil {
 		return fmt.Sprintf("failed to format user: %v", err.Error())
