@@ -15,12 +15,10 @@ const (
 
 // Destination is a representation of a single location that a team can deliver results to.
 type Destination struct {
-	ID        string `json:"id"`
-	TeamID    string `json:"team_id"`
-	Location  string `json:"location"`
-	Region    string `json:"region"`
-	accessKey string
-	secretKey string
+	ID        string     `json:"id"`
+	TeamID    string     `json:"team_id"`
+	Location  string     `json:"location"`
+	Region    string     `json:"region"`
 	Name      string     `json:"name"`
 	DestType  string     `json:"type"`
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
