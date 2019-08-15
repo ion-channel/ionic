@@ -85,8 +85,7 @@ func TestTeamUsers(t *testing.T) {
 		g.It("should delete a team user", func() {
 			server.AddPath("/v1/teamUsers/deleteTeamUser").
 				SetMethods("DELETE").
-				SetPayload([]byte(SampleDeleteTeamUser)).
-				SetStatus(http.StatusOK)
+				SetStatus(http.StatusNoContent)
 
 			server.AddPath("/v1/teamUsers/getTeamUser").
 				SetMethods("GET").
@@ -96,7 +95,7 @@ func TestTeamUsers(t *testing.T) {
 				ID: "someid",
 			}
 
-			response, err := client.DeleteTeamUser(tu, "atoken")
+			err := client.DeleteTeamUser(tu, "atoken")
 			Expect(err).To(BeNil())
 			Expect(tu.ID).To(Equal("someid"))
 
@@ -104,14 +103,12 @@ func TestTeamUsers(t *testing.T) {
 			Expect(len(hr)).To(Equal(2))
 			Expect(hr[0].Verb).To(Equal("DELETE"))
 			Expect(hr[1].Verb).To(Equal("GET"))
-			Expect(string(response)).To(ContainSubstring(`{"message": "Deleted Team User: someid"}`))
 		})
 
 		g.It("should return an error if it fails to validate the user was deleted", func() {
 			server.AddPath("/v1/teamUsers/deleteTeamUser").
 				SetMethods("DELETE").
-				SetPayload([]byte(SampleDeleteTeamUser)).
-				SetStatus(http.StatusOK)
+				SetStatus(http.StatusNoContent)
 
 			server.AddPath("/v1/teamUsers/getTeamUser").
 				SetMethods("GET").
@@ -122,8 +119,7 @@ func TestTeamUsers(t *testing.T) {
 				ID: "someid",
 			}
 
-			response, err := client.DeleteTeamUser(tu, "atoken")
-			Expect(response).To(BeNil())
+			err := client.DeleteTeamUser(tu, "atoken")
 
 			hr := server.HitRecords()
 			Expect(len(hr)).To(Equal(2))

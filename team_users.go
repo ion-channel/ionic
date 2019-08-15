@@ -94,19 +94,19 @@ func (ic *IonClient) UpdateTeamUser(teamuser *teamusers.TeamUser, token string) 
 
 // DeleteTeamUser takes a teamUser object and then makes the call to delete the teamUser.
 // Once the delete call has been made, a GetTeamUser call is made to validate the deletion.
-// It returns a string or any errors it encounters with the API.
-func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) (json.RawMessage, error) {
+// It returns any errors it encounters with the API.
+func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) error {
 	params := &url.Values{}
 	params.Set("someid", teamuser.ID)
 
 	_, err := json.Marshal(teamuser)
 	if err != nil {
-		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+		return fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
 
-	response, err := ic.Delete(teamusers.TeamsDeleteTeamUserEndpoint, token, params, nil)
+	_, err = ic.Delete(teamusers.TeamsDeleteTeamUserEndpoint, token, params, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to delete team user: %v", err.Error())
+		return fmt.Errorf("failed to delete team user: %v", err.Error())
 	}
 
 	params = &url.Values{}
@@ -118,9 +118,9 @@ func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) 
 		var teamU teamusers.TeamUser
 		err = json.Unmarshal(t, &teamU)
 		if err != nil {
-			return nil, fmt.Errorf("cannot parse team: %v", err.Error())
+			return fmt.Errorf("cannot parse team: %v", err.Error())
 		}
-		return nil, fmt.Errorf("failed to validate team user deletion: %v", t)
+		return fmt.Errorf("failed to validate team user deletion: %v", t)
 	}
-	return response, nil
+	return nil
 }

@@ -28,3 +28,15 @@ func (ic *IonClient) GetDeliveryDestinations(teamID, token string) ([]deliveries
 
 	return d, nil
 }
+
+// DeleteDeliveryDestination takes a team ID, and token. It returns errors.
+func (ic *IonClient) DeleteDeliveryDestination(destinationID, token string) error {
+	params := &url.Values{}
+	params.Set("id", destinationID)
+
+	_, err := ic.Delete(deliveries.DeliveriesDeleteDestinationEndpoint, token, params, nil)
+	if err != nil {
+		return fmt.Errorf("failed to delete delivery destination: %v", err.Error())
+	}
+	return err
+}

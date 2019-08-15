@@ -81,7 +81,7 @@ func _do(client *http.Client, method string, baseURL *url.URL, endpoint, token s
 		return nil, errors.Errors(string(body), resp.StatusCode, "api: error response")
 	}
 
-	if strings.ToUpper(method) == "HEAD" {
+	if strings.ToUpper(method) == "HEAD" || strings.ToUpper(method) == "DELETE" {
 		return &responses.IonResponse{}, nil
 	}
 
