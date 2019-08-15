@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	// DeliveriesGetDestinationEndpoints returns all destinations for a team. Requires team id.
-	DeliveriesGetDestinationsEndpoints = "/v1/teams/getDeliveryDestinations"
+	// DeliveriesGetDestinationsEndpoint returns all destinations for a team. Requires team id.
+	DeliveriesGetDestinationsEndpoint = "/v1/teams/getDeliveryDestinations"
 	// DeliveriesDeleteDestinationEndpoint markes a delivery destination as deleted. It requires a delivery destination id.
 	DeliveriesDeleteDestinationEndpoint = "/v1/teams/deleteDeliveryDestination"
 )

@@ -15,7 +15,7 @@ func (ic *IonClient) GetDeliveryDestinations(teamID, token string) ([]deliveries
 	params := &url.Values{}
 	params.Set("id", teamID)
 
-	b, err := ic.Get(deliveries.DeliveriesGetDestinationsEndpoints, token, params, nil, nil)
+	b, err := ic.Get(deliveries.DeliveriesGetDestinationsEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get deliveries: %v", err.Error())
 	}
