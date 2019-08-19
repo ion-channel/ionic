@@ -24,8 +24,8 @@ type Destination struct {
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
-// CreateDestinationInput is an input representation of a single location that a team can deliver results to.
-type CreateDestinationInput struct {
+// CreateDestination is an input representation of a single location that a team can deliver results to.
+type CreateDestination struct {
 	Destination
 	AccessKey string `json:"access_key"`
 	SecretKey string `json:"secret_key"`
