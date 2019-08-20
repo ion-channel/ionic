@@ -11,6 +11,8 @@ const (
 	DeliveriesGetDestinationsEndpoint = "/v1/teams/getDeliveryDestinations"
 	// DeliveriesDeleteDestinationEndpoint markes a delivery destination as deleted. It requires a delivery destination id.
 	DeliveriesDeleteDestinationEndpoint = "/v1/teams/deleteDeliveryDestination"
+	// CreateDeleteDestinationEndpoint creates a destination. Requires team id, location, region, name, destination type, access key (empty string allowed), secret key (empty string allowed) and token.
+	CreateDeleteDestinationEndpoint = "/v1/teams/createDeliveryDestination"
 )
 
 // Destination is a representation of a single location that a team can deliver results to.

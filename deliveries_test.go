@@ -7,6 +7,7 @@ import (
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
+	"github.com/ion-channel/ionic/deliveries"
 	. "github.com/onsi/gomega"
 )
 
@@ -99,6 +100,42 @@ func TestDeleteDeliveryDestination(t *testing.T) {
 	})
 }
 
+func TestCreateDeliveryDestinations(t *testing.T) {
+	g := Goblin(t)
+	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
+
+	g.Describe("Delivery Destinations", func() {
+		server := bogus.New()
+		h, p := server.HostPort()
+		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
+
+		g.It("should add a delivery destination", func() {
+			server.AddPath("/v1/teams/createDeliveryDestination").
+				SetMethods("POST").
+				SetPayload([]byte(SampleValidDeliveryDestination)).
+				SetStatus(http.StatusOK)
+
+			d := &deliveries.CreateDestination{
+				Destination: deliveries.Destination{
+					TeamID:   "7660D469-45DA-4AA3-A421-4F65E9C0CEE9",
+					Location: "location1",
+					Region:   "us-east-1",
+					Name:     "location1Name",
+					DestType: "s3",
+				},
+				AccessKey: "",
+				SecretKey: "",
+			}
+
+			dest, err := client.CreateDeliveryDestinations(d, "token")
+			Expect(err).To(BeNil())
+			Expect(dest.ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
+			Expect(dest.Name).To(Equal("location1Name"))
+			Expect(dest.Region).To(Equal("us-east-1"))
+		})
+	})
+}
+
 const (
 	SampleValidDeliveryDestinations = `
 	{
@@ -122,6 +159,19 @@ const (
 		  }
 		]
 	  }
+	`
+
+	SampleValidDeliveryDestination = `
+		{  
+			"data":{  
+			"id":"334c183d-4d37-4515-84c4-0d0ed0fb8db0",
+			"team_id":"7660D469-45DA-4AA3-A421-4F65E9C0CEE9",
+			"location":"location1",
+			"region":"us-east-1",
+			"name":"location1Name",
+			"type":"s3"
+			}
+		}
 	`
 
 	SampleInvalidDeliveryDestinations = `{"analysis":"fooanalysis", "action":"foo_action"}`

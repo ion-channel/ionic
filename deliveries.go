@@ -1,6 +1,7 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -39,4 +40,28 @@ func (ic *IonClient) DeleteDeliveryDestination(destinationID, token string) erro
 		return fmt.Errorf("failed to delete delivery destination: %v", err.Error())
 	}
 	return err
+}
+
+// CreateDeliveryDestinations takes *CreateDestination, and token
+// It returns a *CreateDestination and error
+func (ic *IonClient) CreateDeliveryDestinations(dest *deliveries.CreateDestination, token string) (*deliveries.CreateDestination, error) {
+	params := &url.Values{}
+
+	b, err := json.Marshal(dest)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshall destination: %v", err.Error())
+	}
+
+	b, err = ic.Post(deliveries.CreateDeleteDestinationEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create destination: %v", err.Error())
+	}
+
+	var a deliveries.CreateDestination
+	err = json.Unmarshal(b, &a)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response from create destination: %v", err.Error())
+	}
+
+	return &a, nil
 }
