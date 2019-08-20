@@ -63,7 +63,5 @@ func (ic *IonClient) CreateDeliveryDestinations(dest *deliveries.CreateDestinati
 		return nil, fmt.Errorf("failed to read response from create destination: %v", err.Error())
 	}
 
-	dest.AccessKey = ""
-	dest.SecretKey = ""
 	return &a, nil
 }
