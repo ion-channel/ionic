@@ -16,7 +16,7 @@ func (ic *IonClient) GetDeliveryDestinations(teamID, token string) ([]deliveries
 	params := &url.Values{}
 	params.Set("id", teamID)
 
-	b, err := ic.Get(deliveries.DeliveriesGetDestinationsEndpoint, token, params, nil, nil)
+	b, err := ic.Get(deliveries.GetDestinationsEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get deliveries: %v", err.Error())
 	}
@@ -35,7 +35,7 @@ func (ic *IonClient) DeleteDeliveryDestination(destinationID, token string) erro
 	params := &url.Values{}
 	params.Set("id", destinationID)
 
-	_, err := ic.Delete(deliveries.DeliveriesDeleteDestinationEndpoint, token, params, nil)
+	_, err := ic.Delete(deliveries.DeleteDestinationEndpoint, token, params, nil)
 	if err != nil {
 		return fmt.Errorf("failed to delete delivery destination: %v", err.Error())
 	}
@@ -52,7 +52,7 @@ func (ic *IonClient) CreateDeliveryDestinations(dest *deliveries.CreateDestinati
 		return nil, fmt.Errorf("failed to marshall destination: %v", err.Error())
 	}
 
-	b, err = ic.Post(deliveries.CreateDeleteDestinationEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	b, err = ic.Post(deliveries.CreateDestinationEndpoint, token, params, *bytes.NewBuffer(b), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create destination: %v", err.Error())
 	}
