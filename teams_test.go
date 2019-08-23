@@ -69,5 +69,5 @@ func TestTeams(t *testing.T) {
 
 const (
 	SampleValidTeam  = `{"data":{"id":"cd98e4e1-6926-4989-8ef8-f326cd5956fc","created_at":"2016-09-09T22:06:49.487Z","updated_at":"2016-09-09T22:06:49.487Z","name":"ion-channel","sys_admin":true,"poc_name":"","poc_email":"","poc_name_hash":"","poc_email_hash":""}}`
-	SampleCreateTeam = `{"data":{"id":"5c4a8a84-efa0-4357-91f6-9f9e95f7dd1a","created_at":"2018-01-05T23:59:58.160Z","updated_at":"2018-01-05T23:59:58.160Z","name":"test-team","sys_admin":false,"deleted_at":null,"poc_name":"Ion","poc_email":"test@iontest.com","poc_name_hash":"","poc_email_hash":"","delivery_location":"","access_key":"","secret_key":"","delivery_region":""}}`
+	SampleCreateTeam = `{"data":{"id":"5c4a8a84-efa0-4357-91f6-9f9e95f7dd1a","created_at":"2018-01-05T23:59:58.160Z","updated_at":"2018-01-05T23:59:58.160Z","name":"test-team","sys_admin":false,"deleted_at":null,"poc_name":"Ion","poc_email":"test@iontest.com","poc_name_hash":"","poc_email_hash":""}}`
 )

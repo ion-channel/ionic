@@ -12,13 +12,9 @@ import (
 // CreateTeamOptions represents all the values that can be provided for a team
 // at the time of creation
 type CreateTeamOptions struct {
-	Name             string `json:"name"`
-	POCName          string `json:"poc_name"`
-	POCEmail         string `json:"poc_email"`
-	DeliveryLocation string `json:"delivery_location"`
-	AccessKey        string `json:"access_key"`
-	SecretKey        string `json:"secret_key"`
-	DeliveryRegion   string `json:"delivery_region"`
+	Name     string `json:"name"`
+	POCName  string `json:"poc_name"`
+	POCEmail string `json:"poc_email"`
 }
 
 // CreateTeam takes a create team options, validates the minimum info is
