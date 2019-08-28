@@ -92,6 +92,36 @@ func TestDigest(t *testing.T) {
 				Expect(ds.Errored).To(BeTrue())
 				Expect(ds.ErroredMessage).To(Equal("evaluation not received"))
 			})
+
+			g.It("should show an error passed along", func() {
+				s := &scanner.ScanStatus{
+					Status:  "errored",
+					Message: "failed to perform the scan for a reason",
+				}
+				ds := NewDigest(s, 0, "", "")
+				e := scans.NewEval()
+
+				ds.AppendEval(e, "count", 1)
+				Expect(ds).NotTo(BeNil())
+				Expect(ds.Pending).To(BeFalse())
+				Expect(ds.Errored).To(BeTrue())
+				Expect(ds.ErroredMessage).To(Equal("failed to perform the scan for a reason"))
+			})
+
+			g.It("should not have an error", func() {
+				s := &scanner.ScanStatus{
+					Status:  "finished",
+					Message: "completed scan",
+				}
+				ds := NewDigest(s, 0, "", "")
+				e := scans.NewEval()
+
+				ds.AppendEval(e, "count", 1)
+				Expect(ds).NotTo(BeNil())
+				Expect(ds.Pending).To(BeFalse())
+				Expect(ds.Errored).To(BeFalse())
+				Expect(ds.ErroredMessage).To(Equal(""))
+			})
 		})
 
 		g.Describe("Pluralization", func() {
