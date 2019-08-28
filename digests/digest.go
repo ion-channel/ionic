@@ -166,8 +166,12 @@ func (d *Digest) AppendEval(eval *scans.Evaluation, dataType string, value inter
 
 	d.Data = data
 	d.Title = title
-	d.Errored = false
-	d.ErroredMessage = ""
+	// since all digests are created with an error and default error message, if default message is still there, we need to
+	// flip errored state from true to false.
+	if d.ErroredMessage == "evaluation not received" {
+		d.Errored = false
+		d.ErroredMessage = ""
+	}
 	d.ScanID = eval.ID
 	d.RuleID = eval.RuleID
 	d.RulesetID = eval.RulesetID
