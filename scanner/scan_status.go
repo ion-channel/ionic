@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"strings"
 	"time"
 )
 
@@ -21,4 +22,15 @@ type ScanStatus struct {
 	Status           string    `json:"status"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
+}
+
+// Errored encapsulates the concerns of whether a ScanStatus is in an errored
+// state or not. It returns true or false based on whether the ScanStatus is
+// errored.
+func (s *ScanStatus) Errored() bool {
+	if strings.ToLower(s.Status) == "errored" {
+		return true
+	}
+
+	return false
 }

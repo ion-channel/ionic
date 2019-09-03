@@ -83,7 +83,7 @@ func NewDigest(status *scanner.ScanStatus, index int, singular, plural string) *
 	errored := true
 	erroredMsg := "evaluation not received"
 
-	if status != nil && strings.ToLower(status.Status) == "errored" {
+	if status != nil && status.Errored() {
 		errored = true
 		erroredMsg = status.Message
 	}

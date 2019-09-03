@@ -12,7 +12,7 @@ func coveragDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Diges
 
 	d := NewDigest(status, codeCoverageIndex, "code coverage", "code coverage")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.CoverageResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into coverage")

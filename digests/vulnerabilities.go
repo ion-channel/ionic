@@ -50,7 +50,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	// total vulns
 	d := NewDigest(status, totalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", vulnCount)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to total vulnerabilities digest: %v", err.Error())
@@ -73,7 +73,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	// unique vulns
 	d = NewDigest(status, uniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", uniqVulnCount)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
@@ -96,7 +96,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	// high vulns
 	d = NewDigest(status, highVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", highs)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
@@ -112,7 +112,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	// critical vulns
 	d = NewDigest(status, criticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", crits)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())

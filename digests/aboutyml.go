@@ -12,7 +12,7 @@ func aboutYMLDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dige
 
 	d := NewDigest(status, aboutYMLIndex, "valid about yaml", "valid about yaml")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.AboutYMLResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into aboutyaml")
