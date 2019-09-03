@@ -139,6 +139,16 @@ func (d *Digest) AppendEval(eval *scans.Evaluation, dataType string, value inter
 		if c == 1 {
 			title = d.singularTitle
 		}
+
+		// Counts less than 0 are an indicator of error state. Record where the
+		// information came from, but do not overwrite errors and other states.
+		if c < 0 {
+			d.ScanID = eval.ID
+			d.RuleID = eval.RuleID
+			d.RulesetID = eval.RulesetID
+
+			return nil
+		}
 	case "list":
 		l, ok := value.([]string)
 		if !ok {
@@ -166,12 +176,8 @@ func (d *Digest) AppendEval(eval *scans.Evaluation, dataType string, value inter
 
 	d.Data = data
 	d.Title = title
-	// since all digests are created with an error and default error message, if default message is still there, we need to
-	// flip errored state from true to false.
-	if d.ErroredMessage == "evaluation not received" {
-		d.Errored = false
-		d.ErroredMessage = ""
-	}
+	d.Errored = false
+	d.ErroredMessage = ""
 	d.ScanID = eval.ID
 	d.RuleID = eval.RuleID
 	d.RulesetID = eval.RulesetID

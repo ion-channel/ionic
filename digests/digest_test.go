@@ -93,7 +93,7 @@ func TestDigest(t *testing.T) {
 				Expect(ds.ErroredMessage).To(Equal("evaluation not received"))
 			})
 
-			g.It("should show an error passed along", func() {
+			g.It("should show an error when an invalid count is appended", func() {
 				s := &scanner.ScanStatus{
 					Status:  "errored",
 					Message: "failed to perform the scan for a reason",
@@ -101,7 +101,7 @@ func TestDigest(t *testing.T) {
 				ds := NewDigest(s, 0, "", "")
 				e := scans.NewEval()
 
-				ds.AppendEval(e, "count", 1)
+				ds.AppendEval(e, "count", -1)
 				Expect(ds).NotTo(BeNil())
 				Expect(ds.Pending).To(BeFalse())
 				Expect(ds.Errored).To(BeTrue())
