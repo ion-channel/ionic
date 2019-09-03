@@ -12,7 +12,7 @@ func differenceDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	d := NewDigest(status, differenceIndex, "difference detected", "difference detected")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.DifferenceResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into difference")

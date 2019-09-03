@@ -12,7 +12,7 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 
 	d := NewDigest(status, uniqueCommittersIndex, "unique committer", "unique committers")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into community")

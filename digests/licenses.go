@@ -12,7 +12,7 @@ func licenseDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Diges
 
 	d := NewDigest(status, licensesIndex, "license found", "licenses found")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.LicenseResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into license")

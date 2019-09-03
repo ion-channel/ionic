@@ -23,7 +23,7 @@ func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest,
 
 	d := NewDigest(status, filesScannedIndex, "total file scanned", "total files scanned")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", scannedFiles)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create total files scanned digest: %v", err.Error())
@@ -41,7 +41,7 @@ func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest,
 
 	d = NewDigest(status, virusFoundIndex, "virus found", "viruses found")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", infectedFiles)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create total files scanned digest: %v", err.Error())

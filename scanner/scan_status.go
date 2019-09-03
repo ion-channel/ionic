@@ -1,12 +1,24 @@
 package scanner
 
 import (
+	"strings"
 	"time"
 )
 
 const (
 	// ScannerAddScanEndpoint is a string representation of the current endpoint for scanner add scan
 	ScannerAddScanEndpoint = "v1/scanner/addScanResult"
+
+	// ScanStatusErrored denotes a request for scan has errored during
+	// the run, the message field will have more details
+	ScanStatusErrored = "errored"
+	// ScanStatusFinished denotes a request for scan has been
+	// completed, view the passed field from an Scan and the scan details for
+	// more information
+	ScanStatusFinished = "finished"
+	// ScanStatusStarted denotes a request for scan has been
+	// accepted and has begun
+	ScanStatusStarted = "started"
 )
 
 //ScanStatus identifies the state of a scan performed by the Ion system
@@ -21,4 +33,15 @@ type ScanStatus struct {
 	Status           string    `json:"status"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
+}
+
+// Errored encapsulates the concerns of whether a ScanStatus is in an errored
+// state or not. It returns true or false based on whether the ScanStatus is
+// errored.
+func (s *ScanStatus) Errored() bool {
+	if strings.ToLower(s.Status) == ScanStatusErrored {
+		return true
+	}
+
+	return false
 }

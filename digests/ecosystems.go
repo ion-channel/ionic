@@ -12,7 +12,7 @@ func ecosystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	d := NewDigest(status, languagesIndex, "language", "languages")
 
-	if eval != nil {
+	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.EcosystemResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into languages bytes")
