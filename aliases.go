@@ -9,25 +9,21 @@ import (
 	"github.com/ion-channel/ionic/aliases"
 )
 
-type createAliasOptions struct {
+// AddAliasOptions struct that allows for adding an alias to a
+// project
+type AddAliasOptions struct {
 	Name      string `json:"name"`
 	ProjectID string `json:"project_id"`
 	TeamID    string `json:"team_id"`
 	Version   string `json:"version"`
+	Org       string `json:"org"`
 }
 
 //AddAlias takes a project and adds an alias to it. It returns the
 // project stored or an error encountered by the API
-func (ic *IonClient) AddAlias(projectID, teamID, name, version, token string) (*aliases.Alias, error) {
+func (ic *IonClient) AddAlias(alias AddAliasOptions, token string) (*aliases.Alias, error) {
 	params := &url.Values{}
-	params.Set("project_id", projectID)
-
-	alias := createAliasOptions{
-		Name:      name,
-		Version:   version,
-		TeamID:    teamID,
-		ProjectID: projectID,
-	}
+	params.Set("project_id", alias.ProjectID)
 
 	b, err := json.Marshal(alias)
 	if err != nil {
