@@ -81,6 +81,7 @@ func TestScan(t *testing.T) {
 				Expect(ss.UntranslatedResults).NotTo(BeNil())
 				Expect(ss.UntranslatedResults.License).NotTo(BeNil())
 				Expect(ss.UntranslatedResults.License.Name).To(Equal("some license"))
+				Expect(ss.UntranslatedResults.License.Type[0].Confidence).To(Equal(float32(0.0)))
 			})
 
 			g.It("should populate results with translated result", func() {
@@ -121,7 +122,7 @@ func TestScan(t *testing.T) {
 							&License{
 								Name: "some license",
 								Type: []LicenseType{
-									LicenseType{Name: "a license"},
+									LicenseType{Name: "a license", Confidence: 1.0},
 								},
 							},
 						},

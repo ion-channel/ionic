@@ -342,7 +342,8 @@ type License struct {
 
 // LicenseType represents a type of license such as MIT, Apache 2.0, etc
 type LicenseType struct {
-	Name string `json:"name" xml:"name"`
+	Name       string  `json:"name" xml:"name"`
+	Confidence float32 `json:"confidence" xml:"confidence"`
 }
 
 // VirusResults represents the data collected from a virus scan.  It includes
