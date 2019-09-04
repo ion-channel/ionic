@@ -121,3 +121,22 @@ func (ic *IonClient) GetVersionsForDependency(packageName, ecosystem, token stri
 
 	return deps, nil
 }
+
+// SearchDependencies takes a query `org AND name` and
+// calls the Ion API to retrieve the information, then forms a slice of
+// Ionic dependencies.Dependency objects
+func (ic *IonClient) SearchDependencies(q, token string) ([]dependencies.Dependency, error) {
+	params := &url.Values{}
+	params.Set("q", q)
+
+	b, err := ic.Get(dependencies.ResolveDependencySearchEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get dependencies: %v", err.Error())
+	}
+	var results []dependencies.Dependency
+	err = json.Unmarshal(b, &results)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal search results: %v (%v)", err.Error(), string(b))
+	}
+	return results, nil
+}

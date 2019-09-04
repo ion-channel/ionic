@@ -88,6 +88,33 @@ func TestDependencies(t *testing.T) {
 			Expect(len(hrs)).To(Equal(1))
 			Expect(string(hrs[0].Body)).To(ContainSubstring(samplePomSnippet))
 		})
+
+		g.It("should support search for dependencies", func() {
+			server.AddPath("/v1/dependency/search").
+				SetMethods("GET").
+				SetPayload([]byte(sampleSearchResponse)).
+				SetStatus(http.StatusOK)
+
+			tf, err := ioutil.TempFile("", "test")
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer os.Remove(tf.Name()) // clean up
+
+			tf.Write([]byte(samplePomSnippet))
+			tf.Close()
+
+			deps, err := client.SearchDependencies("some org", "atoken")
+
+			Expect(err).To(BeNil())
+			Expect(deps[0].Version).To(Equal("1.16.3"))
+			Expect(deps[0].Name).To(Equal("invaluable"))
+			Expect(deps[0].Org).To(Equal("nefarious"))
+
+			hrs := server.HitRecords()
+			Expect(len(hrs)).To(Equal(1))
+		})
 	})
 }
 
@@ -95,6 +122,7 @@ const (
 	sampleLatestVersionResponse  = `{"data":{"version":"1.16.3"}}`
 	sampleLatestVersionsResponse = `{"data":["1.16.3","1.16.2"]}`
 	sampleResolutionResponse     = `{"data":{"dependencies":[{"version":"1.16.3"}]}}`
+	sampleSearchResponse         = `{"data":[{"name":"invaluable", "version":"1.16.3", "org": "nefarious"}]}`
 
 	samplePomSnippet = `<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
