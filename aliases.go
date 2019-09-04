@@ -20,6 +20,7 @@ type createAliasOptions struct {
 // project stored or an error encountered by the API
 func (ic *IonClient) AddAlias(projectID, teamID, name, version, token string) (*aliases.Alias, error) {
 	params := &url.Values{}
+	params.Set("project_id", projectID)
 
 	alias := createAliasOptions{
 		Name:      name,
