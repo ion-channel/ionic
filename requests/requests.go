@@ -150,3 +150,11 @@ func Post(client *http.Client, baseURL *url.URL, endpoint, token string, params 
 func Put(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
 	return do(client, "PUT", baseURL, endpoint, token, params, payload, headers, nil)
 }
+
+// Patch takes a client, baseURL, endpoint, token, params, payload, and headers to pass as a patch call to
+// the API.  It will return a json RawMessage for the response and any errors it
+// encounters with the API.
+// It is used internally by the SDK
+func Patch(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
+	return do(client, "PATCH", baseURL, endpoint, token, params, payload, headers, nil)
+}
