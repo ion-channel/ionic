@@ -212,7 +212,8 @@ const (
         "name": "some license",
         "type": [
           {
-            "name": "a license"
+            "name": "a license",
+						"confidence": 1.0
           }
         ]
       }
