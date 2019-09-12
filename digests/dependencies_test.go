@@ -55,5 +55,54 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(ds[3].Pending).To(BeFalse())
 			Expect(ds[3].Errored).To(BeFalse())
 		})
+
+		g.It("should have no warning with transitive dependencies", func() {
+			s := &scanner.ScanStatus{}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "dependency",
+				Data: scans.DependencyResults{
+					Dependencies: nil,
+					Meta: scans.DependencyMeta{
+						FirstDegreeCount:     2,
+						NoVersionCount:       1,
+						TotalUniqueCount:     115,
+						UpdateAvailableCount: 2,
+					},
+				},
+			}
+
+			ds, err := dependencyDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(ds[3].Warning).To(BeFalse())
+			Expect(ds[3].WarningMessage).To(BeEmpty())
+			Expect(string(ds[3].Data)).To(ContainSubstring("count\":113"))
+			Expect(string(ds[3].Title)).To(Equal("transitive dependencies"))
+		})
+
+		g.It("should have a warning with transitive dependencies", func() {
+			s := &scanner.ScanStatus{}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "dependency",
+				Data: scans.DependencyResults{
+					Dependencies: nil,
+					Meta: scans.DependencyMeta{
+						FirstDegreeCount:     2,
+						NoVersionCount:       1,
+						TotalUniqueCount:     2,
+						UpdateAvailableCount: 2,
+					},
+				},
+			}
+
+			ds, err := dependencyDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(ds[3].Warning).To(BeTrue())
+			Expect(ds[3].WarningMessage).To(Equal("no transitive dependencies found"))
+			Expect(string(ds[3].Data)).To(ContainSubstring("count\":0"))
+			Expect(string(ds[3].Title)).To(Equal("transitive dependencies"))
+		})
 	})
+
 }
