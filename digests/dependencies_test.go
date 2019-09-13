@@ -103,6 +103,54 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(string(ds[3].Data)).To(ContainSubstring("count\":0"))
 			Expect(string(ds[3].Title)).To(Equal("transitive dependencies"))
 		})
+
+		g.It("should have no warning with direct dependencies", func() {
+			s := &scanner.ScanStatus{}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "dependency",
+				Data: scans.DependencyResults{
+					Dependencies: nil,
+					Meta: scans.DependencyMeta{
+						FirstDegreeCount:     13,
+						NoVersionCount:       1,
+						TotalUniqueCount:     115,
+						UpdateAvailableCount: 2,
+					},
+				},
+			}
+
+			ds, err := dependencyDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(ds[2].Warning).To(BeFalse())
+			Expect(ds[2].WarningMessage).To(BeEmpty())
+			Expect(string(ds[2].Data)).To(ContainSubstring("count\":13"))
+			Expect(string(ds[2].Title)).To(Equal("direct dependencies"))
+		})
+
+		g.It("should have a warning with direct dependencies", func() {
+			s := &scanner.ScanStatus{}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "dependency",
+				Data: scans.DependencyResults{
+					Dependencies: nil,
+					Meta: scans.DependencyMeta{
+						FirstDegreeCount:     0,
+						NoVersionCount:       1,
+						TotalUniqueCount:     2,
+						UpdateAvailableCount: 2,
+					},
+				},
+			}
+
+			ds, err := dependencyDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(ds[2].Warning).To(BeTrue())
+			Expect(ds[2].WarningMessage).To(Equal("no direct dependencies found"))
+			Expect(string(ds[2].Data)).To(ContainSubstring("count\":0"))
+			Expect(string(ds[2].Title)).To(Equal("direct dependencies"))
+		})
 	})
 
 }
