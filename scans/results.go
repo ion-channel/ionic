@@ -369,25 +369,29 @@ type VirusResults struct {
 //VulnerabilityResults represents the data collected from a vulnerability scan.  It includes
 // information of the vulnerabilities seen.
 type VulnerabilityResults struct {
-	Vulnerabilities []struct {
-		ID              int                             `json:"id" xml:"id"`
-		ExternalID      string                          `json:"external_id" xml:"external_id"`
-		SourceID        int                             `json:"source_id" xml:"source_id"`
-		Title           string                          `json:"title" xml:"title"`
-		Name            string                          `json:"name" xml:"name"`
-		Org             string                          `json:"org" xml:"org"`
-		Version         string                          `json:"version" xml:"version"`
-		Up              interface{}                     `json:"up" xml:"up"`
-		Edition         interface{}                     `json:"edition" xml:"edition"`
-		Aliases         []string                        `json:"aliases" xml:"aliases"`
-		CreatedAt       time.Time                       `json:"created_at" xml:"created_at"`
-		UpdatedAt       time.Time                       `json:"updated_at" xml:"updated_at"`
-		References      interface{}                     `json:"references" xml:"references"`
-		Part            interface{}                     `json:"part" xml:"part"`
-		Language        interface{}                     `json:"language" xml:"language"`
-		Vulnerabilities []vulnerabilities.Vulnerability `json:"vulnerabilities" xml:"vulnerabilities"`
-	} `json:"vulnerabilities" xml:"vulnerabilities"`
-	Meta struct {
+	Vulnerabilities []VulnerabilityResultsProduct `json:"vulnerabilities" xml:"vulnerabilities"`
+	Meta            struct {
 		VulnerabilityCount int `json:"vulnerability_count" xml:"vulnerability_count"`
 	} `json:"meta" xml:"meta"`
+}
+
+// VulnerabilityResultsProduct represents the data about a product collected from
+// a vulnerability scan.  Vulnerabilities are linked to products.
+type VulnerabilityResultsProduct struct {
+	ID              int                             `json:"id" xml:"id"`
+	ExternalID      string                          `json:"external_id" xml:"external_id"`
+	SourceID        int                             `json:"source_id" xml:"source_id"`
+	Title           string                          `json:"title" xml:"title"`
+	Name            string                          `json:"name" xml:"name"`
+	Org             string                          `json:"org" xml:"org"`
+	Version         string                          `json:"version" xml:"version"`
+	Up              interface{}                     `json:"up" xml:"up"`
+	Edition         interface{}                     `json:"edition" xml:"edition"`
+	Aliases         []string                        `json:"aliases" xml:"aliases"`
+	CreatedAt       time.Time                       `json:"created_at" xml:"created_at"`
+	UpdatedAt       time.Time                       `json:"updated_at" xml:"updated_at"`
+	References      interface{}                     `json:"references" xml:"references"`
+	Part            interface{}                     `json:"part" xml:"part"`
+	Language        interface{}                     `json:"language" xml:"language"`
+	Vulnerabilities []vulnerabilities.Vulnerability `json:"vulnerabilities" xml:"vulnerabilities"`
 }
