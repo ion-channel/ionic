@@ -65,6 +65,11 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		}
 
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
+
+		if directDeps < 1 {
+			d.Warning = true
+			d.WarningMessage = "no direct dependencies found"
+		}
 	}
 
 	digests = append(digests, *d)
