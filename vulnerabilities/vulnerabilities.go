@@ -49,6 +49,15 @@ type Vulnerability struct {
 	UpdatedAt                   time.Time          `json:"updated_at" xml:"updated_at"`
 }
 
+// VulnerabilityInput struct for adding a vulnerability
+type VulnerabilityInput struct {
+	Vulnerability
+	Dependencies []string   `json:"dependencies"`
+	Source       []string   `json:"source"`
+	UpdatedAt    *time.Time `json:"updated_at,omitempty"`
+	CreatedAt    *time.Time `json:"created_at,omitempty"`
+}
+
 // Source represents information about where the vulnerability data came from
 type Source struct {
 	ID           int       `json:"id" xml:"id"`

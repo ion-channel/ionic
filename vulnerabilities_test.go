@@ -68,8 +68,10 @@ func TestVulns(t *testing.T) {
 				SetPayload([]byte(SampleVulnerabilityResponse)).
 				SetStatus(http.StatusOK)
 
-			newV := &vulnerabilities.Vulnerability{
-				ExternalID: "CVE-2013-4164",
+			newV := &vulnerabilities.VulnerabilityInput{
+				Vulnerability: vulnerabilities.Vulnerability{
+					ExternalID: "CVE-2013-4164",
+				},
 			}
 
 			v, err := client.AddVulnerability(newV, "atoken")
