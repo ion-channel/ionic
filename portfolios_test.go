@@ -36,9 +36,22 @@ func TestPortfolios(t *testing.T) {
 			Expect(vs.UniqueVulnerabilities).To(Equal(2))
 			Expect(vs.MostFrequentVulnerability).To(Equal("somecve"))
 		})
+
+		g.It("should get raw vulnerability list", func() {
+			server.AddPath("/v1/animal/getVulnerabilityList").
+				SetMethods("POST").
+				SetPayload([]byte(SampleVulnList)).
+				SetStatus(http.StatusOK)
+
+			vl, err := client.GetRawVulnerabilityList([]string{"1", "2"}, "somelist", "5", "sometoken")
+			Expect(err).To(BeNil())
+			Expect(string(vl)).To(Equal("{\"cve_list\":[{\"title\":\"cve1\",\"projects_affected\":3,\"product\":\"someproduct2\",\"rating\":8.8,\"system\":\"cvssv3\"}]}"))
+		})
+
 	})
 }
 
 const (
 	SampleVulnStats = `{"data":{"total_vulnerabilities":4,"unique_vulnerabilities":2,"most_frequent_vulnerability":"somecve"}}`
+	SampleVulnList  = `{"data":{"cve_list":[{"title":"cve1","projects_affected":3,"product":"someproduct2","rating":8.8,"system":"cvssv3"}]}}`
 )

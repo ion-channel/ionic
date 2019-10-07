@@ -36,3 +36,24 @@ func (ic *IonClient) GetVulnerabilityStats(ids []string, token string) (*portfol
 
 	return &vs, nil
 }
+
+// GetRawVulnerabilityList gets a raw response from the API
+func (ic *IonClient) GetRawVulnerabilityList(ids []string, listType, limit, token string) ([]byte, error) {
+	p := portfolios.VulnerabilityListParams{
+		ListType: listType,
+		Ids:      ids,
+		Limit:    limit,
+	}
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	resp, err := ic.Post(portfolios.VulnerabilityListEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request vulnerability list: %v", err.Error())
+	}
+
+	return resp, nil
+}
