@@ -162,24 +162,6 @@ func (ic *IonClient) GetProjects(teamID, token string, page *pagination.Paginati
 	return pList, nil
 }
 
-// GetActiveProjects takes a team ID and returns the active projects for that team.  It
-// returns an error for any API errors it may encounter.
-func (ic *IonClient) GetActiveProjects(teamID, token string, page *pagination.Pagination) ([]projects.Project, error) {
-	ps, err := ic.GetProjects(teamID, token, pagination.AllItems)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
-	}
-
-	aps := make([]projects.Project, 0)
-	for i := range ps {
-		if ps[i].Active {
-			aps = append(aps, ps[i])
-		}
-	}
-
-	return aps, nil
-}
-
 // GetProjectByURL takes a uri, teamID, and API token to request the noted
 // project from the API. It returns the project and any errors it encounters
 // with the API.

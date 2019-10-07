@@ -79,19 +79,6 @@ func TestProjects(t *testing.T) {
 			Expect(*projects[0].Name).To(Equal("Statler"))
 		})
 
-		g.It("should get all active projects", func() {
-			server.AddPath("/v1/project/getProjects").
-				SetMethods("GET").
-				SetPayload([]byte(SampleValidProjects)).
-				SetStatus(http.StatusOK)
-
-			projects, err := client.GetActiveProjects("bef86653-1926-4990-8ef8-5f26cd59d6fc", "", nil)
-			Expect(err).To(BeNil())
-			Expect(len(projects)).To(Equal(1))
-			Expect(*projects[0].ID).To(Equal("334c183d-4d37-4515-84c4-0d0ed0fb8db0"))
-			Expect(*projects[0].Name).To(Equal("Statler"))
-		})
-
 		g.It("should get a project by the url", func() {
 			server.AddPath("/v1/project/getProjectByUrl").
 				SetMethods("GET").
