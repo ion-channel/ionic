@@ -14,7 +14,7 @@ func TestPortfolios(t *testing.T) {
 	g := Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
-	g.Describe("Reports", func() {
+	g.Describe("Portfolios", func() {
 		server := bogus.New()
 		h, p := server.HostPort()
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
@@ -48,10 +48,36 @@ func TestPortfolios(t *testing.T) {
 			Expect(string(vl)).To(Equal("{\"cve_list\":[{\"title\":\"cve1\",\"projects_affected\":3,\"product\":\"someproduct2\",\"rating\":8.8,\"system\":\"cvssv3\"}]}"))
 		})
 
+		g.It("should get raw vulnerability metrics", func() {
+			server.AddPath("/v1/animal/getScanMetrics").
+				SetMethods("POST").
+				SetPayload([]byte(SampleVulnMetrics)).
+				SetStatus(http.StatusOK)
+
+			vm, err := client.GetRawVulnerabilityMetrics([]string{"1", "2"}, "somemetric", "sometoken")
+			Expect(err).To(BeNil())
+			Expect(string(vm)).To(Equal("{\"line_graph\":{\"title\":\"vulnerabilities over time\",\"lines\":[{\"domain\":\"date\",\"range\":\"count\",\"legend\":\"vulnerabilities\",\"points\":{\"2019-10-08\":9}},{\"domain\":\"date\",\"range\":\"count\",\"legend\":\"projects\",\"points\":{\"2019-10-08\":3}}]}}"))
+		})
+
+		g.It("should return a status summary", func() {
+			server.AddPath("/v1/ruleset/getPortfolioSummary").
+				SetMethods("POST").
+				SetPayload([]byte(SampleStatusSummary)).
+				SetStatus(http.StatusOK)
+
+			vss, err := client.GetPortfolioStatusSummary([]string{"1", "2"}, "sometoken")
+			Expect(err).To(BeNil())
+			Expect(vss.PassingProjects).To(Equal(0))
+			Expect(vss.FailingProjects).To(Equal(4))
+			Expect(vss.ErroredProjects).To(Equal(1))
+			Expect(vss.PendingProjects).To(Equal(14))
+		})
 	})
 }
 
 const (
-	SampleVulnStats = `{"data":{"total_vulnerabilities":4,"unique_vulnerabilities":2,"most_frequent_vulnerability":"somecve"}}`
-	SampleVulnList  = `{"data":{"cve_list":[{"title":"cve1","projects_affected":3,"product":"someproduct2","rating":8.8,"system":"cvssv3"}]}}`
+	SampleVulnStats     = `{"data":{"total_vulnerabilities":4,"unique_vulnerabilities":2,"most_frequent_vulnerability":"somecve"}}`
+	SampleVulnList      = `{"data":{"cve_list":[{"title":"cve1","projects_affected":3,"product":"someproduct2","rating":8.8,"system":"cvssv3"}]}}`
+	SampleVulnMetrics   = `{"data":{"line_graph":{"title":"vulnerabilities over time","lines":[{"domain":"date","range":"count","legend":"vulnerabilities","points":{"2019-10-08":9}},{"domain":"date","range":"count","legend":"projects","points":{"2019-10-08":3}}]}}}`
+	SampleStatusSummary = `{"data":{"passing_projects":0,"failing_projects":4,"errored_projects":1,"pending_projects":14}}`
 )
