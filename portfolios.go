@@ -78,3 +78,28 @@ func (ic *IonClient) GetRawVulnerabilityMetrics(ids []string, metric, token stri
 
 	return resp, nil
 }
+
+// GetPortfolioStatusSummary takes project ids (slice of strings) and a token (string) and returns a status summary
+func (ic *IonClient) GetPortfolioStatusSummary(ids []string, token string) (*portfolios.PortfolioStatusSummary, error) {
+	pso := portfolios.PortfolioStatusOptions{
+		IDs: ids,
+	}
+
+	b, err := json.Marshal(pso)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(portfolios.PortfoliStatusSummaryEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request portfolio status summary: %v", err.Error())
+	}
+
+	var ps portfolios.PortfolioStatusSummary
+	err = json.Unmarshal(r, &ps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return &ps, nil
+}
