@@ -57,3 +57,24 @@ func (ic *IonClient) GetRawVulnerabilityList(ids []string, listType, limit, toke
 
 	return resp, nil
 }
+
+// GetRawVulnerabilityMetrics takes slice of strings (project ids), metric, and token
+// and returns raw response from the API
+func (ic *IonClient) GetRawVulnerabilityMetrics(ids []string, metric, token string) ([]byte, error) {
+	mb := portfolios.MetricsBody{
+		Metric:     metric,
+		ProjectIDs: ids,
+	}
+
+	b, err := json.Marshal(mb)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	resp, err := ic.Post(portfolios.VulnerabilityMetricsEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request vulnerability metrics: %v", err.Error())
+	}
+
+	return resp, nil
+}
