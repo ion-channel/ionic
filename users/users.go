@@ -43,3 +43,11 @@ func (u User) String() string {
 	}
 	return string(b)
 }
+
+// IsMemberOfTeam takes a team id and returns true if user is a member of that team.
+func (u User) IsMemberOfTeam(id string) bool {
+	if _, ok := u.Teams[id]; ok {
+		return true
+	}
+	return false
+}
