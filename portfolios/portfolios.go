@@ -21,8 +21,8 @@ type VulnerabilityStat struct {
 // VulnerabilityListParams represents the vulnerability list paramaters
 type VulnerabilityListParams struct {
 	Ids      []string `json:"ids"`
-	ListType string   `json:"list_type"`
-	Limit    string   `json:"limit"`
+	ListType string   `json:"list_type,omitempty"`
+	Limit    string   `json:"limit,omitempty"`
 }
 
 // MetricsBody represents the metrics body
