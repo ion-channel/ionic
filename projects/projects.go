@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"regexp"
 	"strings"
 	"time"
@@ -203,4 +204,48 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 	}
 
 	return invalidFields, projErr
+}
+
+// ProjectFilter represents the available fields to filter a get project request
+// with.
+type ProjectFilter struct {
+	Type   *string `json:"type,omitempty"`
+	Active *bool   `json:"active,omitempty"`
+}
+
+// Param converts the non nil fields of the Project Filter into a string usable
+// for URL query params.
+func (pf *ProjectFilter) Param() string {
+	ps := make([]string, 0)
+
+	fields := reflect.TypeOf(pf)
+	values := reflect.ValueOf(pf)
+
+	if fields.Kind() == reflect.Ptr {
+		fields = fields.Elem()
+		values = values.Elem()
+	}
+
+	for i := 0; i < fields.NumField(); i++ {
+		value := values.Field(i)
+
+		if value.IsNil() {
+			continue
+		}
+
+		if value.Kind() == reflect.Ptr {
+			value = value.Elem()
+		}
+
+		name := strings.ToLower(fields.Field(i).Name)
+
+		switch value.Kind() {
+		case reflect.String:
+			ps = append(ps, fmt.Sprintf("%v:%v", name, value.String()))
+		case reflect.Bool:
+			ps = append(ps, fmt.Sprintf("%v:%v", name, value.Bool()))
+		}
+	}
+
+	return strings.Join(ps, ",")
 }

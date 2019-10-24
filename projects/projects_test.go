@@ -361,6 +361,30 @@ func TestProject(t *testing.T) {
 			})
 		})
 	})
+
+	g.Describe("Project Filters", func() {
+		g.It("should convert the filter to params", func() {
+			a := false
+			t := "git"
+
+			pf := ProjectFilter{
+				Type:   &t,
+				Active: &a,
+			}
+
+			Expect(pf.Param()).To(Equal("type:git,active:false"))
+		})
+
+		g.It("should not include blank filters in the params", func() {
+			t := "git"
+
+			pf := ProjectFilter{
+				Type: &t,
+			}
+
+			Expect(pf.Param()).To(Equal("type:git"))
+		})
+	})
 }
 
 const (
