@@ -108,10 +108,14 @@ func (ic *IonClient) CreateProjectsFromCSV(csvFile, teamID, token string) (*Crea
 // GetProject takes a project ID, team ID, and token. It returns the project and
 // an error if it receives a bad response from the API or fails to unmarshal the
 // JSON response from the API.
-func (ic *IonClient) GetProject(id, teamID, token string) (*projects.Project, error) {
+func (ic *IonClient) GetProject(id, teamID, token string, filter *projects.ProjectFilter) (*projects.Project, error) {
 	params := &url.Values{}
 	params.Set("id", id)
 	params.Set("team_id", teamID)
+
+	if filter != nil {
+		params.Set("filter_by", filter.Param())
+	}
 
 	b, err := ic.Get(projects.GetProjectEndpoint, token, params, nil, nil)
 	if err != nil {
