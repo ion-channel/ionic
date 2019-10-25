@@ -367,7 +367,7 @@ func TestProject(t *testing.T) {
 			a := false
 			t := "git"
 
-			pf := ProjectFilter{
+			pf := Filter{
 				Type:   &t,
 				Active: &a,
 			}
@@ -378,7 +378,7 @@ func TestProject(t *testing.T) {
 		g.It("should not include blank filters in the params", func() {
 			t := "git"
 
-			pf := ProjectFilter{
+			pf := Filter{
 				Type: &t,
 			}
 
@@ -389,7 +389,7 @@ func TestProject(t *testing.T) {
 			a := false
 			t := "git"
 
-			pf := ProjectFilter{
+			pf := Filter{
 				Type:   &t,
 				Active: &a,
 			}
@@ -412,7 +412,7 @@ func TestProject(t *testing.T) {
 			t := "git"
 			ti := "someteamid"
 
-			pf := ProjectFilter{
+			pf := Filter{
 				Type:   &t,
 				Active: &a,
 				TeamID: &ti,
@@ -440,7 +440,7 @@ func TestProject(t *testing.T) {
 			t := "git"
 			ti := "someteamid"
 
-			pf := ProjectFilter{
+			pf := Filter{
 				Type:   &t,
 				Active: &a,
 				TeamID: &ti,

@@ -207,9 +207,9 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 	return invalidFields, projErr
 }
 
-// ProjectFilter represents the available fields to filter a get project request
+// Filter represents the available fields to filter a get project request
 // with.
-type ProjectFilter struct {
+type Filter struct {
 	ID      *string `sql:"id"`
 	TeamID  *string `sql:"team_id"`
 	Source  *string `sql:"source"`
@@ -221,14 +221,14 @@ type ProjectFilter struct {
 // ParseParam takes a param string, breaks it apart, and repopulates it into a
 // struct for further use. Any invalid or incomplete interpretations of a field
 // will be ignored and only valid entries put into the struct.
-func ParseParam(param string) *ProjectFilter {
+func ParseParam(param string) *Filter {
 	if param == "" || !strings.ContainsAny(param, ":") {
 		return nil
 	}
 
 	fvs := strings.Split(param, ",")
 
-	pf := ProjectFilter{}
+	pf := Filter{}
 
 	for i := range fvs {
 		parts := strings.Split(fvs[i], ":")
@@ -261,7 +261,7 @@ func ParseParam(param string) *ProjectFilter {
 
 // Param converts the non nil fields of the Project Filter into a string usable
 // for URL query params.
-func (pf *ProjectFilter) Param() string {
+func (pf *Filter) Param() string {
 	ps := make([]string, 0)
 
 	fields := reflect.TypeOf(pf)
@@ -299,7 +299,7 @@ func (pf *ProjectFilter) Param() string {
 // SQL takes an identifier and returns the filter as a constructed where clause
 // and set of values for use in a query as SQL params. If the identifier is left
 // blank it will not be included in the resulting where clause.
-func (pf *ProjectFilter) SQL(identifier string) (string, []interface{}) {
+func (pf *Filter) SQL(identifier string) (string, []interface{}) {
 	wheres := make([]string, 0)
 	vals := make([]interface{}, 0)
 
