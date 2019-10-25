@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -209,8 +210,53 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 // ProjectFilter represents the available fields to filter a get project request
 // with.
 type ProjectFilter struct {
-	Type   *string `json:"type,omitempty"`
-	Active *bool   `json:"active,omitempty"`
+	ID      *string `sql:"id"`
+	TeamID  *string `sql:"team_id"`
+	Source  *string `sql:"source"`
+	Type    *string `sql:"type"`
+	Active  *bool   `sql:"active"`
+	Monitor *bool   `sql:"should_monitor"`
+}
+
+// ParseParam takes a param string, breaks it apart, and repopulates it into a
+// struct for further use. Any invalid or incomplete interpretations of a field
+// will be ignored and only valid entries put into the struct.
+func ParseParam(param string) *ProjectFilter {
+	if param == "" || !strings.ContainsAny(param, ":") {
+		return nil
+	}
+
+	fvs := strings.Split(param, ",")
+
+	pf := ProjectFilter{}
+
+	for i := range fvs {
+		parts := strings.Split(fvs[i], ":")
+
+		if len(parts) == 2 {
+			name := strings.Title(parts[0])
+			value := parts[1]
+
+			field, _ := reflect.TypeOf(&pf).Elem().FieldByName(name)
+			kind := field.Type.Kind()
+
+			if kind == reflect.Ptr {
+				kind = field.Type.Elem().Kind()
+			}
+
+			switch kind {
+			case reflect.String:
+				reflect.ValueOf(&pf).Elem().FieldByName(name).Set(reflect.ValueOf(&value))
+			case reflect.Bool:
+				b, err := strconv.ParseBool(value)
+				if err == nil {
+					reflect.ValueOf(&pf).Elem().FieldByName(name).Set(reflect.ValueOf(&b))
+				}
+			}
+		}
+	}
+
+	return &pf
 }
 
 // Param converts the non nil fields of the Project Filter into a string usable
@@ -248,4 +294,50 @@ func (pf *ProjectFilter) Param() string {
 	}
 
 	return strings.Join(ps, ",")
+}
+
+// SQL takes an identifier and returns the filter as a constructed where clause
+// and set of values for use in a query as SQL params. If the identifier is left
+// blank it will not be included in the resulting where clause.
+func (pf *ProjectFilter) SQL(identifier string) (string, []interface{}) {
+	wheres := make([]string, 0)
+	vals := make([]interface{}, 0)
+
+	fields := reflect.TypeOf(pf)
+	values := reflect.ValueOf(pf)
+
+	if fields.Kind() == reflect.Ptr {
+		fields = fields.Elem()
+		values = values.Elem()
+	}
+
+	idx := 1
+	for i := 0; i < fields.NumField(); i++ {
+		value := values.Field(i)
+
+		if value.IsNil() {
+			continue
+		}
+
+		if value.Kind() == reflect.Ptr {
+			value = value.Elem()
+		}
+
+		tag, ok := fields.Field(i).Tag.Lookup("sql")
+		if !ok {
+			tag = fields.Field(i).Name
+		}
+
+		ident := ""
+		if identifier != "" {
+			ident = fmt.Sprintf("%v.", identifier)
+		}
+
+		name := strings.ToLower(tag)
+		wheres = append(wheres, fmt.Sprintf("%v%v=$%v", ident, name, idx))
+		vals = append(vals, value.Interface())
+		idx++
+	}
+
+	return strings.Join(wheres, " AND "), vals
 }
