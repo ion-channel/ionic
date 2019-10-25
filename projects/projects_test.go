@@ -429,7 +429,7 @@ func TestProject(t *testing.T) {
 				}
 
 				query, vals := pf.SQL("p")
-				Expect(query).To(Equal("WHERE p.team_id=$1 AND p.type=$2 AND p.active=$3"))
+				Expect(query).To(Equal(" WHERE p.team_id=$1 AND p.type=$2 AND p.active=$3"))
 				Expect(len(vals)).To(Equal(3))
 
 				teamID, ok := vals[0].(string)
@@ -457,7 +457,7 @@ func TestProject(t *testing.T) {
 				}
 
 				query, vals := pf.SQL("")
-				Expect(query).To(Equal("WHERE team_id=$1 AND type=$2 AND active=$3"))
+				Expect(query).To(Equal(" WHERE team_id=$1 AND type=$2 AND active=$3"))
 				Expect(len(vals)).To(Equal(3))
 			})
 
