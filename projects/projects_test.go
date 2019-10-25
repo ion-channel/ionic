@@ -363,92 +363,111 @@ func TestProject(t *testing.T) {
 	})
 
 	g.Describe("Project Filters", func() {
-		g.It("should convert the filter to params", func() {
-			a := false
-			t := "git"
+		g.Describe("To Param String", func() {
+			g.It("should convert the filter to params", func() {
+				a := false
+				t := "git"
 
-			pf := Filter{
-				Type:   &t,
-				Active: &a,
-			}
+				pf := Filter{
+					Type:   &t,
+					Active: &a,
+				}
 
-			Expect(pf.Param()).To(Equal("type:git,active:false"))
+				Expect(pf.Param()).To(Equal("type:git,active:false"))
+			})
+
+			g.It("should not include blank filters in the params", func() {
+				t := "git"
+
+				pf := Filter{
+					Type: &t,
+				}
+
+				Expect(pf.Param()).To(Equal("type:git"))
+			})
 		})
 
-		g.It("should not include blank filters in the params", func() {
-			t := "git"
+		g.Describe("From Param String", func() {
+			g.It("should parse a filter from a param", func() {
+				a := false
+				t := "git"
 
-			pf := Filter{
-				Type: &t,
-			}
+				pf := Filter{
+					Type:   &t,
+					Active: &a,
+				}
 
-			Expect(pf.Param()).To(Equal("type:git"))
+				newPf := ParseParam(pf.Param())
+				Expect(newPf).NotTo(BeNil())
+
+				Expect(newPf.Type).NotTo(BeNil())
+				Expect(*newPf.Type).To(Equal(t))
+
+				Expect(newPf.Active).NotTo(BeNil())
+				Expect(*newPf.Active).To(Equal(a))
+
+				Expect(newPf.TeamID).To(BeNil())
+				Expect(newPf.Source).To(BeNil())
+			})
+
+			g.It("should return a filter for an empty param string", func() {
+				newPf := ParseParam("")
+				Expect(newPf).NotTo(BeNil())
+			})
 		})
 
-		g.It("should parse a filter from a param", func() {
-			a := false
-			t := "git"
+		g.Describe("To SQL", func() {
+			g.It("should convert a filter to a where clause with an identifier", func() {
+				a := false
+				t := "git"
+				ti := "someteamid"
 
-			pf := Filter{
-				Type:   &t,
-				Active: &a,
-			}
+				pf := Filter{
+					Type:   &t,
+					Active: &a,
+					TeamID: &ti,
+				}
 
-			newPf := ParseParam(pf.Param())
-			Expect(newPf).NotTo(BeNil())
+				query, vals := pf.SQL("p")
+				Expect(query).To(Equal("WHERE p.team_id=$1 AND p.type=$2 AND p.active=$3"))
+				Expect(len(vals)).To(Equal(3))
 
-			Expect(newPf.Type).NotTo(BeNil())
-			Expect(*newPf.Type).To(Equal(t))
+				teamID, ok := vals[0].(string)
+				Expect(ok).To(BeTrue())
+				Expect(teamID).To(Equal(ti))
 
-			Expect(newPf.Active).NotTo(BeNil())
-			Expect(*newPf.Active).To(Equal(a))
+				typeStr, ok := vals[1].(string)
+				Expect(ok).To(BeTrue())
+				Expect(typeStr).To(Equal(t))
 
-			Expect(newPf.TeamID).To(BeNil())
-			Expect(newPf.Source).To(BeNil())
-		})
+				active, ok := vals[2].(bool)
+				Expect(ok).To(BeTrue())
+				Expect(active).To(Equal(a))
+			})
 
-		g.It("should convert a filter to a where clause with an identifier", func() {
-			a := false
-			t := "git"
-			ti := "someteamid"
+			g.It("should convert a filter to a where clause without an identifier", func() {
+				a := false
+				t := "git"
+				ti := "someteamid"
 
-			pf := Filter{
-				Type:   &t,
-				Active: &a,
-				TeamID: &ti,
-			}
+				pf := Filter{
+					Type:   &t,
+					Active: &a,
+					TeamID: &ti,
+				}
 
-			query, vals := pf.SQL("p")
-			Expect(query).To(Equal("p.team_id=$1 AND p.type=$2 AND p.active=$3"))
-			Expect(len(vals)).To(Equal(3))
+				query, vals := pf.SQL("")
+				Expect(query).To(Equal("WHERE team_id=$1 AND type=$2 AND active=$3"))
+				Expect(len(vals)).To(Equal(3))
+			})
 
-			teamID, ok := vals[0].(string)
-			Expect(ok).To(BeTrue())
-			Expect(teamID).To(Equal(ti))
+			g.It("should return an empty where clause for no params", func() {
+				pf := Filter{}
 
-			typeStr, ok := vals[1].(string)
-			Expect(ok).To(BeTrue())
-			Expect(typeStr).To(Equal(t))
-
-			active, ok := vals[2].(bool)
-			Expect(ok).To(BeTrue())
-			Expect(active).To(Equal(a))
-		})
-
-		g.It("should convert a filter to a where clause without an identifier", func() {
-			a := false
-			t := "git"
-			ti := "someteamid"
-
-			pf := Filter{
-				Type:   &t,
-				Active: &a,
-				TeamID: &ti,
-			}
-
-			query, vals := pf.SQL("")
-			Expect(query).To(Equal("team_id=$1 AND type=$2 AND active=$3"))
-			Expect(len(vals)).To(Equal(3))
+				query, vals := pf.SQL("p")
+				Expect(query).To(Equal(""))
+				Expect(len(vals)).To(Equal(0))
+			})
 		})
 	})
 }
