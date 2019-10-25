@@ -384,6 +384,72 @@ func TestProject(t *testing.T) {
 
 			Expect(pf.Param()).To(Equal("type:git"))
 		})
+
+		g.It("should parse a filter from a param", func() {
+			a := false
+			t := "git"
+
+			pf := ProjectFilter{
+				Type:   &t,
+				Active: &a,
+			}
+
+			newPf := ParseParam(pf.Param())
+			Expect(newPf).NotTo(BeNil())
+
+			Expect(newPf.Type).NotTo(BeNil())
+			Expect(*newPf.Type).To(Equal(t))
+
+			Expect(newPf.Active).NotTo(BeNil())
+			Expect(*newPf.Active).To(Equal(a))
+
+			Expect(newPf.TeamID).To(BeNil())
+			Expect(newPf.Source).To(BeNil())
+		})
+
+		g.It("should convert a filter to a where clause with an identifier", func() {
+			a := false
+			t := "git"
+			ti := "someteamid"
+
+			pf := ProjectFilter{
+				Type:   &t,
+				Active: &a,
+				TeamID: &ti,
+			}
+
+			query, vals := pf.SQL("p")
+			Expect(query).To(Equal("p.team_id=$1 AND p.type=$2 AND p.active=$3"))
+			Expect(len(vals)).To(Equal(3))
+
+			teamID, ok := vals[0].(string)
+			Expect(ok).To(BeTrue())
+			Expect(teamID).To(Equal(ti))
+
+			typeStr, ok := vals[1].(string)
+			Expect(ok).To(BeTrue())
+			Expect(typeStr).To(Equal(t))
+
+			active, ok := vals[2].(bool)
+			Expect(ok).To(BeTrue())
+			Expect(active).To(Equal(a))
+		})
+
+		g.It("should convert a filter to a where clause without an identifier", func() {
+			a := false
+			t := "git"
+			ti := "someteamid"
+
+			pf := ProjectFilter{
+				Type:   &t,
+				Active: &a,
+				TeamID: &ti,
+			}
+
+			query, vals := pf.SQL("")
+			Expect(query).To(Equal("team_id=$1 AND type=$2 AND active=$3"))
+			Expect(len(vals)).To(Equal(3))
+		})
 	})
 }
 
