@@ -222,14 +222,9 @@ type Filter struct {
 // struct for further use. Any invalid or incomplete interpretations of a field
 // will be ignored and only valid entries put into the struct.
 func ParseParam(param string) *Filter {
-	if param == "" || !strings.ContainsAny(param, ":") {
-		return nil
-	}
-
-	fvs := strings.Split(param, ",")
-
 	pf := Filter{}
 
+	fvs := strings.Split(param, ",")
 	for i := range fvs {
 		parts := strings.Split(fvs[i], ":")
 
