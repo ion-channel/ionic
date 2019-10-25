@@ -295,8 +295,6 @@ func (pf *Filter) Param() string {
 // and set of values for use in a query as SQL params. If the identifier is left
 // blank it will not be included in the resulting where clause.
 func (pf *Filter) SQL(identifier string) (string, []interface{}) {
-	wheres := make([]string, 0)
-	vals := make([]interface{}, 0)
 
 	fields := reflect.TypeOf(pf)
 	values := reflect.ValueOf(pf)
@@ -307,6 +305,8 @@ func (pf *Filter) SQL(identifier string) (string, []interface{}) {
 	}
 
 	idx := 1
+	wheres := make([]string, 0)
+	vals := make([]interface{}, 0)
 	for i := 0; i < fields.NumField(); i++ {
 		value := values.Field(i)
 
@@ -334,5 +334,10 @@ func (pf *Filter) SQL(identifier string) (string, []interface{}) {
 		idx++
 	}
 
-	return strings.Join(wheres, " AND "), vals
+	where := strings.Join(wheres, " AND ")
+	if where != "" {
+		where = fmt.Sprintf("WHERE %v", where)
+	}
+
+	return where, vals
 }
