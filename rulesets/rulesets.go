@@ -17,6 +17,8 @@ const (
 	CreateRuleSetEndpoint = "v1/ruleset/createRuleset"
 	// GetAppliedRuleSetEndpoint is a string representation of the current endpoint for getting applied ruleset
 	GetAppliedRuleSetEndpoint = "v1/ruleset/getAppliedRulesetForProject"
+	// GetBatchAppliedRulesetEndpoint is a string representation of the current endpoint for getting batched applied rulesets
+	GetBatchAppliedRulesetEndpoint = "v1/ruleset/getAppliedRulesets"
 	// GetRuleSetEndpoint is a string representation of the current endpoint for getting ruleset
 	GetRuleSetEndpoint = "v1/ruleset/getRuleset"
 	// GetRuleSetsEndpoint is a string representation of the current endpoint for getting rulesets (plural)
@@ -24,6 +26,14 @@ const (
 	//RulesetsGetRulesEndpoint is a string representation of the current endpoint for getting rules.
 	RulesetsGetRulesEndpoint = "v1/ruleset/getRules"
 )
+
+// AppliedRulesetRequest represents a request for an applied ruleset result
+type AppliedRulesetRequest struct {
+	ProjectID  string `json:"project_id"`
+	TeamID     string `json:"team_id"`
+	SummaryID  string `json:"summary_id"`
+	AnalysisID string `json:"analysis_id"`
+}
 
 // CreateRuleSetOptions struct for creating a ruleset
 type CreateRuleSetOptions struct {
