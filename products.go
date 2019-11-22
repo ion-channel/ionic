@@ -29,6 +29,29 @@ func (ic *IonClient) GetProducts(idSearch, token string) ([]products.Product, er
 	return ps, nil
 }
 
+// GetProductVersions takes a product name, version, and token.
+// It returns the product versions found, and any API errors it may encounters.
+func (ic *IonClient) GetProductVersions(name, version, token string) ([]products.Product, error) {
+	params := &url.Values{}
+	params.Set("name", name)
+	if version != "" {
+		params.Set("version", version)
+	}
+
+	b, err := ic.Get(products.GetProductVersionsEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get product versions: %v", err.Error())
+	}
+
+	var ps []products.Product
+	err = json.Unmarshal(b, &ps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get product versions: %v", err.Error())
+	}
+
+	return ps, nil
+}
+
 // ProductSearch takes a search query. It returns a new raw json message
 // of all the matching products in the Bunsen dependencies table
 func (ic *IonClient) ProductSearch(searchInput products.ProductSearchQuery, token string) ([]products.Product, error) {

@@ -11,6 +11,8 @@ const (
 	ProductSearchEndpoint = "v1/product/search"
 	// ProductGetProductEndpoint is a string representation of the current endpoint for getting a product
 	ProductGetProductEndpoint = "v1/product/getProduct"
+	// GetProductVersionsEndpoint is a string representation of the current endpoint for getting a product's versions
+	GetProductVersionsEndpoint = "v1/product/getProductVersions"
 )
 
 // Product represents a software product within the system for identification
