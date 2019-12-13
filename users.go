@@ -7,7 +7,6 @@ import (
 	"net/url"
 
 	"github.com/ion-channel/ionic/errors"
-	"github.com/ion-channel/ionic/events"
 	"github.com/ion-channel/ionic/users"
 )
 
@@ -53,32 +52,6 @@ func (ic *IonClient) CreateUser(email, username, password, token string) (*users
 	}
 
 	return &u, nil
-}
-
-// GetUsersSubscribedForEvent takes an event and token, and returns a list of users
-// subscribed to that event and returns an error if there are JSON marshaling
-// or unmarshaling issues or issues with the request
-func (ic *IonClient) GetUsersSubscribedForEvent(event events.Event, token string) ([]users.User, error) {
-	b, err := json.Marshal(event)
-	if err != nil {
-		return nil, errors.Prepend("get users subscribed for event: failed marshaling event", err)
-	}
-
-	buff := bytes.NewBuffer(b)
-	b, err = ic.Post(users.UsersSubscribedForEventEndpoint, token, nil, *buff, nil)
-	if err != nil {
-		return nil, errors.Prepend("get users subscribed for event", err)
-	}
-
-	var users struct {
-		Users []users.User `json:"users"`
-	}
-	err = json.Unmarshal(b, &users)
-	if err != nil {
-		return nil, errors.Prepend("get users subscribed for event: failed unmarshaling users", err)
-	}
-
-	return users.Users, nil
 }
 
 // GetSelf returns the user object associated with the bearer token provided.
