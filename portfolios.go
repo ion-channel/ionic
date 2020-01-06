@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/url"
 
 	"github.com/ion-channel/ionic/portfolios"
 )
@@ -102,4 +103,24 @@ func (ic *IonClient) GetPortfolioStatusSummary(ids []string, token string) (*por
 	}
 
 	return &ps, nil
+}
+
+// GetPortfolioAffectedProjects takes team id, external id, and a token (string) and returns a slice of affected projects
+func (ic *IonClient) GetPortfolioAffectedProjects(teamID, externalID, token string) ([]portfolios.AffectedProject, error) {
+	params := &url.Values{}
+	params.Set("id", teamID)
+	params.Set("external_id", externalID)
+
+	r, err := ic.Get(portfolios.PortfolioGetAffectedProjectsEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request portfolio status summary: %v", err.Error())
+	}
+
+	var aps []portfolios.AffectedProject
+	err = json.Unmarshal(r, &aps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return aps, nil
 }
