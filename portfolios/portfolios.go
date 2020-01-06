@@ -9,6 +9,8 @@ const (
 	VulnerabilityMetricsEndpoint = "v1/animal/getScanMetrics"
 	// PortfoliStatusSummaryEndpoint is a string representation for getting a portfolio status summary.
 	PortfoliStatusSummaryEndpoint = "v1/ruleset/getPortfolioSummary"
+	// PortfolioGetAffectedProjectsEndpoint is a string representation for getting a list of affected projects.
+	PortfolioGetAffectedProjectsEndpoint = "v1/animal/getAffectedProjects"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
@@ -43,4 +45,12 @@ type PortfolioStatusSummary struct {
 // PortfolioStatusOptions represents a summary of portfolio status options
 type PortfolioStatusOptions struct {
 	IDs []string `json:"ids"`
+}
+
+// AffectedProject represents a single project affected by a vulnerability
+type AffectedProject struct {
+	ID              string `json:"id"`
+	Name            string `json:"name"`
+	Version         string `json:"version"`
+	Vulnerabilities int    `json:"vulnerabilities"`
 }

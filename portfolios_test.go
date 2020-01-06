@@ -72,12 +72,26 @@ func TestPortfolios(t *testing.T) {
 			Expect(vss.ErroredProjects).To(Equal(1))
 			Expect(vss.PendingProjects).To(Equal(14))
 		})
+
+		g.It("should return a list of affected projects", func() {
+			server.AddPath("/v1/animal/getAffectedProjects").
+				SetMethods("GET").
+				SetPayload([]byte(SampleAffectedProjectIds)).
+				SetStatus(http.StatusOK)
+
+			r, err := client.GetPortfolioAffectedProjects("team_id", "external_id", "sometoken")
+			Expect(err).To(BeNil())
+			Expect(len(r)).To(Equal(2))
+			Expect(r[0].ID).To(Equal("1984b037-71f5-4bc2-84f0-5baf37a25fa5"))
+			Expect(r[1].Vulnerabilities).To(Equal(1))
+		})
 	})
 }
 
 const (
-	SampleVulnStats     = `{"data":{"total_vulnerabilities":4,"unique_vulnerabilities":2,"most_frequent_vulnerability":"somecve"}}`
-	SampleVulnList      = `{"data":{"cve_list":[{"title":"cve1","projects_affected":3,"product":"someproduct2","rating":8.8,"system":"cvssv3"}]}}`
-	SampleVulnMetrics   = `{"data":{"line_graph":{"title":"vulnerabilities over time","lines":[{"domain":"date","range":"count","legend":"vulnerabilities","points":{"2019-10-08":9}},{"domain":"date","range":"count","legend":"projects","points":{"2019-10-08":3}}]}}}`
-	SampleStatusSummary = `{"data":{"passing_projects":0,"failing_projects":4,"errored_projects":1,"pending_projects":14}}`
+	SampleVulnStats          = `{"data":{"total_vulnerabilities":4,"unique_vulnerabilities":2,"most_frequent_vulnerability":"somecve"}}`
+	SampleVulnList           = `{"data":{"cve_list":[{"title":"cve1","projects_affected":3,"product":"someproduct2","rating":8.8,"system":"cvssv3"}]}}`
+	SampleVulnMetrics        = `{"data":{"line_graph":{"title":"vulnerabilities over time","lines":[{"domain":"date","range":"count","legend":"vulnerabilities","points":{"2019-10-08":9}},{"domain":"date","range":"count","legend":"projects","points":{"2019-10-08":3}}]}}}`
+	SampleStatusSummary      = `{"data":{"passing_projects":0,"failing_projects":4,"errored_projects":1,"pending_projects":14}}`
+	SampleAffectedProjectIds = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"","version":"","vulnerabilities":15},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"","version":"","vulnerabilities":1}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 )
