@@ -11,6 +11,8 @@ const (
 	PortfoliStatusSummaryEndpoint = "v1/ruleset/getPortfolioSummary"
 	// PortfolioGetAffectedProjectsEndpoint is a string representation for getting a list of affected projects.
 	PortfolioGetAffectedProjectsEndpoint = "v1/animal/getAffectedProjects"
+	// PortfolioGetAffectedProjectsInfoEndpoint is a string representation for getting the name and version of projects from a list of project ids
+	PortfolioGetAffectedProjectsInfoEndpoint = "v1/project/getAffectedProjectsInfo"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
@@ -42,8 +44,8 @@ type PortfolioStatusSummary struct {
 	PendingProjects int `json:"pending_projects"`
 }
 
-// PortfolioStatusOptions represents a summary of portfolio status options
-type PortfolioStatusOptions struct {
+// PortfolioRequestedIds represents a list of IDs to send to a request
+type PortfolioRequestedIds struct {
 	IDs []string `json:"ids"`
 }
 

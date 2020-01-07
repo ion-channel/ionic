@@ -82,11 +82,11 @@ func (ic *IonClient) GetRawVulnerabilityMetrics(ids []string, metric, token stri
 
 // GetPortfolioStatusSummary takes project ids (slice of strings) and a token (string) and returns a status summary
 func (ic *IonClient) GetPortfolioStatusSummary(ids []string, token string) (*portfolios.PortfolioStatusSummary, error) {
-	pso := portfolios.PortfolioStatusOptions{
+	ri := portfolios.PortfolioRequestedIds{
 		IDs: ids,
 	}
 
-	b, err := json.Marshal(pso)
+	b, err := json.Marshal(ri)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
@@ -113,7 +113,32 @@ func (ic *IonClient) GetPortfolioAffectedProjects(teamID, externalID, token stri
 
 	r, err := ic.Get(portfolios.PortfolioGetAffectedProjectsEndpoint, token, params, nil, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to request portfolio status summary: %v", err.Error())
+		return nil, fmt.Errorf("failed to request portfolio affected projects: %v", err.Error())
+	}
+
+	var aps []portfolios.AffectedProject
+	err = json.Unmarshal(r, &aps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return aps, nil
+}
+
+// GetPortfolioAffectedProjectsInfo takes team id, external id, and a token (string) and returns a slice of affected projects
+func (ic *IonClient) GetPortfolioAffectedProjectsInfo(ids []string, token string) ([]portfolios.AffectedProject, error) {
+	ri := portfolios.PortfolioRequestedIds{
+		IDs: ids,
+	}
+
+	b, err := json.Marshal(ri)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(portfolios.PortfolioGetAffectedProjectsInfoEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request portfolio affected projects info: %v", err.Error())
 	}
 
 	var aps []portfolios.AffectedProject
