@@ -74,7 +74,7 @@ func TestPortfolios(t *testing.T) {
 		})
 
 		g.It("should return a list of affected projects", func() {
-			server.AddPath("/v1/animal/getAffectedProjects").
+			server.AddPath("/v1/animal/getAffectedProjectIds").
 				SetMethods("GET").
 				SetPayload([]byte(SampleAffectedProjectIds)).
 				SetStatus(http.StatusOK)

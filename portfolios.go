@@ -111,7 +111,7 @@ func (ic *IonClient) GetPortfolioAffectedProjects(teamID, externalID, token stri
 	params.Set("id", teamID)
 	params.Set("external_id", externalID)
 
-	r, err := ic.Get(portfolios.PortfolioGetAffectedProjectsEndpoint, token, params, nil, nil)
+	r, err := ic.Get(portfolios.PortfolioGetAffectedProjectIdsEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to request portfolio affected projects: %v", err.Error())
 	}
