@@ -193,6 +193,12 @@ func TestProject(t *testing.T) {
 				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
+
+				t = "s3"
+				p.Type = &t
+				fs, err = p.Validate(client, b, testToken)
+				Expect(err).To(BeNil())
+				Expect(len(fs)).To(Equal(0))
 			})
 
 			g.It("should say a project is invalid if the type is invalid", func() {
@@ -301,6 +307,7 @@ func TestProject(t *testing.T) {
 					"ssh://user@host.xz:port/path/to/repo.git/",
 					"svn+ssh://foo@svn.bar.com/project",
 					"svn://svn.code.sf.net/p/regshot/code/trunk",
+					"s3://bucket/key",
 				}
 
 				for _, val := range us {

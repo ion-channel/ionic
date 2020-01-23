@@ -20,7 +20,7 @@ import (
 
 const (
 	validEmailRegex  = `(?i)^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$`
-	validGitURIRegex = `^(?:(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync)+\+ssh\:\/\/|git\+https?:\/\/|git\@|(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync|ssh|file)+s?:\/\/)[^\s]+$`
+	validGitURIRegex = `^(?:(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync)+\+ssh\:\/\/|git\+https?:\/\/|git\@|(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync|ssh|file|s3)+s?:\/\/)[^\s]+$`
 )
 
 const (
@@ -193,7 +193,7 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 					projErr = ErrInvalidProject
 				}
 			}
-		case "git", "svn":
+		case "git", "svn", "s3":
 			r := regexp.MustCompile(validGitURIRegex)
 			if p.Source != nil && !r.MatchString(*p.Source) {
 				invalidFields["source"] = "source must be a valid uri"
