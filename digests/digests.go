@@ -95,11 +95,11 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 	case "external_coverage", "code_coverage", "coverage":
 		return coveragDigests(status, eval)
 
-	case "about_yml":
-		return nil, nil
-
 	case "difference":
 		return differenceDigests(status, eval)
+
+	case "about_yml", "file_type":
+		return nil, nil
 
 	default:
 		return nil, fmt.Errorf("Couldn't figure out how to map '%v' to a digest", status.Name)
