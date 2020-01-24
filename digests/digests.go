@@ -23,7 +23,6 @@ const (
 	transitiveDependencyIndex
 	dependencyOutdatedIndex
 	noVersionIndex
-	aboutYMLIndex
 	languagesIndex
 	uniqueCommittersIndex
 	codeCoverageIndex
@@ -97,7 +96,7 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 		return coveragDigests(status, eval)
 
 	case "about_yml":
-		return aboutYMLDigests(status, eval)
+		return nil, nil
 
 	case "difference":
 		return differenceDigests(status, eval)
