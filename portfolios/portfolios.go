@@ -7,8 +7,10 @@ const (
 	VulnerabilityListEndpoint = "v1/animal/getVulnerabilityList"
 	// VulnerabilityMetricsEndpoint is a string representation for getting a list of vulnerability metrics.
 	VulnerabilityMetricsEndpoint = "v1/animal/getScanMetrics"
-	// PortfoliStatusSummaryEndpoint is a string representation for getting a portfolio status summary.
-	PortfoliStatusSummaryEndpoint = "v1/ruleset/getPortfolioSummary"
+	// PortfolioStatusSummaryEndpoint is a string representation for getting a portfolio status summary.
+	PortfolioStatusSummaryEndpoint = "v1/ruleset/getPortfolioSummary"
+	// PortfolioStartedErroredSummaryEndpoint is a string representation for getting the started and errored count for a list of projects
+	PortfolioStartedErroredSummaryEndpoint = "v1/scanner/getStatuses"
 	// PortfolioGetAffectedProjectIdsEndpoint is a string representation for getting a list of affected projects.
 	PortfolioGetAffectedProjectIdsEndpoint = "v1/animal/getAffectedProjectIds"
 	// PortfolioGetAffectedProjectsInfoEndpoint is a string representation for getting the name and version of projects from a list of project ids
@@ -42,6 +44,18 @@ type PortfolioStatusSummary struct {
 	FailingProjects int `json:"failing_projects"`
 	ErroredProjects int `json:"errored_projects"`
 	PendingProjects int `json:"pending_projects"`
+}
+
+// PortfolioPassingFailingSummary represents a summary of passing and failing for projects
+type PortfolioPassingFailingSummary struct {
+	PassingProjects int `json:"passing_projects"`
+	FailingProjects int `json:"failing_projects"`
+}
+
+// PortfolioStartedErroredSummary represents a summary of started and errored statuses for projects
+type PortfolioStartedErroredSummary struct {
+	StartedProjects int `json:"started_projects"`
+	ErroredProjects int `json:"errored_projects"`
 }
 
 // PortfolioRequestedIds represents a list of IDs to send to a request

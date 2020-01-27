@@ -91,12 +91,37 @@ func (ic *IonClient) GetPortfolioStatusSummary(ids []string, token string) (*por
 		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
 
-	r, err := ic.Post(portfolios.PortfoliStatusSummaryEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	r, err := ic.Post(portfolios.PortfolioStatusSummaryEndpoint, token, nil, *bytes.NewBuffer(b), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to request portfolio status summary: %v", err.Error())
 	}
 
 	var ps portfolios.PortfolioStatusSummary
+	err = json.Unmarshal(r, &ps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return &ps, nil
+}
+
+// GetProjectStatusForStartedAndErrored takes project ids (slice of strings) and a token (string) and returns PortfolioStartedErroredSummary
+func (ic *IonClient) GetProjectStatusForStartedAndErrored(ids []string, token string) (*portfolios.PortfolioStartedErroredSummary, error) {
+	ri := portfolios.PortfolioRequestedIds{
+		IDs: ids,
+	}
+
+	b, err := json.Marshal(ri)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(portfolios.PortfolioStartedErroredSummaryEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request portfolio status summary: %v", err.Error())
+	}
+
+	var ps portfolios.PortfolioStartedErroredSummary
 	err = json.Unmarshal(r, &ps)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
