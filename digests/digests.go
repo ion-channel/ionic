@@ -53,7 +53,9 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 			continue
 		}
 
-		ds = append(ds, d...)
+		if d != nil {
+			ds = append(ds, d...)
+		}
 	}
 
 	sort.Slice(ds, func(i, j int) bool { return ds[i].Index < ds[j].Index })
