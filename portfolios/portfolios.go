@@ -7,8 +7,8 @@ const (
 	VulnerabilityListEndpoint = "v1/animal/getVulnerabilityList"
 	// VulnerabilityMetricsEndpoint is a string representation for getting a list of vulnerability metrics.
 	VulnerabilityMetricsEndpoint = "v1/animal/getScanMetrics"
-	// PortfolioStatusSummaryEndpoint is a string representation for getting a portfolio status summary.
-	PortfolioStatusSummaryEndpoint = "v1/ruleset/getPortfolioSummary"
+	// PortfolioPassFailSummaryEndpoint is a string representation for getting a portfolio status summary.
+	PortfolioPassFailSummaryEndpoint = "v1/ruleset/getStatuses"
 	// PortfolioStartedErroredSummaryEndpoint is a string representation for getting the started and errored count for a list of projects
 	PortfolioStartedErroredSummaryEndpoint = "v1/scanner/getStatuses"
 	// PortfolioGetAffectedProjectIdsEndpoint is a string representation for getting a list of affected projects.
