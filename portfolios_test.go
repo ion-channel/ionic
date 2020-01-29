@@ -81,6 +81,7 @@ func TestPortfolios(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(s.StartedProjects).To(Equal(2))
 			Expect(s.ErroredProjects).To(Equal(6))
+			Expect(s.FinishedProjects).To(Equal(3))
 		})
 
 		g.It("should return a list of affected projects", func() {
@@ -117,7 +118,7 @@ const (
 	SampleVulnList            = `{"data":{"cve_list":[{"title":"cve1","projects_affected":3,"product":"someproduct2","rating":8.8,"system":"cvssv3"}]}}`
 	SampleVulnMetrics         = `{"data":{"line_graph":{"title":"vulnerabilities over time","lines":[{"domain":"date","range":"count","legend":"vulnerabilities","points":{"2019-10-08":9}},{"domain":"date","range":"count","legend":"projects","points":{"2019-10-08":3}}]}}}`
 	SamplePassFailSummary     = `{"data":{"passing_projects":0,"failing_projects":4}}`
-	SampleStartedEndedSummary = `{"data":{"started_projects":2,"errored_projects":6}}`
+	SampleStartedEndedSummary = `{"data":{"started_projects":2,"errored_projects":6,"finished_projects":3}}`
 	SampleAffectedProjectIds  = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"","version":"","vulnerabilities":15},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"","version":"","vulnerabilities":1}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 	SampleAffectedProjectInfo = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"someName1","version":"someVersion1","vulnerabilities":0},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"someName2","version":"someVersion2","vulnerabilities":0}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 )
