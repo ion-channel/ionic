@@ -15,8 +15,8 @@ func TestVulnerabilities(t *testing.T) {
 		g.It("should return a new cvss version 3", func() {
 			cvssv3 := NewV3FromShorthand("CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L")
 
-			Expect(cvssv3.AccessVector).To(Equal("network"))
-			Expect(cvssv3.AccessComplexity).To(Equal("low"))
+			Expect(cvssv3.AttackVector).To(Equal("network"))
+			Expect(cvssv3.AttackComplexity).To(Equal("low"))
 			Expect(cvssv3.PrivilegesRequired).To(Equal("none"))
 			Expect(cvssv3.UserInteraction).To(Equal("required"))
 			Expect(cvssv3.Scope).To(Equal("unchanged"))
@@ -26,13 +26,13 @@ func TestVulnerabilities(t *testing.T) {
 
 			// Additional AccessVector cases
 			cvssv3 = NewV3FromShorthand("CVSS:3.0/AV:A/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L")
-			Expect(cvssv3.AccessVector).To(Equal("adjacent"))
+			Expect(cvssv3.AttackVector).To(Equal("adjacent"))
 
 			cvssv3 = NewV3FromShorthand("CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L")
-			Expect(cvssv3.AccessVector).To(Equal("local"))
+			Expect(cvssv3.AttackVector).To(Equal("local"))
 
 			cvssv3 = NewV3FromShorthand("CVSS:3.0/AV:P/AC:L/PR:N/UI:R/S:U/C:N/I:N/A:L")
-			Expect(cvssv3.AccessVector).To(Equal("physical"))
+			Expect(cvssv3.AttackVector).To(Equal("physical"))
 
 			// Additional UserInteraction cases
 			cvssv3 = NewV3FromShorthand("CVSS:3.0/AV:P/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L")
