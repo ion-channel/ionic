@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 )
 
 // IonResponse represents the response structure expected back from the Ion
@@ -18,13 +17,9 @@ type IonResponse struct {
 
 // Meta represents the metadata section of an IonResponse
 type Meta struct {
-	Copyright  string     `json:"copyright"`
-	Authors    []string   `json:"authors"`
-	Version    string     `json:"version"`
-	LastUpdate *time.Time `json:"last_update,omitempty"`
-	TotalCount int        `json:"total_count"`
-	Limit      int        `json:"limit,omitempty"`
-	Offset     int        `json:"offset"`
+	TotalCount int `json:"total_count"`
+	Limit      int `json:"limit,omitempty"`
+	Offset     int `json:"offset"`
 }
 
 // NewResponse takes a data object, meta object, and desired status code to
@@ -34,18 +29,6 @@ func NewResponse(data interface{}, meta Meta, status int) (*IonResponse, error) 
 	b, err := json.Marshal(data)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal response data: %v", err.Error())
-	}
-
-	if meta.Copyright == "" {
-		meta.Copyright = "Copyright 2018 Selection Pressure LLC www.selectpress.net"
-	}
-
-	if meta.Authors == nil || len(meta.Authors) < 1 {
-		meta.Authors = append(meta.Authors, "Ion Channel Dev Team")
-	}
-
-	if meta.Version == "" {
-		meta.Version = "v1"
 	}
 
 	return &IonResponse{Data: b, Meta: meta, status: status}, nil
