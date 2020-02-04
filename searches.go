@@ -6,6 +6,7 @@ import (
 	"net/url"
 
 	"github.com/ion-channel/ionic/products"
+	"github.com/ion-channel/ionic/responses"
 )
 
 const (
@@ -15,20 +16,20 @@ const (
 // GetSearch takes a query to perform
 // a productidentifier search against the Ion API, assembling a slice of Ionic
 // products.ProductSearchResponse objects
-func (ic *IonClient) GetSearch(query, token string) ([]products.Product, error) {
+func (ic *IonClient) GetSearch(query, token string) ([]products.Product, *responses.Meta, error) {
 	params := &url.Values{}
 	params.Set("q", query)
 
-	b, _, err := ic.Get(searchEndpoint, token, params, nil, nil)
+	b, m, err := ic.Get(searchEndpoint, token, params, nil, nil)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get productidentifiers search: %v", err.Error())
+		return nil, nil, fmt.Errorf("failed to get productidentifiers search: %v", err.Error())
 	}
 
 	var results []products.Product
 	err = json.Unmarshal(b, &results)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal product search results: %v", err.Error())
+		return nil, nil, fmt.Errorf("failed to unmarshal product search results: %v", err.Error())
 	}
 
-	return results, nil
+	return results, m, nil
 }
