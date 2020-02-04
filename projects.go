@@ -113,7 +113,7 @@ func (ic *IonClient) GetProject(id, teamID, token string) (*projects.Project, er
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(projects.GetProjectEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(projects.GetProjectEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -134,7 +134,7 @@ func (ic *IonClient) GetRawProject(id, teamID, token string) (json.RawMessage, e
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(projects.GetProjectEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(projects.GetProjectEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get project: %v", err.Error())
 	}
@@ -152,7 +152,7 @@ func (ic *IonClient) GetProjects(teamID, token string, page *pagination.Paginati
 		params.Set("filter_by", filter.Param())
 	}
 
-	b, err := ic.Get(projects.GetProjectsEndpoint, token, params, nil, page)
+	b, _, err := ic.Get(projects.GetProjectsEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects: %v", err.Error())
 	}
@@ -174,7 +174,7 @@ func (ic *IonClient) GetProjectByURL(uri, teamID, token string) (*projects.Proje
 	params.Set("url", uri)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(projects.GetProjectByURLEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(projects.GetProjectByURLEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects by url: %v", err.Error())
 	}

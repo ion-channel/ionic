@@ -58,7 +58,7 @@ func (ic *IonClient) CreateUser(email, username, password, token string) (*users
 // An error is returned if the client cannot talk to the API or the returned
 // user object is nil or blank
 func (ic *IonClient) GetSelf(token string) (*users.User, error) {
-	b, err := ic.Get(users.UsersGetSelfEndpoint, token, nil, nil, nil)
+	b, _, err := ic.Get(users.UsersGetSelfEndpoint, token, nil, nil, nil)
 	if err != nil {
 		return nil, errors.Prepend("get self", err)
 	}
@@ -79,7 +79,7 @@ func (ic *IonClient) GetUser(id, token string) (*users.User, error) {
 	params := &url.Values{}
 	params.Set("id", id)
 
-	b, err := ic.Get(users.UsersGetUserEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(users.UsersGetUserEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, errors.Prepend("get user", err)
 	}
@@ -95,7 +95,7 @@ func (ic *IonClient) GetUser(id, token string) (*users.User, error) {
 
 // GetUsers requests and returns all users for a given installation
 func (ic *IonClient) GetUsers(token string) ([]users.User, error) {
-	b, err := ic.Get(users.UsersGetUsers, token, nil, nil, nil)
+	b, _, err := ic.Get(users.UsersGetUsers, token, nil, nil, nil)
 	if err != nil {
 		return nil, errors.Prepend("get users", err)
 	}

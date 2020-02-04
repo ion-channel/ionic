@@ -73,7 +73,7 @@ func (ic *IonClient) GetTag(id, teamID, token string) (*tags.Tag, error) {
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(tags.GetTagEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(tags.GetTagEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get tag: %v", err.Error())
 	}
@@ -93,7 +93,7 @@ func (ic *IonClient) GetTags(teamID, token string) ([]tags.Tag, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(tags.GetTagsEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(tags.GetTagsEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get tag: %v", err.Error())
 	}
@@ -113,7 +113,7 @@ func (ic *IonClient) GetRawTags(teamID, token string) (json.RawMessage, error) {
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(tags.GetTagsEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(tags.GetTagsEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get tag: %v", err.Error())
 	}
@@ -128,7 +128,7 @@ func (ic *IonClient) GetRawTag(id, teamID, token string) (json.RawMessage, error
 	params.Set("id", id)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(tags.GetTagEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(tags.GetTagEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get tag: %v", err.Error())
 	}

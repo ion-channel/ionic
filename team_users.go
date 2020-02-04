@@ -52,7 +52,7 @@ func (ic *IonClient) GetTeamUser(teamID, userID, token string) (*teamusers.TeamU
 	params.Set("team_id", teamID)
 	params.Set("user_id", userID)
 
-	b, err := ic.Get(teamusers.TeamsGetTeamUserEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(teamusers.TeamsGetTeamUserEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team: %v", err.Error())
 	}
@@ -113,14 +113,14 @@ func (ic *IonClient) DeleteTeamUser(teamuser *teamusers.TeamUser, token string) 
 	params.Set("team_id", teamuser.TeamID)
 	params.Set("user_id", teamuser.UserID)
 
-	t, err := ic.Get(teamusers.TeamsGetTeamUserEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(teamusers.TeamsGetTeamUserEndpoint, token, params, nil, nil)
 	if err == nil {
 		var teamU teamusers.TeamUser
-		err = json.Unmarshal(t, &teamU)
+		err = json.Unmarshal(b, &teamU)
 		if err != nil {
 			return fmt.Errorf("cannot parse team: %v", err.Error())
 		}
-		return fmt.Errorf("failed to validate team user deletion: %v", t)
+		return fmt.Errorf("failed to validate team user deletion: %v", b)
 	}
 	return nil
 }
