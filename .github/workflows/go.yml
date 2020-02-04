@@ -1,0 +1,96 @@
+name: Build
+on: [push]
+jobs:
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+
+    env:
+      GOPATH: ${{ github.workspace }}
+
+    steps:
+
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+
+    - name: Setup
+      run: |
+        # https://github.com/actions/setup-go/issues/14
+        export GOBIN=${GOPATH}/bin
+        go get -u golang.org/x/lint/golint
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        path: ./src/github.com/${{ github.repository }}
+
+    - name: Fmt, Vet, Lint
+      working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      run: |
+        # https://github.com/actions/setup-go/issues/14
+        export GOBIN=${GOPATH}/bin
+        export PATH=${PATH}:${GOBIN}
+        make fmt vet lint
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    env:
+      GOPATH: ${{ github.workspace }}
+
+    steps:
+
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        path: ./src/github.com/${{ github.repository }}
+
+    - name: Test
+      working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      run: make test
+
+  docs:
+    name: Docs
+    needs: [linting, test]
+    if: endsWith(github.head_ref, '/master') == true
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Setup
+      run: sudo apt-get install pandoc
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        path: ./src/github.com/${{ github.repository }}
+
+    - name: Debug
+      run: echo ${{ github.ref }}
+
+    - name: Docs
+      working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      run: make docs
+
+    - name: AWS Creds
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_TEST_DEPLOY_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.AWS_TEST_DEPLOY_SECRET_KEY }}
+        aws-region: us-east-2
+
+    - name: Deploy
+      working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
+      run: make deploy_docs
