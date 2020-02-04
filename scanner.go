@@ -96,6 +96,25 @@ func (ic *IonClient) GetLatestAnalysisStatus(teamID, projectID, token string) (*
 	return &a, nil
 }
 
+//GetLatestAnalysisStatuses takes a teamID and returns the latest analysis statuses or an error encountered by the API
+func (ic *IonClient) GetLatestAnalysisStatuses(teamID, token string) ([]scanner.AnalysisStatus, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	b, _, err := ic.Get(scanner.ScannerGetLatestAnalysisStatusesEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+	}
+
+	var a []scanner.AnalysisStatus
+	err = json.Unmarshal(b, &a)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+	}
+
+	return a, nil
+}
+
 //AddScanResult takes a scanResultID, teamID, projectID, status, scanType, and
 //client provided scan results, and adds them to the returned project analysis
 //or an error encountered by the API

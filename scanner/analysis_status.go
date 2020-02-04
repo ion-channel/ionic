@@ -30,6 +30,8 @@ const (
 	ScannerGetAnalysisStatusEndpoint = "v1/scanner/getAnalysisStatus"
 	// ScannerGetLatestAnalysisStatusEndpoint is a string representation of the current endpoint for getting latest analysis status
 	ScannerGetLatestAnalysisStatusEndpoint = "v1/scanner/getLatestAnalysisStatus"
+	// ScannerGetLatestAnalysisStatusesEndpoint is a string representation of the current endpoint for getting latest analysis statuses
+	ScannerGetLatestAnalysisStatusesEndpoint = "v1/scanner/getLatestAnalysisStatuses"
 )
 
 // AnalysisStatus is a representation of an Ion Channel Analysis Status within the system
