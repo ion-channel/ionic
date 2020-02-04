@@ -11,6 +11,7 @@ import (
 
 	"github.com/ion-channel/ionic/pagination"
 	"github.com/ion-channel/ionic/requests"
+	"github.com/ion-channel/ionic/responses"
 )
 
 const (
@@ -71,7 +72,7 @@ func (ic *IonClient) Head(endpoint, token string, params *url.Values, headers ht
 // Get takes an endpoint, token, params, headers, and pagination params to pass as a
 // get call to the API.  It will return a json RawMessage for the response and
 // any errors it encounters with the API.
-func (ic *IonClient) Get(endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
+func (ic *IonClient) Get(endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, *responses.Meta, error) {
 	return requests.Get(ic.client, ic.baseURL, endpoint, token, params, headers, page)
 }
 

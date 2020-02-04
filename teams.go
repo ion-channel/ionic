@@ -53,7 +53,7 @@ func (ic *IonClient) GetTeam(id, token string) (*teams.Team, error) {
 	params := &url.Values{}
 	params.Set("someid", id)
 
-	b, err := ic.Get(teams.TeamsGetTeamEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(teams.TeamsGetTeamEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get team: %v", err.Error())
 	}
@@ -71,7 +71,7 @@ func (ic *IonClient) GetTeam(id, token string) (*teams.Team, error) {
 // team.  An error is returned for client communications and unmarshalling
 // errors.
 func (ic *IonClient) GetTeams(token string) ([]teams.Team, error) {
-	b, err := ic.Get(teams.TeamsGetTeamsEndpoint, token, nil, nil, nil)
+	b, _, err := ic.Get(teams.TeamsGetTeamsEndpoint, token, nil, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get teams: %v", err.Error())
 	}

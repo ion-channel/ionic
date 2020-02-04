@@ -62,7 +62,7 @@ func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID, token stri
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(scanner.ScannerGetAnalysisStatusEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(scanner.ScannerGetAnalysisStatusEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis status: %v", err.Error())
 	}
@@ -82,7 +82,7 @@ func (ic *IonClient) GetLatestAnalysisStatus(teamID, projectID, token string) (*
 	params.Set("team_id", teamID)
 	params.Set("project_id", projectID)
 
-	b, err := ic.Get(scanner.ScannerGetLatestAnalysisStatusEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(scanner.ScannerGetLatestAnalysisStatusEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
 	}

@@ -42,7 +42,7 @@ func (ic *IonClient) GetAppliedRuleSet(projectID, teamID, analysisID, token stri
 		params.Set("analysis_id", analysisID)
 	}
 
-	b, err := ic.Get(rulesets.GetAppliedRuleSetEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(rulesets.GetAppliedRuleSetEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get applied ruleset summary: %v", err.Error())
 	}
@@ -87,7 +87,7 @@ func (ic *IonClient) GetRawAppliedRuleSet(projectID, teamID, analysisID, token s
 		params.Set("analysis_id", analysisID)
 	}
 
-	b, err := ic.Get(rulesets.GetAppliedRuleSetEndpoint, token, params, nil, page)
+	b, _, err := ic.Get(rulesets.GetAppliedRuleSetEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get applied rulesets: %v", err.Error())
 	}
@@ -101,7 +101,7 @@ func (ic *IonClient) GetRuleSet(ruleSetID, teamID, token string) (*rulesets.Rule
 	params.Set("id", ruleSetID)
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(rulesets.GetRuleSetEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(rulesets.GetRuleSetEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get ruleset: %v", err.Error())
 	}
@@ -120,7 +120,7 @@ func (ic *IonClient) GetRuleSets(teamID, token string, page *pagination.Paginati
 	params := &url.Values{}
 	params.Set("team_id", teamID)
 
-	b, err := ic.Get(rulesets.GetRuleSetsEndpoint, token, params, nil, page)
+	b, _, err := ic.Get(rulesets.GetRuleSetsEndpoint, token, params, nil, page)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get rulesets: %v", err.Error())
 	}

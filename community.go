@@ -14,7 +14,7 @@ func (ic *IonClient) GetRepo(repo, token string) (*community.Repo, error) {
 	params := &url.Values{}
 	params.Set("repo", repo)
 
-	b, err := ic.Get(community.GetRepoEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(community.GetRepoEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get repo: %v", err.Error())
 	}
@@ -33,7 +33,7 @@ func (ic *IonClient) SearchRepo(q, token string) ([]community.Repo, error) {
 	params := &url.Values{}
 	params.Set("q", q)
 
-	b, err := ic.Get(community.SearchRepoEndpoint, token, params, nil, nil)
+	b, _, err := ic.Get(community.SearchRepoEndpoint, token, params, nil, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get repo: %v", err.Error())
 	}
