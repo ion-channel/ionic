@@ -18,14 +18,14 @@ const (
 	maxPagingLimit = 100
 )
 
-func do(client *http.Client, method string, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
+func do(client *http.Client, method string, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (json.RawMessage, *responses.Meta, error) {
 	if page == nil || page.Limit > 0 {
 		ir, err := _do(client, method, baseURL, endpoint, token, params, payload, headers, page)
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 
-		return ir.Data, nil
+		return ir.Data, &ir.Meta, nil
 	}
 
 	page = pagination.New(0, maxPagingLimit)
@@ -37,7 +37,7 @@ func do(client *http.Client, method string, baseURL *url.URL, endpoint, token st
 		ir, err := _do(client, method, baseURL, endpoint, token, params, payload, headers, page)
 		if err != nil {
 			err.Prepend("api: paging")
-			return nil, err
+			return nil, nil, err
 		}
 
 		data = append(data, ir.Data[1:len(ir.Data)-1]...)
@@ -47,7 +47,7 @@ func do(client *http.Client, method string, baseURL *url.URL, endpoint, token st
 	}
 
 	data = append(data[:len(data)-1], []byte("]")...)
-	return data, nil
+	return data, &responses.Meta{TotalCount: total}, nil
 }
 
 func _do(client *http.Client, method string, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (*responses.IonResponse, *errors.IonError) {
@@ -116,14 +116,15 @@ func createURL(baseURL *url.URL, endpoint string, params *url.Values, page *pagi
 // encounters with the API.
 // It is used internally by the SDK
 func Delete(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, headers http.Header) (json.RawMessage, error) {
-	return do(client, "DELETE", baseURL, endpoint, token, params, bytes.Buffer{}, headers, nil)
+	r, _, err := do(client, "DELETE", baseURL, endpoint, token, params, bytes.Buffer{}, headers, nil)
+	return r, err
 }
 
 // Head takes a client, baseURL, endpoint, token, params, headers, and pagination params to pass as a
 // head call to the API.  It will return any errors it encounters with the API.
 // It is used internally by the SDK
 func Head(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) error {
-	_, err := do(client, "HEAD", baseURL, endpoint, token, params, bytes.Buffer{}, headers, page)
+	_, _, err := do(client, "HEAD", baseURL, endpoint, token, params, bytes.Buffer{}, headers, page)
 	return err
 }
 
@@ -131,8 +132,9 @@ func Head(client *http.Client, baseURL *url.URL, endpoint, token string, params 
 // get call to the API.  It will return a json RawMessage for the response and
 // any errors it encounters with the API.
 // It is used internally by the SDK
-func Get(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, error) {
-	return do(client, "GET", baseURL, endpoint, token, params, bytes.Buffer{}, headers, page)
+func Get(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, headers http.Header, page *pagination.Pagination) (json.RawMessage, *responses.Meta, error) {
+	r, m, err := do(client, "GET", baseURL, endpoint, token, params, bytes.Buffer{}, headers, page)
+	return r, m, err
 }
 
 // Post takes a client, baseURL, endpoint, token, params, payload, and headers to pass as a post call
@@ -140,7 +142,8 @@ func Get(client *http.Client, baseURL *url.URL, endpoint, token string, params *
 // it encounters with the API.
 // It is used internally by the SDK
 func Post(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
-	return do(client, "POST", baseURL, endpoint, token, params, payload, headers, nil)
+	r, _, err := do(client, "POST", baseURL, endpoint, token, params, payload, headers, nil)
+	return r, err
 }
 
 // Put takes a client, baseURL, endpoint, token, params, payload, and headers to pass as a put call to
@@ -148,7 +151,8 @@ func Post(client *http.Client, baseURL *url.URL, endpoint, token string, params 
 // encounters with the API.
 // It is used internally by the SDK
 func Put(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
-	return do(client, "PUT", baseURL, endpoint, token, params, payload, headers, nil)
+	r, _, err := do(client, "PUT", baseURL, endpoint, token, params, payload, headers, nil)
+	return r, err
 }
 
 // Patch takes a client, baseURL, endpoint, token, params, payload, and headers to pass as a patch call to
@@ -156,5 +160,6 @@ func Put(client *http.Client, baseURL *url.URL, endpoint, token string, params *
 // encounters with the API.
 // It is used internally by the SDK
 func Patch(client *http.Client, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header) (json.RawMessage, error) {
-	return do(client, "PATCH", baseURL, endpoint, token, params, payload, headers, nil)
+	r, _, err := do(client, "PATCH", baseURL, endpoint, token, params, payload, headers, nil)
+	return r, err
 }
