@@ -21,10 +21,6 @@ func TestResponses(t *testing.T) {
 
 				r, err := NewResponse(d, Meta{}, http.StatusOK)
 				Expect(err).To(BeNil())
-				Expect(r.Meta.Copyright).To(ContainSubstring("Selection Pressure LLC"))
-				Expect(len(r.Meta.Authors)).To(Equal(1))
-				Expect(r.Meta.Authors[0]).To(Equal("Ion Channel Dev Team"))
-				Expect(r.Meta.Version).To(Equal("v1"))
 				Expect(string(r.Data)).To(ContainSubstring("\"name\":\"foo\""))
 			})
 		})
@@ -43,9 +39,6 @@ func TestResponses(t *testing.T) {
 
 				Expect(string(mw.WrittenHeaders())).To(ContainSubstring("Header: 200"))
 				Expect(string(mw.Written())).To(ContainSubstring(`"data":{"name":"foo"}`))
-				Expect(string(mw.Written())).To(ContainSubstring(`"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net"`))
-				Expect(string(mw.Written())).To(ContainSubstring(`"authors":["Ion Channel Dev Team"]`))
-				Expect(string(mw.Written())).To(ContainSubstring(`"version":"v1"`))
 				Expect(string(mw.Written())).To(ContainSubstring(`"total_count":0,"offset":0`))
 			})
 		})
