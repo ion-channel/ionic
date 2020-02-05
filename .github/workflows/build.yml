@@ -78,7 +78,9 @@ jobs:
         path: ./src/github.com/${{ github.repository }}
 
     - name: Debug
-      run: echo ${{ github.ref }}
+      run: |
+        echo ${{ github.ref }}
+        echo ${{ endsWith(github.head_ref, '/master') }}
 
     - name: Docs
       working-directory: ${{ github.workspace }}/src/github.com/${{ github.repository }}
