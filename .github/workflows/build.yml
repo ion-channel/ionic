@@ -69,7 +69,7 @@ jobs:
     steps:
 
     - name: Setup
-      run: sudo apt-get install pandoc
+      run: brew install pandoc
 
     - name: Checkout
       uses: actions/checkout@v2
