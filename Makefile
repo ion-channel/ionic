@@ -83,7 +83,7 @@ lint: ## Run golint
 .PHONY: docs
 docs: ## exports documents from the source code
 	@echo "creating documentation..."
-	@./make-public-docs > docs/endpoints.md
+	./make-public-docs > docs/endpoints.md
 	@pandoc -f markdown docs/endpoints.md -c api.css -s --highlight-style monochrome --metadata pagetitle="API Documentation" -o docs/index.html
 	@pandoc -f markdown docs/examples.md -c api.css -s --highlight-style monochrome --metadata pagetitle="API Examples" -o docs/examples.html
 	@pandoc -f markdown docs/data_examples.md -c api.css -s --highlight-style monochrome --metadata pagetitle="API Data Examples" -o docs/data_examples.html

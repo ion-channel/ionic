@@ -6,7 +6,9 @@ echo "# Ion Channel API Documentation"
 oldIFS=$IFS
 for f in $(ls */*.go | grep -v _test.go)
 do
+
   if [ -f $f ] ; then
+    >&2 echo "Processing $f"
     s=$(cat $f | grep -B1 'Endpoint =')
     if [[ -n "$s" ]] ; then
       s=${s//$'\n'/|}         # convert all new lines to '|'
@@ -24,6 +26,7 @@ do
 
         # if line starts with any letter, it's the name and the endpoint
         if [[ $element =~ ^[a-zA-Z].* ]] ; then
+          >&2 echo "  Processing $element"
           prevIFS=$IFS
           IFS='=' read -r -a arr2 <<< "$element"
           name=${arr2[0]}
@@ -52,9 +55,11 @@ do
           fi
 
           IFS=$prevIFS
+          >&2 echo "  Finished Processing $element"
         fi
       done
     fi
+    >&2 echo "Finished Processing $f"
   fi
 done
 

@@ -63,7 +63,7 @@ jobs:
   docs:
     name: Docs
     needs: [linting, test]
-    if: endsWith(github.ref, '/master') == true
+    # if: endsWith(github.ref, '/master') == true
     runs-on: ubuntu-latest
 
     steps:
