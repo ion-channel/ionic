@@ -69,7 +69,7 @@ jobs:
     steps:
 
     - name: Setup
-      run: brew install pandoc
+      run: brew install pandoc awscli
 
     - name: Checkout
       uses: actions/checkout@v2
