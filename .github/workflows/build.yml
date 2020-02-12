@@ -1,5 +1,5 @@
 name: Build
-on: [push, respository_dispatch]
+on: [push, repository_dispatch]
 jobs:
   linting:
     name: Linting
