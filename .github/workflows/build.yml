@@ -64,7 +64,7 @@ jobs:
     name: Docs
     needs: [linting, test]
     # if: endsWith(github.ref, '/master') == true
-    runs-on: centos-latest
+    runs-on: macos-latest
 
     steps:
 
