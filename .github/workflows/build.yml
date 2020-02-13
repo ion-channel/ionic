@@ -64,12 +64,12 @@ jobs:
     name: Docs
     needs: [linting, test]
     if: endsWith(github.ref, '/master') == true
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
 
     - name: Setup
-      run: sudo apt-get install pandoc
+      run: brew install pandoc awscli
 
     - name: Checkout
       uses: actions/checkout@v2
