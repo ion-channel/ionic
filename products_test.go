@@ -8,6 +8,7 @@ import (
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
+	"github.com/ion-channel/ionic/pagination"
 	"github.com/ion-channel/ionic/products"
 	. "github.com/onsi/gomega"
 )
@@ -70,7 +71,7 @@ func TestProducts(t *testing.T) {
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less+mahVersion", "someapikey")
+			products, _, err := client.GetProductSearch("less+mahVersion", nil, "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
@@ -80,12 +81,33 @@ func TestProducts(t *testing.T) {
 			Expect(products).To(HaveLen(5))
 			Expect(products[0].ID).To(Equal(39862))
 		})
+		g.It("should search for a product by pages", func() {
+			server.AddPath("/v1/product/search").
+				SetMethods("GET").
+				SetPayload([]byte(sampleBunsenSearchResponse)).
+				SetStatus(http.StatusOK)
+			page := pagination.Pagination{
+				Offset: 0,
+				Limit:  100,
+			}
+			products, _, err := client.GetProductSearch("less+mahVersion", &page, "someapikey")
+			Expect(err).To(BeNil())
+			hitRecords := server.HitRecords()
+			Expect(hitRecords).To(HaveLen(1))
+			hitRecord := hitRecords[0]
+			Expect(hitRecord.Header.Get("Authorization")).To(Equal("Bearer someapikey"))
+			Expect(hitRecord.Query.Get("q")).To(Equal("less+mahVersion"))
+			Expect(hitRecord.Query.Get("offset")).To(Equal("0"))
+			Expect(hitRecord.Query.Get("limit")).To(Equal("100"))
+			Expect(products).To(HaveLen(5))
+			Expect(products[0].ID).To(Equal(39862))
+		})
 		g.It("should omit version from product search when it is not given", func() {
 			server.AddPath("/v1/product/search").
 				SetMethods("GET").
 				SetPayload([]byte(sampleBunsenSearchResponse)).
 				SetStatus(http.StatusOK)
-			products, err := client.GetProductSearch("less", "someapikey")
+			products, _, err := client.GetProductSearch("less", nil, "someapikey")
 			Expect(err).To(BeNil())
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
