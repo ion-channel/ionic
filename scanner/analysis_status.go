@@ -5,9 +5,9 @@ import (
 )
 
 const (
-	// AnalysisStatusAccepted denotes a request for analysis has been
+	// AnalysisStatusQueued denotes a request for analysis has been
 	// accepted and queued
-	AnalysisStatusAccepted = "accepted"
+	AnalysisStatusQueued = "queued"
 	// AnalysisStatusErrored denotes a request for analysis has errored during
 	// the run, the message field will have more details
 	AnalysisStatusErrored = "errored"
