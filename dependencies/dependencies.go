@@ -23,6 +23,7 @@ type Dependency struct {
 	Scope         string       `json:"scope"`
 	Requirement   string       `json:"requirement"`
 	Dependencies  []Dependency `json:"dependencies"`
+	Confidence    float32      `json:"confidence"`
 }
 
 // Meta represents all the known meta information for a dependency set
