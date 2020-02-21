@@ -54,9 +54,9 @@ type PortfolioPassingFailingSummary struct {
 
 // PortfolioStartedErroredSummary represents a summary of started and errored statuses for projects
 type PortfolioStartedErroredSummary struct {
-	StartedProjects  int `json:"started_projects"`
-	ErroredProjects  int `json:"errored_projects"`
-	FinishedProjects int `json:"finished_projects"`
+	AnalyzingProjects int `json:"analyzing_projects"`
+	ErroredProjects   int `json:"errored_projects"`
+	FinishedProjects  int `json:"finished_projects"`
 }
 
 // PortfolioRequestedIds represents a list of IDs to send to a request
