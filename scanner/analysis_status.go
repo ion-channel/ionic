@@ -18,9 +18,9 @@ const (
 	// AnalysisStatusFailed denotes a request for analysis has failed to
 	// run, the message field will have more details
 	AnalysisStatusFailed = "failed"
-	// AnalysisStatusStarted denotes a request for analysis has been
+	// AnalysisStatusAnalyzing denotes a request for analysis has been
 	// accepted and has begun
-	AnalysisStatusStarted = "started"
+	AnalysisStatusAnalyzing = "analyzing"
 )
 
 const (

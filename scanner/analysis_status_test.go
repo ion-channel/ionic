@@ -23,7 +23,7 @@ func TestEvaluation(t *testing.T) {
 
 		g.It("should provide a simple function for determining not done stati", func() {
 			a := &AnalysisStatus{
-				Status: AnalysisStatusStarted,
+				Status: AnalysisStatusAnalyzing,
 			}
 
 			Expect(a.Done()).To(BeFalse())
