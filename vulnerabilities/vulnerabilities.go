@@ -74,6 +74,16 @@ type Source struct {
 type ScoreDetails struct {
 	CVSSv2 *CVSSv2 `json:"cvssv2,omitempty" xml:"cvssv2"`
 	CVSSv3 *CVSSv3 `json:"cvssv3,omitempty" xml:"cvssv3"`
+	NPM    *NPM    `json:"npm,omitempty" xml:"npm"`
+}
+
+// NPM represents the variables that go into determining the NPM score
+// for a given vulnerability
+type NPM struct {
+	AttackVector string  `json:"attackVector" xml:"attackVector"`
+	AccessVector string  `json:"accessVector" xml:"accessVector"`
+	BaseScore    float64 `json:"baseScore" xml:"baseScore"`
+	BaseSeverity string  `json:"baseSeverity" xml:"baseSeverity"`
 }
 
 // CVSSv2 represents the variables that go into determining the CVSS v2 score
