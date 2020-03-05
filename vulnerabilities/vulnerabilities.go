@@ -81,7 +81,6 @@ type ScoreDetails struct {
 // for a given vulnerability
 type NPM struct {
 	AttackVector string  `json:"attackVector" xml:"attackVector"`
-	AccessVector string  `json:"accessVector" xml:"accessVector"`
 	BaseScore    float64 `json:"baseScore" xml:"baseScore"`
 	BaseSeverity string  `json:"baseSeverity" xml:"baseSeverity"`
 }
