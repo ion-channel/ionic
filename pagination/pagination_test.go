@@ -24,13 +24,13 @@ func TestPagination(t *testing.T) {
 				Expect(p.Offset).To(Equal(o))
 			})
 
-			g.It("should set limit to -1 if not positive", func() {
+			g.It("should set limit to 10 if not positive", func() {
 				o := 20
 				l := -100
 				p := New(o, l)
 
 				Expect(p.Limit).NotTo(Equal(l))
-				Expect(p.Limit).To(Equal(-1))
+				Expect(p.Limit).To(Equal(10))
 				Expect(p.Offset).To(Equal(o))
 			})
 
