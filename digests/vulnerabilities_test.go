@@ -76,7 +76,7 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 			Expect(len(ds)).To(Equal(4))
 
 			Expect(ds[0].Title).To(Equal("total vulnerabilities"))
-			Expect(string(ds[0].Data)).To(Equal(`{"count":3}`))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":4}`))
 			Expect(ds[0].Warning).To(BeTrue())
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
@@ -436,7 +436,7 @@ const (
 			}
 		],
 		"meta": {
-			"vulnerability_count": 3
+			"vulnerability_count": 4
 		}
 	}`
 )
