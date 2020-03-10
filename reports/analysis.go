@@ -65,5 +65,9 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 		},
 	}
 
+	if ar.Analysis.Status == "finished" {
+		ar.Analysis.Status = status.Status
+	}
+
 	return &ar, nil
 }
