@@ -13,10 +13,12 @@ const (
 	DefaultOffset = 0
 	// DefaultLimit is the standard limit chosen when nothing is provided
 	DefaultLimit = 10
+	// MaximumLimit the highest value of limit
+	MaximumLimit = 1000
 )
 
 // AllItems is a convenience for requesting all items of a given entity
-var AllItems = &Pagination{Offset: 0, Limit: -1}
+var AllItems = &Pagination{Offset: 0, Limit: MaximumLimit}
 
 // Pagination represents the necessary elements for a paginated request
 type Pagination struct {
@@ -37,7 +39,7 @@ func New(offset, limit int) *Pagination {
 	}
 
 	if p.Limit < 1 {
-		p.Limit = -1
+		p.Limit = 10
 	}
 
 	return p
@@ -111,7 +113,7 @@ func (p *Pagination) SQL() string {
 	}
 
 	switch {
-	case p.Limit > 0:
+	case p.Limit > 0 && p.Limit < MaximumLimit:
 		strs = append(strs, fmt.Sprintf("LIMIT %d", p.Limit))
 	case p.Limit <= 0:
 	}
@@ -121,7 +123,7 @@ func (p *Pagination) SQL() string {
 
 // Up increments the offset up by the limit.
 func (p *Pagination) Up() {
-	if p.Limit > 0 {
+	if p.Limit > 0 && p.Limit < MaximumLimit {
 		p.Offset += p.Limit
 	}
 }
