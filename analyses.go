@@ -32,6 +32,28 @@ func (ic *IonClient) GetAnalysis(id, teamID, projectID, token string) (*analyses
 	return &a, nil
 }
 
+// GetLatestAnalysis takes a team ID, project ID, and token.  It returns the
+// latest analysis found.  If the analysis is not found it will return an error, and
+// will return an error for any other API issues it encounters.
+func (ic *IonClient) GetLatestAnalysis(teamID, projectID, token string) (*analyses.Analysis, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("project_id", projectID)
+
+	b, _, err := ic.Get(analyses.AnalysisGetLatestAnalysisEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analysis: %v", err.Error())
+	}
+
+	var a analyses.Analysis
+	err = json.Unmarshal(b, &a)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal analysis: %v", err.Error())
+	}
+
+	return &a, nil
+}
+
 // GetAnalyses takes a team ID, project ID, and token. It returns a slice of
 // analyses for the project or an error for any API issues it encounters.
 func (ic *IonClient) GetAnalyses(teamID, projectID, token string, page *pagination.Pagination) ([]analyses.Analysis, error) {
