@@ -73,18 +73,6 @@ func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID, token stri
 		return nil, fmt.Errorf("failed to get analysis status: %v", err.Error())
 	}
 
-	if a.Status == "finished" {
-		w, err := ic.GetAppliedRuleSet(projectID, teamID, analysisID, token)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get pass/fail status: %v", err.Error())
-		}
-
-		a.Status = "pass"
-		if !w.RuleEvaluationSummary.Passed {
-			a.Status = "fail"
-		}
-	}
-
 	return &a, nil
 }
 

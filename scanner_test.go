@@ -61,7 +61,7 @@ func TestScanner(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(analysisStatus.ID).To(Equal("analysis-id"))
 			Expect(analysisStatus.Message).To(Equal("Completed compliance analysis"))
-			Expect(analysisStatus.Status).To(Equal("pass"))
+			Expect(analysisStatus.Status).To(Equal("finished"))
 			Expect(analysisStatus.ScanStatus[0].Status).To(Equal("finished"))
 			Expect(analysisStatus.ScanStatus[0].Message).To(Equal("Finished difference scan for Apache-Qpid, a difference was detected."))
 		})
