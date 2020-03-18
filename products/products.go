@@ -35,7 +35,7 @@ type Product struct {
 	Sources            []Source      `json:"source" xml:"source"`
 	Confidence         float64       `json:"confidence" xml:"confidence"`
 	VulnerabilityCount int           `json:"vulnerability_count" xml:"vulnerability_count"`
-	Vulnerabilities    []interface{} `json:"vulnerabilities,omitempty" xml:"vulnerabilities,omitempty"`
+	Vulnerabilities    []interface{} `json:"vulnerabilities" xml:"vulnerabilities"`
 }
 
 // Source represents information about where the product data came from
