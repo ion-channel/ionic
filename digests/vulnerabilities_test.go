@@ -142,7 +142,7 @@ const (
 						"title": "CVE-2011-5036",
 						"summary": "Rack before 1.1.3, 1.2.x before 1.2.5, and 1.3.x before 1.3.6 computes hash values for form parameters without restricting the ability to trigger hash collisions predictably, which allows remote attackers to cause a denial of service (CPU consumption) by sending many crafted parameters.",
 						"score": "7.5",
-						"score_version": "3.0",
+						"score_version": "3.1",
 						"score_system": "CVSS",
 						"score_details": {
 							"cvssv3": {
