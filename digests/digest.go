@@ -26,6 +26,7 @@ type Digest struct {
 	Index          int             `json:"index"`
 	Title          string          `json:"title"`
 	Data           json.RawMessage `json:"data"`
+	SourceData     json.RawMessage `json:"source_data"`
 	ScanID         string          `json:"scan_id"`
 	RuleID         string          `json:"rule_id"`
 	RulesetID      string          `json:"ruleset_id"`
@@ -184,6 +185,12 @@ func (d *Digest) AppendEval(eval *scans.Evaluation, dataType string, value inter
 	d.Evaluated = (strings.ToLower(eval.Type) != "not evaluated")
 	d.Passed = eval.Passed
 	d.PassedMessage = eval.Description
+
+	b, err := json.Marshal(&eval.TranslatedResults)
+	if err != nil {
+		return fmt.Errorf("failed to marshal digest data: %v", err.Error())
+	}
+	d.SourceData = b
 
 	return nil
 }
