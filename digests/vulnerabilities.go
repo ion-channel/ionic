@@ -126,14 +126,15 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 						}
 					}
 				} else {
-					switch v.ScoreVersion {
-					case "3.0":
+					ver, _ := strconv.ParseFloat(v.ScoreVersion, 32)
+					switch int(ver) {
+					case 3:
 						if v.ScoreDetails.CVSSv3 != nil && v.ScoreDetails.CVSSv3.BaseScore >= 9.0 {
 							crits++
 						} else if v.ScoreDetails.CVSSv3 != nil && v.ScoreDetails.CVSSv3.BaseScore >= 7.0 {
 							highs++
 						}
-					case "2.0":
+					case 2:
 						if v.ScoreDetails.CVSSv2 != nil && v.ScoreDetails.CVSSv2.BaseScore >= 7.0 {
 							highs++
 						}
