@@ -60,7 +60,7 @@ func TestDigest(t *testing.T) {
 					singularTitle:  "somesingulartitle",
 					pluralTitle:    "somepluraltitle",
 				}
-				Expect(fmt.Sprintf("%v", d)).To(Equal(`{"index":12,"title":"sometitle","data":null,"scan_id":"somescanid","rule_id":"someruleid","ruleset_id":"somerulesetid","evaluated":true,"pending":false,"passed":true,"passed_message":"somepassedmessage","warning":false,"warning_message":"somewarningmessage","errored":false,"errored_message":"someerroredmessage"}`))
+				Expect(fmt.Sprintf("%v", d)).To(Equal(`{"index":12,"title":"sometitle","data":null,"source_data":null,"scan_id":"somescanid","rule_id":"someruleid","ruleset_id":"somerulesetid","evaluated":true,"pending":false,"passed":true,"passed_message":"somepassedmessage","warning":false,"warning_message":"somewarningmessage","errored":false,"errored_message":"someerroredmessage"}`))
 			})
 		})
 
