@@ -21,9 +21,20 @@ const (
 // ByScore sort interface impl for sorting vulnerabilities by score
 type ByScore []vulnerabilities.Vulnerability
 
-func (v ByScore) Len() int           { return len(v) }
-func (v ByScore) Swap(i, j int)      { v[i], v[j] = v[j], v[i] }
-func (v ByScore) Less(i, j int) bool { return v[i].Score > v[j].Score }
+func (v ByScore) Len() int      { return len(v) }
+func (v ByScore) Swap(i, j int) { v[i], v[j] = v[j], v[i] }
+func (v ByScore) Less(i, j int) bool {
+	iscore, err := strconv.ParseFloat(v[i].Score, 32)
+	if err != nil {
+		return false
+	}
+
+	jscore, err := strconv.ParseFloat(v[j].Score, 32)
+	if err != nil {
+		return true
+	}
+	return iscore > jscore
+}
 
 type filter func(*vulnerabilities.Vulnerability) bool
 
