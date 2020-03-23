@@ -112,20 +112,22 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	var highs int
 	var crits int
 	var data interface{}
+	var results scans.VulnerabilityResults
 	if eval != nil {
 		data = eval.TranslatedResults.Data
 		b, ok := data.(scans.VulnerabilityResults)
+		results = b
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into vuln")
 		}
 
-		vulnCount = b.Meta.VulnerabilityCount
+		vulnCount = results.Meta.VulnerabilityCount
 
 		ids := make(map[int]bool, 0)
 
-		for i := range b.Vulnerabilities {
-			for j := range b.Vulnerabilities[i].Vulnerabilities {
-				v := b.Vulnerabilities[i].Vulnerabilities[j]
+		for i := range results.Vulnerabilities {
+			for j := range results.Vulnerabilities[i].Vulnerabilities {
+				v := results.Vulnerabilities[i].Vulnerabilities[j]
 				ids[v.ID] = true
 
 				if v.ScoreSystem == "NPM" {
@@ -259,5 +261,8 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	digests = append(digests, *d)
 
+	if eval != nil {
+		eval.TranslatedResults.Data = results
+	}
 	return digests, nil
 }
