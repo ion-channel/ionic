@@ -1,9 +1,7 @@
 package projects
 
 import (
-	"crypto/x509"
 	"encoding/json"
-	"encoding/pem"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -140,35 +138,6 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 	r := regexp.MustCompile(validEmailRegex)
 	if p.POCEmail != "" && !r.MatchString(p.POCEmail) {
 		invalidFields["poc_email"] = "invalid email supplied"
-		projErr = ErrInvalidProject
-	}
-
-	isFinger, err := regexp.MatchString("[a-f0-9]{2}\\:[a-f0-9]{2}\\:[a-f0-9]{2}\\:", p.DeployKey)
-	if err != nil {
-		return nil, fmt.Errorf("failed to detect deploy key fingerprint: %v", err.Error())
-	}
-
-	if isFinger {
-		p.DeployKey = ""
-	}
-
-	block, rest := pem.Decode([]byte(p.DeployKey))
-	if block != nil {
-		pkey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-		if err != nil {
-			invalidFields["deploy_key"] = "must be a valid ssh key"
-			projErr = ErrInvalidProject
-		} else {
-			err = pkey.Validate()
-			if err != nil {
-				invalidFields["deploy_key"] = "must be a valid ssh key"
-				projErr = ErrInvalidProject
-			}
-		}
-	}
-
-	if block == nil && rest != nil && string(rest) != "" {
-		invalidFields["deploy_key"] = "must be a valid ssh key"
 		projErr = ErrInvalidProject
 	}
 
