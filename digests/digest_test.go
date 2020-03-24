@@ -73,7 +73,7 @@ func TestDigest(t *testing.T) {
 
 			g.It("should show an error if present", func() {
 				s := &scanner.ScanStatus{
-					Status:  "errored",
+					Status:  scanner.AnalysisStatusErrored,
 					Message: "failed to perform the scan for a reason",
 				}
 				ds := NewDigest(s, 0, "", "")
@@ -83,13 +83,13 @@ func TestDigest(t *testing.T) {
 				Expect(ds.ErroredMessage).To(Equal("failed to perform the scan for a reason"))
 
 				s = &scanner.ScanStatus{
-					Status:  "finished",
+					Status:  scanner.AnalysisStatusFinished,
 					Message: "completed scan",
 				}
 				ds = NewDigest(s, 0, "", "")
 				Expect(ds).NotTo(BeNil())
 				Expect(ds.Pending).To(BeFalse())
-				Expect(ds.Errored).To(BeTrue())
+				Expect(ds.Errored).To(BeFalse())
 				Expect(ds.ErroredMessage).To(Equal("evaluation not received"))
 			})
 

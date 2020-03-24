@@ -18,6 +18,7 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 	g.Describe("Vulnerabilities", func() {
 		g.It("should produce digests", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 
 			var r scans.VulnerabilityResults
@@ -59,6 +60,7 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 
 		g.It("should differenciate value counts", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 
 			var r scans.VulnerabilityResults

@@ -17,6 +17,7 @@ func TestCoverageDigests(t *testing.T) {
 	g.Describe("Coverage", func() {
 		g.It("should produce digests", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "coverage",

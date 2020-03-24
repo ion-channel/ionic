@@ -17,6 +17,7 @@ func TestDependenciesDigests(t *testing.T) {
 	g.Describe("Dependencies", func() {
 		g.It("should produce digests", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "dependency",

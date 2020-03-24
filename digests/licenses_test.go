@@ -17,6 +17,7 @@ func TestLicensesDigests(t *testing.T) {
 	g.Describe("Licenses", func() {
 		g.It("should produce digests with license name when only one", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "license",
@@ -41,6 +42,7 @@ func TestLicensesDigests(t *testing.T) {
 
 		g.It("should produce digests with count when more than one", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "license",
@@ -66,6 +68,7 @@ func TestLicensesDigests(t *testing.T) {
 
 		g.It("should warn when no licenses are found", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "license",

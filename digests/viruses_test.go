@@ -17,6 +17,7 @@ func TestVirusesDigests(t *testing.T) {
 	g.Describe("Viruses", func() {
 		g.It("should produce digests", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "virus",
@@ -43,6 +44,7 @@ func TestVirusesDigests(t *testing.T) {
 
 		g.It("should warn when no files are seen", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "virus",
@@ -66,6 +68,7 @@ func TestVirusesDigests(t *testing.T) {
 
 		g.It("should warn when viruses are seen", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.AnalysisStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "virus",
