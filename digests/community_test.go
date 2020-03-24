@@ -17,6 +17,7 @@ func TestCommunityDigests(t *testing.T) {
 	g.Describe("Community", func() {
 		g.It("should produce digests", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "community",
@@ -37,6 +38,7 @@ func TestCommunityDigests(t *testing.T) {
 
 		g.It("should warn about single committer repos", func() {
 			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
 			e := scans.NewEval()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "community",

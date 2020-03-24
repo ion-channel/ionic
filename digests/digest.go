@@ -80,18 +80,31 @@ func (d Digest) String() string {
 // will favor a plural title. A newly constructed Digest with the appropriate
 // settings is returned.
 func NewDigest(status *scanner.ScanStatus, index int, singular, plural string) *Digest {
-	// A digest is in an error state until an evaluation is appended into it
-	errored := true
+	// We have other states now
+	errored := false
+	pending := true
 	erroredMsg := "evaluation not received"
 
-	if status != nil && status.Errored() {
-		errored = true
-		erroredMsg = status.Message
+	if status != nil {
+		switch status.Status {
+		case scanner.AnalysisStatusErrored:
+			errored = true
+			erroredMsg = status.Message
+			pending = false
+		case scanner.AnalysisStatusQueued, scanner.AnalysisStatusAnalyzing:
+			pending = true
+		case scanner.AnalysisStatusFinished, scanner.AnalysisStatusFailed:
+			pending = false
+		default:
+			errored = true
+			pending = true
+			erroredMsg = "Unknown status"
+		}
 	}
 
 	d := &Digest{
 		Index:          index,
-		Pending:        status == nil,
+		Pending:        pending,
 		Errored:        errored,
 		ErroredMessage: erroredMsg,
 		Title:          plural,
