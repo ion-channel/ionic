@@ -145,3 +145,35 @@ func (ic *IonClient) AddScanResult(scanResultID, teamID, projectID, status, scan
 
 	return &a, nil
 }
+
+type projectStates struct {
+	Filter string   `json:"filter"`
+	IDs    []string `json:"ids"`
+}
+
+// GetProjectsStates takes a slice of project ids and an optional filter
+// returns a slice of id's with each respected state
+func (ic *IonClient) GetProjectsStates(ids []string, filter string, token string) ([]scanner.ProjectsStates, error) {
+	ri := projectStates{
+		IDs:    ids,
+		Filter: filter,
+	}
+
+	b, err := json.Marshal(ri)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(scanner.ScannerGetProjectsStates, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get project states: %v", err.Error())
+	}
+
+	var ps []scanner.ProjectsStates
+	err = json.Unmarshal(r, &ps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return ps, nil
+}
