@@ -8,6 +8,8 @@ import (
 const (
 	// ScannerAddScanEndpoint is a string representation of the current endpoint for scanner add scan
 	ScannerAddScanEndpoint = "v1/scanner/addScanResult"
+	// ScannerGetProjectsStates is a string representation of the current endpoint getting requested projects scan states
+	ScannerGetProjectsStates = "v1/scanner/getProjectsStates"
 
 	// ScanStatusErrored denotes a request for scan has errored during
 	// the run, the message field will have more details
@@ -33,6 +35,12 @@ type ScanStatus struct {
 	Status           string    `json:"status"`
 	CreatedAt        time.Time `json:"created_at"`
 	UpdatedAt        time.Time `json:"updated_at"`
+}
+
+// ProjectsStates identfies the state of a scan for requested projects
+type ProjectsStates struct {
+	ID     string `json:"id"`
+	Status string `json:"status"`
 }
 
 // Errored encapsulates the concerns of whether a ScanStatus is in an errored
