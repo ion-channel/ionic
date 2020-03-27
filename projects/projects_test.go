@@ -96,27 +96,6 @@ func TestProject(t *testing.T) {
 			Expect(fs["type"]).To(Equal("missing type"))
 		})
 
-		g.It("should say a project is invalid if a deploy key is invalid", func() {
-			server.AddPath("/v1/ruleset/getRuleset").
-				SetMethods("HEAD").
-				SetStatus(http.StatusOK)
-
-			var p Project
-			err := json.Unmarshal([]byte(fmt.Sprintf(sampleValidProject, host, port)), &p)
-			b, _ := url.Parse(fmt.Sprintf("http://%v:%v", host, port))
-			Expect(err).To(BeNil())
-
-			p.DeployKey = sampleInvalidKey
-			fs, err := p.Validate(client, b, testToken)
-			Expect(err).To(Equal(ErrInvalidProject))
-			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
-
-			p.DeployKey = "not valid"
-			fs, err = p.Validate(client, b, testToken)
-			Expect(err).To(Equal(ErrInvalidProject))
-			Expect(fs["deploy_key"]).To(Equal("must be a valid ssh key"))
-		})
-
 		g.It("should return string in JSON", func() {
 			id := "someid"
 			teamID := "someteamiD"
