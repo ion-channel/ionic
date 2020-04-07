@@ -7,8 +7,28 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
+type dfilter func(*scans.Dependency) bool
+
+func nv(d *scans.Dependency) bool {
+	if d.Requirement == "" {
+		return true
+	}
+	return false
+}
+
+func filterDependencies(data scans.DependencyResults, unique bool, f dfilter) ([]scans.Dependency, error) {
+	ds := []scans.Dependency{}
+	for _, dr := range data.Dependencies {
+		if f(&dr) {
+			ds = append(ds, dr)
+		}
+	}
+	return ds, nil
+}
+
 func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
+	var results scans.DependencyResults
 
 	var updateAvailable, noVersions, directDeps, transDeps int
 	if eval != nil && !status.Errored() {
@@ -16,7 +36,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into dependency bytes")
 		}
-
+		results = b
 		updateAvailable = b.Meta.UpdateAvailableCount
 		noVersions = b.Meta.NoVersionCount
 		directDeps = b.Meta.FirstDegreeCount
@@ -36,10 +56,16 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	digests = append(digests, *d)
 
+	// No version specified
 	d = NewDigest(status, noVersionIndex, "dependency no version specified", "dependencies no version specified")
 
 	if eval != nil && !status.Errored() {
-		err := d.AppendEval(eval, "count", noVersions)
+		filtered, err := filterDependencies(results, false, nv)
+		if err != nil {
+			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
+		}
+		eval.TranslatedResults.Data = filtered
+		err = d.AppendEval(eval, "count", noVersions)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependencies no version digest: %v", err.Error())
 		}
@@ -92,5 +118,8 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	digests = append(digests, *d)
 
+	if eval != nil {
+		eval.TranslatedResults.Data = results
+	}
 	return digests, nil
 }
