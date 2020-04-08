@@ -36,7 +36,7 @@ func (v ByScore) Less(i, j int) bool {
 	return iscore > jscore
 }
 
-type filter func(*vulnerabilities.Vulnerability) bool
+type vfilter func(*vulnerabilities.Vulnerability) bool
 
 func all(v *vulnerabilities.Vulnerability) bool {
 	return true
@@ -67,7 +67,7 @@ func critical(v *vulnerabilities.Vulnerability) bool {
 	return false
 }
 
-func pivotToVulnerabilities(data interface{}, unique bool, f filter) ([]vulnerabilities.Vulnerability, error) {
+func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]vulnerabilities.Vulnerability, error) {
 	b, ok := data.(scans.VulnerabilityResults)
 	if !ok {
 		return nil, fmt.Errorf("error coercing evaluation translated results into vuln")
