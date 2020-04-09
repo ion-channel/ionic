@@ -105,7 +105,7 @@ func TestDependenciesDigests(t *testing.T) {
 					Dependencies: []scans.Dependency{
 						scans.Dependency{
 							Name:          "ExpectNoVersion",
-							Version:       "2.0.0",
+							Version:       "3.0.0",
 							LatestVersion: "3.0.0",
 							Requirement:   "",
 						},
@@ -137,7 +137,8 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[0].Title).To(Equal("dependencies outdated"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
-			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"2.0.0","scope":"","requirement":""},{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1"}]}`))
+			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1"}]}`))
+			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":""}]}`))
 			Expect(ds[0].Warning).To(BeFalse())
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())

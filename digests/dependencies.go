@@ -23,9 +23,13 @@ func od(d *scans.Dependency) bool {
 	return false
 }
 
-func filterDependencies(data scans.DependencyResults, unique bool, f dfilter) ([]scans.Dependency, error) {
+func filterDependencies(data interface{}, unique bool, f dfilter) ([]scans.Dependency, error) {
+	b, ok := data.(scans.DependencyResults)
+	if !ok {
+		return nil, fmt.Errorf("error coercing evaluation translated results into dep")
+	}
 	ds := []scans.Dependency{}
-	for _, dr := range data.Dependencies {
+	for _, dr := range b.Dependencies {
 		if f(&dr) {
 			ds = append(ds, dr)
 		}
@@ -36,10 +40,12 @@ func filterDependencies(data scans.DependencyResults, unique bool, f dfilter) ([
 func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 	var results scans.DependencyResults
+	var data interface{}
 
 	var updateAvailable, noVersions, directDeps, transDeps int
 	if eval != nil && !status.Errored() {
-		b, ok := eval.TranslatedResults.Data.(scans.DependencyResults)
+		data = eval.TranslatedResults.Data
+		b, ok := data.(scans.DependencyResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into dependency bytes")
 		}
@@ -53,7 +59,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d := NewDigest(status, dependencyOutdatedIndex, "dependency outdated", "dependencies outdated")
 
 	if eval != nil && !status.Errored() {
-		filtered, err := filterDependencies(results, false, od)
+		filtered, err := filterDependencies(data, false, od)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
 		}
@@ -73,7 +79,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d = NewDigest(status, noVersionIndex, "dependency no version specified", "dependencies no version specified")
 
 	if eval != nil && !status.Errored() {
-		filtered, err := filterDependencies(results, false, nv)
+		filtered, err := filterDependencies(data, false, nv)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
 		}
@@ -93,6 +99,9 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		}
 	}
 
+	if eval != nil {
+		eval.TranslatedResults.Data = results
+	}
 	digests = append(digests, *d)
 
 	d = NewDigest(status, directDependencyIndex, "direct dependency", "direct dependencies")
