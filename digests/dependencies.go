@@ -16,6 +16,13 @@ func nv(d *scans.Dependency) bool {
 	return false
 }
 
+func od(d *scans.Dependency) bool {
+	if d.Version < d.LatestVersion {
+		return true
+	}
+	return false
+}
+
 func filterDependencies(data scans.DependencyResults, unique bool, f dfilter) ([]scans.Dependency, error) {
 	ds := []scans.Dependency{}
 	for _, dr := range data.Dependencies {
@@ -46,7 +53,13 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d := NewDigest(status, dependencyOutdatedIndex, "dependency outdated", "dependencies outdated")
 
 	if eval != nil && !status.Errored() {
-		err := d.AppendEval(eval, "count", updateAvailable)
+		filtered, err := filterDependencies(results, false, od)
+		if err != nil {
+			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
+		}
+		eval.TranslatedResults.Data = filtered
+
+		err = d.AppendEval(eval, "count", updateAvailable)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependencies outdated digest: %v", err.Error())
 		}

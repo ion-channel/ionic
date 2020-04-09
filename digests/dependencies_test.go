@@ -95,6 +95,54 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(ds[1].Errored).To(BeFalse())
 		})
 
+		g.It("should produce outdated digest with relevent data", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "dependency",
+				Data: scans.DependencyResults{
+					Dependencies: []scans.Dependency{
+						scans.Dependency{
+							Name:          "ExpectNoVersion",
+							Version:       "2.0.0",
+							LatestVersion: "3.0.0",
+							Requirement:   "",
+						},
+						scans.Dependency{
+							Name:          "ExpectVersion",
+							Version:       "1.1.1",
+							LatestVersion: "2.0.0",
+							Requirement:   "1.1.1",
+						},
+						scans.Dependency{
+							Name:          "ExpectVersion",
+							Version:       "10",
+							LatestVersion: "10",
+							Requirement:   "10",
+						},
+					},
+					Meta: scans.DependencyMeta{
+						FirstDegreeCount:     2,
+						NoVersionCount:       1,
+						TotalUniqueCount:     115,
+						UpdateAvailableCount: 2,
+					},
+				},
+			}
+
+			ds, err := dependencyDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(4))
+
+			Expect(ds[0].Title).To(Equal("dependencies outdated"))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
+			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"2.0.0","scope":"","requirement":""},{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1"}]}`))
+			Expect(ds[0].Warning).To(BeFalse())
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+		})
+
 		g.It("should have no warning with transitive dependencies", func() {
 			s := &scanner.ScanStatus{}
 			e := scans.NewEval()
