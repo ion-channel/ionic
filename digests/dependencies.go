@@ -39,7 +39,6 @@ func filterDependencies(data interface{}, unique bool, f dfilter) ([]scans.Depen
 
 func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
-	var results scans.DependencyResults
 	var data interface{}
 
 	var updateAvailable, noVersions, directDeps, transDeps int
@@ -49,7 +48,6 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into dependency bytes")
 		}
-		results = b
 		updateAvailable = b.Meta.UpdateAvailableCount
 		noVersions = b.Meta.NoVersionCount
 		directDeps = b.Meta.FirstDegreeCount
@@ -70,6 +68,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 			return nil, fmt.Errorf("failed to create dependencies outdated digest: %v", err.Error())
 		}
 
+		d.MarshalSourceData(filtered, "dependency")
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
@@ -83,7 +82,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
 		}
-		eval.TranslatedResults.Data = filtered
+		d.MarshalSourceData(filtered, "dependency")
 		err = d.AppendEval(eval, "count", noVersions)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependencies no version digest: %v", err.Error())
@@ -137,8 +136,5 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	digests = append(digests, *d)
 
-	if eval != nil {
-		eval.TranslatedResults.Data = results
-	}
 	return digests, nil
 }

@@ -199,12 +199,21 @@ func (d *Digest) AppendEval(eval *scans.Evaluation, dataType string, value inter
 	d.Passed = eval.Passed
 	d.PassedMessage = eval.Description
 
-	b, err := json.Marshal(&eval.TranslatedResults)
+	return nil
+}
+
+// MarshalSourceData takes a data struct, generates json
+// and sets the source data on the digest
+func (d *Digest) MarshalSourceData(data interface{}, t string) error {
+	r := scans.TranslatedResults{
+		Type: t,
+		Data: data,
+	}
+	b, err := json.Marshal(&r)
 	if err != nil {
 		return fmt.Errorf("failed to marshal digest data: %v", err.Error())
 	}
 	d.SourceData = b
-
 	return nil
 }
 
