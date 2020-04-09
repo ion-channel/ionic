@@ -214,6 +214,7 @@ func (d *Digest) MarshalSourceData(data interface{}, t string) error {
 		return fmt.Errorf("failed to marshal digest data: %v", err.Error())
 	}
 	d.SourceData = b
+
 	return nil
 }
 
