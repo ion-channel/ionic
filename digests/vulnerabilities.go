@@ -169,7 +169,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
-		eval.TranslatedResults.Data = pivoted
+		d.MarshalSourceData(pivoted, "vulnerability")
 		err = d.AppendEval(eval, "count", vulnCount)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to total vulnerabilities digest: %v", err.Error())
@@ -197,7 +197,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
-		eval.TranslatedResults.Data = pivoted
+		d.MarshalSourceData(pivoted, "vulnerability")
 		err = d.AppendEval(eval, "count", uniqVulnCount)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
@@ -225,7 +225,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
-		eval.TranslatedResults.Data = pivoted
+		d.MarshalSourceData(pivoted, "vulnerability")
 
 		err = d.AppendEval(eval, "count", highs)
 		if err != nil {
@@ -247,7 +247,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
-		eval.TranslatedResults.Data = pivoted
+		d.MarshalSourceData(pivoted, "vulnerability")
 
 		err = d.AppendEval(eval, "count", crits)
 		if err != nil {
@@ -261,8 +261,5 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	digests = append(digests, *d)
 
-	if eval != nil {
-		eval.TranslatedResults.Data = results
-	}
 	return digests, nil
 }

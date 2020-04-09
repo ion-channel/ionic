@@ -23,9 +23,17 @@ func od(d *scans.Dependency) bool {
 	return false
 }
 
-func filterDependencies(data scans.DependencyResults, unique bool, f dfilter) ([]scans.Dependency, error) {
+func giveem(d *scans.Dependency) bool {
+	return true
+}
+
+func filterDependencies(data interface{}, unique bool, f dfilter) ([]scans.Dependency, error) {
+	b, ok := data.(scans.DependencyResults)
+	if !ok {
+		return nil, fmt.Errorf("error coercing evaluation translated results into dep")
+	}
 	ds := []scans.Dependency{}
-	for _, dr := range data.Dependencies {
+	for _, dr := range b.Dependencies {
 		if f(&dr) {
 			ds = append(ds, dr)
 		}
@@ -35,15 +43,15 @@ func filterDependencies(data scans.DependencyResults, unique bool, f dfilter) ([
 
 func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
-	var results scans.DependencyResults
+	var data interface{}
 
 	var updateAvailable, noVersions, directDeps, transDeps int
 	if eval != nil && !status.Errored() {
-		b, ok := eval.TranslatedResults.Data.(scans.DependencyResults)
+		data = eval.TranslatedResults.Data
+		b, ok := data.(scans.DependencyResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into dependency bytes")
 		}
-		results = b
 		updateAvailable = b.Meta.UpdateAvailableCount
 		noVersions = b.Meta.NoVersionCount
 		directDeps = b.Meta.FirstDegreeCount
@@ -53,17 +61,17 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d := NewDigest(status, dependencyOutdatedIndex, "dependency outdated", "dependencies outdated")
 
 	if eval != nil && !status.Errored() {
-		filtered, err := filterDependencies(results, false, od)
+		filtered, err := filterDependencies(data, false, od)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
 		}
-		eval.TranslatedResults.Data = filtered
 
 		err = d.AppendEval(eval, "count", updateAvailable)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependencies outdated digest: %v", err.Error())
 		}
 
+		d.MarshalSourceData(filtered, "dependency")
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
@@ -73,11 +81,11 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d = NewDigest(status, noVersionIndex, "dependency no version specified", "dependencies no version specified")
 
 	if eval != nil && !status.Errored() {
-		filtered, err := filterDependencies(results, false, nv)
+		filtered, err := filterDependencies(data, false, nv)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
 		}
-		eval.TranslatedResults.Data = filtered
+		d.MarshalSourceData(filtered, "dependency")
 		err = d.AppendEval(eval, "count", noVersions)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependencies no version digest: %v", err.Error())
@@ -98,7 +106,12 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d = NewDigest(status, directDependencyIndex, "direct dependency", "direct dependencies")
 
 	if eval != nil && !status.Errored() {
-		err := d.AppendEval(eval, "count", directDeps)
+		filtered, err := filterDependencies(data, false, giveem)
+		if err != nil {
+			return nil, fmt.Errorf("failed to add evaluation data to direct dependency digest: %v", err.Error())
+		}
+		d.MarshalSourceData(filtered, "dependency")
+		err = d.AppendEval(eval, "count", directDeps)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create direct dependencies digeest: %v", err.Error())
 		}
@@ -116,7 +129,12 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d = NewDigest(status, transitiveDependencyIndex, "transitive dependency", "transitive dependencies")
 
 	if eval != nil && !status.Errored() {
-		err := d.AppendEval(eval, "count", transDeps)
+		filtered, err := filterDependencies(data, false, giveem)
+		if err != nil {
+			return nil, fmt.Errorf("failed to add evaluation data to transitive dependency digest: %v", err.Error())
+		}
+		d.MarshalSourceData(filtered, "dependency")
+		err = d.AppendEval(eval, "count", transDeps)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create transitive dependencies digeest: %v", err.Error())
 		}
@@ -131,8 +149,5 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	digests = append(digests, *d)
 
-	if eval != nil {
-		eval.TranslatedResults.Data = results
-	}
 	return digests, nil
 }
