@@ -99,9 +99,6 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		}
 	}
 
-	if eval != nil {
-		eval.TranslatedResults.Data = results
-	}
 	digests = append(digests, *d)
 
 	d = NewDigest(status, directDependencyIndex, "direct dependency", "direct dependencies")
