@@ -9,12 +9,6 @@ import (
 	"github.com/ion-channel/ionic/scanner"
 )
 
-type analyzeRequest struct {
-	TeamID    string `json:"team_id"`
-	ProjectID string `json:"project_id"`
-	Branch    string `json:"branch,omitempty"`
-}
-
 type addScanRequest struct {
 	TeamID    string               `json:"team_id"`
 	ProjectID string               `json:"project_id"`
@@ -27,7 +21,7 @@ type addScanRequest struct {
 // AnalyzeProject takes a projectID, teamID, and project branch, performs an
 // analysis, and returns the result status or an error encountered by the API
 func (ic *IonClient) AnalyzeProject(projectID, teamID, branch, token string) (*scanner.AnalysisStatus, error) {
-	request := &analyzeRequest{}
+	request := &scanner.AnalyzeRequest{}
 	request.TeamID = teamID
 	request.ProjectID = projectID
 
