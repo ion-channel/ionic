@@ -309,5 +309,8 @@ func (pf *Filter) SQL(identifier string) (string, []interface{}) {
 		where = fmt.Sprintf(" WHERE %v", where)
 	}
 
+	// Append trailing new line so other commands can concatenate nicely
+	where = where + "\n"
+
 	return where, vals
 }
