@@ -259,15 +259,16 @@ type CoverageResults struct {
 
 // Dependency represents data for an individual requirement resolution
 type Dependency struct {
-	LatestVersion string `json:"latest_version" xml:"latest_version"`
-	Org           string `json:"org" xml:"org"`
-	Name          string `json:"name" xml:"name"`
-	Type          string `json:"type" xml:"type"`
-	Package       string `json:"package" xml:"package"`
-	Version       string `json:"version" xml:"version"`
-	Scope         string `json:"scope" xml:"scope"`
-	Requirement   string `json:"requirement" xml:"requirement"`
-	File          string `json:"file" xml:"file"`
+	LatestVersion string       `json:"latest_version" xml:"latest_version"`
+	Org           string       `json:"org" xml:"org"`
+	Name          string       `json:"name" xml:"name"`
+	Type          string       `json:"type" xml:"type"`
+	Package       string       `json:"package" xml:"package"`
+	Version       string       `json:"version" xml:"version"`
+	Scope         string       `json:"scope" xml:"scope"`
+	Requirement   string       `json:"requirement" xml:"requirement"`
+	File          string       `json:"file" xml:"file"`
+	Dependencies  []Dependency `json:"dependencies" xml:"dependencies"`
 }
 
 // DependencyMeta represents data for a summary of all dependencies resolved
