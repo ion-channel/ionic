@@ -89,7 +89,7 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[1].Title).To(Equal("dependency no version specified"))
 			Expect(string(ds[1].Data)).To(Equal(`{"count":1}`))
-			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":""}]}`))
+			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null}]}`))
 			Expect(ds[1].Warning).To(BeTrue())
 			Expect(ds[1].Pending).To(BeFalse())
 			Expect(ds[1].Errored).To(BeFalse())
@@ -137,8 +137,8 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[0].Title).To(Equal("dependencies outdated"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
-			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":""}]}`))
-			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":""}]}`))
+			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null}]}`))
+			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependencies":null}]}`))
 			Expect(ds[0].Warning).To(BeFalse())
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
