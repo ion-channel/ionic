@@ -2,8 +2,6 @@ package digests
 
 import (
 	"fmt"
-	"reflect"
-	"runtime"
 
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
@@ -42,11 +40,10 @@ func filterDependencies(data interface{}, unique bool, f dfilter) ([]scans.Depen
 	}
 	ds := []scans.Dependency{}
 	for _, dr := range b.Dependencies {
-		fmt.Printf("Filter: %v\n", runtime.FuncForPC(reflect.ValueOf(f).Pointer()).Name())
-		fmt.Printf("Before: %v\n", dr.Dependencies)
+
 		filtered := f(&dr)
 		if filtered != nil {
-			fmt.Printf("After: %v\n", filtered.Dependencies)
+
 			ds = append(ds, *filtered)
 		}
 	}
@@ -118,9 +115,8 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d = NewDigest(status, directDependencyIndex, "direct dependency", "direct dependencies")
 
 	if eval != nil && !status.Errored() {
-		fmt.Printf("data: %v\n", data)
 		filtered, err := filterDependencies(data, false, direct)
-		fmt.Printf("Filtered: %v\n", filtered)
+
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to direct dependency digest: %v", err.Error())
 		}
