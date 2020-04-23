@@ -7,24 +7,30 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-type dfilter func(*scans.Dependency) bool
+type dfilter func(*scans.Dependency) *scans.Dependency
 
-func nv(d *scans.Dependency) bool {
+func nv(d *scans.Dependency) *scans.Dependency {
 	if d.Requirement == "" {
-		return true
+		return d
 	}
-	return false
+	return nil
 }
 
-func od(d *scans.Dependency) bool {
+func od(d *scans.Dependency) *scans.Dependency {
 	if d.Version < d.LatestVersion {
-		return true
+		return d
 	}
-	return false
+	return nil
 }
 
-func giveem(d *scans.Dependency) bool {
-	return true
+func giveem(d *scans.Dependency) *scans.Dependency {
+	return d
+}
+
+func direct(d *scans.Dependency) *scans.Dependency {
+	ff := d
+	ff.Dependencies = nil
+	return ff
 }
 
 func filterDependencies(data interface{}, unique bool, f dfilter) ([]scans.Dependency, error) {
@@ -34,8 +40,11 @@ func filterDependencies(data interface{}, unique bool, f dfilter) ([]scans.Depen
 	}
 	ds := []scans.Dependency{}
 	for _, dr := range b.Dependencies {
-		if f(&dr) {
-			ds = append(ds, dr)
+
+		filtered := f(&dr)
+		if filtered != nil {
+
+			ds = append(ds, *filtered)
 		}
 	}
 	return ds, nil
@@ -106,7 +115,8 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d = NewDigest(status, directDependencyIndex, "direct dependency", "direct dependencies")
 
 	if eval != nil && !status.Errored() {
-		filtered, err := filterDependencies(data, false, giveem)
+		filtered, err := filterDependencies(data, false, direct)
+
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to direct dependency digest: %v", err.Error())
 		}

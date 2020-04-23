@@ -144,6 +144,86 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(ds[0].Errored).To(BeFalse())
 		})
 
+		g.It("should produce transitive digest with relevent data", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "dependency",
+				Data: scans.DependencyResults{
+					Dependencies: []scans.Dependency{
+						scans.Dependency{
+							Name:        "ExpectNoVersion",
+							Requirement: "",
+							Dependencies: []scans.Dependency{
+								scans.Dependency{
+									Name:        "ExpectVersion",
+									Requirement: "1.1.1",
+								},
+							},
+						},
+					},
+					Meta: scans.DependencyMeta{
+						FirstDegreeCount:     2,
+						NoVersionCount:       1,
+						TotalUniqueCount:     115,
+						UpdateAvailableCount: 2,
+					},
+				},
+			}
+
+			ds, err := dependencyDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(4))
+
+			Expect(ds[3].Title).To(Equal("transitive dependencies"))
+			Expect(string(ds[3].Data)).To(Equal(`{"count":113}`))
+			Expect(string(ds[3].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":[{"latest_version":"","org":"","name":"ExpectVersion","type":"","package":"","version":"","scope":"","requirement":"1.1.1","file":"","dependencies":null}]}]}`))
+			Expect(ds[3].Warning).To(BeFalse())
+			Expect(ds[3].Pending).To(BeFalse())
+			Expect(ds[3].Errored).To(BeFalse())
+		})
+
+		g.It("should produce direct digest with relevent data", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "dependency",
+				Data: scans.DependencyResults{
+					Dependencies: []scans.Dependency{
+						scans.Dependency{
+							Name:        "ExpectNoVersion",
+							Requirement: "",
+							Dependencies: []scans.Dependency{
+								scans.Dependency{
+									Name:        "ExpectVersion",
+									Requirement: "1.1.1",
+								},
+							},
+						},
+					},
+					Meta: scans.DependencyMeta{
+						FirstDegreeCount:     2,
+						NoVersionCount:       1,
+						TotalUniqueCount:     115,
+						UpdateAvailableCount: 2,
+					},
+				},
+			}
+
+			ds, err := dependencyDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(4))
+
+			Expect(ds[2].Title).To(Equal("direct dependencies"))
+			Expect(string(ds[2].Data)).To(Equal(`{"count":2}`))
+			Expect(string(ds[2].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null}]}`))
+			Expect(ds[2].Warning).To(BeFalse())
+			Expect(ds[2].Pending).To(BeFalse())
+			Expect(ds[2].Errored).To(BeFalse())
+		})
+
 		g.It("should have no warning with transitive dependencies", func() {
 			s := &scanner.ScanStatus{}
 			e := scans.NewEval()
