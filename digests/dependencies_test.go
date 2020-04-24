@@ -146,6 +146,14 @@ func TestDependenciesDigests(t *testing.T) {
 							Version:       "10",
 							LatestVersion: "10",
 							Requirement:   "10",
+							Dependencies: []scans.Dependency{
+								scans.Dependency{
+									Name:          "ExpectVersion",
+									Version:       "1.1.1",
+									LatestVersion: "2.0.0",
+									Requirement:   "1.1.1",
+								},
+							},
 						},
 					},
 					Meta: scans.DependencyMeta{
@@ -163,7 +171,7 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[0].Title).To(Equal("dependencies outdated"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
-			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null}]}`))
+			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null},{"latest_version":"10","org":"","name":"ExpectVersion","type":"","package":"","version":"10","scope":"","requirement":"10","file":"","dependencies":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null}]}]}`))
 			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependencies":null}]}`))
 			Expect(ds[0].Warning).To(BeFalse())
 			Expect(ds[0].Pending).To(BeFalse())
