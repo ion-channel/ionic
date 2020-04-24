@@ -13,6 +13,14 @@ func nv(d *scans.Dependency) *scans.Dependency {
 	if d.Requirement == "" {
 		return d
 	}
+	if d.Dependencies != nil {
+		for _, dep := range d.Dependencies {
+			f := nv(&dep)
+			if f != nil {
+				return d
+			}
+		}
+	}
 	return nil
 }
 
