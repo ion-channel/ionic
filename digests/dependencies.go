@@ -28,6 +28,14 @@ func od(d *scans.Dependency) *scans.Dependency {
 	if d.Version < d.LatestVersion {
 		return d
 	}
+	if d.Dependencies != nil {
+		for _, dep := range d.Dependencies {
+			f := od(&dep)
+			if f != nil {
+				return d
+			}
+		}
+	}
 	return nil
 }
 
