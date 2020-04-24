@@ -10,7 +10,7 @@ import (
 type dfilter func(*scans.Dependency) *scans.Dependency
 
 func nv(d *scans.Dependency) *scans.Dependency {
-	if d.Requirement == "" {
+	if d.Requirement == "" || d.Requirement == ">= 0" || d.Requirement == "\u003e= 0" {
 		return d
 	}
 	if d.Dependencies != nil {
