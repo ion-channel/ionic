@@ -72,6 +72,32 @@ func TestDependenciesDigests(t *testing.T) {
 						scans.Dependency{
 							Name:        "ExpectVersion",
 							Requirement: "1.1.1",
+							Dependencies: []scans.Dependency{
+								scans.Dependency{
+									Name:        "ExpectNoVersion",
+									Requirement: "",
+								},
+							},
+						},
+						scans.Dependency{
+							Name:        "ExpectVersion",
+							Requirement: "1.1.1",
+							Dependencies: []scans.Dependency{
+								scans.Dependency{
+									Name:        "ExpectNoVersion",
+									Requirement: "",
+								},
+								scans.Dependency{
+									Name:        "ExpectVersion",
+									Requirement: "1.1.1",
+									Dependencies: []scans.Dependency{
+										scans.Dependency{
+											Name:        "ExpectNoVersion",
+											Requirement: "",
+										},
+									},
+								},
+							},
 						},
 					},
 					Meta: scans.DependencyMeta{
@@ -89,7 +115,7 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[1].Title).To(Equal("dependency no version specified"))
 			Expect(string(ds[1].Data)).To(Equal(`{"count":1}`))
-			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null}]}`))
+			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null},{"latest_version":"","org":"","name":"ExpectVersion","type":"","package":"","version":"","scope":"","requirement":"1.1.1","file":"","dependencies":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null}]},{"latest_version":"","org":"","name":"ExpectVersion","type":"","package":"","version":"","scope":"","requirement":"1.1.1","file":"","dependencies":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null},{"latest_version":"","org":"","name":"ExpectVersion","type":"","package":"","version":"","scope":"","requirement":"1.1.1","file":"","dependencies":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null}]}]}]}`))
 			Expect(ds[1].Warning).To(BeTrue())
 			Expect(ds[1].Pending).To(BeFalse())
 			Expect(ds[1].Errored).To(BeFalse())
