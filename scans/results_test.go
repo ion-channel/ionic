@@ -217,6 +217,17 @@ func TestScanResults(t *testing.T) {
 
 			v, ok := r.Data.(VirusResults)
 			Expect(ok).To(Equal(true))
+
+			fn := FileNotes{
+				"empty_file": []string{"file1", "file2", "file3"},
+				"file1":      []string{"path/to/file"},
+			}
+			Expect(v.FileNotes).To(Equal(fn))
+			cd := ClamavDetails{
+				ClamavDbVersion: "1.1.0",
+				ClamavVersion:   "1.0.0",
+			}
+			Expect(v.ClamavDetails).To(Equal(cd))
 			Expect(v.KnownViruses).To(Equal(10))
 		})
 
@@ -249,7 +260,7 @@ const (
 	SampleValidScanResultsDependency    = `{"type":"dependency","data":{"dependencies":[{"requirement":">1.0","latest_version":"2.0","org":"net.sourceforge.javacsv","name":"javacsv","type":"maven","package":"jar","version":"2.0","scope":"compile"},{"latest_version":"4.12","org":"junit","name":"junit","type":"maven","package":"jar","version":"4.11","scope":"test"},{"latest_version":"1.4-atlassian-1","org":"org.hamcrest","name":"hamcrest-core","type":"maven","package":"jar","version":"1.3","scope":"test"},{"latest_version":"4.5.2","org":"org.apache.httpcomponents","name":"httpclient","type":"maven","package":"jar","version":"4.3.4","scope":"compile"},{"latest_version":"4.4.5","org":"org.apache.httpcomponents","name":"httpcore","type":"maven","package":"jar","version":"4.3.2","scope":"compile"},{"latest_version":"99.0-does-not-exist","org":"commons-logging","name":"commons-logging","type":"maven","package":"jar","version":"1.1.3","scope":"compile"},{"latest_version":"20041127.091804","org":"commons-codec","name":"commons-codec","type":"maven","package":"jar","version":"1.6","scope":"compile"}],"meta":{"first_degree_count":3,"no_version_count":0,"total_unique_count":7,"update_available_count":2}}}`
 	SampleValidScanResultsEcosystems    = `{"type":"ecosystems","data":{"Java":2430,"Makefile":210,"Ruby":666}}`
 	SampleValidScanResultsLicense       = `{"type":"license","data":{"license":{"name":"Not found","type":[]}}}`
-	SampleValidScanResultsVirus         = `{"type":"virus","data":{"known_viruses":10,"engine_version":"","scanned_directories":1,"scanned_files":2,"infected_files":1,"data_scanned":"some cool data was scanned","data_read":"we read some data","time":"10PM","file_notes": {"empty_file":["file1","file2","file3"]},"clam_av_details":{"clamav_version":"1.0.0","clamav_db_version":"1.1.0"}}}`
+	SampleValidScanResultsVirus         = `{"type":"virus","data":{"known_viruses":10,"engine_version":"","scanned_directories":1,"scanned_files":2,"infected_files":1,"data_scanned":"some cool data was scanned","data_read":"we read some data","time":"10PM","file_notes": {"empty_file":["file1","file2","file3"], "file1": ["path/to/file"]},"clam_av_details":{"clamav_version":"1.0.0","clamav_db_version":"1.1.0"}}}`
 	SampleValidScanResultsVulnerability = `{"type":"vulnerability","data":{"vulnerabilities":[{"id":316274974,"name":"hadoop","org":"apache","version":"2.8.0","up":null,"edition":null,"aliases":null,"created_at":"2017-02-13T20:02:32.785Z","updated_at":"2017-02-13T20:02:32.785Z","title":null,"references":null,"part":null,"language":null,"source_id":1,"external_id":"cpe:/a:apache:hadoop:2.8.0","vulnerabilities":[{"id":92596,"external_id":"CVE-2017-7669","title":"CVE-2017-7669","summary":"In Apache Hadoop 2.8.0, 3.0.0-alpha1, and 3.0.0-alpha2, the LinuxContainerExecutor runs docker commands as root with insufficient input validation. When the docker feature is enabled, authenticated users can run commands as root.","score":"8.5","score_version":"2.0","score_system":"CVSS","score_details":{"cvssv2":{"vectorString":"(AV:N/AC:M/Au:S/C:C/I:C/A:C)","accessVector":"NETWORK","accessComplexity":"MEDIUM","authentication":"SINGLE","confidentialityImpact":"COMPLETE","integrityImpact":"COMPLETE","availabilityImpact":"COMPLETE","baseScore":8.5},"cvssv3":{"vectorString":"AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H","attackVector":"NETWORK","attackComplexity":"HIGH","privilegesRequired":"LOW","userInteraction":"NONE","scope":"UNCHANGED","confidentialityImpact":"HIGH","integrityImpact":"HIGH","availabilityImpact":"HIGH","baseScore":7.5,"baseSeverity":"HIGH"}},"vector":"NETWORK","access_complexity":"MEDIUM","vulnerability_authentication":"SINGLE","confidentiality_impact":"COMPLETE","integrity_impact":"COMPLETE","availability_impact":"COMPLETE","vulnerability_source":null,"assessment_check":null,"scanner":null,"recommendation":"","references":[{"type":"UNKNOWN","source":"","url":"http://www.securityfocus.com/bid/98795","text":"http://www.securityfocus.com/bid/98795"},{"type":"UNKNOWN","source":"","url":"https://mail-archives.apache.org/mod_mbox/hadoop-user/201706.mbox/%3C4A2FDA56-491B-4C2A-915F-C9D4A4BDB92A%40apache.org%3E","text":"https://mail-archives.apache.org/mod_mbox/hadoop-user/201706.mbox/%3C4A2FDA56-491B-4C2A-915F-C9D4A4BDB92A%40apache.org%3E"}],"modified_at":"2017-06-09T16:21:00.000Z","published_at":"2017-06-05T01:29:00.000Z","created_at":"2017-07-12T23:07:35.491Z","updated_at":"2017-07-12T23:07:35.491Z","source_id":1}]}],"meta":{"vulnerability_count":1}}}`
 	SampleInvalidResults                = `{"type":"fooresult", "data":"I pitty the foo"}`
 	SampleValidScanResultsDifference    = `{"data": {"checksum": "checksumishere","difference": true},"type": "difference"}`
