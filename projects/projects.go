@@ -196,7 +196,7 @@ func ParseParam(param string) *Filter {
 
 	fvs := strings.Split(param, ",")
 	for i := range fvs {
-		parts := strings.Split(fvs[i], ":")
+		parts := strings.SplitN(fvs[i], ":", 2)
 
 		if len(parts) == 2 {
 			name := parts[0]
