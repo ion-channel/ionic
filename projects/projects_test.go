@@ -394,14 +394,23 @@ func TestProject(t *testing.T) {
 				newPf := ParseParam(pf.Param())
 				Expect(newPf).NotTo(BeNil())
 
+				Expect(newPf.ID).NotTo(BeNil())
+				Expect(*newPf.ID).To(Equal(id))
+
 				Expect(newPf.Type).NotTo(BeNil())
 				Expect(*newPf.Type).To(Equal(t))
 
 				Expect(newPf.Active).NotTo(BeNil())
 				Expect(*newPf.Active).To(Equal(a))
 
-				Expect(newPf.TeamID).To(BeNil())
-				Expect(newPf.Source).To(BeNil())
+				Expect(newPf.TeamID).NotTo(BeNil())
+				Expect(*newPf.TeamID).To(Equal(tid))
+
+				Expect(newPf.Source).NotTo(BeNil())
+				Expect(*newPf.Source).To(Equal(s))
+
+				Expect(newPf.Monitor).NotTo(BeNil())
+				Expect(*newPf.Monitor).To(Equal(m))
 			})
 
 			g.It("should return a filter for an empty param string", func() {
