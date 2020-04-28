@@ -377,10 +377,18 @@ func TestProject(t *testing.T) {
 			g.It("should parse a filter from a param", func() {
 				a := false
 				t := "git"
+				s := "https://github.com/ion-channel/ionic"
+				tid := "coolteam"
+				id := "projectid"
+				m := true
 
 				pf := Filter{
-					Type:   &t,
-					Active: &a,
+					ID:      &id,
+					TeamID:  &tid,
+					Source:  &s,
+					Type:    &t,
+					Active:  &a,
+					Monitor: &m,
 				}
 
 				newPf := ParseParam(pf.Param())
