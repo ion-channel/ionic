@@ -417,6 +417,14 @@ func TestProject(t *testing.T) {
 				newPf := ParseParam("")
 				Expect(newPf).NotTo(BeNil())
 			})
+
+			g.It("should ignore unknown fields in the params", func() {
+				newPf := ParseParam("url:someurl,id:coolproject")
+				Expect(newPf).NotTo(BeNil())
+
+				Expect(newPf.ID).NotTo(BeNil())
+				Expect(*newPf.ID).To(Equal("coolproject"))
+			})
 		})
 
 		g.Describe("To SQL", func() {
