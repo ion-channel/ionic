@@ -112,8 +112,7 @@ func (e *Evaluation) UnmarshalJSON(b []byte) error {
 			}
 
 			e.UntranslatedResults = &un
-
-			return nil
+			return e.Translate()
 		}
 
 		return fmt.Errorf("failed to unmarshal translated results: %v", err.Error())
