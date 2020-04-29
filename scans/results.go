@@ -21,6 +21,7 @@ type UntranslatedResults struct {
 	ExternalVulnerabilities *ExternalVulnerabilitiesResults `json:"external_vulnerability,omitempty"`
 	License                 *LicenseResults                 `json:"license,omitempty"`
 	Virus                   *VirusResults                   `json:"clamav,omitempty"`
+	VirusDetails            *ClamavDetails                  `json:"clam_av_details,omitempty"`
 	Vulnerability           *VulnerabilityResults           `json:"vulnerabilities,omitempty"`
 }
 
@@ -66,6 +67,7 @@ func (u *UntranslatedResults) Translate() *TranslatedResults {
 	}
 	if u.Virus != nil {
 		tr.Type = "virus"
+		u.Virus.ClamavDetails = *u.VirusDetails
 		tr.Data = *u.Virus
 	}
 	if u.Vulnerability != nil {
