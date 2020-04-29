@@ -74,17 +74,16 @@ func TestEvaluation(t *testing.T) {
 		})
 
 		g.Describe("Unmarshalling", func() {
-			// g.It("should populate results with untranslated result", func() {
-			// 	var ee Evaluation
-			// 	err := json.Unmarshal([]byte(sampleUntranslatedResults), &ee)
-			//
-			// 	Expect(err).To(BeNil())
-			// 	Expect(ee.TeamID).To(Equal("cuketest"))
-			// 	Expect(ee.TranslatedResults).To(BeNil())
-			// 	Expect(ee.UntranslatedResults).NotTo(BeNil())
-			// 	Expect(ee.UntranslatedResults.License).NotTo(BeNil())
-			// 	Expect(ee.UntranslatedResults.License.Name).To(Equal("some license"))
-			// })
+			g.It("should populate results with untranslated result", func() {
+				var ee Evaluation
+				err := json.Unmarshal([]byte(sampleUntranslatedResults), &ee)
+
+				Expect(err).To(BeNil())
+				Expect(ee.TeamID).To(Equal("cuketest"))
+				Expect(ee.UntranslatedResults).To(BeNil())
+				tr := ee.TranslatedResults.Data.(LicenseResults)
+				Expect(tr.Name).To(Equal("some license"))
+			})
 
 			g.It("should populate results with translated result", func() {
 				var ee Evaluation
