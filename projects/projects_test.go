@@ -377,14 +377,25 @@ func TestProject(t *testing.T) {
 			g.It("should parse a filter from a param", func() {
 				a := false
 				t := "git"
+				s := "https://github.com/ion-channel/ionic"
+				tid := "coolteam"
+				id := "projectid"
+				m := true
 
 				pf := Filter{
-					Type:   &t,
-					Active: &a,
+					ID:      &id,
+					TeamID:  &tid,
+					Source:  &s,
+					Type:    &t,
+					Active:  &a,
+					Monitor: &m,
 				}
 
 				newPf := ParseParam(pf.Param())
 				Expect(newPf).NotTo(BeNil())
+
+				Expect(newPf.ID).NotTo(BeNil())
+				Expect(*newPf.ID).To(Equal(id))
 
 				Expect(newPf.Type).NotTo(BeNil())
 				Expect(*newPf.Type).To(Equal(t))
@@ -392,8 +403,14 @@ func TestProject(t *testing.T) {
 				Expect(newPf.Active).NotTo(BeNil())
 				Expect(*newPf.Active).To(Equal(a))
 
-				Expect(newPf.TeamID).To(BeNil())
-				Expect(newPf.Source).To(BeNil())
+				Expect(newPf.TeamID).NotTo(BeNil())
+				Expect(*newPf.TeamID).To(Equal(tid))
+
+				Expect(newPf.Source).NotTo(BeNil())
+				Expect(*newPf.Source).To(Equal(s))
+
+				Expect(newPf.Monitor).NotTo(BeNil())
+				Expect(*newPf.Monitor).To(Equal(m))
 			})
 
 			g.It("should return a filter for an empty param string", func() {

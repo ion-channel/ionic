@@ -196,13 +196,15 @@ func ParseParam(param string) *Filter {
 
 	fvs := strings.Split(param, ",")
 	for i := range fvs {
-		parts := strings.Split(fvs[i], ":")
+		parts := strings.SplitN(fvs[i], ":", 2)
 
 		if len(parts) == 2 {
-			name := strings.Title(parts[0])
+			name := parts[0]
+			comp := func(n string) bool { return strings.ToLower(n) == name }
+
 			value := parts[1]
 
-			field, _ := reflect.TypeOf(&pf).Elem().FieldByName(name)
+			field, _ := reflect.TypeOf(&pf).Elem().FieldByNameFunc(comp)
 			kind := field.Type.Kind()
 
 			if kind == reflect.Ptr {
@@ -211,11 +213,11 @@ func ParseParam(param string) *Filter {
 
 			switch kind {
 			case reflect.String:
-				reflect.ValueOf(&pf).Elem().FieldByName(name).Set(reflect.ValueOf(&value))
+				reflect.ValueOf(&pf).Elem().FieldByNameFunc(comp).Set(reflect.ValueOf(&value))
 			case reflect.Bool:
 				b, err := strconv.ParseBool(value)
 				if err == nil {
-					reflect.ValueOf(&pf).Elem().FieldByName(name).Set(reflect.ValueOf(&b))
+					reflect.ValueOf(&pf).Elem().FieldByNameFunc(comp).Set(reflect.ValueOf(&b))
 				}
 			}
 		}
