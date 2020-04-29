@@ -204,7 +204,11 @@ func ParseParam(param string) *Filter {
 
 			value := parts[1]
 
-			field, _ := reflect.TypeOf(&pf).Elem().FieldByNameFunc(comp)
+			field, found := reflect.TypeOf(&pf).Elem().FieldByNameFunc(comp)
+			if !found {
+				continue
+			}
+
 			kind := field.Type.Kind()
 
 			if kind == reflect.Ptr {
