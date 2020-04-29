@@ -15,6 +15,19 @@ func TestScan(t *testing.T) {
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Scan", func() {
+		g.Describe("New", func() {
+			g.It("should return virus results from a new scan", func() {
+				r := json.RawMessage(`{"clamav": {"time": "0.133 sec (0 m 0 s)", "file_notes": {"win.test.eicar_hdb-1_found": ["/workspace/ae0013af-9dfc-41be-9ae5-99c66d0e43c0/eicar/bin/eicar.com"]}, "scanned_files": 37, "infected_files": 1}, "clam_av_details": {"clamav_version": "ClamAV 0.101.5", "clamav_db_version": "Mon Apr 20 12:00:23 2020\n"}}`)
+				s, _ := NewScan("someid", "someteamid", "someprojectid", "someanalysisid", "somesummary", "somename", "somedesc", r, time.Now(), time.Now(), 19.22)
+				Expect(s.Results).To(Equal(r))
+				j, err := s.MarshalJSON()
+				Expect(err).To(BeNil())
+				err = json.Unmarshal(j, &s)
+				Expect(err).To(BeNil())
+				v := s.TranslatedResults.Data.(VirusResults)
+				Expect(v.ClamavDetails.ClamavVersion).To(Equal("ClamAV 0.101.5"))
+			})
+		})
 		g.Describe("Translating", func() {
 			g.It("should translate an untranslated scan", func() {
 				s := &Scan{
