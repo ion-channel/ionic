@@ -6,6 +6,7 @@ import (
 	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
+	"github.com/ion-channel/ionic/scanner"
 
 	. "github.com/franela/goblin"
 	. "github.com/onsi/gomega"
@@ -52,12 +53,21 @@ func TestProjectReport(t *testing.T) {
 			ar := &rulesets.AppliedRulesetSummary{
 				RuleEvaluationSummary: &rulesets.RuleEvaluationSummary{
 					RulesetName: expectedRulesetName,
+					Summary:     "pass",
 				},
 			}
 
-			pr := NewProjectReports(p, s, ar)
-			Expect(pr).NotTo(BeNil())
+			as := &scanner.AnalysisStatus{
+				Status: scanner.AnalysisStatusFinished,
+			}
 
+			input := NewProjectReportsInput{
+				p, s, ar, as,
+			}
+			pr := NewProjectReports(input)
+			Expect(pr).NotTo(BeNil())
+			Expect(pr.Status).To(Equal(ProjectStatusPassing))
+			Expect(*pr.Project.ID).To(Equal(expectedProjectID))
 			Expect(*pr.Project.ID).To(Equal(expectedProjectID))
 			Expect(pr.RulesetName).To(Equal(expectedRulesetName))
 
@@ -65,8 +75,8 @@ func TestProjectReport(t *testing.T) {
 			Expect(pr.AnalysisSummary.AnalysisID).To(Equal(expectedAnalysisID))
 			Expect(pr.AnalysisSummary.Trigger).To(Equal("source commit"))
 			Expect(pr.AnalysisSummary.RulesetName).To(Equal(expectedRulesetName))
-			Expect(pr.AnalysisSummary.Risk).To(Equal("high"))
-			Expect(pr.AnalysisSummary.Passed).To(Equal(false))
+			Expect(pr.AnalysisSummary.Risk).To(Equal("low"))
+			Expect(pr.AnalysisSummary.Passed).To(Equal(true))
 		})
 	})
 }
