@@ -9,9 +9,13 @@ import (
 
 type dfilter func(*scans.Dependency) *scans.Dependency
 
+var eVs = [...]string{"", ">= 0", "\u003e= 0", ">=0.0", "\u003e=0.0"}
+
 func nv(d *scans.Dependency) *scans.Dependency {
-	if d.Requirement == "" || d.Requirement == ">= 0" || d.Requirement == "\u003e= 0" {
-		return d
+	for _, e := range eVs {
+		if d.Requirement == e {
+			return d
+		}
 	}
 	if d.Dependencies != nil {
 		for _, dep := range d.Dependencies {
