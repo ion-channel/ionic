@@ -402,4 +402,5 @@ type VulnerabilityResultsProduct struct {
 	Part            interface{}                     `json:"part" xml:"part"`
 	Language        interface{}                     `json:"language" xml:"language"`
 	Vulnerabilities []vulnerabilities.Vulnerability `json:"vulnerabilities" xml:"vulnerabilities"`
+	Dependency      Dependency                      `json:"dependency" xml:"dependency"`
 }
