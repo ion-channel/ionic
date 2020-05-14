@@ -6,10 +6,8 @@ import (
 	"sort"
 	"strconv"
 
-	"github.com/ion-channel/ionic/products"
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
-	"github.com/ion-channel/ionic/vulnerabilities"
 )
 
 const (
@@ -19,7 +17,7 @@ const (
 )
 
 // ByScore sort interface impl for sorting vulnerabilities by score
-type ByScore []vulnerabilities.Vulnerability
+type ByScore []scans.VulnerabilityResultsVulnerability
 
 func (v ByScore) Len() int      { return len(v) }
 func (v ByScore) Swap(i, j int) { v[i], v[j] = v[j], v[i] }
@@ -36,13 +34,13 @@ func (v ByScore) Less(i, j int) bool {
 	return iscore > jscore
 }
 
-type vfilter func(*vulnerabilities.Vulnerability) bool
+type vfilter func(*scans.VulnerabilityResultsVulnerability) bool
 
-func all(v *vulnerabilities.Vulnerability) bool {
+func all(v *scans.VulnerabilityResultsVulnerability) bool {
 	return true
 }
 
-func high(v *vulnerabilities.Vulnerability) bool {
+func high(v *scans.VulnerabilityResultsVulnerability) bool {
 	score, err := strconv.ParseFloat(v.Score, 32)
 	if err != nil {
 		return false
@@ -56,7 +54,7 @@ func high(v *vulnerabilities.Vulnerability) bool {
 	return false
 }
 
-func critical(v *vulnerabilities.Vulnerability) bool {
+func critical(v *scans.VulnerabilityResultsVulnerability) bool {
 	score, err := strconv.ParseFloat(v.Score, 32)
 	if err != nil {
 		return false
@@ -67,13 +65,13 @@ func critical(v *vulnerabilities.Vulnerability) bool {
 	return false
 }
 
-func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]vulnerabilities.Vulnerability, error) {
+func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]scans.VulnerabilityResultsVulnerability, error) {
 	b, ok := data.(scans.VulnerabilityResults)
 	if !ok {
 		return nil, fmt.Errorf("error coercing evaluation translated results into vuln")
 	}
 
-	uu := map[string]*vulnerabilities.Vulnerability{}
+	uu := map[string]*scans.VulnerabilityResultsVulnerability{}
 	for _, p := range b.Vulnerabilities {
 		for _, v := range p.Vulnerabilities {
 			vv := v
@@ -86,7 +84,7 @@ func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]vulnera
 			if uu[key] == nil {
 				uu[key] = &vv
 			}
-			d := products.Product{
+			d := scans.VulnerabilityResultsProduct{
 				ExternalID: p.ExternalID,
 				Name:       p.Name,
 				Org:        p.Org,
@@ -95,7 +93,7 @@ func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]vulnera
 			uu[key].Dependencies = append(uu[key].Dependencies, d)
 		}
 	}
-	values := []vulnerabilities.Vulnerability{}
+	values := []scans.VulnerabilityResultsVulnerability{}
 	for _, v := range uu {
 		if f(v) {
 			values = append(values, *v)
