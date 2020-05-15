@@ -112,6 +112,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	var data interface{}
 	var results scans.VulnerabilityResults
 	if eval != nil {
+		eval.Translate()
 		data = eval.TranslatedResults.Data
 		b, ok := data.(scans.VulnerabilityResults)
 		results = b
