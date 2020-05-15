@@ -84,14 +84,8 @@ func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]scans.V
 			if uu[key] == nil {
 				uu[key] = &vv
 			}
-			d := scans.VulnerabilityResultsProduct{
-				ExternalID: p.ExternalID,
-				Name:       p.Name,
-				Org:        p.Org,
-				Version:    p.Version,
-				Query:      p.Query,
-			}
-			uu[key].Dependencies = append(uu[key].Dependencies, d)
+
+			uu[key].Dependencies = append(uu[key].Dependencies, p)
 		}
 	}
 	values := []scans.VulnerabilityResultsVulnerability{}
