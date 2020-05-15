@@ -89,6 +89,7 @@ func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]scans.V
 				Name:       p.Name,
 				Org:        p.Org,
 				Version:    p.Version,
+				Query:      p.Query,
 			}
 			uu[key].Dependencies = append(uu[key].Dependencies, d)
 		}
