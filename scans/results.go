@@ -386,21 +386,27 @@ type VulnerabilityResults struct {
 // VulnerabilityResultsProduct represents the data about a product collected from
 // a vulnerability scan.  Vulnerabilities are linked to products.
 type VulnerabilityResultsProduct struct {
-	ID              int                             `json:"id" xml:"id"`
-	ExternalID      string                          `json:"external_id" xml:"external_id"`
-	SourceID        int                             `json:"source_id" xml:"source_id"`
-	Title           string                          `json:"title" xml:"title"`
-	Name            string                          `json:"name" xml:"name"`
-	Org             string                          `json:"org" xml:"org"`
-	Version         string                          `json:"version" xml:"version"`
-	Up              interface{}                     `json:"up" xml:"up"`
-	Edition         interface{}                     `json:"edition" xml:"edition"`
-	Aliases         []string                        `json:"aliases" xml:"aliases"`
-	CreatedAt       time.Time                       `json:"created_at" xml:"created_at"`
-	UpdatedAt       time.Time                       `json:"updated_at" xml:"updated_at"`
-	References      interface{}                     `json:"references" xml:"references"`
-	Part            interface{}                     `json:"part" xml:"part"`
-	Language        interface{}                     `json:"language" xml:"language"`
-	Vulnerabilities []vulnerabilities.Vulnerability `json:"vulnerabilities" xml:"vulnerabilities"`
-	Dependency      Dependency                      `json:"dependency" xml:"dependency"`
+	ID              int                                 `json:"id" xml:"id"`
+	ExternalID      string                              `json:"external_id" xml:"external_id"`
+	SourceID        int                                 `json:"source_id" xml:"source_id"`
+	Title           string                              `json:"title" xml:"title"`
+	Name            string                              `json:"name" xml:"name"`
+	Org             string                              `json:"org" xml:"org"`
+	Version         string                              `json:"version" xml:"version"`
+	Up              interface{}                         `json:"up" xml:"up"`
+	Edition         interface{}                         `json:"edition" xml:"edition"`
+	Aliases         []string                            `json:"aliases" xml:"aliases"`
+	CreatedAt       time.Time                           `json:"created_at" xml:"created_at"`
+	UpdatedAt       time.Time                           `json:"updated_at" xml:"updated_at"`
+	References      interface{}                         `json:"references" xml:"references"`
+	Part            interface{}                         `json:"part" xml:"part"`
+	Language        interface{}                         `json:"language" xml:"language"`
+	Vulnerabilities []VulnerabilityResultsVulnerability `json:"vulnerabilities" xml:"vulnerabilities"`
+	Query           Dependency                          `json:"query" xml:"query"`
+}
+
+// VulnerabilityResultsVulnerability wrapper
+type VulnerabilityResultsVulnerability struct {
+	vulnerabilities.Vulnerability
+	Dependencies []VulnerabilityResultsProduct `json:"dependencies" xml:"dependencies"`
 }
