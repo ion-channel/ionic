@@ -49,6 +49,35 @@ func (ic *IonClient) AnalyzeProject(projectID, teamID, branch, token string) (*s
 	return &a, nil
 }
 
+// AnalyzeProjects takes a team ID to perform analyses on. An optional set of
+// params can be provided to go along with the request, predominently for
+// internal purposes. It will return the IDs of the analyses created and any
+// errors it encounters with the request.
+func (ic *IonClient) AnalyzeProjects(teamID, token string, params *url.Values) ([]string, error) {
+	request := &scanner.AnalyzeRequest{
+		TeamID: teamID,
+	}
+
+	b, err := json.Marshal(request)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body to JSON: %v", err.Error())
+	}
+
+	buff := bytes.NewBuffer(b)
+	b, err = ic.Post(scanner.ScannerAnalyzeProjectEndpoint, token, params, *buff, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to start analysis: %v", err.Error())
+	}
+
+	var ids []string
+	err = json.Unmarshal(b, &ids)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analysis status: %v", err.Error())
+	}
+
+	return ids, nil
+}
+
 //GetAnalysisStatus takes an analysisID, teamID, and projectID and returns the analysis status or an error encountered by the API
 func (ic *IonClient) GetAnalysisStatus(analysisID, teamID, projectID, token string) (*scanner.AnalysisStatus, error) {
 	params := &url.Values{}
