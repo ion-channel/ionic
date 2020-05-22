@@ -69,6 +69,11 @@ func (ic *IonClient) AnalyzeProjects(teamID, token string, params *url.Values) (
 		return nil, fmt.Errorf("failed to start analysis: %v", err.Error())
 	}
 
+	// We got a "team recently analyzed" message back
+	if string(b) == "" {
+		return nil, nil
+	}
+
 	var ids []string
 	err = json.Unmarshal(b, &ids)
 	if err != nil {
