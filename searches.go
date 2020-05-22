@@ -13,12 +13,13 @@ const (
 	searchEndpoint = "v1/search"
 )
 
-// GetSearch takes a query to perform
+// GetSearch takes a query to perform and a to be searched param
 // a productidentifier search against the Ion API, assembling a slice of Ionic
 // products.ProductSearchResponse objects
-func (ic *IonClient) GetSearch(query, token string) ([]products.Product, *responses.Meta, error) {
+func (ic *IonClient) GetSearch(query, tbs, token string) ([]products.Product, *responses.Meta, error) {
 	params := &url.Values{}
 	params.Set("q", query)
+	params.Set("tbs", tbs)
 
 	b, m, err := ic.Get(searchEndpoint, token, params, nil, nil)
 	if err != nil {
