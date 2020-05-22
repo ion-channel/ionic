@@ -122,6 +122,17 @@ func TestScanner(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(len(ids)).To(Equal(2))
 		})
+
+		g.It("should handle a team being analyzed recently", func() {
+			server.AddPath("/v1/scanner/analyzeProject").
+				SetMethods("POST").
+				SetPayload([]byte(`{"message":"team has been analyzed recently","code":200}`)).
+				SetStatus(http.StatusOK)
+
+			ids, err := client.AnalyzeProjects("ateamid", "atoken", nil)
+			Expect(err).To(BeNil())
+			Expect(len(ids)).To(Equal(0))
+		})
 	})
 }
 
