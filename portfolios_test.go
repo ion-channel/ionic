@@ -110,6 +110,20 @@ func TestPortfolios(t *testing.T) {
 			Expect(r[0].Name).To(Equal("someName1"))
 			Expect(r[1].Version).To(Equal("someVersion2"))
 		})
+
+		g.It("should return dependency stats", func() {
+			server.AddPath("/v1/animal/getDependencyStats").
+				SetMethods("POST").
+				SetPayload([]byte(SampleDependencyStats)).
+				SetStatus(http.StatusOK)
+
+			r, err := client.GetDependencyStats([]string{"aprojectid"}, "sometoken")
+			Expect(err).To(BeNil())
+			Expect(r.DirectDependencies).To(Equal(44))
+			Expect(r.TransitiveDependencies).To(Equal(33))
+			Expect(r.OutdatedDependencies).To(Equal(22))
+			Expect(r.NoVersionSpecified).To(Equal(11))
+		})
 	})
 }
 
@@ -121,4 +135,5 @@ const (
 	SampleStartedEndedSummary = `{"data":{"analyzing_projects":2,"errored_projects":6,"finished_projects":3}}`
 	SampleAffectedProjectIds  = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"","version":"","vulnerabilities":15},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"","version":"","vulnerabilities":1}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 	SampleAffectedProjectInfo = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"someName1","version":"someVersion1","vulnerabilities":0},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"someName2","version":"someVersion2","vulnerabilities":0}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
+	SampleDependencyStats     = `{"data":{"direct_dependencies":44,"transitive_dependencies":33,"outdated_dependencies":22,"no_vesion_dependencies":11}}`
 )
