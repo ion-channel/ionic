@@ -15,6 +15,8 @@ const (
 	PortfolioGetAffectedProjectIdsEndpoint = "v1/animal/getAffectedProjectIds"
 	// PortfolioGetAffectedProjectsInfoEndpoint is a string representation for getting the name and version of projects from a list of project ids
 	PortfolioGetAffectedProjectsInfoEndpoint = "v1/project/getAffectedProjectsInfo"
+	// DependencyStatsEndpoint is a string representation of the current endpoint for getting dependencies statistics
+	DependencyStatsEndpoint = "v1/animal/getDependencyStats"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
@@ -70,4 +72,12 @@ type AffectedProject struct {
 	Name            string `json:"name"`
 	Version         string `json:"version"`
 	Vulnerabilities int    `json:"vulnerabilities"`
+}
+
+// DependencyStat represents the dependency stat summary for the portfolio page
+type DependencyStat struct {
+	DirectDependencies     int `json:"direct_dependencies"`
+	TransitiveDependencies int `json:"transitive_dependencies"`
+	OutdatedDependencies   int `json:"outdated_dependencies"`
+	NoVersionSpecified     int `json:"no_vesion_dependencies"`
 }

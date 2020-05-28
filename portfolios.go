@@ -174,3 +174,31 @@ func (ic *IonClient) GetPortfolioAffectedProjectsInfo(ids []string, token string
 
 	return aps, nil
 }
+
+// GetDependencyStats takes slice of project ids and token and returns dependency stat and any errors
+func (ic *IonClient) GetDependencyStats(ids []string, token string) (*portfolios.DependencyStat, error) {
+	p := struct {
+		Ids []string `json:"ids"`
+	}{
+		ids,
+	}
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(portfolios.DependencyStatsEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request dependency list: %v", err.Error())
+	}
+
+	var ds portfolios.DependencyStat
+	err = json.Unmarshal(r, &ds)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal dependency stats response: %v", err.Error())
+	}
+
+	return &ds, nil
+}
