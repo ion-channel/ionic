@@ -188,7 +188,7 @@ func (ic *IonClient) GetProjectByURL(uri, teamID, token string) (*projects.Proje
 	return &p, nil
 }
 
-//UpdateProject takes a project to update and token to use. It returns the
+// UpdateProject takes a project to update and token to use. It returns the
 // project stored or an error encountered by the API
 func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*projects.Project, error) {
 	params := &url.Values{}
@@ -204,6 +204,48 @@ func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*pr
 			errs = append(errs, msg)
 		}
 		return nil, fmt.Errorf("%v: %v", projects.ErrInvalidProject, strings.Join(errs, ", "))
+	}
+
+	params.Set("id", *project.ID)
+	params.Set("team_id", *project.TeamID)
+
+	params.Set("name", *project.Name)
+	params.Set("type", *project.Type)
+	params.Set("active", strconv.FormatBool(project.Active))
+	params.Set("source", *project.Source)
+	params.Set("branch", *project.Branch)
+	params.Set("description", *project.Description)
+	params.Set("ruleset_id", *project.RulesetID)
+	params.Set("chat_channel", project.ChatChannel)
+	params.Set("should_monitor", strconv.FormatBool(project.Monitor))
+
+	b, err := json.Marshal(project)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshall project: %v", err.Error())
+	}
+
+	b, err = ic.Put(projects.UpdateProjectEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to update projects: %v", err.Error())
+	}
+
+	var p projects.Project
+	err = json.Unmarshal(b, &p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response from update: %v", err.Error())
+	}
+
+	return &p, nil
+}
+
+// UpdateProjectWithoutValidation takes a project to update and token to use. It returns the
+// project stored or an error encountered by the API. Should behave like UpdateProject above
+// but without the validation step. Use with care.
+func (ic *IonClient) UpdateProjectWithoutValidation(project *projects.Project, token string) (*projects.Project, error) {
+	params := &url.Values{}
+
+	if project.ID == nil {
+		return nil, fmt.Errorf("%v: %v", projects.ErrInvalidProject, "missing id")
 	}
 
 	params.Set("id", *project.ID)
