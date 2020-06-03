@@ -100,7 +100,7 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 	case "difference":
 		return differenceDigests(status, eval)
 
-	case "about_yml", "file_type":
+	case "about_yml", "file_type", "buildsystems":
 		return nil, nil
 
 	default:
