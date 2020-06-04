@@ -13,6 +13,7 @@ import (
 // translated for use in reports
 type UntranslatedResults struct {
 	AboutYML                *AboutYMLResults                `json:"about_yml,omitempty"`
+	Buildsystem             *BuildsystemResults             `json:"buildsystems,omitempty"`
 	Community               *CommunityResults               `json:"community,omitempty"`
 	Coverage                *CoverageResults                `json:"coverage,omitempty"`
 	Dependency              *DependencyResults              `json:"dependency,omitempty"`
@@ -36,6 +37,10 @@ func (u *UntranslatedResults) Translate() *TranslatedResults {
 	if u.AboutYML != nil {
 		tr.Type = "about_yml"
 		tr.Data = *u.AboutYML
+	}
+	if u.Buildsystem != nil {
+		tr.Type = "buildsystems"
+		tr.Data = *u.Buildsystem
 	}
 	if u.Community != nil {
 		tr.Type = "community"
@@ -110,6 +115,14 @@ func (r *TranslatedResults) UnmarshalJSON(b []byte) error {
 		}
 
 		r.Data = a
+	case "buildsystems":
+		var b BuildsystemResults
+		err := json.Unmarshal(tr.RawData, &b)
+		if err != nil {
+			return fmt.Errorf("failed to unmarshall buildsystems results: %v", err)
+		}
+
+		r.Data = b
 	case "community":
 		var c CommunityResults
 		err := json.Unmarshal(tr.RawData, &c)
@@ -243,6 +256,18 @@ type AboutYMLResults struct {
 	Message string `json:"message" xml:"message"`
 	Valid   bool   `json:"valid" xml:"valid"`
 	Content string `json:"content" xml:"content"`
+}
+
+// Compiler represents the data for individual compilers or interpreters found
+type Compiler struct {
+	Name    string `json:"name" xml:"name"`
+	Version string `json:"verison" xml:"version"`
+}
+
+// BuildsystemResults represents the data collected from an buildsystems scan.  It
+// include the name and version of any compiler found
+type BuildsystemResults struct {
+	Compilers []Compiler `json:"compilers" xml:"compilers"`
 }
 
 // CommunityResults represents the data collected from a community scan.  It
