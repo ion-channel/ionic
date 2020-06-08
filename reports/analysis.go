@@ -33,7 +33,7 @@ type analysisReport struct {
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
-func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, projectRuleset *rulesets.RuleSet, appliedRuleset *rulesets.AppliedRulesetSummary) (*AnalysisReport, error) {
+func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, projectRuleset *rulesets.RuleSet, appliedRuleset *rulesets.AppliedRulesetSummary, experimental bool) (*AnalysisReport, error) {
 	if analysis == nil {
 		analysis = &analyses.Analysis{
 			ID:        status.ID,
@@ -43,7 +43,7 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 		}
 	}
 
-	ds, err := digests.NewDigests(appliedRuleset, status.ScanStatus)
+	ds, err := digests.NewDigests(appliedRuleset, status.ScanStatus, experimental)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get digests: %v", err.Error())
 	}
