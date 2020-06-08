@@ -18,6 +18,8 @@ func buildsystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]
 			return nil, fmt.Errorf("error coercing evaluation translated results into buildss bytes")
 		}
 
+		d.MarshalSourceData(b, "buildsystems")
+
 		switch len(b.Compilers) {
 		case 0:
 			err := d.AppendEval(eval, "chars", "none detected")
