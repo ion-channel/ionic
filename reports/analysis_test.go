@@ -68,7 +68,7 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(s, &a, p, pr, app)
+				ar, err := NewAnalysisReport(s, &a, p, pr, app, true)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
@@ -145,7 +145,7 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(s, &a, p, pr, app)
+				ar, err := NewAnalysisReport(s, &a, p, pr, app, true)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
