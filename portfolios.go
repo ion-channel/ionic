@@ -216,7 +216,7 @@ func (ic *IonClient) GetRawDependencyList(ids []string, listType, limit, token s
 		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
 
-	resp, err := ic.Post(portfolios.DepenencyListEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	resp, err := ic.Post(portfolios.DependencyListEndpoint, token, nil, *bytes.NewBuffer(b), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to request dependency list: %v", err.Error())
 	}

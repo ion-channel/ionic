@@ -17,8 +17,8 @@ const (
 	PortfolioGetAffectedProjectsInfoEndpoint = "v1/project/getAffectedProjectsInfo"
 	// DependencyStatsEndpoint is a string representation of the current endpoint for getting dependencies statistics
 	DependencyStatsEndpoint = "v1/animal/getDependencyStats"
-	// DepenencyListEndpoint is a string representation for getting a list of vulnerabilities by type.
-	DepenencyListEndpoint = "v1/animal/getDependencyList"
+	// DependencyListEndpoint is a string representation for getting a list of vulnerabilities by type.
+	DependencyListEndpoint = "v1/animal/getDependencyList"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
