@@ -81,3 +81,17 @@ type DependencyStat struct {
 	OutdatedDependencies   int `json:"outdated_dependencies"`
 	NoVersionSpecified     int `json:"no_vesion_dependencies"`
 }
+
+// Dependency represents data for an individual dependency
+type Dependency struct {
+	LatestVersion string `json:"latest_version" xml:"latest_version"`
+	Org           string `json:"org" xml:"org"`
+	Name          string `json:"name" xml:"name"`
+	Type          string `json:"type" xml:"type"`
+	Package       string `json:"package" xml:"package"`
+	Version       string `json:"version" xml:"version"`
+	Scope         string `json:"scope" xml:"scope"`
+	Requirement   string `json:"requirement" xml:"requirement"`
+	File          string `json:"file" xml:"file"`
+	ProjectsCount int    `json:"projects_count,omitempty"`
+}

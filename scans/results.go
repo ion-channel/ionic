@@ -296,7 +296,6 @@ type Dependency struct {
 	Requirement   string       `json:"requirement" xml:"requirement"`
 	File          string       `json:"file" xml:"file"`
 	Dependencies  []Dependency `json:"dependencies" xml:"dependencies"`
-	TotalCount    int          `json:"total_count,omitempty"`
 }
 
 // DependencyMeta represents data for a summary of all dependencies resolved
