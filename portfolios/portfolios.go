@@ -17,6 +17,8 @@ const (
 	PortfolioGetAffectedProjectsInfoEndpoint = "v1/project/getAffectedProjectsInfo"
 	// DependencyStatsEndpoint is a string representation of the current endpoint for getting dependencies statistics
 	DependencyStatsEndpoint = "v1/animal/getDependencyStats"
+	// DependencyListEndpoint is a string representation for getting a list of vulnerabilities by type.
+	DependencyListEndpoint = "v1/animal/getDependencyList"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
@@ -26,8 +28,8 @@ type VulnerabilityStat struct {
 	MostFrequentVulnerability string `json:"most_frequent_vulnerability"`
 }
 
-// VulnerabilityListParams represents the vulnerability list paramaters
-type VulnerabilityListParams struct {
+// PortfolioListParams represents the vulnerability list paramaters
+type PortfolioListParams struct {
 	Ids      []string `json:"ids"`
 	ListType string   `json:"list_type,omitempty"`
 	Limit    string   `json:"limit,omitempty"`
