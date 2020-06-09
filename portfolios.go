@@ -40,7 +40,7 @@ func (ic *IonClient) GetVulnerabilityStats(ids []string, token string) (*portfol
 
 // GetRawVulnerabilityList gets a raw response from the API
 func (ic *IonClient) GetRawVulnerabilityList(ids []string, listType, limit, token string) ([]byte, error) {
-	p := portfolios.VulnerabilityListParams{
+	p := portfolios.PortfolioListParams{
 		ListType: listType,
 		Ids:      ids,
 		Limit:    limit,
@@ -201,4 +201,25 @@ func (ic *IonClient) GetDependencyStats(ids []string, token string) (*portfolios
 	}
 
 	return &ds, nil
+}
+
+// GetRawDependencyList gets a raw response from the API
+func (ic *IonClient) GetRawDependencyList(ids []string, listType, limit, token string) ([]byte, error) {
+	p := portfolios.PortfolioListParams{
+		ListType: listType,
+		Ids:      ids,
+		Limit:    limit,
+	}
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	resp, err := ic.Post(portfolios.DepenencyListEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request dependency list: %v", err.Error())
+	}
+
+	return resp, nil
 }

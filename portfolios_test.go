@@ -124,6 +124,17 @@ func TestPortfolios(t *testing.T) {
 			Expect(r.OutdatedDependencies).To(Equal(22))
 			Expect(r.NoVersionSpecified).To(Equal(11))
 		})
+
+		g.It("should get raw dependency list", func() {
+			server.AddPath("/v1/animal/getDependencyList").
+				SetMethods("POST").
+				SetPayload([]byte(SampleDependencyList)).
+				SetStatus(http.StatusOK)
+
+			vl, err := client.GetRawDependencyList([]string{"1", "2"}, "somelist", "5", "sometoken")
+			Expect(err).To(BeNil())
+			Expect(string(vl)).To(Equal("{\"dependency_list\":[{\"name\":\"name1\",\"org\":\"org1\",\"version\":\"someversion1\",\"package\":\"package1\",\"type\":\"type1\",\"latest_version\":\"latestversion1\",\"scope\":\"scope1\",\"requirement\":\"requirement1\",\"file\":\"file1\",\"projects_count\":2}]}"))
+		})
 	})
 }
 
@@ -136,4 +147,5 @@ const (
 	SampleAffectedProjectIds  = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"","version":"","vulnerabilities":15},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"","version":"","vulnerabilities":1}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 	SampleAffectedProjectInfo = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"someName1","version":"someVersion1","vulnerabilities":0},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"someName2","version":"someVersion2","vulnerabilities":0}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 	SampleDependencyStats     = `{"data":{"direct_dependencies":44,"transitive_dependencies":33,"outdated_dependencies":22,"no_vesion_dependencies":11}}`
+	SampleDependencyList      = `{"data":{"dependency_list":[{"name":"name1","org":"org1","version":"someversion1","package":"package1","type":"type1","latest_version":"latestversion1","scope":"scope1","requirement":"requirement1","file":"file1","projects_count":2}]}}`
 )
