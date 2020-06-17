@@ -139,3 +139,22 @@ func (ic *IonClient) GetRuleSets(teamID, token string, page *pagination.Paginati
 func (ic *IonClient) RuleSetExists(ruleSetID, teamID, token string) (bool, error) {
 	return rulesets.RuleSetExists(ic.client, ic.baseURL, ruleSetID, teamID, token)
 }
+
+//GetProjectHistory takes a project id and returns a daily history of pass/fail statuses
+func (ic *IonClient) GetProjectHistory(projectID, token string) ([]rulesets.ProjectPassFailHistory, error) {
+	params := &url.Values{}
+	params.Set("project_id", projectID)
+
+	b, _, err := ic.Get(rulesets.GetProjectHistoryEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get project history: %v", err.Error())
+	}
+
+	var ph []rulesets.ProjectPassFailHistory
+	err = json.Unmarshal(b, &ph)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal ruleset: %v", err.Error())
+	}
+
+	return ph, nil
+}

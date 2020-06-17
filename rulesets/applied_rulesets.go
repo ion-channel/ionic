@@ -7,6 +7,11 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
+const (
+	// GetProjectHistoryEndpoint is a string representation of the current endpoint for getting a project's history
+	GetProjectHistoryEndpoint = "v1/ruleset/getProjectHistory"
+)
+
 // AppliedRulesetSummary identifies the rule set applied to an analysis of a
 // project and the result of their evaluation
 type AppliedRulesetSummary struct {
@@ -37,4 +42,13 @@ type RuleEvaluationSummary struct {
 	Risk        string             `json:"risk"`
 	Passed      bool               `json:"passed"`
 	Ruleresults []scans.Evaluation `json:"ruleresults"`
+}
+
+// ProjectPassFailHistory represents a pass failing history of a project's evaluation
+type ProjectPassFailHistory struct {
+	TeamID     string    `json:"team_id"`
+	ProjectID  string    `json:"project_id"`
+	AnalysisID string    `json:"analysis_id"`
+	Status     bool      `json:"pass"`
+	CreatedAt  time.Time `json:"created_at"`
 }
