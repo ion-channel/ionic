@@ -8,10 +8,11 @@ import (
 )
 
 var validUserEventActions = map[string]string{
-	AccountCreated:  AccountCreated,
-	ForgotPassword:  ForgotPassword,
-	PasswordChanged: PasswordChanged,
-	UserSignup:      UserSignup,
+	AccountCreated:      AccountCreated,
+	ForgotPassword:      ForgotPassword,
+	PasswordChanged:     PasswordChanged,
+	UserSignup:          UserSignup,
+	UserSignupInitiated: UserSignupInitiated,
 }
 
 // UserEventAction represents possible actions related to a user event

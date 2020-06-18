@@ -45,6 +45,8 @@ const (
 	PasswordChanged = "password_changed"
 	// UserSignup constant for user signup event action
 	UserSignup = "user_signup"
+	// UserSignupInitiated constant for user signup process initiation
+	UserSignupInitiated = "user_signup_initiated"
 	// VulnerabilityAdded constant for vulnerability added event action
 	VulnerabilityAdded = "vulnerability_added"
 	// VulnerabilityUpdated constant for vulnerability updated event action
