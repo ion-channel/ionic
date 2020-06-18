@@ -26,7 +26,7 @@ func TestAnalysis(t *testing.T) {
 		})
 
 		g.It("should get an analysis", func() {
-			server.AddPath("/v1/animal/getAnalysis").
+			server.AddPath("/v1/animal/getAnalysis2").
 				SetMethods("GET").
 				SetPayload([]byte(SampleValidAnalysis)).
 				SetStatus(http.StatusOK)
@@ -41,7 +41,7 @@ func TestAnalysis(t *testing.T) {
 		})
 
 		g.It("should return an error when backing service is unavailable", func() {
-			server.AddPath("/v1/animal/getAnalysis").
+			server.AddPath("/v1/animal/getAnalysis2").
 				SetMethods("GET").
 				SetPayload([]byte("Fake 503 error as if from ALB")).
 				SetStatus(http.StatusServiceUnavailable)
@@ -83,7 +83,7 @@ func TestAnalysis(t *testing.T) {
 		})
 
 		g.It("should get a raw analysis", func() {
-			server.AddPath("/v1/animal/getAnalysis").
+			server.AddPath("/v1/animal/getAnalysis2").
 				SetMethods("GET").
 				SetPayload([]byte(SampleValidAnalysis)).
 				SetStatus(http.StatusOK)

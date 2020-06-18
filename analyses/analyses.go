@@ -11,7 +11,7 @@ import (
 
 const (
 	// AnalysisGetAnalysisEndpoint returns a single raw analysis. Requires team id, project id and analysis id.
-	AnalysisGetAnalysisEndpoint = "v1/animal/getAnalysis"
+	AnalysisGetAnalysisEndpoint = "v1/animal/getAnalysis2"
 	// AnalysisGetAnalysesEndpoint returns multiple raw analyses. Requires team id and project id.
 	AnalysisGetAnalysesEndpoint = "v1/animal/getAnalyses"
 	// AnalysisGetLatestAnalysisSummaryEndpoint returns the latest analysis summary. Requires team id and project id.

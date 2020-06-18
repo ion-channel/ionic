@@ -20,7 +20,7 @@ func TestReports(t *testing.T) {
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get an analysis report", func() {
-			server.AddPath("/v1/report/getAnalysis").
+			server.AddPath("/v1/report/getAnalysis2").
 				SetMethods("GET").
 				SetPayload([]byte(SampleValidAnalysisReport)).
 				SetStatus(http.StatusOK)
@@ -32,7 +32,7 @@ func TestReports(t *testing.T) {
 		})
 
 		g.It("should get an raw analysis report", func() {
-			server.AddPath("/v1/report/getAnalysis").
+			server.AddPath("/v1/report/getAnalysis2").
 				SetMethods("GET").
 				SetPayload([]byte(SampleValidAnalysisReport)).
 				SetStatus(http.StatusOK)

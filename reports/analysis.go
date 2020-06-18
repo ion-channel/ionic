@@ -12,7 +12,7 @@ import (
 
 const (
 	// ReportGetAnalysisReportEndpoint is a string representation of the current endpoint for getting report analysis
-	ReportGetAnalysisReportEndpoint = "v1/report/getAnalysis"
+	ReportGetAnalysisReportEndpoint = "v1/report/getAnalysis2"
 	// ReportGetAnalysisNavigationEndpoint is a string representation of the current endpoint for getting report analysis navigation
 	ReportGetAnalysisNavigationEndpoint = "v1/report/getAnalysisNav"
 )
