@@ -1,11 +1,7 @@
 package reports
 
 import (
-	"fmt"
-
 	"github.com/ion-channel/ionic/analyses"
-	"github.com/ion-channel/ionic/digests"
-	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/scanner"
 )
@@ -21,19 +17,10 @@ const (
 // given analysis
 type AnalysisReport struct {
 	Analysis *analyses.Analysis `json:"analysis" xml:"analysis"`
-	Report   *analysisReport    `json:"report" xml:"report"`
-}
-
-type analysisReport struct {
-	Project           *projects.Project               `json:"project" xml:"project"`
-	ProjectRuleset    *rulesets.RuleSet               `json:"project_ruleset" xml:"project_ruleset"`
-	Statuses          *scanner.AnalysisStatus         `json:"statuses" xml:"statuses"`
-	Digests           []digests.Digest                `json:"digests" xml:"digests"`
-	RulesetEvaluation *rulesets.AppliedRulesetSummary `json:"ruleset_evaluation" xml:"ruleset_evaluation"`
 }
 
 // NewAnalysisReport takes an Analysis and returns an initialized AnalysisReport
-func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, project *projects.Project, projectRuleset *rulesets.RuleSet, appliedRuleset *rulesets.AppliedRulesetSummary, experimental bool) (*AnalysisReport, error) {
+func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, appliedRuleset *rulesets.AppliedRulesetSummary, experimental bool) (*AnalysisReport, error) {
 	if analysis == nil {
 		analysis = &analyses.Analysis{
 			ID:        status.ID,
@@ -41,11 +28,6 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 			TeamID:    status.TeamID,
 			Status:    status.Status,
 		}
-	}
-
-	ds, err := digests.NewDigests(appliedRuleset, status.ScanStatus, experimental)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get digests: %v", err.Error())
 	}
 
 	if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
@@ -56,17 +38,20 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 
 	ar := AnalysisReport{
 		Analysis: analysis,
-		Report: &analysisReport{
-			Project:           project,
-			ProjectRuleset:    projectRuleset,
-			Statuses:          status,
-			Digests:           ds,
-			RulesetEvaluation: appliedRuleset,
-		},
 	}
 
-	if ar.Analysis.Status == "finished" {
-		ar.Analysis.Status = status.Status
+	switch status.Status {
+	case scanner.AnalysisStatusErrored:
+		analysis.Status = scanner.AnalysisStatusErrored
+	case scanner.AnalysisStatusFinished:
+		analysis.Status = scanner.AnalysisStatusFailed
+		if appliedRuleset.RuleEvaluationSummary.Passed {
+			analysis.Status = scanner.AnalysisStatusPassed
+		}
+	case scanner.AnalysisStatusQueued:
+		analysis.Status = scanner.AnalysisStatusQueued
+	case scanner.AnalysisStatusAnalyzing:
+		analysis.Status = scanner.AnalysisStatusAnalyzing
 	}
 
 	return &ar, nil
