@@ -4,13 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/analyses"
-	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
-	"github.com/ion-channel/ionic/tags"
 
 	. "github.com/franela/goblin"
 	. "github.com/onsi/gomega"
@@ -35,26 +32,6 @@ func TestAnalysisReport(t *testing.T) {
 				json.Unmarshal([]byte(sampleAnalysisPayload), &a)
 				Expect(a.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 
-				rulesetID := "someruleset"
-				p := &projects.Project{
-					RulesetID: &rulesetID,
-					Aliases: []aliases.Alias{
-						aliases.Alias{
-							Name: "bar",
-						},
-					},
-					Tags: []tags.Tag{
-						tags.Tag{
-							Name: "foo",
-						},
-					},
-				}
-
-				pr := &rulesets.RuleSet{
-					ID:   rulesetID,
-					Name: "this ruleset",
-				}
-
 				var eval scans.Evaluation
 				json.Unmarshal([]byte(sampleUntranslatedResults), &eval)
 
@@ -68,35 +45,11 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(s, &a, p, pr, app, true)
+				ar, err := NewAnalysisReport(s, &a, app, true)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.RulesetName).To(Equal("super cool ruleset"))
-				Expect(ar.Report.Statuses.Status).To(Equal("finished"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Risk).To(Equal("low"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Passed).To(Equal(true))
-				Expect(len(ar.Report.Project.Aliases)).To(Equal(1))
-				Expect(ar.Report.Project.Aliases[0].Name).To(Equal("bar"))
-				Expect(len(ar.Report.Project.Tags)).To(Equal(1))
-				Expect(ar.Report.Project.Tags[0].Name).To(Equal("foo"))
 				Expect(ar.Analysis.TriggerText).To(Equal("Merge pull request #220 from ion-channel/foobranch\n\nadding new coverage format"))
-				Expect(ar.Report.Project.RulesetID).To(Equal(&rulesetID))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults).NotTo(BeNil())
-				Expect(len(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults)).To(Equal(1))
-
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].UntranslatedResults).To(BeNil())
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].TranslatedResults).NotTo(BeNil())
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].TranslatedResults.Type).To(Equal("license"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].AnalysisID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].Results).NotTo(BeNil())
-				Expect(len(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].Results)).NotTo(Equal(0))
-
-				lr, ok := ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].TranslatedResults.Data.(scans.LicenseResults)
-				Expect(ok).To(BeTrue(), "Expected LicenseResults type")
-				Expect(lr.Type).To(HaveLen(1))
-				Expect(lr.Type[0].Name).To(Equal("apache-2.0"))
-				Expect(lr.Name).To(Equal("LICENSE.md"))
 			})
 
 			g.It("should return a new analysis report even if the analysis contains translated results", func() {
@@ -112,26 +65,6 @@ func TestAnalysisReport(t *testing.T) {
 				json.Unmarshal([]byte(sampleAnalysisPayload), &a)
 				Expect(a.ID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
 
-				rulesetID := "someruleset"
-				p := &projects.Project{
-					RulesetID: &rulesetID,
-					Aliases: []aliases.Alias{
-						aliases.Alias{
-							Name: "bar",
-						},
-					},
-					Tags: []tags.Tag{
-						tags.Tag{
-							Name: "foo",
-						},
-					},
-				}
-
-				pr := &rulesets.RuleSet{
-					ID:   rulesetID,
-					Name: "this ruleset",
-				}
-
 				var eval scans.Evaluation
 				json.Unmarshal([]byte(sampleTranslatedResults), &eval)
 
@@ -145,34 +78,11 @@ func TestAnalysisReport(t *testing.T) {
 					},
 				}
 
-				ar, err := NewAnalysisReport(s, &a, p, pr, app, true)
+				ar, err := NewAnalysisReport(s, &a, app, true)
 				Expect(err).To(BeNil())
 				Expect(ar).NotTo(BeNil())
 
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.RulesetName).To(Equal("super cool ruleset"))
-				Expect(ar.Report.Statuses.Status).To(Equal("finished"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Risk).To(Equal("low"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Passed).To(Equal(true))
-				Expect(len(ar.Report.Project.Aliases)).To(Equal(1))
-				Expect(ar.Report.Project.Aliases[0].Name).To(Equal("bar"))
-				Expect(len(ar.Report.Project.Tags)).To(Equal(1))
-				Expect(ar.Report.Project.Tags[0].Name).To(Equal("foo"))
 				Expect(ar.Analysis.TriggerText).To(Equal("Merge pull request #220 from ion-channel/foobranch\n\nadding new coverage format"))
-				Expect(ar.Report.Project.RulesetID).To(Equal(&rulesetID))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults).NotTo(BeNil())
-				Expect(len(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults)).To(Equal(1))
-
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].UntranslatedResults).To(BeNil())
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].TranslatedResults).NotTo(BeNil())
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].TranslatedResults.Type).To(Equal("community"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].AnalysisID).To(Equal("f9bca953-80ac-46c4-b195-d37f3bc4f498"))
-				Expect(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].Results).NotTo(BeNil())
-				Expect(len(ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].Results)).NotTo(Equal(0))
-
-				cr, ok := ar.Report.RulesetEvaluation.RuleEvaluationSummary.Ruleresults[0].TranslatedResults.Data.(scans.CommunityResults)
-				Expect(ok).To(BeTrue())
-				Expect(cr.Committers).To(Equal(5))
-				Expect(cr.Name).To(Equal("reponame"))
 			})
 		})
 	})

@@ -15,8 +15,11 @@ const (
 	// completed, view the passed field from an Analysis and the scan details for
 	// more information
 	AnalysisStatusFinished = "finished"
-	// AnalysisStatusFailed denotes a request for analysis has failed to
+	// AnalysisStatusPassed denotes a request for analysis has failed to
 	// run, the message field will have more details
+	AnalysisStatusPassed = "passed"
+	// AnalysisStatusFailed denotes a request for analysis has been
+	// accepted and has failed
 	AnalysisStatusFailed = "failed"
 	// AnalysisStatusAnalyzing denotes a request for analysis has been
 	// accepted and has begun
