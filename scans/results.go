@@ -264,10 +264,22 @@ type Compiler struct {
 	Version string `json:"version" xml:"version"`
 }
 
+// Image represents the data for individual docker images found
+type Image struct {
+	Name    string `json:"name" xml:"name"`
+	Version string `json:"version" xml:"version"`
+}
+
+// Dockerfile represents the data collected from a Dockerfile
+type Dockerfile struct {
+	Images []Image `json:"images" xml:"images"`
+}
+
 // BuildsystemResults represents the data collected from an buildsystems scan.  It
 // include the name and version of any compiler found
 type BuildsystemResults struct {
-	Compilers []Compiler `json:"compilers" xml:"compilers"`
+	Compilers  []Compiler `json:"compilers" xml:"compilers"`
+	Dockerfile Dockerfile `json:"docker_file" xml:"docker_file"`
 }
 
 // CommunityResults represents the data collected from a community scan.  It
