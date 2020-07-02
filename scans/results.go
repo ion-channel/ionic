@@ -261,7 +261,7 @@ type AboutYMLResults struct {
 // Compiler represents the data for individual compilers or interpreters found
 type Compiler struct {
 	Name    string `json:"name" xml:"name"`
-	Version string `json:"verison" xml:"version"`
+	Version string `json:"version" xml:"version"`
 }
 
 // BuildsystemResults represents the data collected from an buildsystems scan.  It
