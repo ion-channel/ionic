@@ -174,6 +174,14 @@ func TestScanResults(t *testing.T) {
 							Version: "1.1.0",
 						},
 					},
+					Dockerfile: Dockerfile{
+						Images: []Image{
+							Image{
+								Name:    "golang",
+								Version: "1.1.0",
+							},
+						},
+					},
 				},
 			}
 
@@ -287,7 +295,7 @@ func TestScanResults(t *testing.T) {
 const (
 	SampleValidScanResultsAboutYML = `{"type":"about_yml", "data":{"message": "foo message", "valid": true, "content": "some content"}}`
 
-	SampleValidScanResultsBuildsystems  = `{"type":"buildsystems","data":{"compilers":[{"name":"Go","version":"1.1.0"}]}}`
+	SampleValidScanResultsBuildsystems  = `{"type":"buildsystems","data":{"compilers":[{"name":"Go","version":"1.1.0"}],"docker_file":{"images":[{"name":"golang","version":"1.1.0"}]}}}`
 	SampleValidScanResultsCommunity     = `{"type":"community", "data":{"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}}`
 	SampleValidScanResultsCoverage      = `{"type":"external_coverage", "data":{"value":42.0}}`
 	SampleValidScanResultsDependency    = `{"type":"dependency","data":{"dependencies":[{"requirement":">1.0","latest_version":"2.0","org":"net.sourceforge.javacsv","name":"javacsv","type":"maven","package":"jar","version":"2.0","scope":"compile"},{"latest_version":"4.12","org":"junit","name":"junit","type":"maven","package":"jar","version":"4.11","scope":"test"},{"latest_version":"1.4-atlassian-1","org":"org.hamcrest","name":"hamcrest-core","type":"maven","package":"jar","version":"1.3","scope":"test"},{"latest_version":"4.5.2","org":"org.apache.httpcomponents","name":"httpclient","type":"maven","package":"jar","version":"4.3.4","scope":"compile"},{"latest_version":"4.4.5","org":"org.apache.httpcomponents","name":"httpcore","type":"maven","package":"jar","version":"4.3.2","scope":"compile"},{"latest_version":"99.0-does-not-exist","org":"commons-logging","name":"commons-logging","type":"maven","package":"jar","version":"1.1.3","scope":"compile"},{"latest_version":"20041127.091804","org":"commons-codec","name":"commons-codec","type":"maven","package":"jar","version":"1.6","scope":"compile"}],"meta":{"first_degree_count":3,"no_version_count":0,"total_unique_count":7,"update_available_count":2}}}`
