@@ -23,6 +23,7 @@ const (
 	transitiveDependencyIndex
 	dependencyOutdatedIndex
 	compilersIndex
+	containerImagesIndex
 	noVersionIndex
 	languagesIndex
 	uniqueCommittersIndex
