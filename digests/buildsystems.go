@@ -34,7 +34,7 @@ func createCompilerDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (
 			return nil, fmt.Errorf("error coercing evaluation translated results into buildss bytes")
 		}
 
-		d.MarshalSourceData(b, "buildsystems")
+		d.MarshalSourceData(b.Compilers, "compilers")
 
 		switch len(b.Compilers) {
 		case 0:
@@ -76,7 +76,7 @@ func createImagesDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (*D
 			return nil, fmt.Errorf("error coercing evaluation translated results into buildss bytes")
 		}
 
-		d.MarshalSourceData(b, "buildsystems")
+		d.MarshalSourceData(b.Dockerfile.Images, "container images")
 
 		switch len(b.Dockerfile.Images) {
 		case 0:
