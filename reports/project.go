@@ -15,9 +15,9 @@ const (
 	//ReportGetScanReportEndpoint is a string representation of the current endpoint for getting scan report
 	ReportGetScanReportEndpoint = "v1/report/getScan"
 
-	// ProjectStatusErroring denotes a request for analysis has errored during
+	// ProjectStatusErrored denotes a request for analysis has errored during
 	// the run, the message field will have more details
-	ProjectStatusErroring = "erroring"
+	ProjectStatusErrored = "errored"
 	// ProjectStatusPassing denotes a request for analysis has been
 	// completed and is passing
 	ProjectStatusPassing = "passing"
@@ -103,7 +103,7 @@ func NewProjectReports(input NewProjectReportsInput) *ProjectReports {
 
 		switch analysisStatus.Status {
 		case scanner.AnalysisStatusErrored:
-			projectStatus = ProjectStatusErroring
+			projectStatus = ProjectStatusErrored
 		case scanner.AnalysisStatusFinished:
 			projectStatus = ProjectStatusFailing
 			if summary.Passed {
