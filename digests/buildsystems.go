@@ -10,6 +10,16 @@ import (
 func buildsystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
+	c, err := createCompilerDigests(status, eval)
+	if err != nil {
+		return nil, err
+	}
+	digests = append(digests, *c)
+
+	return digests, nil
+}
+
+func createCompilerDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (*Digest, error) {
 	d := NewDigest(status, compilersIndex, "compiler", "compilers")
 
 	if eval != nil && !status.Errored() {
@@ -48,7 +58,5 @@ func buildsystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
-	digests = append(digests, *d)
-
-	return digests, nil
+	return d, nil
 }
