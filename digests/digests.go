@@ -22,9 +22,9 @@ const (
 	directDependencyIndex
 	transitiveDependencyIndex
 	dependencyOutdatedIndex
+	noVersionIndex
 	compilersIndex
 	containerImagesIndex
-	noVersionIndex
 	languagesIndex
 	uniqueCommittersIndex
 	codeCoverageIndex
