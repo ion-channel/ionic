@@ -27,6 +27,8 @@ func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analys
 			ProjectID: status.ProjectID,
 			TeamID:    status.TeamID,
 			Status:    status.Status,
+			CreatedAt: status.CreatedAt,
+			UpdatedAt: status.UpdatedAt,
 		}
 	}
 
