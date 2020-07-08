@@ -50,5 +50,6 @@ type ProjectPassFailHistory struct {
 	ProjectID  string    `json:"project_id"`
 	AnalysisID string    `json:"analysis_id"`
 	Status     bool      `json:"pass"`
+	FailCount  int       `json:"fail_count"`
 	CreatedAt  time.Time `json:"created_at"`
 }
