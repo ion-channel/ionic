@@ -270,9 +270,16 @@ type Image struct {
 	Version string `json:"version" xml:"version"`
 }
 
+// DockerDependency represents the data for individual docker dependency found
+type DockerDependency struct {
+	Name    string `json:"name" xml:"name"`
+	Version string `json:"version" xml:"version"`
+}
+
 // Dockerfile represents the data collected from a Dockerfile
 type Dockerfile struct {
-	Images []Image `json:"images" xml:"images"`
+	Images       []Image            `json:"images" xml:"images"`
+	Dependencies []DockerDependency `json:"dependencies" xml:"dependencies"`
 }
 
 // BuildsystemResults represents the data collected from an buildsystems scan.  It
