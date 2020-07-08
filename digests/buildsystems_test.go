@@ -29,7 +29,7 @@ func TestBuildsystemsDigests(t *testing.T) {
 
 			ds, err := buildsystemsDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(3))
 			Expect(string(ds[0].Data)).To(Equal(`{"chars":"none detected"}`))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
@@ -54,7 +54,7 @@ func TestBuildsystemsDigests(t *testing.T) {
 
 			ds, err := buildsystemsDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(3))
 			Expect(ds[0].Title).To(Equal("compiler"))
 			Expect(string(ds[0].Data)).To(Equal(`{"chars":"gcc"}`))
 			Expect(ds[0].Pending).To(BeFalse())
@@ -89,7 +89,7 @@ func TestBuildsystemsDigests(t *testing.T) {
 
 			ds, err := buildsystemsDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(3))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":4}`))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
@@ -108,7 +108,7 @@ func TestBuildsystemsDigests(t *testing.T) {
 
 			ds, err := buildsystemsDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(3))
 			Expect(string(ds[1].Data)).To(Equal(`{"chars":"none detected"}`))
 			Expect(ds[1].Pending).To(BeFalse())
 			Expect(ds[1].Errored).To(BeFalse())
@@ -135,7 +135,7 @@ func TestBuildsystemsDigests(t *testing.T) {
 
 			ds, err := buildsystemsDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(3))
 			Expect(ds[1].Title).To(Equal("container image"))
 			Expect(string(ds[1].Data)).To(Equal(`{"chars":"foo"}`))
 			Expect(ds[1].Pending).To(BeFalse())
@@ -169,7 +169,7 @@ func TestBuildsystemsDigests(t *testing.T) {
 
 			ds, err := buildsystemsDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(3))
 			Expect(string(ds[1].Data)).To(Equal(`{"count":3}`))
 			Expect(ds[1].Pending).To(BeFalse())
 			Expect(ds[1].Errored).To(BeFalse())

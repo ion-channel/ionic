@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ion-channel/ionic/dependencies"
 	"github.com/ion-channel/ionic/vulnerabilities"
 )
 
@@ -272,7 +273,8 @@ type Image struct {
 
 // Dockerfile represents the data collected from a Dockerfile
 type Dockerfile struct {
-	Images []Image `json:"images" xml:"images"`
+	Images       []Image                   `json:"images" xml:"images"`
+	Dependencies []dependencies.Dependency `json:"dependencies" xml:"dependencies"`
 }
 
 // BuildsystemResults represents the data collected from an buildsystems scan.  It

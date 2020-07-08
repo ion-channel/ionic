@@ -25,6 +25,7 @@ const (
 	noVersionIndex
 	compilersIndex
 	containerImagesIndex
+	containerDependenciesIndex
 	languagesIndex
 	uniqueCommittersIndex
 	codeCoverageIndex
