@@ -145,7 +145,7 @@ func createContainerDependenciesDigests(status *scanner.ScanStatus, eval *scans.
 
 			d.UseSingularTitle()
 		default:
-			err := d.AppendEval(eval, "count", len(b.Dockerfile.Images))
+			err := d.AppendEval(eval, "count", len(b.Dockerfile.Dependencies))
 			if err != nil {
 				return nil, fmt.Errorf("failed to create builds container dep digest: %v", err.Error())
 			}
