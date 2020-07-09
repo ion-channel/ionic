@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/ion-channel/ionic/dependencies"
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 
@@ -306,7 +307,7 @@ func TestCreateImagesDigests(t *testing.T) {
 			Expect(d.Data).To(Equal(json.RawMessage(`{"chars":"foo"}`)))
 		})
 
-		g.It("should return container image count of 4", func() {
+		g.It("should return container image count of 3", func() {
 			s := &scanner.ScanStatus{
 				Status:  "finished",
 				Message: "completed scan",
@@ -332,6 +333,88 @@ func TestCreateImagesDigests(t *testing.T) {
 			}
 
 			d, err := createImagesDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(err).To(BeNil())
+			Expect(d).NotTo(BeNil())
+			Expect(d.Data).To(Equal(json.RawMessage(`{"count":3}`)))
+		})
+	})
+}
+
+func TestCreateContainerDependenciesDigests(t *testing.T) {
+	g := goblin.Goblin(t)
+	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
+
+	g.Describe("Container Dependencies Digests", func() {
+		g.It("should return none detected when no container dependency data", func() {
+			s := &scanner.ScanStatus{
+				Status:  "finished",
+				Message: "completed scan",
+			}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "buildsystems",
+				Data: scans.BuildsystemResults{},
+			}
+
+			d, err := createContainerDependenciesDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(d).NotTo(BeNil())
+			Expect(d.Data).To(Equal(json.RawMessage(`{"chars":"none detected"}`)))
+		})
+
+		g.It("should return 1 result with single container dependency", func() {
+			s := &scanner.ScanStatus{
+				Status:  "finished",
+				Message: "completed scan",
+			}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "buildsystems",
+				Data: scans.BuildsystemResults{
+					Dockerfile: scans.Dockerfile{
+						Dependencies: []dependencies.Dependency{
+							dependencies.Dependency{
+								Name: "foo",
+							},
+						},
+					},
+				},
+			}
+
+			d, err := createContainerDependenciesDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(err).To(BeNil())
+			Expect(d).NotTo(BeNil())
+			Expect(d.Data).To(Equal(json.RawMessage(`{"chars":"foo"}`)))
+		})
+
+		g.It("should return container dependency count of 3", func() {
+			s := &scanner.ScanStatus{
+				Status:  "finished",
+				Message: "completed scan",
+			}
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "buildsystems",
+				Data: scans.BuildsystemResults{
+					Dockerfile: scans.Dockerfile{
+						Dependencies: []dependencies.Dependency{
+							dependencies.Dependency{
+								Name: "foo",
+							},
+							dependencies.Dependency{
+								Name: "bar",
+							},
+							dependencies.Dependency{
+								Name: "baz",
+							},
+						},
+					},
+				},
+			}
+
+			d, err := createContainerDependenciesDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(err).To(BeNil())
 			Expect(d).NotTo(BeNil())
