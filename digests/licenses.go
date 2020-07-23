@@ -10,7 +10,7 @@ import (
 func licenseDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
-	d := NewDigest(status, licensesIndex, "license found", "licenses found")
+	d := NewDigest(status, LicensesIndex, "license found", "licenses found")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.LicenseResults)

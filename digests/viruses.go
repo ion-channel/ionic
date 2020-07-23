@@ -21,7 +21,7 @@ func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest,
 		infectedFiles = b.InfectedFiles
 	}
 
-	d := NewDigest(status, filesScannedIndex, "total file scanned", "total files scanned")
+	d := NewDigest(status, FilesScannedIndex, "total file scanned", "total files scanned")
 
 	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", scannedFiles)
@@ -39,7 +39,7 @@ func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest,
 
 	digests = append(digests, *d)
 
-	d = NewDigest(status, virusFoundIndex, "virus found", "viruses found")
+	d = NewDigest(status, VirusFoundIndex, "virus found", "viruses found")
 
 	if eval != nil && !status.Errored() {
 		err := d.AppendEval(eval, "count", infectedFiles)

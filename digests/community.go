@@ -10,7 +10,7 @@ import (
 func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
-	d := NewDigest(status, uniqueCommittersIndex, "unique committer", "unique committers")
+	d := NewDigest(status, UniqueCommittersIndex, "unique committer", "unique committers")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)

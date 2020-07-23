@@ -87,7 +87,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		transDeps = b.Meta.TotalUniqueCount - b.Meta.FirstDegreeCount
 	}
 
-	d := NewDigest(status, dependencyOutdatedIndex, "dependency outdated", "dependencies outdated")
+	d := NewDigest(status, DependencyOutdatedIndex, "dependency outdated", "dependencies outdated")
 
 	if eval != nil && !status.Errored() {
 		filtered, err := filterDependencies(data, false, od)
@@ -107,7 +107,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	digests = append(digests, *d)
 
 	// No version specified
-	d = NewDigest(status, noVersionIndex, "dependency no version specified", "dependencies no version specified")
+	d = NewDigest(status, NoVersionIndex, "dependency no version specified", "dependencies no version specified")
 
 	if eval != nil && !status.Errored() {
 		filtered, err := filterDependencies(data, false, nv)
@@ -132,7 +132,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	digests = append(digests, *d)
 
-	d = NewDigest(status, directDependencyIndex, "direct dependency", "direct dependencies")
+	d = NewDigest(status, DirectDependencyIndex, "direct dependency", "direct dependencies")
 
 	if eval != nil && !status.Errored() {
 		filtered, err := filterDependencies(data, false, direct)
@@ -156,7 +156,7 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 	digests = append(digests, *d)
 
-	d = NewDigest(status, transitiveDependencyIndex, "transitive dependency", "transitive dependencies")
+	d = NewDigest(status, TransitiveDependencyIndex, "transitive dependency", "transitive dependencies")
 
 	if eval != nil && !status.Errored() {
 		filtered, err := filterDependencies(data, false, giveem)

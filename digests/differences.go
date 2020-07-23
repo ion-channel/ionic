@@ -10,7 +10,7 @@ import (
 func differenceDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
-	d := NewDigest(status, differenceIndex, "difference detected", "difference detected")
+	d := NewDigest(status, DifferenceIndex, "difference detected", "difference detected")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.DifferenceResults)

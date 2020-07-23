@@ -10,7 +10,7 @@ import (
 func ecosystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
-	d := NewDigest(status, languagesIndex, "language", "languages")
+	d := NewDigest(status, LanguagesIndex, "language", "languages")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.EcosystemResults)
