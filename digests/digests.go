@@ -33,7 +33,7 @@ const (
 
 // NewDigests takes an applied ruleset and returns the relevant digests derived
 // from all the evaluations in it, and any errors it encounters.
-func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scanner.ScanStatus, experimental bool) ([]Digest, error) {
+func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scanner.ScanStatus) ([]Digest, error) {
 	ds := make([]Digest, 0)
 	errs := make([]string, 0, 0)
 
@@ -50,7 +50,7 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 			}
 		}
 
-		d, err := _newDigests(&s, e, experimental)
+		d, err := _newDigests(&s, e)
 		if err != nil {
 			errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
 			continue
@@ -70,7 +70,7 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 	return ds, nil
 }
 
-func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation, experimental bool) ([]Digest, error) {
+func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	if eval != nil {
 		err := eval.Translate()
 		if err != nil {
@@ -104,10 +104,7 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation, experimenta
 		return differenceDigests(status, eval)
 
 	case "buildsystems":
-		if experimental {
-			return buildsystemsDigests(status, eval)
-		}
-		return nil, nil
+		return buildsystemsDigests(status, eval)
 
 	case "about_yml", "file_type":
 		return nil, nil
