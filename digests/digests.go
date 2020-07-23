@@ -31,6 +31,18 @@ const (
 	codeCoverageIndex
 )
 
+// GroupedDigests represents an organized grouped report of digests
+type GroupedDigests struct {
+	Name    string   `json:"name"`
+	Digests []Digest `json:"digests"`
+}
+
+// DigestReport is the report of organized grouped and ungrouped digests
+type DigestReport struct {
+	SingleDigests  *[]Digest         `json:"single_digests,omitempty,omitnull"`
+	GroupedDigests *[]GroupedDigests `json:"grouped_digests,omitempty,omitnull"`
+}
+
 // NewDigests takes an applied ruleset and returns the relevant digests derived
 // from all the evaluations in it, and any errors it encounters.
 func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scanner.ScanStatus) ([]Digest, error) {
