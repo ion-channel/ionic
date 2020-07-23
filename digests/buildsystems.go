@@ -32,7 +32,7 @@ func buildsystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]
 }
 
 func createCompilerDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (*Digest, error) {
-	d := NewDigest(status, compilersIndex, "compiler", "compilers")
+	d := NewDigest(status, CompilersIndex, "compiler", "compilers")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.BuildsystemResults)
@@ -74,7 +74,7 @@ func createCompilerDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (
 }
 
 func createImagesDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (*Digest, error) {
-	d := NewDigest(status, containerImagesIndex, "container image", "container images")
+	d := NewDigest(status, ContainerImagesIndex, "container image", "container images")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.BuildsystemResults)
@@ -116,7 +116,7 @@ func createImagesDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (*D
 }
 
 func createContainerDependenciesDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (*Digest, error) {
-	d := NewDigest(status, containerDependenciesIndex, "container dependencies", "container dependencies")
+	d := NewDigest(status, ContainerDependenciesIndex, "container dependencies", "container dependencies")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.BuildsystemResults)

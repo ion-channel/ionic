@@ -156,7 +156,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	}
 
 	// total vulns
-	d := NewDigest(status, totalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
+	d := NewDigest(status, TotalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, false, all)
@@ -184,7 +184,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	digests = append(digests, *d)
 
 	// unique vulns
-	d = NewDigest(status, uniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
+	d = NewDigest(status, UniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, true, all)
@@ -212,7 +212,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	digests = append(digests, *d)
 
 	// high vulns
-	d = NewDigest(status, highVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
+	d = NewDigest(status, HighVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, true, high)
@@ -234,7 +234,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	digests = append(digests, *d)
 
 	// critical vulns
-	d = NewDigest(status, criticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
+	d = NewDigest(status, CriticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, true, critical)

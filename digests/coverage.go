@@ -10,7 +10,7 @@ import (
 func coveragDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
 
-	d := NewDigest(status, codeCoverageIndex, "code coverage", "code coverage")
+	d := NewDigest(status, CodeCoverageIndex, "code coverage", "code coverage")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.CoverageResults)

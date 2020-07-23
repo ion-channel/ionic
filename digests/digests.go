@@ -11,24 +11,42 @@ import (
 )
 
 const (
-	differenceIndex = iota
-	virusFoundIndex
-	criticalVulnerabilitiesIndex
-	highVulnerabilitiesIndex
-	totalVulnerabilitiesIndex
-	uniqueVulnerabilitiesIndex
-	licensesIndex
-	filesScannedIndex
-	directDependencyIndex
-	transitiveDependencyIndex
-	dependencyOutdatedIndex
-	noVersionIndex
-	compilersIndex
-	containerImagesIndex
-	containerDependenciesIndex
-	languagesIndex
-	uniqueCommittersIndex
-	codeCoverageIndex
+	//DifferenceIndex represents the index number for this digest type
+	DifferenceIndex = iota
+	//VirusFoundIndex represents the index number for this digest type
+	VirusFoundIndex
+	//CriticalVulnerabilitiesIndex represents the index number for this digest type
+	CriticalVulnerabilitiesIndex
+	//HighVulnerabilitiesIndex represents the index number for this digest type
+	HighVulnerabilitiesIndex
+	//TotalVulnerabilitiesIndex represents the index number for this digest type
+	TotalVulnerabilitiesIndex
+	//UniqueVulnerabilitiesIndex represents the index number for this digest type
+	UniqueVulnerabilitiesIndex
+	//LicensesIndex represents the index number for this digest type
+	LicensesIndex
+	//FilesScannedIndex represents the index number for this digest type
+	FilesScannedIndex
+	//DirectDependencyIndex represents the index number for this digest type
+	DirectDependencyIndex
+	//TransitiveDependencyIndex represents the index number for this digest type
+	TransitiveDependencyIndex
+	//DependencyOutdatedIndex represents the index number for this digest type
+	DependencyOutdatedIndex
+	//NoVersionIndex represents the index number for this digest type
+	NoVersionIndex
+	//CompilersIndex represents the index number for this digest type
+	CompilersIndex
+	//ContainerImagesIndex represents the index number for this digest type
+	ContainerImagesIndex
+	//ContainerDependenciesIndex represents the index number for this digest type
+	ContainerDependenciesIndex
+	//LanguagesIndex represents the index number for this digest type
+	LanguagesIndex
+	//UniqueCommittersIndex represents the index number for this digest type
+	UniqueCommittersIndex
+	//CodeCoverageIndex represents the index number for this digest type
+	CodeCoverageIndex
 )
 
 // GroupedDigests represents an organized grouped report of digests
