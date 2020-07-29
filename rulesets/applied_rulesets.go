@@ -46,10 +46,11 @@ type RuleEvaluationSummary struct {
 
 // ProjectPassFailHistory represents a pass failing history of a project's evaluation
 type ProjectPassFailHistory struct {
-	TeamID     string    `json:"team_id"`
-	ProjectID  string    `json:"project_id"`
-	AnalysisID string    `json:"analysis_id"`
-	Status     bool      `json:"pass"`
-	FailCount  int       `json:"fail_count"`
-	CreatedAt  time.Time `json:"created_at"`
+	TeamID        string    `json:"team_id"`
+	ProjectID     string    `json:"project_id"`
+	AnalysisID    string    `json:"analysis_id"`
+	Status        bool      `json:"pass"`
+	FailCount     int       `json:"fail_count"`
+	CreatedAt     time.Time `json:"created_at"`
+	StatusFlipped bool      `json:"status_flipped"`
 }
