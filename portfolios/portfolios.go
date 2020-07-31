@@ -1,5 +1,7 @@
 package portfolios
 
+import "time"
+
 const (
 	// VulnerabilityStatsEndpoint is a string representation of the current endpoint for getting vulnerability statistics
 	VulnerabilityStatsEndpoint = "v1/animal/getVulnerabilityStats"
@@ -19,6 +21,8 @@ const (
 	DependencyStatsEndpoint = "v1/animal/getDependencyStats"
 	// DependencyListEndpoint is a string representation for getting a list of vulnerabilities by type.
 	DependencyListEndpoint = "v1/animal/getDependencyList"
+	//RulesetsGetStatusesHistory is a string representation of the current endpoint for status history of projects
+	RulesetsGetStatusesHistory = "v1/ruleset/getStatusesHistory"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
@@ -96,4 +100,12 @@ type Dependency struct {
 	Requirement   string `json:"requirement" xml:"requirement"`
 	File          string `json:"file" xml:"file"`
 	ProjectsCount int    `json:"projects_count,omitempty"`
+}
+
+// StatusesHistory represents the number of times in a row the status remained
+// unchanged, and the timestamp of the first one
+type StatusesHistory struct {
+	Status         string    `json:"status"`
+	Count          int       `json:"count"`
+	FirstCreatedAt time.Time `json:"first_created_at"`
 }

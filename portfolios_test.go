@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
+	"time"
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
@@ -135,6 +136,28 @@ func TestPortfolios(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(string(vl)).To(Equal("{\"dependency_list\":[{\"name\":\"name1\",\"org\":\"org1\",\"version\":\"someversion1\",\"package\":\"package1\",\"type\":\"type1\",\"latest_version\":\"latestversion1\",\"scope\":\"scope1\",\"requirement\":\"requirement1\",\"file\":\"file1\",\"projects_count\":2}]}"))
 		})
+
+		g.It("should get status history", func() {
+			server.AddPath("/v1/ruleset/getStatusesHistory").
+				SetMethods("POST").
+				SetPayload([]byte(SampleStatusHistory)).
+				SetStatus(http.StatusOK)
+
+			sh, err := client.GetProjectsStatusHistory([]string{"1", "2"}, "sometoken")
+			Expect(err).To(BeNil())
+			t, _ := time.Parse(time.RFC3339Nano, "2020-07-31T10:54:51.725241-07:00")
+			Expect(sh[0].Status).To(Equal("pass"))
+			Expect(sh[0].Count).To(Equal(4))
+			Expect(sh[0].FirstCreatedAt).To(Equal(t))
+			t, _ = time.Parse(time.RFC3339Nano, "2020-07-31T10:58:51.725241-07:00")
+			Expect(sh[1].Status).To(Equal("fail"))
+			Expect(sh[1].Count).To(Equal(1))
+			Expect(sh[1].FirstCreatedAt).To(Equal(t))
+			t, _ = time.Parse(time.RFC3339Nano, "2020-07-31T10:59:51.725241-07:00")
+			Expect(sh[2].Status).To(Equal("pass"))
+			Expect(sh[2].Count).To(Equal(1))
+			Expect(sh[2].FirstCreatedAt).To(Equal(t))
+		})
 	})
 }
 
@@ -148,4 +171,5 @@ const (
 	SampleAffectedProjectInfo = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"someName1","version":"someVersion1","vulnerabilities":0},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"someName2","version":"someVersion2","vulnerabilities":0}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 	SampleDependencyStats     = `{"data":{"direct_dependencies":44,"transitive_dependencies":33,"outdated_dependencies":22,"no_vesion_dependencies":11}}`
 	SampleDependencyList      = `{"data":{"dependency_list":[{"name":"name1","org":"org1","version":"someversion1","package":"package1","type":"type1","latest_version":"latestversion1","scope":"scope1","requirement":"requirement1","file":"file1","projects_count":2}]}}`
+	SampleStatusHistory       = `{"data":[{"status":"pass","count":4,"first_created_at":"2020-07-31T10:54:51.725241-07:00"},{"status":"fail","count":1,"first_created_at":"2020-07-31T10:58:51.725241-07:00"},{"status":"pass","count":1,"first_created_at":"2020-07-31T10:59:51.725241-07:00"}],"meta":{"total_count":3,"offset":0,"last_update":"0001-01-01T00:00:00Z"}}`
 )
