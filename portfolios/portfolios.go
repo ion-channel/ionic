@@ -21,7 +21,7 @@ const (
 	DependencyStatsEndpoint = "v1/animal/getDependencyStats"
 	// DependencyListEndpoint is a string representation for getting a list of vulnerabilities by type.
 	DependencyListEndpoint = "v1/animal/getDependencyList"
-	//RulesetsGetStatusesHistory is a string representation of the current endpoint for status history of projects
+	// RulesetsGetStatusesHistory is a string representation of the current endpoint for status history of projects
 	RulesetsGetStatusesHistory = "v1/ruleset/getStatusesHistory"
 )
 
