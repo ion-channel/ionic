@@ -223,3 +223,32 @@ func (ic *IonClient) GetRawDependencyList(ids []string, listType, limit, token s
 
 	return resp, nil
 }
+
+// GetProjectsStatusHistory takes slice of project ids and token and returns list of status history for projects
+func (ic *IonClient) GetProjectsStatusHistory(ids []string, token string) ([]portfolios.StatusesHistory, error) {
+	p := struct {
+		Ids []string `json:"ids"`
+	}{
+		ids,
+	}
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(portfolios.RulesetsGetStatusesHistory, token, nil, *bytes.NewBuffer(b), nil)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to request status history: %v", err.Error())
+	}
+
+	var sh []portfolios.StatusesHistory
+	err = json.Unmarshal(r, &sh)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal vunlerability stats response: %v", err.Error())
+	}
+
+	return sh, nil
+}

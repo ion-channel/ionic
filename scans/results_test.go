@@ -2,7 +2,6 @@ package scans
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	. "github.com/franela/goblin"
@@ -203,7 +202,6 @@ func TestScanResults(t *testing.T) {
 
 			b, err := json.Marshal(r)
 			Expect(err).To(BeNil())
-			fmt.Printf("\n%v\n", string(b))
 			Expect(string(b)).To(Equal(SampleValidScanResultsBuildsystems))
 		})
 
