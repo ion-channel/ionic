@@ -237,7 +237,7 @@ func (ic *IonClient) GetProjectsStatusHistory(ids []string, token string) ([]por
 		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
 
-	r, err := ic.Post(portfolios.RulesetsGetStatusesHistory, token, nil, *bytes.NewBuffer(b), nil)
+	r, err := ic.Post(portfolios.RulesetsGetStatusesHistoryEndpoint, token, nil, *bytes.NewBuffer(b), nil)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to request status history: %v", err.Error())
@@ -247,8 +247,31 @@ func (ic *IonClient) GetProjectsStatusHistory(ids []string, token string) ([]por
 	err = json.Unmarshal(r, &sh)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal vunlerability stats response: %v", err.Error())
+		return nil, fmt.Errorf("failed to unmarshal status history response: %v", err.Error())
 	}
 
 	return sh, nil
+}
+
+// GetMttr takes team id and optional project ID and returns the mttr for project
+// If project id is not given, it will return mttr of all active projects on the team
+func (ic *IonClient) GetMttr(teamID, projectID string, token string) (*portfolios.Mttr, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("project_id", projectID)
+
+	r, _, err := ic.Get(portfolios.ReportsGetMttrEndpoint, token, params, nil, nil)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to request mttr: %v", err.Error())
+	}
+
+	var mttr portfolios.Mttr
+	err = json.Unmarshal(r, &mttr)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal mttr response: %v", err.Error())
+	}
+
+	return &mttr, nil
 }
