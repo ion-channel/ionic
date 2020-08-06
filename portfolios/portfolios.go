@@ -118,6 +118,7 @@ type StatusesHistory struct {
 // Mttr represents the data object for mean time to remediation
 type Mttr struct {
 	Mttr                string          `json:"mttr"`
+	MttrMinutes         int             `json:"mttr_minutes"`
 	UnresolvedIncident  bool            `json:"unresolved_incident"`
 	TimeInCurrentStatus string          `json:"time_in_current_status"`
 	FailedMttrIncidents int             `json:"failed_mttr_incidents"`
