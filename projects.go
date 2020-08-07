@@ -237,3 +237,25 @@ func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*pr
 
 	return &p, nil
 }
+
+// GetMttr takes team id and project ID and returns the mttr for project
+func (ic *IonClient) GetMttr(teamID, projectID string, token string) (*projects.Mttr, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("project_id", projectID)
+
+	r, _, err := ic.Get(projects.ReportsGetMttrEndpoint, token, params, nil, nil)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to request mttr: %v", err.Error())
+	}
+
+	var mttr projects.Mttr
+	err = json.Unmarshal(r, &mttr)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal mttr response: %v", err.Error())
+	}
+
+	return &mttr, nil
+}
