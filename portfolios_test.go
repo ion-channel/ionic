@@ -158,22 +158,6 @@ func TestPortfolios(t *testing.T) {
 			Expect(sh[2].Count).To(Equal(1))
 			Expect(sh[2].FirstCreatedAt).To(Equal(t))
 		})
-
-		g.It("should return a mttr of a project", func() {
-			server.AddPath("/v1/report/getMttr").
-				SetMethods("GET").
-				SetPayload([]byte(SampleGetMttr)).
-				SetStatus(http.StatusOK)
-
-			r, err := client.GetMttr("team_id", "project_id", "sometoken")
-			Expect(err).To(BeNil())
-			Expect(r).NotTo(BeNil())
-			Expect(r.Mttr).To(Equal("1 day"))
-			Expect(r.MttrMinutes).To(Equal(1440))
-			Expect(r.UnresolvedIncident).To(Equal(false))
-			Expect(r.FailedMttrIncidents).To(Equal(1))
-			Expect(r.ProjectCount).To(Equal(1))
-		})
 	})
 }
 
@@ -188,5 +172,4 @@ const (
 	SampleDependencyStats     = `{"data":{"direct_dependencies":44,"transitive_dependencies":33,"outdated_dependencies":22,"no_vesion_dependencies":11}}`
 	SampleDependencyList      = `{"data":{"dependency_list":[{"name":"name1","org":"org1","version":"someversion1","package":"package1","type":"type1","latest_version":"latestversion1","scope":"scope1","requirement":"requirement1","file":"file1","projects_count":2}]}}`
 	SampleStatusHistory       = `{"data":[{"status":"pass","count":4,"first_created_at":"2020-07-31T10:54:51.725241-07:00"},{"status":"fail","count":1,"first_created_at":"2020-07-31T10:58:51.725241-07:00"},{"status":"pass","count":1,"first_created_at":"2020-07-31T10:59:51.725241-07:00"}],"meta":{"total_count":3,"offset":0,"last_update":"0001-01-01T00:00:00Z"}}`
-	SampleGetMttr             = `{"data":{"mttr":"1 day", "mttr_minutes": 1440, "unresolved_incident":false,"time_in_current_status":"1.83 days","failed_mttr_incidents":1,"project_count":1,"data":[{"status":"pass","count":2,"first_created_at":"2020-08-01T22:54:34.543703Z"},{"status":"fail","count":1,"first_created_at":"2020-08-02T22:54:34.579672Z"},{"status":"pass","count":1,"first_created_at":"2020-08-03T22:54:34.608181Z"}]},"meta":{"total_count":1,"offset":0,"last_update":"2020-08-05T18:48:10.6778402Z"}}`
 )

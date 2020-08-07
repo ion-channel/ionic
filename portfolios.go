@@ -252,26 +252,3 @@ func (ic *IonClient) GetProjectsStatusHistory(ids []string, token string) ([]por
 
 	return sh, nil
 }
-
-// GetMttr takes team id and optional project ID and returns the mttr for project
-// If project id is not given, it will return mttr of all active projects on the team
-func (ic *IonClient) GetMttr(teamID, projectID string, token string) (*portfolios.Mttr, error) {
-	params := &url.Values{}
-	params.Set("team_id", teamID)
-	params.Set("project_id", projectID)
-
-	r, _, err := ic.Get(portfolios.ReportsGetMttrEndpoint, token, params, nil, nil)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to request mttr: %v", err.Error())
-	}
-
-	var mttr portfolios.Mttr
-	err = json.Unmarshal(r, &mttr)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal mttr response: %v", err.Error())
-	}
-
-	return &mttr, nil
-}

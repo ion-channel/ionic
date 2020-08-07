@@ -1,7 +1,6 @@
 package portfolios
 
 import (
-	"encoding/json"
 	"time"
 )
 
@@ -26,8 +25,6 @@ const (
 	DependencyListEndpoint = "v1/animal/getDependencyList"
 	// RulesetsGetStatusesHistoryEndpoint is a string representation of the current endpoint for status history of projects
 	RulesetsGetStatusesHistoryEndpoint = "v1/ruleset/getStatusesHistory"
-	// ReportsGetMttrEndpoint is a string representation of the current endpoint for Mean Time of Remediation of project(s)
-	ReportsGetMttrEndpoint = "v1/report/getMttr"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
@@ -113,15 +110,4 @@ type StatusesHistory struct {
 	Status         string    `json:"status"`
 	Count          int       `json:"count"`
 	FirstCreatedAt time.Time `json:"first_created_at"`
-}
-
-// Mttr represents the data object for mean time to remediation
-type Mttr struct {
-	Mttr                string          `json:"mttr"`
-	MttrMinutes         int             `json:"mttr_minutes"`
-	UnresolvedIncident  bool            `json:"unresolved_incident"`
-	TimeInCurrentStatus string          `json:"time_in_current_status"`
-	FailedMttrIncidents int             `json:"failed_mttr_incidents"`
-	ProjectCount        int             `json:"project_count"`
-	Data                json.RawMessage `json:"data"`
 }
