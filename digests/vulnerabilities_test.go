@@ -38,6 +38,10 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 					Name:            "product",
 					Vulnerabilities: vs,
 				},
+				scans.VulnerabilityResultsProduct{
+					Name:            "product2",
+					Vulnerabilities: []scans.VulnerabilityResultsVulnerability{},
+				},
 			}
 
 			r := scans.VulnerabilityResults{
