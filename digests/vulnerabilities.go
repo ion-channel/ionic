@@ -2,7 +2,6 @@ package digests
 
 import (
 	"fmt"
-	"math/rand"
 	"sort"
 	"strconv"
 
@@ -17,7 +16,7 @@ const (
 )
 
 // ByScore sort interface impl for sorting vulnerabilities by score
-type ByScore []scans.VulnerabilityResultsVulnerability
+type ByScore []*scans.VulnerabilityResultsVulnerability
 
 func (v ByScore) Len() int      { return len(v) }
 func (v ByScore) Swap(i, j int) { v[i], v[j] = v[j], v[i] }
@@ -65,43 +64,39 @@ func critical(v *scans.VulnerabilityResultsVulnerability) bool {
 	return false
 }
 
-func pivotToVulnerabilities(data interface{}, unique bool, f vfilter) ([]scans.VulnerabilityResultsVulnerability, error) {
+func pivotToVulnerabilities(data interface{}, f vfilter) ([]*scans.VulnerabilityResultsVulnerability, error) {
 	b, ok := data.(scans.VulnerabilityResults)
 	if !ok {
 		return nil, fmt.Errorf("error coercing evaluation translated results into vuln")
 	}
 
+	var values []*scans.VulnerabilityResultsVulnerability
 	uu := map[string]*scans.VulnerabilityResultsVulnerability{}
 	for _, p := range b.Vulnerabilities {
+		values = []*scans.VulnerabilityResultsVulnerability{}
+		pp := p
+		pp.Vulnerabilities = nil
 		for _, v := range p.Vulnerabilities {
-			vv := v
-
-			key := vv.ExternalID
-
-			if !unique {
-				key = fmt.Sprintf("%d", rand.Int())
+			if f(&v) {
+				key := v.ExternalID
+				if uu[key] == nil {
+					v.Dependencies = append(v.Dependencies, pp)
+					values = append(values, &v)
+					uu[key] = &v
+				}
 			}
-			if uu[key] == nil {
-				uu[key] = &vv
-			}
-
-			uu[key].Dependencies = append(uu[key].Dependencies, p)
 		}
 	}
-	values := []scans.VulnerabilityResultsVulnerability{}
-	for _, v := range uu {
-		if f(v) {
-			values = append(values, *v)
-		}
-	}
+
 	sort.Sort(ByScore(values))
 	return values, nil
 }
 
 func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
-	digests := make([]Digest, 0)
+	digests := make([]Digest, 4)
 
-	var vulnCount, uniqVulnCount int
+	var vulnCount int
+	var uniqVulnCount int
 	var highs int
 	var crits int
 	var data interface{}
@@ -155,11 +150,16 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		uniqVulnCount = len(ids)
 	}
 
-	// total vulns
+	// wg := new(sync.WaitGroup)
+	// wg.Add(4)
+	//
+	// // total vulns
+	// go func() {
+	// 	defer wg.Done()
 	d := NewDigest(status, TotalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
 
 	if eval != nil && !status.Errored() {
-		pivoted, err := pivotToVulnerabilities(data, false, all)
+		pivoted, err := pivotToVulnerabilities(data, all)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
@@ -181,13 +181,16 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
-	digests = append(digests, *d)
+	digests[0] = *d
+	// }()
 
-	// unique vulns
+	// go func() {
+	// 	defer wg.Done()
+	// 	// unique vulns
 	d = NewDigest(status, UniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
 
 	if eval != nil && !status.Errored() {
-		pivoted, err := pivotToVulnerabilities(data, true, all)
+		pivoted, err := pivotToVulnerabilities(data, all)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
@@ -209,13 +212,16 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
-	digests = append(digests, *d)
+	digests[1] = *d
+	// }()
 
-	// high vulns
+	// go func() {
+	// 	defer wg.Done()
+	// 	// high vulns
 	d = NewDigest(status, HighVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
 
 	if eval != nil && !status.Errored() {
-		pivoted, err := pivotToVulnerabilities(data, true, high)
+		pivoted, err := pivotToVulnerabilities(data, high)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
@@ -231,13 +237,16 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		}
 	}
 
-	digests = append(digests, *d)
+	digests[2] = *d
+	// }()
 
+	// go func() {
+	// 	defer wg.Done()
 	// critical vulns
 	d = NewDigest(status, CriticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
 
 	if eval != nil && !status.Errored() {
-		pivoted, err := pivotToVulnerabilities(data, true, critical)
+		pivoted, err := pivotToVulnerabilities(data, critical)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to unique vulnerabilities digest: %v", err.Error())
 		}
@@ -253,7 +262,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		}
 	}
 
-	digests = append(digests, *d)
+	digests[3] = *d
+	// }()
 
+	// wg.Wait()
 	return digests, nil
 }
