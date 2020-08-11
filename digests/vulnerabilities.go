@@ -16,7 +16,7 @@ const (
 )
 
 // ByScore sort interface impl for sorting vulnerabilities by score
-type ByScore []*scans.VulnerabilityResultsVulnerability
+type ByScore []scans.VulnerabilityResultsVulnerability
 
 func (v ByScore) Len() int      { return len(v) }
 func (v ByScore) Swap(i, j int) { v[i], v[j] = v[j], v[i] }
@@ -64,16 +64,16 @@ func critical(v *scans.VulnerabilityResultsVulnerability) bool {
 	return false
 }
 
-func pivotToVulnerabilities(data interface{}, f vfilter) ([]*scans.VulnerabilityResultsVulnerability, error) {
+func pivotToVulnerabilities(data interface{}, f vfilter) ([]scans.VulnerabilityResultsVulnerability, error) {
 	b, ok := data.(scans.VulnerabilityResults)
 	if !ok {
 		return nil, fmt.Errorf("error coercing evaluation translated results into vuln")
 	}
 
-	var values []*scans.VulnerabilityResultsVulnerability
+	var values []scans.VulnerabilityResultsVulnerability
 	uu := map[string]*scans.VulnerabilityResultsVulnerability{}
 	for _, p := range b.Vulnerabilities {
-		values = []*scans.VulnerabilityResultsVulnerability{}
+		values = []scans.VulnerabilityResultsVulnerability{}
 		pp := p
 		pp.Vulnerabilities = []scans.VulnerabilityResultsVulnerability{}
 		for _, v := range p.Vulnerabilities {
@@ -81,7 +81,7 @@ func pivotToVulnerabilities(data interface{}, f vfilter) ([]*scans.Vulnerability
 				key := v.ExternalID
 				if uu[key] == nil {
 					v.Dependencies = append(v.Dependencies, pp)
-					values = append(values, &v)
+					values = append(values, v)
 					uu[key] = &v
 				}
 			}
