@@ -75,7 +75,7 @@ func pivotToVulnerabilities(data interface{}, f vfilter) ([]*scans.Vulnerability
 	for _, p := range b.Vulnerabilities {
 		values = []*scans.VulnerabilityResultsVulnerability{}
 		pp := p
-		pp.Vulnerabilities = nil
+		pp.Vulnerabilities = []scans.VulnerabilityResultsVulnerability{}
 		for _, v := range p.Vulnerabilities {
 			if f(&v) {
 				key := v.ExternalID
