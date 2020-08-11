@@ -1,6 +1,7 @@
 package digests
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 	"testing"
@@ -87,9 +88,10 @@ func TestDigest(t *testing.T) {
 					Message: "completed scan",
 				}
 				ds = NewDigest(s, 0, "", "")
+				j, _ := json.Marshal(ds)
 				Expect(ds).NotTo(BeNil())
 				Expect(ds.Pending).To(BeFalse())
-				Expect(ds.Errored).To(BeFalse())
+				Expect(ds.Errored).To(BeTrue())
 				Expect(ds.ErroredMessage).To(Equal("evaluation not received"))
 			})
 
