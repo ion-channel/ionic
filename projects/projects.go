@@ -34,8 +34,6 @@ const (
 	GetProjectsEndpoint = "v1/project/getProjects"
 	// UpdateProjectEndpoint is a string representation of the current endpoint for updating project
 	UpdateProjectEndpoint = "v1/project/updateProject"
-	// ReportsGetMttrEndpoint is a string representation of the current endpoint for Mean Time of Remediation of project(s)
-	ReportsGetMttrEndpoint = "v1/report/getMttr"
 )
 
 var (
@@ -69,16 +67,6 @@ type Project struct {
 	Private          bool            `json:"private"`
 	Aliases          []aliases.Alias `json:"aliases"`
 	Tags             []tags.Tag      `json:"tags"`
-}
-
-// Mttr represents the data object for mean time to remediation of a project
-type Mttr struct {
-	Mttr                int64           `json:"mttr"`
-	UnresolvedIncident  bool            `json:"unresolved_incident"`
-	TimeInCurrentStatus int64           `json:"time_in_current_status"`
-	FailedMttrIncidents int             `json:"failed_mttr_incidents"`
-	ProjectCount        int             `json:"project_count"`
-	Data                json.RawMessage `json:"data"`
 }
 
 // String returns a JSON formatted string of the project object
