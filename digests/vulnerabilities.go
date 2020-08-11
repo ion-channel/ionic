@@ -93,7 +93,7 @@ func pivotToVulnerabilities(data interface{}, f vfilter) ([]scans.VulnerabilityR
 }
 
 func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
-	digests := make([]Digest, 4)
+	digests := []Digest{}
 
 	var vulnCount int
 	var uniqVulnCount int
@@ -150,12 +150,6 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		uniqVulnCount = len(ids)
 	}
 
-	// wg := new(sync.WaitGroup)
-	// wg.Add(4)
-	//
-	// // total vulns
-	// go func() {
-	// 	defer wg.Done()
 	d := NewDigest(status, TotalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
 
 	if eval != nil && !status.Errored() {
@@ -181,12 +175,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
-	digests[0] = *d
-	// }()
+	digests = append(digests, *d)
 
-	// go func() {
-	// 	defer wg.Done()
-	// 	// unique vulns
+	// unique vulns
 	d = NewDigest(status, UniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
 
 	if eval != nil && !status.Errored() {
@@ -212,12 +203,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
-	digests[1] = *d
-	// }()
+	digests = append(digests, *d)
 
-	// go func() {
-	// 	defer wg.Done()
-	// 	// high vulns
+	// high vulns
 	d = NewDigest(status, HighVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
 
 	if eval != nil && !status.Errored() {
@@ -237,11 +225,8 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		}
 	}
 
-	digests[2] = *d
-	// }()
+	digests = append(digests, *d)
 
-	// go func() {
-	// 	defer wg.Done()
 	// critical vulns
 	d = NewDigest(status, CriticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
 
@@ -262,9 +247,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		}
 	}
 
-	digests[3] = *d
-	// }()
+	digests = append(digests, *d)
 
-	// wg.Wait()
 	return digests, nil
 }
