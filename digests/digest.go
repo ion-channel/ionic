@@ -213,9 +213,7 @@ func (d *Digest) MarshalSourceData(data interface{}, t string) error {
 		Type: t,
 		Data: data,
 	}
-	if r.Data == nil {
-		r.Data = []string{}
-	}
+
 	b, err := json.Marshal(&r)
 	if err != nil {
 		return fmt.Errorf("failed to marshal digest data: %v", err.Error())

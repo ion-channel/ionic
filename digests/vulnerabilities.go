@@ -157,7 +157,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	}
 
 	d := NewDigest(status, TotalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
-	d.MarshalSourceData(nil, "vulnerability")
+	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, false, all)
@@ -186,7 +186,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	// unique vulns
 	d = NewDigest(status, UniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
-	d.MarshalSourceData(nil, "vulnerability")
+	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, true, all)
@@ -215,7 +215,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	// high vulns
 	d = NewDigest(status, HighVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
-	d.MarshalSourceData(nil, "vulnerability")
+	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, false, high)
@@ -238,7 +238,7 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 	// critical vulns
 	d = NewDigest(status, CriticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
-	d.MarshalSourceData(nil, "vulnerability")
+	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, false, critical)
