@@ -190,6 +190,34 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 
 			Expect(string(j)).To(Equal(string(b)))
 		})
+
+		g.It("should be errored when vuln scan timeout", func() {
+			var e *scans.Evaluation
+			s := &scanner.ScanStatus{
+				Status:  scanner.AnalysisStatusFinished,
+				Message: "finished after timeout",
+				Name:    "vulnerability",
+			}
+			v, err := vulnerabilityDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(v).NotTo(BeNil())
+			Expect(v[0].Errored).To(Equal(true))
+			Expect(v[0].Data).To(BeNil())
+			Expect(v[0].SourceData).NotTo(BeNil())
+			Expect(string(v[0].SourceData)).To(Equal(`{"type":"vulnerability","data":[]}`))
+			Expect(v[1].Errored).To(Equal(true))
+			Expect(v[1].Data).To(BeNil())
+			Expect(v[1].SourceData).NotTo(BeNil())
+			Expect(string(v[1].SourceData)).To(Equal(`{"type":"vulnerability","data":[]}`))
+			Expect(v[2].Errored).To(Equal(true))
+			Expect(v[2].Data).To(BeNil())
+			Expect(v[2].SourceData).NotTo(BeNil())
+			Expect(string(v[2].SourceData)).To(Equal(`{"type":"vulnerability","data":[]}`))
+			Expect(v[3].Errored).To(Equal(true))
+			Expect(v[3].Data).To(BeNil())
+			Expect(v[3].SourceData).NotTo(BeNil())
+			Expect(string(v[3].SourceData)).To(Equal(`{"type":"vulnerability","data":[]}`))
+		})
 	})
 }
 

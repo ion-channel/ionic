@@ -102,6 +102,10 @@ func NewDigest(status *scanner.ScanStatus, index int, singular, plural string) *
 		}
 	}
 
+	if erroredMsg == "evaluation not received" {
+		errored = true
+	}
+
 	d := &Digest{
 		Index:          index,
 		Pending:        pending,
@@ -208,6 +212,9 @@ func (d *Digest) MarshalSourceData(data interface{}, t string) error {
 	r := scans.TranslatedResults{
 		Type: t,
 		Data: data,
+	}
+	if r.Data == nil {
+		r.Data = []string{}
 	}
 	b, err := json.Marshal(&r)
 	if err != nil {
