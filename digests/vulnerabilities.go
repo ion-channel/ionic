@@ -157,7 +157,6 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 	}
 
 	d := NewDigest(status, TotalVulnerabilitiesIndex, "total vulnerability", "total vulnerabilities")
-	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, false, all)
@@ -181,12 +180,14 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
+	}
 
 	digests = append(digests, *d)
 
 	// unique vulns
 	d = NewDigest(status, UniqueVulnerabilitiesIndex, "unique vulnerability", "unique vulnerabilities")
-	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, true, all)
@@ -210,12 +211,14 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
+	}
 
 	digests = append(digests, *d)
 
 	// high vulns
 	d = NewDigest(status, HighVulnerabilitiesIndex, "high vulnerability", "high vulnerabilities")
-	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, false, high)
@@ -233,12 +236,14 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 			d.Passed = true
 		}
 	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
+	}
 
 	digests = append(digests, *d)
 
 	// critical vulns
 	d = NewDigest(status, CriticalVulnerabilitiesIndex, "critical vulnerability", "critical vulnerabilities")
-	d.MarshalSourceData([]string{}, "vulnerability")
 
 	if eval != nil && !status.Errored() {
 		pivoted, err := pivotToVulnerabilities(data, false, critical)
@@ -255,6 +260,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if crits == 0 {
 			d.Passed = true
 		}
+	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
 	}
 
 	digests = append(digests, *d)

@@ -176,15 +176,19 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 
 			Expect(ds[0].Title).To(Equal("total vulnerabilities"))
 			Expect(string(ds[0].SourceData)).To(Equal(totalVulnerabilities))
+			Expect(ds[0].Errored).To(BeFalse())
 
 			Expect(ds[1].Title).To(Equal("unique vulnerabilities"))
 			Expect(string(ds[1].SourceData)).To(Equal(uniqueVulnerabilities))
+			Expect(ds[1].Errored).To(BeFalse())
 
 			Expect(ds[2].Title).To(Equal("high vulnerabilities"))
 			Expect(string(ds[2].SourceData)).To(Equal(highVulnerabilities))
+			Expect(ds[2].Errored).To(BeFalse())
 
 			Expect(ds[3].Title).To(Equal("critical vulnerabilities"))
 			Expect(string(ds[3].SourceData)).To(Equal(`{"type":"vulnerability","data":[]}`))
+			Expect(ds[3].Errored).To(BeFalse())
 
 			j, _ := json.Marshal(&e.TranslatedResults.Data)
 
