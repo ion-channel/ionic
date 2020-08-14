@@ -89,7 +89,7 @@ func TestDigest(t *testing.T) {
 				ds = NewDigest(s, 0, "", "")
 				Expect(ds).NotTo(BeNil())
 				Expect(ds.Pending).To(BeFalse())
-				Expect(ds.Errored).To(BeFalse())
+				Expect(ds.Errored).To(BeTrue())
 				Expect(ds.ErroredMessage).To(Equal("evaluation not received"))
 			})
 

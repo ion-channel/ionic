@@ -180,6 +180,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
+	}
 
 	digests = append(digests, *d)
 
@@ -208,6 +211,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
+	}
 
 	digests = append(digests, *d)
 
@@ -230,6 +236,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 			d.Passed = true
 		}
 	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
+	}
 
 	digests = append(digests, *d)
 
@@ -251,6 +260,9 @@ func vulnerabilityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([
 		if crits == 0 {
 			d.Passed = true
 		}
+	}
+	if d.SourceData == nil {
+		d.SourceData = []byte(`{"type":"vulnerability","data":[]}`)
 	}
 
 	digests = append(digests, *d)
