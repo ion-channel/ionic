@@ -237,3 +237,22 @@ func (ic *IonClient) UpdateProject(project *projects.Project, token string) (*pr
 
 	return &p, nil
 }
+
+// GetUsedRulesetIds takes a team ID and returns rulesets used by all projects in that team
+func (ic *IonClient) GetUsedRulesetIds(teamID, token string) ([]projects.RulesetID, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	b, _, err := ic.Get(projects.GetUsedRulesetIdsEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get team's ruleset ids: %v", err.Error())
+	}
+
+	var rList []projects.RulesetID
+	err = json.Unmarshal(b, &rList)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal team's ruleset ids: %v", err.Error())
+	}
+
+	return rList, nil
+}
