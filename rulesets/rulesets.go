@@ -1,6 +1,7 @@
 package rulesets
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -45,17 +46,17 @@ type CreateRuleSetOptions struct {
 
 // RuleSet is a collection of rules
 type RuleSet struct {
-	ID          string       `json:"id"`
-	TeamID      string       `json:"team_id"`
-	Name        string       `json:"name"`
-	Description string       `json:"description"`
-	RuleIDs     []string     `json:"rule_ids"`
-	CreatedAt   time.Time    `json:"created_at"`
-	UpdatedAt   time.Time    `json:"updated_at"`
-	Rules       []rules.Rule `json:"rules"`
-	Deprecated  bool         `json:"has_deprecated_rules"`
-	DeletedAt   string       `json:"deleted_at"`
-	DeletedBy   string       `json:"deleted_by"`
+	ID          string        `json:"id"`
+	TeamID      string        `json:"team_id"`
+	Name        string        `json:"name"`
+	Description string        `json:"description"`
+	RuleIDs     []string      `json:"rule_ids"`
+	CreatedAt   time.Time     `json:"created_at"`
+	UpdatedAt   time.Time     `json:"updated_at"`
+	Rules       []rules.Rule  `json:"rules"`
+	Deprecated  bool          `json:"has_deprecated_rules"`
+	DeletedAt   *sql.NullTime `json:"deleted_at,omitempty"`
+	DeletedBy   string        `json:"deleted_by,omitempty"`
 }
 
 // String returns a JSON formatted string of the ruleset object
