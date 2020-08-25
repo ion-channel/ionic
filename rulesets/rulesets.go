@@ -54,6 +54,8 @@ type RuleSet struct {
 	UpdatedAt   time.Time    `json:"updated_at"`
 	Rules       []rules.Rule `json:"rules"`
 	Deprecated  bool         `json:"has_deprecated_rules"`
+	DeletedAt   string       `json:"deleted_at"`
+	DeletedBy   string       `json:"deleted_by"`
 }
 
 // String returns a JSON formatted string of the ruleset object
