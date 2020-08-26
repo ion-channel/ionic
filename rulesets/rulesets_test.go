@@ -30,7 +30,6 @@ func TestTeam(t *testing.T) {
 				Rules:       nil,
 				Deprecated:  false,
 			}
-
 			Expect(fmt.Sprintf("%v", r)).To(Equal(`{"id":"someid","team_id":"some_teamID","name":"somename","description":"somedescription","rule_ids":null,"created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","rules":null,"has_deprecated_rules":false}`))
 
 		})
