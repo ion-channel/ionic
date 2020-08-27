@@ -18,6 +18,7 @@ func ecosystemsDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 			return nil, fmt.Errorf("error coercing evaluation translated results into languages bytes")
 		}
 
+		d.MarshalSourceData(b, "languages")
 		switch len(b.Ecosystems) {
 		case 0:
 			err := d.AppendEval(eval, "chars", "none detected")

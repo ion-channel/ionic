@@ -9,14 +9,14 @@ import (
 
 func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
-
+	var r scans.VirusResults
 	var scannedFiles, infectedFiles int
 	if eval != nil {
 		b, ok := eval.TranslatedResults.Data.(scans.VirusResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into virus")
 		}
-
+		r = b
 		scannedFiles = b.ScannedFiles
 		infectedFiles = b.InfectedFiles
 	}
@@ -29,6 +29,7 @@ func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest,
 			return nil, fmt.Errorf("failed to create total files scanned digest: %v", err.Error())
 		}
 
+		d.MarshalSourceData(scannedFiles, "files")
 		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 
 		if scannedFiles < 1 {
@@ -47,6 +48,7 @@ func virusDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest,
 			return nil, fmt.Errorf("failed to create total files scanned digest: %v", err.Error())
 		}
 
+		d.MarshalSourceData(r, "virus")
 		if infectedFiles > 0 {
 			d.Warning = true
 			d.WarningMessage = "infected files were seen"
