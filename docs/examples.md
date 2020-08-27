@@ -35,7 +35,7 @@ You should see a response containing some product information for `lodash` at ve
 You can get an API token from the user settings section of the Ion Channel console.  Once you have the token you can supply that in the `Authentication` header in your requests.
 
 ```
-curl "https://api.ionchannel.io/v1/metadata/getLanguages?text=hello+ion+channel"
+curl "https://api.ionchannel.io/v1/metadata/getLanguages?text=hello+world"
 ```
 
 The curl request above will result in a 401 code with authentication failed.
@@ -47,29 +47,28 @@ The curl request above will result in a 401 code with authentication failed.
 Making the same request with your token will respond with all of the languages detected in your request.
 
 ```
-curl -H 'Authorization: Bearer yourtokenhere' "https://api.ionchannel.io/v1/metadata/getLanguages?text=hello+ion+channel"
+curl -H 'Authorization: Bearer yourtokenhere' "https://api.ionchannel.io/v1/metadata/getLanguages?text=hello+world"
 ```
 
 with a response similar to:
 
 ```
 {
-	"data": [{
-		"name": "English",
-		"confidence": 1.0
-	}],
-	"timestamps": {
-		"created": "2019-08-06 22:02:43 +0000",
-		"updated": "2019-08-06 22:02:43 +0000"
-	},
-	"links": {
-		"self": "https://api.ionchannel.io/v1/metadata/getLanguages?text=hello+this+is+english"
-	},
-	"meta": {
-		"copyright": "Copyright 2019 Selection Pressure LLC www.selectpress.net",
-		"authors": ["Ion Channel"],
-		"version": "v1"
-	}
+  "data": [
+    {
+      "name": "English",
+      "confidence": 0.67913777
+    }
+  ],
+  "meta": {
+    "copyright": "Copyright 2018 Selection Pressure LLC www.selectpress.net",
+    "authors": [
+      "Ion Channel Dev Team"
+    ],
+    "version": "v1",
+    "total_count": 0,
+    "offset": 0
+  }
 }
 ```
 
@@ -176,7 +175,7 @@ The `POST /v1/project/createProject` endpoint is where you send requests for pro
   "name": "test project",
   "description": "this is a new project",
   "type": "git",
-  "source": "git@github.com/ion-channel/ionic.git",
+  "source": "git@github.com:ion-channel/ionic.git",
   "branch": "master",
   "active": true
 }
@@ -184,7 +183,7 @@ The `POST /v1/project/createProject` endpoint is where you send requests for pro
 
 ## Analyzing a project
 
-You can request analyzing of a project using `POST /v1/scanner/analyzeProject` and providing the `project_id` and `team_id` as query params.  You should receive a response with the status `accepted`.
+You can request analyzing of a project using `POST /v1/scanner/analyzeProject` and providing the `project_id` and `team_id` as json in the body.  You should receive a response with the status `queued`.
 
 ```
 {
