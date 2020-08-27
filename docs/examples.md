@@ -175,7 +175,7 @@ The `POST /v1/project/createProject` endpoint is where you send requests for pro
   "name": "test project",
   "description": "this is a new project",
   "type": "git",
-  "source": "git@github.com/ion-channel:ionic.git",
+  "source": "git@github.com:ion-channel/ionic.git",
   "branch": "master",
   "active": true
 }
@@ -183,7 +183,7 @@ The `POST /v1/project/createProject` endpoint is where you send requests for pro
 
 ## Analyzing a project
 
-You can request analyzing of a project using `POST /v1/scanner/analyzeProject` and providing the `project_id` and `team_id` as query params.  You should receive a response with the status `accepted`.
+You can request analyzing of a project using `POST /v1/scanner/analyzeProject` and providing the `project_id` and `team_id` as json in the body.  You should receive a response with the status `queued`.
 
 ```
 {
