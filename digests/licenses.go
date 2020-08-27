@@ -18,6 +18,7 @@ func licenseDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Diges
 			return nil, fmt.Errorf("error coercing evaluation translated results into license")
 		}
 
+		d.MarshalSourceData(b, "licenses")
 		licenseList := make([]string, 0)
 		for i := range b.Type {
 			licenseList = append(licenseList, b.Type[i].Name)

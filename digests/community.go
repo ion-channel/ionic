@@ -17,7 +17,7 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into community")
 		}
-
+		d.MarshalSourceData(b, "committers")
 		err := d.AppendEval(eval, "count", b.Committers)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create committers digest: %v", err.Error())

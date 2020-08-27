@@ -17,6 +17,7 @@ func differenceDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into difference")
 		}
+		d.MarshalSourceData(b, "differences")
 
 		err := d.AppendEval(eval, "bool", b.Difference)
 		if err != nil {
