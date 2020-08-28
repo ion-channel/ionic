@@ -55,6 +55,7 @@ type RuleSet struct {
 	UpdatedAt   time.Time     `json:"updated_at"`
 	Rules       []rules.Rule  `json:"rules"`
 	Deprecated  bool          `json:"has_deprecated_rules"`
+	IsUsed      bool          `json:"has_projects_assigned"`
 	DeletedAt   *sql.NullTime `json:"deleted_at,omitempty"`
 	DeletedBy   string        `json:"deleted_by,omitempty"`
 }
