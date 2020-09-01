@@ -29,7 +29,7 @@ func nv(d *scans.Dependency) *scans.Dependency {
 }
 
 func od(d *scans.Dependency) *scans.Dependency {
-	if d.Version < d.LatestVersion {
+	if d.Version < d.LatestVersion && d.Version != "" {
 		return d
 	}
 	if d.Dependencies != nil {
