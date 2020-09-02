@@ -132,7 +132,7 @@ func TestProject(t *testing.T) {
 				Aliases:        nil,
 				Tags:           nil,
 			}
-			Expect(fmt.Sprintf("%v", p)).To(Equal(`{"id":"someid","team_id":"someteamiD","ruleset_id":"someruleset","name":"coolproject","type":"artifact","source":"http://%v:%v/goodurl","branch":"master","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","deploy_key":"thekey","should_monitor":false,"monitor_frequency":"","poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","private":true,"aliases":null,"tags":null}`))
+			Expect(fmt.Sprintf("%v", p)).To(Equal(`{"id":"someid","team_id":"someteamiD","ruleset_id":"someruleset","name":"coolproject","type":"artifact","source":"http://%v:%v/goodurl","branch":"master","description":"the coolest project around","active":true,"chat_channel":"#thechan","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","deploy_key":"thekey","should_monitor":false,"monitor_frequency":"","poc_name":"youknowit","poc_email":"you@know.it","username":"knowit","password":"supersecret","key_fingerprint":"supersecret","private":true,"aliases":null,"tags":null,"ruleset_history":null}`))
 
 		})
 

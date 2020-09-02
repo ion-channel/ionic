@@ -79,6 +79,11 @@ type ProjectRulesetHistory struct {
 	UserID    string    `json:"user_id"`
 }
 
+// RulesetID represents a ruleset ID
+type RulesetID struct {
+	RulesetID string `json:"ruleset_id"`
+}
+
 // String returns a JSON formatted string of the project object
 func (p Project) String() string {
 	b, err := json.Marshal(p)
