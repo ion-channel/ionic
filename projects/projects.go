@@ -74,9 +74,10 @@ type Project struct {
 
 // ProjectRulesetHistory represents the ruleset history of a project
 type ProjectRulesetHistory struct {
-	RulesetID string    `json:"ruleset_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UserID    string    `json:"user_id"`
+	NewRulesetID string    `json:"new_ruleset_id"`
+	OldRulesetID string    `json:"old_ruleset_id"`
+	CreatedAt    time.Time `json:"created_at"`
+	UserID       string    `json:"user_id"`
 }
 
 // RulesetID represents a ruleset ID
