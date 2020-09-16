@@ -128,7 +128,7 @@ func TestRuleSets(t *testing.T) {
 				SetPayload([]byte(SampleProjectHistory)).
 				SetStatus(http.StatusOK)
 
-			ph, err := client.GetProjectHistory("c0210380-3d44-495d-9d10-c7d436a63870", "sometoken")
+			ph, err := client.GetProjectPassFailHistory("c0210380-3d44-495d-9d10-c7d436a63870", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(len(ph)).To(Equal(2))
 			Expect(ph[0].Status).To(Equal(true))

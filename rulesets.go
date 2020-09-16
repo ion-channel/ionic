@@ -140,8 +140,8 @@ func (ic *IonClient) RuleSetExists(ruleSetID, teamID, token string) (bool, error
 	return rulesets.RuleSetExists(ic.client, ic.baseURL, ruleSetID, teamID, token)
 }
 
-//GetProjectHistory takes a project id and returns a daily history of pass/fail statuses
-func (ic *IonClient) GetProjectHistory(projectID, token string) ([]rulesets.ProjectPassFailHistory, error) {
+//GetProjectPassFailHistory takes a project id and returns a daily history of pass/fail statuses
+func (ic *IonClient) GetProjectPassFailHistory(projectID, token string) ([]rulesets.ProjectPassFailHistory, error) {
 	params := &url.Values{}
 	params.Set("project_id", projectID)
 
