@@ -54,3 +54,21 @@ type ProjectPassFailHistory struct {
 	CreatedAt     time.Time `json:"created_at"`
 	StatusFlipped bool      `json:"status_flipped"`
 }
+
+// ProjectRulesetHistory represents history of a project's ruleset changing
+type ProjectRulesetHistory struct {
+	OldRulesetID   string    `json:"old_ruleset_id"`
+	OldRulesetName string    `json:"old_ruleset_name"`
+	NewRulesetID   string    `json:"new_ruleset_id"`
+	NewRulesetName string    `json:"new_ruleset_name"`
+	UserID         string    `json:"user_id"`
+	UserName       string    `json:"user_name"`
+	CreatedAt      time.Time `json:"created_at"`
+}
+
+// ProjectAudit represents a projects history agregated by date
+type ProjectAudit struct {
+	Date           time.Time               `json:"date"`
+	PassFail       *ProjectPassFailHistory `json:"project_pass_fail,omitempty"`
+	RulesetHistory []ProjectRulesetHistory `json:"ruleset_history,omitempty"`
+}
