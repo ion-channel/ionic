@@ -18,10 +18,10 @@ type IonResponse struct {
 
 // Meta represents the metadata section of an IonResponse
 type Meta struct {
-	TotalCount int       `json:"total_count"`
-	Limit      int       `json:"limit,omitempty"`
-	Offset     int       `json:"offset"`
-	LastUpdate time.Time `json:"last_update,omitempty"`
+	TotalCount int        `json:"total_count"`
+	Limit      int        `json:"limit,omitempty"`
+	Offset     int        `json:"offset"`
+	LastUpdate *time.Time `json:"last_update,omitempty"`
 }
 
 // NewResponse takes a data object, meta object, and desired status code to
