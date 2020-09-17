@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"testing"
+	"time"
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/penname"
@@ -18,7 +19,6 @@ func TestResponses(t *testing.T) {
 		g.Describe("Construction", func() {
 			g.It("should return a new response with the defaults set", func() {
 				d := data{Name: "foo"}
-
 				r, err := NewResponse(d, Meta{}, http.StatusOK)
 				Expect(err).To(BeNil())
 				Expect(string(r.Data)).To(ContainSubstring("\"name\":\"foo\""))
@@ -40,7 +40,28 @@ func TestResponses(t *testing.T) {
 				Expect(string(mw.WrittenHeaders())).To(ContainSubstring("Header: 200"))
 				Expect(string(mw.Written())).To(ContainSubstring(`"data":{"name":"foo"}`))
 				Expect(string(mw.Written())).To(ContainSubstring(`"total_count":0,"offset":0`))
+				Expect(string(mw.Written())).ToNot(ContainSubstring(`"last_updated"`))
 			})
+
+			g.It("should write a response with the appropriate Meta fields", func() {
+				d := data{Name: "foo"}
+				responseWithBlankMeta, _ := NewResponse(d, Meta{}, http.StatusOK)
+
+				responseWithBlankMeta.WriteResponse(mw)
+
+				Expect(string(mw.Written())).ToNot(ContainSubstring(`"last_updated"`))
+				Expect(string(mw.Written())).ToNot(ContainSubstring(`"limit"`))
+
+				d = data{Name: "foo"}
+				time := time.Now()
+				responseWithIncludedMeta, _ := NewResponse(d, Meta{LastUpdate: &time, Limit: 1}, http.StatusOK)
+
+				responseWithIncludedMeta.WriteResponse(mw)
+
+				Expect(string(mw.Written())).To(ContainSubstring(`"last_update"`))
+				Expect(string(mw.Written())).To(ContainSubstring(`"limit"`))
+			})
+
 		})
 	})
 
