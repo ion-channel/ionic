@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/ion-channel/ionic/pagination"
+	"github.com/ion-channel/ionic/requests"
 	"github.com/ion-channel/ionic/rulesets"
 )
 
@@ -157,4 +158,30 @@ func (ic *IonClient) GetProjectPassFailHistory(projectID, token string) ([]rules
 	}
 
 	return ph, nil
+}
+
+//GetRulesetNames takes slice of ids and returns the ruleset names with the ids
+func (ic *IonClient) GetRulesetNames(ids []string, token string) ([]rulesets.NameForID, error) {
+	byIDs := requests.ByIDs{
+		IDs: ids,
+	}
+
+	b, err := json.Marshal(byIDs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	buff := bytes.NewBuffer(b)
+	r, err := ic.Post(rulesets.RulesetsGetRulesetNames, token, nil, *buff, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get applied ruleset summary: %v", err.Error())
+	}
+
+	var s []rulesets.NameForID
+	err = json.Unmarshal(r, &s)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal applied ruleset summary: %v", err.Error())
+	}
+
+	return s, nil
 }

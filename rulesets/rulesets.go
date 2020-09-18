@@ -26,6 +26,8 @@ const (
 	GetRuleSetsEndpoint = "v1/ruleset/getRulesets"
 	//RulesetsGetRulesEndpoint is a string representation of the current endpoint for getting rules.
 	RulesetsGetRulesEndpoint = "v1/ruleset/getRules"
+	//RulesetsGetRulesetNames is a string representation of the current endpoint for getting ruleset names.
+	RulesetsGetRulesetNames = "v1/ruleset/getRulesetNames"
 )
 
 // AppliedRulesetRequest represents a request for an applied ruleset result
