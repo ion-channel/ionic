@@ -60,6 +60,12 @@ type RuleSet struct {
 	DeletedBy   string        `json:"deleted_by,omitempty"`
 }
 
+// NameForID represents the data object for ruleset name and its ID
+type NameForID struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
 // String returns a JSON formatted string of the ruleset object
 func (r RuleSet) String() string {
 	b, err := json.Marshal(r)
