@@ -64,8 +64,9 @@ type RuleSet struct {
 
 // NameForID represents the data object for ruleset name and its ID
 type NameForID struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	TeamID string `json:"team_id"`
 }
 
 // String returns a JSON formatted string of the ruleset object
