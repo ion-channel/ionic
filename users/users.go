@@ -15,6 +15,8 @@ const (
 	UsersGetUserEndpoint = "v1/users/getUser"
 	// UsersGetUsers is a string representation of the current endpoint for getting users
 	UsersGetUsers = "v1/users/getUsers"
+	// UsersGetUserNames is a string representation of the current endpoint for getting users
+	UsersGetUserNames = "v1/users/getUserNames"
 )
 
 // User is a representation of an Ion Channel User within the system
@@ -31,6 +33,12 @@ type User struct {
 	SysAdmin          bool              `json:"sys_admin"`
 	System            bool              `json:"system"`
 	Teams             map[string]string `json:"teams"`
+}
+
+// NameAndID represents the data object for user name and its ID
+type NameAndID struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
 
 // String returns a JSON formatted string of the user object
