@@ -7,6 +7,7 @@ import (
 	"net/url"
 
 	"github.com/ion-channel/ionic/errors"
+	"github.com/ion-channel/ionic/requests"
 	"github.com/ion-channel/ionic/users"
 )
 
@@ -107,4 +108,30 @@ func (ic *IonClient) GetUsers(token string) ([]users.User, error) {
 	}
 
 	return us, nil
+}
+
+//GetUserNames takes slice of ids and returns user names with their ids
+func (ic *IonClient) GetUserNames(ids []string, token string) ([]users.NameAndID, error) {
+	byIDs := requests.ByIDs{
+		IDs: ids,
+	}
+
+	b, err := json.Marshal(byIDs)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	buff := bytes.NewBuffer(b)
+	r, err := ic.Post(users.UsersGetUserNames, token, nil, *buff, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user names: %v", err.Error())
+	}
+
+	var s []users.NameAndID
+	err = json.Unmarshal(r, &s)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal user names: %v", err.Error())
+	}
+
+	return s, nil
 }
