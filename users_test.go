@@ -78,7 +78,7 @@ func TestUsers(t *testing.T) {
 				SetPayload([]byte(SampleUserNames)).
 				SetStatus(http.StatusOK)
 
-			un, err := client.GetUserNames([]string{"276bbec3-cc77-44b9-a46d-c7760947ec9d", "B061D58B-FDFD-46BF-A766-2D38DE3B1D7B"}, "sometoken")
+			un, err := client.GetUserNames([]string{"276bbec3-cc77-44b9-a46d-c7760947ec9d", "B061D58B-FDFD-46BF-A766-2D38DE3B1D7B"}, "teamID", "sometoken")
 			Expect(err).To(BeNil())
 			Expect(len(un)).To(Equal(2))
 			Expect(un[0].ID).To(Equal("276bbec3-cc77-44b9-a46d-c7760947ec9d"))
