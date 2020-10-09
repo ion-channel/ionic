@@ -110,8 +110,11 @@ func (ic *IonClient) GetUsers(token string) ([]users.User, error) {
 	return us, nil
 }
 
-//GetUserNames takes slice of ids and returns user names with their ids
-func (ic *IonClient) GetUserNames(ids []string, token string) ([]users.NameAndID, error) {
+//GetUserNames takes slice of ids and teamID and returns user names with their ids
+func (ic *IonClient) GetUserNames(ids []string, teamID, token string) ([]users.NameAndID, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
 	byIDs := requests.ByIDs{
 		IDs: ids,
 	}
@@ -122,7 +125,7 @@ func (ic *IonClient) GetUserNames(ids []string, token string) ([]users.NameAndID
 	}
 
 	buff := bytes.NewBuffer(b)
-	r, err := ic.Post(users.UsersGetUserNames, token, nil, *buff, nil)
+	r, err := ic.Post(users.UsersGetUserNames, token, params, *buff, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get user names: %v", err.Error())
 	}
