@@ -23,6 +23,12 @@ type ByIDs struct {
 	IDs []string `json:"ids"`
 }
 
+// ByIDsAndTeamID represents data to give team id and a slice of project IDs
+type ByIDsAndTeamID struct {
+	TeamID string   `json:"team_id"`
+	IDs    []string `json:"ids"`
+}
+
 func do(client *http.Client, method string, baseURL *url.URL, endpoint, token string, params *url.Values, payload bytes.Buffer, headers http.Header, page *pagination.Pagination) (json.RawMessage, *responses.Meta, error) {
 	if page == nil || page.Limit > 0 {
 		ir, err := _do(client, method, baseURL, endpoint, token, params, payload, headers, page)

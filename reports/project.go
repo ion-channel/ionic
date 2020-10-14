@@ -1,6 +1,8 @@
 package reports
 
 import (
+	"time"
+
 	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/ion-channel/ionic/rulesets"
@@ -14,6 +16,8 @@ const (
 	ReportGetProjectsReportEndpoint = "v1/report/getProjects"
 	//ReportGetScanReportEndpoint is a string representation of the current endpoint for getting scan report
 	ReportGetScanReportEndpoint = "v1/report/getScan"
+	// ReportGetExportedDataEndpoint is a string representation of the current endpoint for exporting projects data
+	ReportGetExportedDataEndpoint = "v1/report/getExportedData"
 
 	// ProjectStatusErrored denotes a request for analysis has errored during
 	// the run, the message field will have more details
@@ -40,6 +44,25 @@ type ProjectReport struct {
 	*projects.Project
 	RulesetName       string             `json:"ruleset_name"`
 	AnalysisSummaries []analyses.Summary `json:"analysis_summaries"`
+}
+
+// ExportedData represents the exported data
+type ExportedData struct {
+	CreatedAt time.Time      `json:"created_at"`
+	Projects  []AnalysisData `json:"projects"`
+}
+
+// AnalysisData represents the project data
+type AnalysisData struct {
+	Library       string `json:"library"`
+	ProjectID     string `json:"project_id"`
+	CurrentStatus string `json:"current_status"`
+	ProductName   string `json:"product_name"`
+	Version       string `json:"version"`
+	VulnCount     int    `json:"vuln_count"`
+	CritVulnCount int    `json:"critical_vuln_count"`
+	HighVulnCount int    `json:"high_vuln_count"`
+	VirusCount    int    `json:"virus_count"`
 }
 
 // NewProjectReport takes a project and analysis summaries to return a
