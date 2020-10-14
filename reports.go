@@ -1,11 +1,13 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
 
 	"github.com/ion-channel/ionic/reports"
+	"github.com/ion-channel/ionic/requests"
 	"github.com/ion-channel/ionic/scanner"
 )
 
@@ -105,4 +107,33 @@ func (ic *IonClient) GetAnalysisNavigation(analysisID, teamID, projectID, token 
 	}
 
 	return &n, nil
+}
+
+// GetExportedProjectsData takes slice of project ids, team id, and token
+// returns slice of exported data for the requested projects
+func (ic *IonClient) GetExportedProjectsData(ids []string, teamID, token string) (*reports.ExportedData, error) {
+	p := requests.ByIDsAndTeamID{
+		TeamID: teamID,
+		IDs:    ids,
+	}
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(reports.ReportGetExportedDataEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to request exported data: %v", err.Error())
+	}
+
+	var ed reports.ExportedData
+	err = json.Unmarshal(r, &ed)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal exported projects data response: %v", err.Error())
+	}
+
+	return &ed, nil
 }
