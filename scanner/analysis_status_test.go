@@ -13,7 +13,7 @@ func TestEvaluation(t *testing.T) {
 
 	g.Describe("AnalysisStatus", func() {
 
-		g.It("should provide a simple function for determining done stati", func() {
+		g.It("should provide a simple function for determining done status", func() {
 			a := &AnalysisStatus{
 				Status: AnalysisStatusErrored,
 			}
@@ -21,7 +21,7 @@ func TestEvaluation(t *testing.T) {
 			Expect(a.Done()).To(BeTrue())
 		})
 
-		g.It("should provide a simple function for determining not done stati", func() {
+		g.It("should provide a simple function for determining not done status", func() {
 			a := &AnalysisStatus{
 				Status: AnalysisStatusAnalyzing,
 			}
