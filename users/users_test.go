@@ -87,6 +87,7 @@ func TestUser(t *testing.T) {
 			u.Teams["inteam"] = "admin"
 			Expect(u.IsMemberOfTeam("inteam")).To(Equal(true))
 			Expect(u.IsAdminOfTeam("inteam")).To(Equal(true))
+			Expect(u.IsAdminOfTeam("notinteam")).To(Equal(false))
 		})
 
 	})
