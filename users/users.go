@@ -57,3 +57,11 @@ func (u User) IsMemberOfTeam(id string) bool {
 	}
 	return false
 }
+
+// IsAdminOfTeam takes a team id and returns true if user is an admin of that team.
+func (u User) IsAdminOfTeam(id string) bool {
+	if ok := u.Teams[id] == "admin"; ok {
+		return true
+	}
+	return false
+}
