@@ -258,8 +258,8 @@ func (ic *IonClient) GetUsedRulesetIds(teamID, token string) ([]projects.Ruleset
 	return rList, nil
 }
 
-// GetNamesVersions takes a team ID and slice of project ids. it returns slice of project ids, aliased names and versions, sorted in that order
-func (ic *IonClient) GetNamesVersions(teamID string, ids []string, token string) ([]projects.NamesVersions, error) {
+// GetNamesAndVersions takes a team ID and slice of project ids. it returns slice of project ids, aliased names and versions, sorted in that order
+func (ic *IonClient) GetNamesAndVersions(teamID string, ids []string, token string) ([]projects.NamesAndVersions, error) {
 	p := requests.ByIDsAndTeamID{
 		TeamID: teamID,
 		IDs:    ids,
@@ -270,12 +270,12 @@ func (ic *IonClient) GetNamesVersions(teamID string, ids []string, token string)
 		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
 	}
 
-	r, err := ic.Post(projects.GetNamesVersionsEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	r, err := ic.Post(projects.GetNamesAndVersionsEndpoint, token, nil, *bytes.NewBuffer(b), nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get projects names and versions: %v", err.Error())
 	}
 
-	var list []projects.NamesVersions
+	var list []projects.NamesAndVersions
 	err = json.Unmarshal(r, &list)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal projects names and versions: %v", err.Error())
