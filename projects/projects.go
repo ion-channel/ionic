@@ -36,6 +36,8 @@ const (
 	UpdateProjectEndpoint = "v1/project/updateProject"
 	// GetUsedRulesetIdsEndpoint is a string representation of the current endpoint for getting list of a team's in use rulesets
 	GetUsedRulesetIdsEndpoint = "v1/project/getUsedRulesetIds"
+	// GetNamesVersionsEndpoint is a string representation of the current endpoint for getting projects alaised names and versions
+	GetNamesVersionsEndpoint = "v1/project/getNamesVersions"
 )
 
 var (
@@ -75,6 +77,13 @@ type Project struct {
 // RulesetID represents a ruleset ID
 type RulesetID struct {
 	RulesetID string `json:"ruleset_id"`
+}
+
+// NamesVersions represents a single shortened alias of name and/or version
+type NamesVersions struct {
+	ID      string `json:"project_id"`
+	Name    string `json:"name"`
+	Version string `json:"version"`
 }
 
 // String returns a JSON formatted string of the project object
