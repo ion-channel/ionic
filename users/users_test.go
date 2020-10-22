@@ -64,5 +64,31 @@ func TestUser(t *testing.T) {
 			Expect(u.IsMemberOfTeam("notinteam")).To(Equal(false))
 		})
 
+		g.It("should check if an admin in team", func() {
+			createdAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+			updatedAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+			lastActive := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
+
+			u := User{
+				ID:                "someid",
+				Email:             "some_email",
+				Username:          "some_user",
+				ChatHandle:        "some_chat_handle",
+				CreatedAt:         createdAt,
+				UpdatedAt:         updatedAt,
+				LastActive:        lastActive,
+				ExternallyManaged: true,
+				Metadata:          nil,
+				SysAdmin:          true,
+				System:            false,
+				Teams:             make(map[string]string),
+			}
+
+			u.Teams["inteam"] = "admin"
+			Expect(u.IsMemberOfTeam("inteam")).To(Equal(true))
+			Expect(u.IsAdminOfTeam("inteam")).To(Equal(true))
+			Expect(u.IsAdminOfTeam("notinteam")).To(Equal(false))
+		})
+
 	})
 }
