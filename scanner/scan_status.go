@@ -39,8 +39,9 @@ type ScanStatus struct {
 
 // ProjectsStates identfies the state of a scan for requested projects
 type ProjectsStates struct {
-	ID     string `json:"id"`
-	Status string `json:"status"`
+	ID         string `json:"id"`
+	Status     string `json:"status"`
+	AnalysisID string `json:"analysis_id"`
 }
 
 // Errored encapsulates the concerns of whether a ScanStatus is in an errored
