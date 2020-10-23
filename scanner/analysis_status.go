@@ -39,17 +39,18 @@ const (
 
 // AnalysisStatus is a representation of an Ion Channel Analysis Status within the system
 type AnalysisStatus struct {
-	ID               string              `json:"id"`
-	TeamID           string              `json:"team_id"`
-	ProjectID        string              `json:"project_id"`
-	Message          string              `json:"message"`
-	Branch           string              `json:"branch"`
-	Status           string              `json:"status"`
-	UnreachableError bool                `json:"unreachable_error"`
-	CreatedAt        time.Time           `json:"created_at"`
-	UpdatedAt        time.Time           `json:"updated_at"`
-	ScanStatus       []ScanStatus        `json:"scan_status"`
-	Deliveries       map[string]Delivery `json:"deliveries"`
+	ID                  string              `json:"id"`
+	TeamID              string              `json:"team_id"`
+	ProjectID           string              `json:"project_id"`
+	Message             string              `json:"message"`
+	Branch              string              `json:"branch"`
+	Status              string              `json:"status"`
+	UnreachableError    bool                `json:"unreachable_error"`
+	AnalysisEventSource string              `json:"analysis_event_src"`
+	CreatedAt           time.Time           `json:"created_at"`
+	UpdatedAt           time.Time           `json:"updated_at"`
+	ScanStatus          []ScanStatus        `json:"scan_status"`
+	Deliveries          map[string]Delivery `json:"deliveries"`
 }
 
 // Done indicates an analyse has stopped processing
