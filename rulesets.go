@@ -185,3 +185,30 @@ func (ic *IonClient) GetRulesetNames(ids []string, token string) ([]rulesets.Nam
 
 	return s, nil
 }
+
+// GetAnalysesStatuses takes a team id, slice of project ids and token
+// returns a slice of project ids, analysis ids, and status
+func (ic *IonClient) GetAnalysesStatuses(teamID string, ids []string, token string) ([]rulesets.Status, error) {
+	body := requests.ByIDsAndTeamID{
+		TeamID: teamID,
+		IDs:    ids,
+	}
+
+	b, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(rulesets.GetRulesetAnalysesStatuses, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get analyses statuses: %v", err.Error())
+	}
+
+	var statuses []rulesets.Status
+	err = json.Unmarshal(r, &statuses)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return statuses, nil
+}
