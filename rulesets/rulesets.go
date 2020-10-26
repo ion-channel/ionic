@@ -28,6 +28,8 @@ const (
 	RulesetsGetRulesEndpoint = "v1/ruleset/getRules"
 	//RulesetsGetRulesetNames is a string representation of the current endpoint for getting ruleset names.
 	RulesetsGetRulesetNames = "v1/ruleset/getRulesetNames"
+	//GetRulesetAnalysesStatuses is a string representation of the current endpoint for getting analyses statuses.
+	GetRulesetAnalysesStatuses = "v1/ruleset/getAnalysesStatuses"
 )
 
 // AppliedRulesetRequest represents a request for an applied ruleset result
@@ -67,6 +69,13 @@ type NameForID struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
 	TeamID string `json:"team_id"`
+}
+
+// Status is a representation of an analysis status
+type Status struct {
+	AnalysisID string `json:"analysis_id"`
+	ProjectID  string `json:"project_id"`
+	Status     string `json:"status"`
 }
 
 // String returns a JSON formatted string of the ruleset object
