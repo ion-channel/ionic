@@ -1,12 +1,14 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
 
 	"github.com/ion-channel/ionic/analyses"
 	"github.com/ion-channel/ionic/pagination"
+	"github.com/ion-channel/ionic/requests"
 )
 
 // GetAnalysis takes an analysis ID, team ID, project ID, and token.  It returns the
@@ -184,4 +186,31 @@ func (ic *IonClient) GetRawLatestAnalysisSummary(teamID, projectID, token string
 	}
 
 	return b, nil
+}
+
+// GetAnalysesExportData takes team id and a slice of analysis ids
+// returns a slice of analyses exported data
+func (ic *IonClient) GetAnalysesExportData(teamID string, ids []string, token string) ([]analyses.ExportData, error) {
+	ri := requests.ByIDsAndTeamID{
+		IDs:    ids,
+		TeamID: teamID,
+	}
+
+	b, err := json.Marshal(ri)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(analyses.AnalysisGetAnalysesExportData, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get project states: %v", err.Error())
+	}
+
+	var ps []analyses.ExportData
+	err = json.Unmarshal(r, &ps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return ps, nil
 }
