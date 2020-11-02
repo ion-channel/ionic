@@ -17,8 +17,9 @@ import (
 )
 
 const (
-	validEmailRegex  = `(?i)^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$`
-	validGitURIRegex = `^(?:(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync)+\+ssh\:\/\/|git\+https?:\/\/|git\@|(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync|ssh|file|s3)+s?:\/\/)[^\s]+$`
+	validEmailRegex     = `(?i)^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$`
+	validGitURIRegex    = `^(?:(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync)+\+ssh\:\/\/|git\+https?:\/\/|git\@|(?:http|ftp|gopher|mailto|mid|cid|news|nntp|prospero|telnet|rlogin|tn3270|wais|svn|git|rsync|ssh|file|s3)+s?:\/\/)[^\s]+$`
+	validDockerURIRegex = `[a-z0-9]+(?:[._-][a-z0-9]+)*`
 )
 
 const (
@@ -126,6 +127,12 @@ func (p *Project) ProjectReachable(client *http.Client, baseURL *url.URL, token 
 				invalidFields["source"] = "source must be a valid uri"
 				projErr = ErrInvalidProject
 			}
+		case "docker":
+			r := regexp.MustCompile(validDockerURIRegex)
+			if p.Source != nil && !r.MatchString(*p.Source) {
+				invalidFields["source"] = "source must be a docker image name"
+				projErr = ErrInvalidProject
+			}
 		default:
 			invalidFields["type"] = fmt.Sprintf("invalid type value")
 			projErr = ErrInvalidProject
@@ -207,6 +214,12 @@ func (p *Project) ValidateRequiredFields(client *http.Client, baseURL *url.URL, 
 			r := regexp.MustCompile(validGitURIRegex)
 			if p.Source != nil && !r.MatchString(*p.Source) {
 				invalidFields["source"] = "source must be a valid uri"
+				projErr = ErrInvalidProject
+			}
+		case "docker":
+			r := regexp.MustCompile(validDockerURIRegex)
+			if p.Source != nil && !r.MatchString(*p.Source) {
+				invalidFields["source"] = "source must be a docker image name"
 				projErr = ErrInvalidProject
 			}
 		default:
@@ -308,6 +321,12 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 			r := regexp.MustCompile(validGitURIRegex)
 			if p.Source != nil && !r.MatchString(*p.Source) {
 				invalidFields["source"] = "source must be a valid uri"
+				projErr = ErrInvalidProject
+			}
+		case "docker":
+			r := regexp.MustCompile(validDockerURIRegex)
+			if p.Source != nil && !r.MatchString(*p.Source) {
+				invalidFields["source"] = "source must be a docker image name"
 				projErr = ErrInvalidProject
 			}
 		default:
