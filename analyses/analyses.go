@@ -23,7 +23,9 @@ const (
 	// AnalysisGetLatestAnalysisEndpoint returns the latest analysis. Requires team id and project id.
 	AnalysisGetLatestAnalysisEndpoint = "v1/animal/getLatestAnalysis"
 	// AnalysisGetScanEndpoint returns a scan. Requires a team id, project id, analysis id and scan id.
-	AnalysisGetScanEndpoint = "v1/animal/getScan"
+	AnalysisGetScanEndpoint = "v1/animal/getAnalysisExportData"
+	// AnalysisGetAnalysesExportData returns exported data for a list of analyses. Requires a team id and list of analyses ids.
+	AnalysisGetAnalysesExportData = "v1/animal/getAnalysesExportData"
 )
 
 // Analysis is a representation of an Ion Channel Analysis within the system
@@ -68,6 +70,17 @@ type Summary struct {
 	TriggerText   string    `json:"trigger_text"`
 	TriggerAuthor string    `json:"trigger_author"`
 	Trigger       string    `json:"trigger"`
+}
+
+// ExportData is the data representation of a scan's exported data
+type ExportData struct {
+	AnalysisID         string `json:"analysis_id"`
+	ProjectID          string `json:"project_id"`
+	Status             string `json:"status"`
+	VirusCount         int    `json:"virus_count"`
+	VulnerabilityCount int    `json:"vulnerability_count"`
+	HighVulnCount      int    `json:"high_vulnerability_count"`
+	CritVulnCount      int    `json:"critical_vulnerability_count"`
 }
 
 // String returns a JSON formatted string of the analysis object
