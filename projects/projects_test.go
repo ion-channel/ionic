@@ -178,6 +178,12 @@ func TestProject(t *testing.T) {
 				fs, err = p.Validate(client, b, testToken)
 				Expect(err).To(BeNil())
 				Expect(len(fs)).To(Equal(0))
+
+				t = "docker"
+				p.Type = &t
+				fs, err = p.Validate(client, b, testToken)
+				Expect(err).To(BeNil())
+				Expect(len(fs)).To(Equal(0))
 			})
 
 			g.It("should say a project is invalid if the type is invalid", func() {
