@@ -186,7 +186,7 @@ func (ic *IonClient) GetRulesetNames(ids []string, token string) ([]rulesets.Nam
 	return s, nil
 }
 
-// GetAnalysesStatuses takes a team id, slice of project ids and token
+// GetAnalysesStatuses takes a team id, slice of analysis ids and token
 // returns a slice of project ids, analysis ids, and status
 func (ic *IonClient) GetAnalysesStatuses(teamID string, ids []string, token string) ([]rulesets.Status, error) {
 	body := requests.ByIDsAndTeamID{
