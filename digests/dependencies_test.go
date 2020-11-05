@@ -136,22 +136,28 @@ func TestDependenciesDigests(t *testing.T) {
 							Requirement:   "",
 						},
 						scans.Dependency{
-							Name:          "ExpectVersion",
+							Name:          "ExpectVersion1",
 							Version:       "1.1.1",
 							LatestVersion: "2.0.0",
 							Requirement:   "1.1.1",
 						},
 						scans.Dependency{
-							Name:          "ExpectVersion",
+							Name:          "ExpectVersion2",
 							Version:       "10",
 							LatestVersion: "10",
 							Requirement:   "10",
 							Dependencies: []scans.Dependency{
 								scans.Dependency{
-									Name:          "ExpectVersion",
+									Name:          "ExpectVersionTDep1",
 									Version:       "1.1.1",
 									LatestVersion: "2.0.0",
 									Requirement:   "1.1.1",
+								},
+								scans.Dependency{
+									Name:          "ExpectVersionTDep2",
+									Version:       "1.0.0",
+									LatestVersion: "1.5.0",
+									Requirement:   "1.0.0",
 								},
 							},
 						},
@@ -171,8 +177,20 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[0].Title).To(Equal("dependencies outdated"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
-			Expect(string(ds[0].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null},{"latest_version":"10","org":"","name":"ExpectVersion","type":"","package":"","version":"10","scope":"","requirement":"10","file":"","dependencies":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null}]}]}`))
-			Expect(string(ds[1].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependencies":null}]}`))
+
+			// ds[0] is dependencies outdated
+			ds0Source := `{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":0,"vulnerable_count":0},"dependencies":null},{"latest_version":"2.0.0","org":"","name":"ExpectVersion1","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":0,"vulnerable_count":0},"dependencies":null},{"latest_version":"10","org":"","name":"ExpectVersion2","type":"","package":"","version":"10","scope":"","requirement":"10","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":2,"vulnerable_count":0},"dependencies":[{"latest_version":"2.0.0","org":"","name":"ExpectVersionTDep1","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null},{"latest_version":"1.5.0","org":"","name":"ExpectVersionTDep2","type":"","package":"","version":"1.0.0","scope":"","requirement":"1.0.0","file":"","dependencies":null}]}]}`
+			// fmt.Printf("\nds0 source is %+v\n\nexpected is   %+v\n", string(ds[0].SourceData), ds0Source)
+			Expect(string(ds[0].SourceData)).To(Equal(ds0Source))
+
+			ds1Source := `{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependencies":null}]}`
+			// fmt.Printf("\n------\nds1 source is %+v\n\nexpected is   %+v\n", string(ds[1].SourceData), ds1Source)
+			Expect(string(ds[1].SourceData)).To(Equal(ds1Source))
+
+			ds2Source := `{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"ExpectNoVersion","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependencies":null},{"latest_version":"2.0.0","org":"","name":"ExpectVersion1","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null},{"latest_version":"10","org":"","name":"ExpectVersion2","type":"","package":"","version":"10","scope":"","requirement":"10","file":"","dependencies":null}]}`
+			// fmt.Printf("\n------\nds2 source is %+v\n\nexpected is   %+v\n", string(ds[2].SourceData), ds2Source)
+			Expect(string(ds[2].SourceData)).To(Equal(ds2Source))
+
 			Expect(ds[0].Warning).To(BeFalse())
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
@@ -252,7 +270,8 @@ func TestDependenciesDigests(t *testing.T) {
 
 			Expect(ds[2].Title).To(Equal("direct dependencies"))
 			Expect(string(ds[2].Data)).To(Equal(`{"count":2}`))
-			Expect(string(ds[2].SourceData)).To(Equal(`{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null}]}`))
+			b := `{"type":"dependency","data":[{"latest_version":"","org":"","name":"ExpectNoVersion","type":"","package":"","version":"","scope":"","requirement":"","file":"","dependencies":null}]}`
+			Expect(string(ds[2].SourceData)).To(Equal(b))
 			Expect(ds[2].Warning).To(BeFalse())
 			Expect(ds[2].Pending).To(BeFalse())
 			Expect(ds[2].Errored).To(BeFalse())
