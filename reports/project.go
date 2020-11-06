@@ -54,11 +54,9 @@ type ExportedData struct {
 
 // AnalysisData represents the project data
 type AnalysisData struct {
-	Library       string `json:"library"`
+	ProjectName   string `json:"project_name"`
 	ProjectID     string `json:"project_id"`
 	CurrentStatus string `json:"current_status"`
-	ProductName   string `json:"product_name"`
-	Version       string `json:"version"`
 	VulnCount     int    `json:"vuln_count"`
 	CritVulnCount int    `json:"critical_vuln_count"`
 	HighVulnCount int    `json:"high_vuln_count"`
