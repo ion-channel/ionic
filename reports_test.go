@@ -97,20 +97,16 @@ func TestReports(t *testing.T) {
 			Expect(d.Projects[0]).NotTo(BeNil())
 
 			Expect(d.Projects[0].ProjectID).To(Equal("foo_id"))
-			Expect(d.Projects[0].Library).To(Equal("foo"))
+			Expect(d.Projects[0].ProjectName).To(Equal("foo"))
 			Expect(d.Projects[0].CurrentStatus).To(Equal("failed"))
-			Expect(d.Projects[0].ProductName).To(Equal(""))
-			Expect(d.Projects[0].Version).To(Equal(""))
 			Expect(d.Projects[0].VulnCount).To(Equal(23))
 			Expect(d.Projects[0].CritVulnCount).To(Equal(1))
 			Expect(d.Projects[0].HighVulnCount).To(Equal(5))
 			Expect(d.Projects[0].VirusCount).To(Equal(0))
 
 			Expect(d.Projects[1].ProjectID).To(Equal("bar_id"))
-			Expect(d.Projects[1].Library).To(Equal("bar"))
+			Expect(d.Projects[1].ProjectName).To(Equal("bar"))
 			Expect(d.Projects[1].CurrentStatus).To(Equal("failed"))
-			Expect(d.Projects[1].ProductName).To(Equal("Hive"))
-			Expect(d.Projects[1].Version).To(Equal("1.1"))
 			Expect(d.Projects[1].VulnCount).To(Equal(26))
 			Expect(d.Projects[1].CritVulnCount).To(Equal(3))
 			Expect(d.Projects[1].HighVulnCount).To(Equal(9))
@@ -124,5 +120,5 @@ const (
 	SampleValidProjectReport  = `{"data":{"id":"AB3DC2C7-4BB8-4211-8F42-158C8AD4BAE3","team_id":"28FB6CD7-2F18-444F-9925-BAB75CFD4A04","ruleset_id":"25174480-5C8F-4C12-8E8D-3E9F125660BE","name":"Pepe","type":"git","source":"git@github.com:ion-channel/pepe.git","branch":"master","description":"","active":true,"chat_channel":"","created_at":"2017-05-26T21:18:28.667Z","updated_at":"2017-07-19T20:02:07.010Z","deploy_key":null,"should_monitor":false,"poc_name":"Daniel","poc_email":"","username":null,"password":null,"key_fingerprint":"","poc_name_hash":"","poc_email_hash":"","aliases":[],"tags":[],"ruleset_name":"Go Project Ruleset","analysis_summaries":[{"analysis_id":"F9D328A5-53E2-4D17-B0E3-09ED60CB1CA2","description":"","branch":"master","risk":"high","summary":"","passed":false,"ruleset_id":"25174480-5C8F-4C12-8E8D-3E9F125660BE","ruleset_name":"Go Project Ruleset","duration":34011.3134330059,"created_at":"2017-09-26T18:23:46.000Z","trigger_hash":"798627047292aa4342cb706c0a5507cd7340a39e","trigger_text":"Merge pull request #151 from ion-channel/test-for-new-account-emails\n\nAdd a test for ensuring we send the right link via email.","trigger_author":"Daniel Hess","trigger":"source commit"},{"analysis_id":"B1454451-C3F0-4226-B2A6-5427E3213116","description":"","branch":"master","risk":"high","summary":"","passed":false,"ruleset_id":"25174480-5C8F-4C12-8E8D-3E9F125660BE","ruleset_name":"Go Project Ruleset","duration":24763.7515759998,"created_at":"2017-07-19T23:19:51.000Z","trigger_hash":"bbd96df8639568106e5ef2fe4a2a7954a587ceb8","trigger_text":"Merge pull request #137 from ion-channel/testing-notice\n\nupdating to notify of running against testing","trigger_author":"Matthew Mayer","trigger":"source commit"}]}}`
 	SampleAnalysisNav         = `{"data":{"analysis":{"branch": "master","created_at": "2017-09-25T21:43:11.069Z","id": "analysis-id","message": "Request for analysis analysis-id on Amazon Web Services SDK has been accepted.","project_id": "93e2f31e-b579-4490-864d-7c630ac49720","status": "accepted","team_id": "team-id","updated_at": "2017-09-25T21:43:11.069Z"}, "latest_analysis":{"branch": "master","created_at": "2017-09-25T21:43:11.069Z","id": "analysis-id","message": "Request for analysis analysis-id on Amazon Web Services SDK has been accepted.","project_id": "93e2f31e-b579-4490-864d-7c630ac49720","status": "accepted","team_id": "team-id","updated_at": "2017-09-25T21:43:11.069Z"}}}`
 
-	SampleExportedProjectsData = `{"data":{"created_at":"2020-10-14T18:44:36.1740216Z","projects":[{"library":"foo","project_id":"foo_id","current_status":"failed","product_name":"","version":"","vuln_count":23,"critical_vuln_count":1,"high_vuln_count":5,"virus_count":0},{"library":"bar","project_id":"bar_id","current_status":"failed","product_name":"Hive","version":"1.1","vuln_count":26,"critical_vuln_count":3,"high_vuln_count":9,"virus_count":1}]},"meta":{"total_count":2,"offset":0,"last_update":"2020-10-14T18:44:36.1740346Z"}}`
+	SampleExportedProjectsData = `{"data":{"created_at":"2020-10-14T18:44:36.1740216Z","projects":[{"project_name":"foo","project_id":"foo_id","current_status":"failed","vuln_count":23,"critical_vuln_count":1,"high_vuln_count":5,"virus_count":0},{"project_name":"bar","project_id":"bar_id","current_status":"failed","vuln_count":26,"critical_vuln_count":3,"high_vuln_count":9,"virus_count":1}]},"meta":{"total_count":2,"offset":0,"last_update":"2020-10-14T18:44:36.1740346Z"}}`
 )
