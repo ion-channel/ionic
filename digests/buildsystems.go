@@ -3,6 +3,7 @@ package digests
 import (
 	"fmt"
 
+	"github.com/ion-channel/ionic/dependencies"
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 )
@@ -38,6 +39,10 @@ func createCompilerDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (
 		b, ok := eval.TranslatedResults.Data.(scans.BuildsystemResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into buildss bytes")
+		}
+
+		if b.Compilers == nil {
+			b.Compilers = make([]scans.Compiler, 0)
 		}
 
 		d.MarshalSourceData(b.Compilers, "compilers")
@@ -82,6 +87,10 @@ func createImagesDigests(status *scanner.ScanStatus, eval *scans.Evaluation) (*D
 			return nil, fmt.Errorf("error coercing evaluation translated results into buildss bytes")
 		}
 
+		if b.Dockerfile.Images == nil {
+			b.Dockerfile.Images = make([]scans.Image, 0)
+		}
+
 		d.MarshalSourceData(b.Dockerfile.Images, "container images")
 
 		switch len(b.Dockerfile.Images) {
@@ -122,6 +131,10 @@ func createContainerDependenciesDigests(status *scanner.ScanStatus, eval *scans.
 		b, ok := eval.TranslatedResults.Data.(scans.BuildsystemResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated container dep results into builds bytes")
+		}
+
+		if b.Dockerfile.Dependencies == nil {
+			b.Dockerfile.Dependencies = make([]dependencies.Dependency, 0)
 		}
 
 		d.MarshalSourceData(b.Dockerfile.Dependencies, "container dependencies")

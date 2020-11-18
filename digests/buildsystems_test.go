@@ -198,6 +198,7 @@ func TestCreateCompilerDigests(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(d).NotTo(BeNil())
 			Expect(d.Data).To(Equal(json.RawMessage("{\"chars\":\"none detected\"}")))
+			Expect(d.SourceData).To(Equal(json.RawMessage(`{"type":"compilers","data":[]}`)))
 		})
 
 		g.It("should return 1 compiler with single compiler", func() {
@@ -279,6 +280,8 @@ func TestCreateImagesDigests(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(d).NotTo(BeNil())
 			Expect(d.Data).To(Equal(json.RawMessage(`{"chars":"none detected"}`)))
+			Expect(d.SourceData).NotTo(BeNil())
+			Expect(d.SourceData).To(Equal(json.RawMessage(`{"type":"container images","data":[]}`)))
 		})
 
 		g.It("should return 1 result with single container image", func() {
@@ -361,6 +364,8 @@ func TestCreateContainerDependenciesDigests(t *testing.T) {
 			Expect(err).To(BeNil())
 			Expect(d).NotTo(BeNil())
 			Expect(d.Data).To(Equal(json.RawMessage(`{"chars":"none detected"}`)))
+			Expect(d.SourceData).NotTo(BeNil())
+			Expect(d.SourceData).To(Equal(json.RawMessage(`{"type":"container dependencies","data":[]}`)))
 		})
 
 		g.It("should return 1 result with single container dependency", func() {
