@@ -29,6 +29,7 @@ func nv(d *scans.Dependency) *scans.Dependency {
 }
 
 func od(d *scans.Dependency) *scans.Dependency {
+	// this should be changed to also handle things like `>= 0`
 	if d.Version < d.LatestVersion && d.Version != "" {
 		return d
 	}
@@ -52,8 +53,10 @@ func outdatedWithMeta(d *scans.Dependency) *scans.Dependency {
 
 	// for each direct dep, figure out how many of its deps are outdated
 	filtered = filterDependenciesOnList(d.Dependencies, false, od)
-	outdatedCount := len(filtered)
+	// we're only interested in the outdated deps
+	scanDeps.Dependencies = filtered
 
+	outdatedCount := len(filtered)
 	m := scans.DependencyMeta{
 		NoVersionCount:       noVersCount,
 		UpdateAvailableCount: outdatedCount,
