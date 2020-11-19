@@ -37,6 +37,10 @@
   name = "github.com/onsi/gomega"
   version = "1.3.0"
 
+[[constraint]]
+  name = "github.com/gomicro/bogus"
+  revision = "e3b537bda9cd7d2e892f225128efb29ac62abda3"
+
 [prune]
   go-tests = true
   unused-packages = true

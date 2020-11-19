@@ -2,6 +2,7 @@ package paths
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 )
 
@@ -12,6 +13,7 @@ type Path struct {
 	payload []byte
 	status  int
 	methods []string
+	params  url.Values
 }
 
 // New returns a newly instantiated path object with everything initialized as
@@ -53,6 +55,12 @@ func (p *Path) SetMethods(methods ...string) *Path {
 	return p
 }
 
+// SetParams sets the expected params and returns path
+func (p *Path) SetParams(params url.Values) *Path {
+	p.params = params
+	return p
+}
+
 // HandleRequest writes to the response writer based how it is configured to
 // handle the request.  If it is not configured to handle the requet it will
 // return a forbidden status.
@@ -62,6 +70,24 @@ func (p *Path) HandleRequest(w http.ResponseWriter, r *http.Request) {
 
 	for header, value := range p.headers {
 		w.Header().Set(header, value)
+	}
+
+	if r.URL != nil {
+		vars := r.URL.Query()
+		for param, value := range p.params {
+			passed, ok := vars[param]
+			if !ok {
+				w.WriteHeader(status)
+				w.Write(payload)
+				return
+			}
+
+			if strings.Join(passed, "") != strings.Join(value, "") {
+				w.WriteHeader(status)
+				w.Write(payload)
+				return
+			}
+		}
 	}
 
 	if p.hasMethod(r.Method) {

@@ -3,12 +3,12 @@ package rulesets
 import (
 	"testing"
 
-	. "github.com/franela/goblin"
+	goblin "github.com/franela/goblin"
 	. "github.com/onsi/gomega"
 )
 
 func TestAppliedRulesets(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Applied Ruleset Summary", func() {

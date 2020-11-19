@@ -9,15 +9,14 @@
   revision = "74c9fe110d4bfd04c222a089a309e0a97e258534"
 
 [[projects]]
-  digest = "1:8399420e4bfd72c54a6bc66aefc84e1fe1277029c5540722399fffb7cd9c3288"
+  digest = "1:34031eae650116f9dec44b5156e28f10bf7d7a1af7c48d97110dc71b1f3f70a6"
   name = "github.com/gomicro/bogus"
   packages = [
     ".",
     "paths",
   ]
   pruneopts = "UT"
-  revision = "dbd2e068cbc3f76ea7ec23f2abf0c5af9c27a162"
-  version = "v0.1.1"
+  revision = "e3b537bda9cd7d2e892f225128efb29ac62abda3"
 
 [[projects]]
   digest = "1:c5829f5d5d7adec9a62d175e1f8cd18f6ed9f3c6d81a10a369b0be0d8b8777c8"

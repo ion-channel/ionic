@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	. "github.com/franela/goblin"
+	goblin "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	"github.com/ion-channel/ionic/deliveries"
 	. "github.com/onsi/gomega"
@@ -16,7 +16,7 @@ const (
 )
 
 func TestGetDeliveryDestinations(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Get Delivery Destinations", func() {
@@ -51,7 +51,7 @@ func TestGetDeliveryDestinations(t *testing.T) {
 }
 
 func TestDeleteDeliveryDestination(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Delete Delivery Destinations", func() {
@@ -101,7 +101,7 @@ func TestDeleteDeliveryDestination(t *testing.T) {
 }
 
 func TestCreateDeliveryDestinations(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Delivery Destinations", func() {

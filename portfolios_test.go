@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/franela/goblin"
+	goblin "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	. "github.com/onsi/gomega"
 )
 
 func TestPortfolios(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Portfolios", func() {

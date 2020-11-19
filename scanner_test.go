@@ -8,13 +8,13 @@ import (
 
 	"github.com/ion-channel/ionic/scanner"
 
-	. "github.com/franela/goblin"
+	goblin "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	. "github.com/onsi/gomega"
 )
 
 func TestScanner(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Scanner", func() {
