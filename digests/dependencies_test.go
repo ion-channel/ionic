@@ -121,7 +121,7 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(ds[1].Errored).To(BeFalse())
 		})
 
-		g.It("should produce outdated digest with relevent data", func() {
+		g.It("should produce outdated digest with relevent data and counts", func() {
 			s := &scanner.ScanStatus{}
 			s.Status = scanner.ScanStatusFinished
 			e := scans.NewEval()
@@ -179,8 +179,8 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(string(ds[0].Data)).To(Equal(`{"count":2}`))
 
 			// ds[0] is dependencies outdated
-			ds0Source := `{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"UpToDate","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":0,"vulnerable_count":0},"dependencies":[]},{"latest_version":"2.0.0","org":"","name":"ExpectVersion1","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":0,"vulnerable_count":0},"dependencies":[]},{"latest_version":"10","org":"","name":"ExpectVersion2","type":"","package":"","version":"10","scope":"","requirement":"10","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":2,"vulnerable_count":0},"dependencies":[{"latest_version":"2.0.0","org":"","name":"ExpectVersionTDep1","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependencies":null},{"latest_version":"1.5.0","org":"","name":"ExpectVersionTDep2","type":"","package":"","version":"1.0.0","scope":"","requirement":"1.0.0","file":"","dependencies":null}]}]}`
-			// fmt.Printf("\nds0 source is %+v\n\nexpected is   %+v\n", string(ds[0].SourceData), ds0Source)
+			ds0Source := `{"type":"dependency","data":[{"latest_version":"2.0.0","org":"","name":"ExpectVersion1","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":0,"vulnerable_count":0},"outdated_version":{"major_behind":1,"minor_behind":0,"patch_behind":0},"dependencies":[]},{"latest_version":"10","org":"","name":"ExpectVersion2","type":"","package":"","version":"10","scope":"","requirement":"10","file":"","dependency_counts":{"first_degree_count":0,"no_version_count":0,"total_unique_count":0,"update_available_count":2,"vulnerable_count":0},"dependencies":[{"latest_version":"2.0.0","org":"","name":"ExpectVersionTDep1","type":"","package":"","version":"1.1.1","scope":"","requirement":"1.1.1","file":"","outdated_version":{"major_behind":1,"minor_behind":0,"patch_behind":0},"dependencies":null},{"latest_version":"1.5.0","org":"","name":"ExpectVersionTDep2","type":"","package":"","version":"1.0.0","scope":"","requirement":"1.0.0","file":"","outdated_version":{"major_behind":0,"minor_behind":5,"patch_behind":0},"dependencies":null}]}]}`
+			//fmt.Printf("\nds0 source is %+v\n\nexpected is   %+v\n", string(ds[0].SourceData), ds0Source)
 			Expect(string(ds[0].SourceData)).To(Equal(ds0Source))
 
 			ds1Source := `{"type":"dependency","data":[{"latest_version":"3.0.0","org":"","name":"UpToDate","type":"","package":"","version":"3.0.0","scope":"","requirement":"","file":"","dependencies":null}]}`
@@ -275,6 +275,54 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(ds[2].Warning).To(BeFalse())
 			Expect(ds[2].Pending).To(BeFalse())
 			Expect(ds[2].Errored).To(BeFalse())
+		})
+
+		g.It("should properly calculate versions behind", func() {
+			d := scans.Dependency{
+				Name:          "ExpectVersion",
+				Version:       "1.1.1",
+				LatestVersion: "2.0.0",
+				Requirement:   "1.1.1",
+			}
+
+			// process out of date
+			dep := od(&d)
+			Expect(dep).ToNot(BeNil())
+			Expect(dep.OutdatedMeta.MajorBehind).To(Equal(1))
+			Expect(dep.OutdatedMeta.MinorBehind).To(Equal(0))
+			Expect(dep.OutdatedMeta.PatchBehind).To(Equal(0))
+		})
+
+		g.It("should return a dependency unmodified if the version is bad", func() {
+			d := scans.Dependency{
+				Name:          "ExpectBadVersion",
+				Version:       "1.1.1",
+				LatestVersion: "foo1bar",
+				Requirement:   "1.1.1",
+			}
+
+			// process out of date
+			dep := od(&d)
+			Expect(dep).ToNot(BeNil())
+			Expect(dep.OutdatedMeta).To(BeNil())
+		})
+
+		g.It("should return a dependency versions behind for a proper npm package", func() {
+			d := scans.Dependency{
+				Org:           "eslint",
+				Type:          "npmjs",
+				Name:          "eslint",
+				Package:       "package",
+				Version:       "5.16.0",
+				LatestVersion: "7.12.1",
+				Requirement:   "^5.8.0",
+			}
+
+			// process out of date
+			dep := od(&d)
+			Expect(dep).ToNot(BeNil())
+			Expect(dep.OutdatedMeta).ToNot(BeNil())
+			Expect(dep.OutdatedMeta.MajorBehind).To(Equal(2))
 		})
 
 		g.It("should have no warning with transitive dependencies", func() {

@@ -310,7 +310,15 @@ type Dependency struct {
 	Requirement   string          `json:"requirement" xml:"requirement"`
 	File          string          `json:"file" xml:"file"`
 	DepMeta       *DependencyMeta `json:"dependency_counts,omitempty" xml:"dependency_counts"`
+	OutdatedMeta  *OutdatedMeta   `json:"outdated_version,omitempty" xml:"outdated_version"`
 	Dependencies  []Dependency    `json:"dependencies" xml:"dependencies"`
+}
+
+// OutdatedMeta is used to represent the number of versions behind a dependcy is
+type OutdatedMeta struct {
+	MajorBehind int `json:"major_behind" xml:"major_behind"`
+	MinorBehind int `json:"minor_behind" xml:"minor_behind"`
+	PatchBehind int `json:"patch_behind" xml:"patch_behind"`
 }
 
 // DependencyMeta represents data for a summary of all dependencies resolved
