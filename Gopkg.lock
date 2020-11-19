@@ -7,7 +7,6 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "74c9fe110d4bfd04c222a089a309e0a97e258534"
-  version = "0.0.1"
 
 [[projects]]
   digest = "1:63dc714aa448e33ddad5e226f1cb297dc5be344efcb7b20d4238083586226c1e"
@@ -26,6 +25,14 @@
   pruneopts = "UT"
   revision = "6b7aa4333fbadc13015f856ae2e27ca2c0817cad"
   version = "v0.1.0"
+
+[[projects]]
+  digest = "1:95732e0c27df672b3fdf5cdd8edd18cba5fc07263ef7cd25eaaad4afc4730313"
+  name = "github.com/hashicorp/go-version"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "59da58cfd357de719a4d16dac30481391a56c002"
+  version = "v1.2.1"
 
 [[projects]]
   digest = "1:038734db8a70cdd73d4215081b22236e2aed3e65ca0727f6afd0ed839630e738"
@@ -101,6 +108,7 @@
     "github.com/franela/goblin",
     "github.com/gomicro/bogus",
     "github.com/gomicro/penname",
+    "github.com/hashicorp/go-version",
     "github.com/onsi/gomega",
   ]
   solver-name = "gps-cdcl"

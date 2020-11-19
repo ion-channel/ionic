@@ -3,6 +3,7 @@ package digests
 import (
 	"fmt"
 
+	"github.com/hashicorp/go-version"
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 )
@@ -29,12 +30,15 @@ func nv(d *scans.Dependency) *scans.Dependency {
 }
 
 func od(d *scans.Dependency) *scans.Dependency {
+	// this should be changed to also handle things like `>= 0`
 	if d.Version < d.LatestVersion && d.Version != "" {
+		// update dependency outdated meta
+		d := digestOutdatedCount(d)
 		return d
 	}
 	if d.Dependencies != nil {
-		for _, dep := range d.Dependencies {
-			f := od(&dep)
+		for i := range d.Dependencies {
+			f := od(&d.Dependencies[i])
 			if f != nil {
 				return d
 			}
@@ -43,8 +47,68 @@ func od(d *scans.Dependency) *scans.Dependency {
 	return nil
 }
 
+// if a dep has outdated deps, count them
+func outdatedWithMeta(d *scans.Dependency) *scans.Dependency {
+	scanDep := *d
+
+	//check our top level dependncy first, to see if it's out of date
+	scanDeps := od(&scanDep)
+
+	// if so continue down the tree calculating dep counts
+	if scanDeps != nil {
+		filtered := filterDependenciesOnList(d.Dependencies, false, nv)
+		noVersCount := len(filtered)
+
+		// for each direct dep, figure out how many of its deps are outdated
+		filtered = filterDependenciesOnList(d.Dependencies, false, od)
+		// we're only interested in the outdated deps
+		scanDeps.Dependencies = filtered
+
+		outdatedCount := len(filtered)
+		m := scans.DependencyMeta{
+			NoVersionCount:       noVersCount,
+			UpdateAvailableCount: outdatedCount,
+			VulnerableCount:      0, // how do we calculate this? We need vulnerability results in here to tie them together
+		}
+		scanDeps.DepMeta = &m
+
+		return scanDeps
+	}
+	return nil
+}
+
 func giveem(d *scans.Dependency) *scans.Dependency {
 	return d
+}
+
+func directWithMeta(d *scans.Dependency) *scans.Dependency {
+	scanDeps := *d
+	topLevelDependencies := make([]scans.Dependency, 0)
+	noVersCount := 0
+	outdatedCount := 0
+	for x := range scanDeps.Dependencies {
+		scanDeps.Dependencies[x].DepMeta = nil
+		scanDeps.Dependencies[x].Dependencies = nil
+		topLevelDependencies = append(topLevelDependencies, scanDeps.Dependencies[x])
+	}
+
+	// We want to remove all transitive deps but keep them around for calculating values with
+	scanDeps.Dependencies = nil
+
+	filtered := filterDependenciesOnList(topLevelDependencies, false, nv)
+	noVersCount = len(filtered)
+
+	filtered = filterDependenciesOnList(topLevelDependencies, false, od)
+	outdatedCount = len(filtered)
+
+	m := scans.DependencyMeta{
+		NoVersionCount:       noVersCount,
+		UpdateAvailableCount: outdatedCount,
+		VulnerableCount:      0, // how do we calculate this? We need vulnerability results in here to tie them together
+	}
+	scanDeps.DepMeta = &m
+
+	return &scanDeps
 }
 
 func direct(d *scans.Dependency) *scans.Dependency {
@@ -53,21 +117,25 @@ func direct(d *scans.Dependency) *scans.Dependency {
 	return ff
 }
 
+func filterDependenciesOnList(deps []scans.Dependency, unique bool, f dfilter) []scans.Dependency {
+	ds := []scans.Dependency{}
+	for _, dr := range deps {
+
+		filtered := f(&dr)
+		if filtered != nil {
+			ds = append(ds, *filtered)
+		}
+	}
+	return ds
+}
+
 func filterDependencies(data interface{}, unique bool, f dfilter) ([]scans.Dependency, error) {
 	b, ok := data.(scans.DependencyResults)
 	if !ok {
 		return nil, fmt.Errorf("error coercing evaluation translated results into dep")
 	}
-	ds := []scans.Dependency{}
-	for _, dr := range b.Dependencies {
 
-		filtered := f(&dr)
-		if filtered != nil {
-
-			ds = append(ds, *filtered)
-		}
-	}
-	return ds, nil
+	return filterDependenciesOnList(b.Dependencies, unique, f), nil
 }
 
 func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
@@ -90,7 +158,8 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	d := NewDigest(status, DependencyOutdatedIndex, "dependency outdated", "dependencies outdated")
 
 	if eval != nil && !status.Errored() {
-		filtered, err := filterDependencies(data, false, od)
+		// return all outdated deps as well as direct deps and the count of their outdated dependencies
+		filtered, err := filterDependencies(data, false, outdatedWithMeta)
 		if err != nil {
 			return nil, fmt.Errorf("failed to add evaluation data to no version dependency digest: %v", err.Error())
 		}
@@ -180,4 +249,41 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	digests = append(digests, *d)
 
 	return digests, nil
+}
+
+func digestOutdatedCount(d *scans.Dependency) *scans.Dependency {
+	dep := d
+	ver, verErr := version.NewVersion(d.Version)
+	latestVersion, lvErr := version.NewVersion(d.LatestVersion)
+	// return the dep as is if we given a bad version
+	if verErr != nil || lvErr != nil {
+		return dep
+	}
+
+	// for major.minor.patch
+	var versionsBehind [3]int
+	if ver.LessThan(latestVersion) {
+		versions := ver.Segments()
+		latestVer := latestVersion.Segments()
+
+		for v := range versions {
+			if versions[v] <= latestVer[v] {
+				versionsBehind[v] = latestVer[v] - versions[v]
+			} else {
+				versionsBehind[v] = 0
+			}
+		}
+
+		outdatedMeta := scans.OutdatedMeta{
+			MajorBehind: versionsBehind[0],
+			MinorBehind: versionsBehind[1],
+			PatchBehind: versionsBehind[2],
+		}
+
+		dep.OutdatedMeta = &outdatedMeta
+		return dep
+
+	}
+	// otherwise return our depedency as-is
+	return dep
 }
