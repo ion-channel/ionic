@@ -31,10 +31,12 @@ func nv(d *scans.Dependency) *scans.Dependency {
 
 func od(d *scans.Dependency) *scans.Dependency {
 	// this should be changed to also handle things like `>= 0`
-	if d.Version < d.LatestVersion && d.Version != "" {
+	if d.LatestVersion != "" && d.Version != "" {
 		// update dependency outdated meta
 		d := digestOutdatedCount(d)
-		return d
+		if d != nil {
+			return d
+		}
 	}
 	if d.Dependencies != nil {
 		for i := range d.Dependencies {
@@ -51,7 +53,7 @@ func od(d *scans.Dependency) *scans.Dependency {
 func outdatedWithMeta(d *scans.Dependency) *scans.Dependency {
 	scanDep := *d
 
-	//check our top level dependncy first, to see if it's out of date
+	// check our top level dependncy first, to see if it's out of date
 	scanDeps := od(&scanDep)
 
 	// if so continue down the tree calculating dep counts
@@ -262,15 +264,20 @@ func digestOutdatedCount(d *scans.Dependency) *scans.Dependency {
 
 	// for major.minor.patch
 	var versionsBehind [3]int
+	// check if our version is out of date, and calculate its versions behind if so
 	if ver.LessThan(latestVersion) {
 		versions := ver.Segments()
 		latestVer := latestVersion.Segments()
-
-		for v := range versions {
-			if versions[v] <= latestVer[v] {
-				versionsBehind[v] = latestVer[v] - versions[v]
+		// check for our shortest version length to use as our index
+		versionsBehindLength := len(versions)
+		if len(latestVer) < len(versions) {
+			versionsBehindLength = len(latestVer)
+		}
+		for i := 0; i < versionsBehindLength; i++ {
+			if versions[i] <= latestVer[i] {
+				versionsBehind[i] = latestVer[i] - versions[i]
 			} else {
-				versionsBehind[v] = 0
+				versionsBehind[i] = 0
 			}
 		}
 
@@ -284,6 +291,6 @@ func digestOutdatedCount(d *scans.Dependency) *scans.Dependency {
 		return dep
 
 	}
-	// otherwise return our depedency as-is
-	return dep
+	// otherwise return nothing
+	return nil
 }
