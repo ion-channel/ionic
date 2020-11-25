@@ -312,6 +312,20 @@ func TestDependenciesDigests(t *testing.T) {
 			Expect(dep.OutdatedMeta).To(BeNil())
 		})
 
+		g.It("should process a dependency with odd version lengths", func() {
+			d := scans.Dependency{
+				Name:          "ExpectGoodVersion",
+				Version:       "1.1.1.1.1",
+				LatestVersion: "2.1.1.1",
+				Requirement:   "2.0",
+			}
+
+			// process out of date
+			dep := od(&d)
+			Expect(dep).ToNot(BeNil())
+			Expect(dep.OutdatedMeta).ToNot(BeNil())
+		})
+
 		g.It("should return a dependency versions behind for a proper npm package", func() {
 			d := scans.Dependency{
 				Org:           "eslint",

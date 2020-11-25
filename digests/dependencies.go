@@ -268,12 +268,7 @@ func digestOutdatedCount(d *scans.Dependency) *scans.Dependency {
 	if ver.LessThan(latestVersion) {
 		versions := ver.Segments()
 		latestVer := latestVersion.Segments()
-		// check for our shortest version length to use as our index
-		versionsBehindLength := len(versions)
-		if len(latestVer) < len(versions) {
-			versionsBehindLength = len(latestVer)
-		}
-		for i := 0; i < versionsBehindLength; i++ {
+		for i := 0; i < len(versionsBehind); i++ {
 			if versions[i] <= latestVer[i] {
 				versionsBehind[i] = latestVer[i] - versions[i]
 			} else {
