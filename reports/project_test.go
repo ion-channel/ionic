@@ -64,7 +64,7 @@ func TestProjectReport(t *testing.T) {
 			input := NewProjectReportsInput{
 				p, s, ar, as,
 			}
-			pr := NewProjectReports(input)
+			pr := NewProjectReports(input, "default-which-will-be-overwitten")
 			Expect(pr).NotTo(BeNil())
 			Expect(pr.Status).To(Equal(ProjectStatusPassing))
 			Expect(*pr.Project.ID).To(Equal(expectedProjectID))

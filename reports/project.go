@@ -93,14 +93,14 @@ type NewProjectReportsInput struct {
 // NewProjectReports takes a project, analysis summary, and applied ruleset to
 // create a summarized, high level report of a singular project. It returns this
 // as a ProjectReports type.
-func NewProjectReports(input NewProjectReportsInput) *ProjectReports {
+func NewProjectReports(input NewProjectReportsInput, defaultRulesetName string) *ProjectReports {
 	project := input.Project
 	summary := input.Summary
 	appliedRuleset := input.AppliedRuleset
 	analysisStatus := input.AnalysisStatus
 
 	projectStatus := ProjectStatusPending
-	rulesetName := "N/A"
+	rulesetName := defaultRulesetName
 	if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
 		rulesetName = appliedRuleset.RuleEvaluationSummary.RulesetName
 	}
