@@ -172,7 +172,6 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		}
 
 		d.MarshalSourceData(filtered, "dependency")
-		d.Evaluated = false // As of now there's no rule to evaluate this against so it's set to not evaluated.
 	}
 
 	digests = append(digests, *d)
@@ -189,6 +188,15 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 		err = d.AppendEval(eval, "count", noVersions)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependencies no version digest: %v", err.Error())
+		}
+
+		// While the "more than one major version behind" rule is a dependency rule we don't
+		// want to apply it to this digest.
+		// As more rules of that type are created we'll add them to this if statement:
+		if eval.RuleID == "c0526ccb-d7b5-498f-8049-41741913bc73" {
+			d.Warning = false
+			d.Evaluated = false
+			d.PassedMessage = ""
 		}
 
 		if noVersions > 0 {
