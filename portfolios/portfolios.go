@@ -28,6 +28,8 @@ const (
 	RulesetsGetStatusesHistoryEndpoint = "v1/ruleset/getStatusesHistory"
 	// ReportsGetMttrEndpoint is a string representation of the current endpoint for Mean Time of Remediation of project(s)
 	ReportsGetMttrEndpoint = "v1/report/getMttr"
+	// PortfolioGetProjectIdsByDependencyEndpoint is a string representation for getting a list of projects by dependency.
+	PortfolioGetProjectIdsByDependencyEndpoint = "v1/animal/getProjectIdsByDependency"
 )
 
 // VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
@@ -123,4 +125,13 @@ type Mttr struct {
 	FailedMttrIncidents int             `json:"failed_mttr_incidents"`
 	ProjectCount        int             `json:"project_count"`
 	Data                json.RawMessage `json:"data"`
+}
+
+// ProjectsByDependency represents the projects that have a given dependency
+type ProjectsByDependency struct {
+	TeamID     string   `json:"team_id"`
+	Name       string   `json:"name"`
+	Org        string   `json:"org"`
+	Version    string   `json:"version"`
+	ProjectIDs []string `json:"project_ids"`
 }
