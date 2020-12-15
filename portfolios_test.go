@@ -173,6 +173,22 @@ func TestPortfolios(t *testing.T) {
 			Expect(r.FailedMttrIncidents).To(Equal(1))
 			Expect(r.ProjectCount).To(Equal(1))
 		})
+
+		g.It("should return a list of projects by dependency", func() {
+			server.AddPath("/v1/animal/getProjectIdsByDependency").
+				SetMethods("GET").
+				SetPayload([]byte(SampleGetProjectsByDep)).
+				SetStatus(http.StatusOK)
+
+			r, err := client.GetProjectIdsByDependency("someteam", "activesupport", "rubyonrails", "5.2.4.3", "sometoken")
+			Expect(err).To(BeNil())
+			Expect(r.TeamID).To(Equal("someteam"))
+			Expect(r.Name).To(Equal("activesupport"))
+			Expect(r.Org).To(Equal("rubyonrails"))
+			Expect(r.Version).To(Equal("5.2.4.3"))
+			Expect(r.ProjectIDs[0]).To(Equal("335e6e38-1c35-48e0-ac05-7e54a0950acb"))
+			Expect(r.ProjectIDs[1]).To(Equal("bc169c32-5d3c-4685-ae7e-8efe3a47c4fa"))
+		})
 	})
 }
 
@@ -188,4 +204,5 @@ const (
 	SampleDependencyList      = `{"data":{"dependency_list":[{"name":"name1","org":"org1","version":"someversion1","package":"package1","type":"type1","latest_version":"latestversion1","scope":"scope1","requirement":"requirement1","file":"file1","projects_count":2}]}}`
 	SampleStatusHistory       = `{"data":[{"status":"pass","count":4,"first_created_at":"2020-07-31T10:54:51.725241-07:00"},{"status":"fail","count":1,"first_created_at":"2020-07-31T10:58:51.725241-07:00"},{"status":"pass","count":1,"first_created_at":"2020-07-31T10:59:51.725241-07:00"}],"meta":{"total_count":3,"offset":0,"last_update":"0001-01-01T00:00:00Z"}}`
 	SampleGetMttr             = `{"data":{"mttr":"1 day","unresolved_incident":false,"time_in_current_status":"1.83 days","failed_mttr_incidents":1,"project_count":1,"data":[{"status":"pass","count":2,"first_created_at":"2020-08-01T22:54:34.543703Z"},{"status":"fail","count":1,"first_created_at":"2020-08-02T22:54:34.579672Z"},{"status":"pass","count":1,"first_created_at":"2020-08-03T22:54:34.608181Z"}]},"meta":{"total_count":1,"offset":0,"last_update":"2020-08-05T18:48:10.6778402Z"}}`
+	SampleGetProjectsByDep    = `{"data":{"team_id":"someteam","name":"activesupport","org":"rubyonrails","version":"5.2.4.3","project_ids":["335e6e38-1c35-48e0-ac05-7e54a0950acb", "bc169c32-5d3c-4685-ae7e-8efe3a47c4fa"]},"meta":{"total_count":0,"offset":0}}`
 )

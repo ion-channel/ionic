@@ -275,3 +275,25 @@ func (ic *IonClient) GetMttr(teamID, projectID string, token string) (*portfolio
 
 	return &mttr, nil
 }
+
+// GetProjectIdsByDependency takes team id, external id, and a token (string) and returns a slice of affected projects
+func (ic *IonClient) GetProjectIdsByDependency(teamID, name, org, version, token string) (*portfolios.ProjectsByDependency, error) {
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+	params.Set("name", name)
+	params.Set("org", org)
+	params.Set("version", version)
+
+	r, _, err := ic.Get(portfolios.PortfolioGetProjectIdsByDependencyEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to request portfolio get projects by dependency: %v", err.Error())
+	}
+
+	var aps portfolios.ProjectsByDependency
+	err = json.Unmarshal(r, &aps)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return &aps, nil
+}
