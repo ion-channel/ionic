@@ -47,6 +47,8 @@ const (
 	UniqueCommittersIndex
 	//CodeCoverageIndex represents the index number for this digest type
 	CodeCoverageIndex
+	//CommittedAtIndex represents the index number for this digest type
+	CommittedAtIndex
 )
 
 // GroupedDigests represents an organized grouped report of digests
