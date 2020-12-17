@@ -192,8 +192,9 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 
 		// While the "more than one major version behind" rule is a dependency rule we don't
 		// want to apply it to this digest.
-		// As more rules of that type are created we'll add them to this if statement:
-		if eval.RuleID == "c0526ccb-d7b5-498f-8049-41741913bc73" || eval.RuleID == "732cb8eb-6fa9-4c33-8d42-e3a8cfc1b231" {
+		// As more rules of that type are created we'll add them to this if statement.
+		// Currently handles more than (one, two, three) major versions behind.
+		if eval.RuleID == "c0526ccb-d7b5-498f-8049-41741913bc73" || eval.RuleID == "732cb8eb-6fa9-4c33-8d42-e3a8cfc1b231" || eval.RuleID == "8c8de7f5-fb27-42ac-90c8-4e9eb7026af5" {
 			d.Warning = false
 			d.Evaluated = false
 			d.PassedMessage = ""
