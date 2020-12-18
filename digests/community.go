@@ -11,6 +11,7 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 	digests := make([]Digest, 0)
 
 	d := NewDigest(status, UniqueCommittersIndex, "unique committer", "unique committers")
+	activityDigest := NewDigest(status, CommittedAtIndex, "committed at", "committed at")
 
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
@@ -27,9 +28,16 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 			d.Warning = true
 			d.WarningMessage = "single committer repository"
 		}
+
+		activityDigest.MarshalSourceData(b, "committed at")
+		err = activityDigest.AppendEval(eval, "chars", b.CommittedAt.String())
+		if err != nil {
+			return nil, fmt.Errorf("failed to create committed at digest: %v", err.Error())
+		}
 	}
 
 	digests = append(digests, *d)
+	digests = append(digests, *activityDigest)
 
 	return digests, nil
 }
