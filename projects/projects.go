@@ -82,8 +82,11 @@ type RulesetID struct {
 
 // Name represents a single project name and id
 type Name struct {
-	ID   string `json:"project_id"`
-	Name string `json:"name"`
+	ID          string `json:"project_id"`
+	Name        string `json:"name"`
+	ProductName string `json:"product_name"`
+	Version     string `json:"version"`
+	Org         string `json:"org"`
 }
 
 // String returns a JSON formatted string of the project object
