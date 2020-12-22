@@ -49,13 +49,16 @@ type ProjectReport struct {
 // ExportedData represents the exported data
 type ExportedData struct {
 	CreatedAt time.Time      `json:"created_at"`
-	Projects  []AnalysisData `json:"projects"`
+	Projects  []ExportFields `json:"projects"`
 }
 
-// AnalysisData represents the project data
-type AnalysisData struct {
+// ExportFields represents the project data
+type ExportFields struct {
 	ProjectName   string `json:"project_name"`
 	ProjectID     string `json:"project_id"`
+	ProductName   string `json:"product_name"`
+	Version       string `json:"version"`
+	Org           string `json:"org"`
 	CurrentStatus string `json:"current_status"`
 	VulnCount     int    `json:"vuln_count"`
 	CritVulnCount int    `json:"critical_vuln_count"`
