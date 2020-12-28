@@ -1,7 +1,9 @@
 package digests
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
@@ -19,21 +21,27 @@ func TestCommunityDigests(t *testing.T) {
 			s := &scanner.ScanStatus{}
 			s.Status = scanner.ScanStatusFinished
 			e := scans.NewEval()
+			committedAt := time.Now()
 			e.TranslatedResults = &scans.TranslatedResults{
 				Type: "community",
 				Data: scans.CommunityResults{
-					Committers: 123321,
+					Committers:  123321,
+					CommittedAt: committedAt,
 				},
 			}
 
 			ds, err := communityDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(1))
+			Expect(len(ds)).To(Equal(2))
 
 			Expect(ds[0].Title).To(Equal("unique committers"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
+
+			Expect(ds[1].Title).To(Equal("days since last commit"))
+			res := fmt.Sprintf("{\"chars\":\"%s\"}", "0")
+			Expect(string(ds[1].Data)).To(Equal(res))
 		})
 
 		g.It("should warn about single committer repos", func() {
@@ -49,7 +57,7 @@ func TestCommunityDigests(t *testing.T) {
 
 			ds, err := communityDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(1))
+			Expect(len(ds)).To(Equal(2))
 
 			Expect(ds[0].Title).To(Equal("unique committer"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":1}`))
@@ -57,6 +65,61 @@ func TestCommunityDigests(t *testing.T) {
 			Expect(ds[0].WarningMessage).To(Equal("single committer repository"))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
+		})
+
+		g.It("should respond properly a zeroed time", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "community",
+				Data: scans.CommunityResults{
+					Committers:  123321,
+					CommittedAt: time.Time{},
+				},
+			}
+
+			ds, err := communityDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(2))
+
+			Expect(ds[0].Title).To(Equal("unique committers"))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+
+			Expect(ds[1].Title).To(Equal("days since last commit"))
+			res := fmt.Sprintf("{\"chars\":\"%s\"}", "N/A")
+			Expect(string(ds[1].Data)).To(Equal(res))
+		})
+
+		g.It("should respond properly to a committed_at time in the past", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			now := time.Now()
+			committedAt := now.AddDate(0, 0, -15)
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "community",
+				Data: scans.CommunityResults{
+					Committers:  123321,
+					CommittedAt: committedAt,
+				},
+			}
+
+			ds, err := communityDigests(s, e)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(2))
+
+			Expect(ds[0].Title).To(Equal("unique committers"))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+
+			Expect(ds[1].Title).To(Equal("days since last commit"))
+			fmt.Printf(fmt.Sprintf("%s", ds[1]))
+			res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
+			Expect(string(ds[1].Data)).To(Equal(res))
 		})
 	})
 }

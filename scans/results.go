@@ -287,9 +287,10 @@ type BuildsystemResults struct {
 // CommunityResults represents the data collected from a community scan.  It
 // represents all known data regarding the open community of a software project
 type CommunityResults struct {
-	Committers int    `json:"committers" xml:"committers"`
-	Name       string `json:"name" xml:"name"`
-	URL        string `json:"url" xml:"url"`
+	Committers  int       `json:"committers" xml:"committers"`
+	Name        string    `json:"name" xml:"name"`
+	URL         string    `json:"url" xml:"url"`
+	CommittedAt time.Time `json:"committed_at" xml:"committed_at"`
 }
 
 // CoverageResults represents the data collected from a code coverage scan.  It
