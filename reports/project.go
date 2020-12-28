@@ -60,10 +60,10 @@ type ExportFields struct {
 	Version       string `json:"version"`
 	Org           string `json:"org"`
 	CurrentStatus string `json:"current_status"`
-	VulnCount     int    `json:"vuln_count"`
-	CritVulnCount int    `json:"critical_vuln_count"`
-	HighVulnCount int    `json:"high_vuln_count"`
-	VirusCount    int    `json:"virus_count"`
+	VulnCount     *int   `json:"vuln_count"`
+	CritVulnCount *int   `json:"critical_vuln_count"`
+	HighVulnCount *int   `json:"high_vuln_count"`
+	VirusCount    *int   `json:"virus_count"`
 }
 
 // NewProjectReport takes a project and analysis summaries to return a
