@@ -1,0 +1,17 @@
+github.com/franela/goblin v0.0.0-20131017120451-74c9fe110d4b h1:fD3VhmqEG0Z58QWvYoa51vY2200bXTFq8x716k3iF/E=
+github.com/franela/goblin v0.0.0-20131017120451-74c9fe110d4b/go.mod h1:7dvUGVsVBjqR7JHJk0brhHOZYGmfBYOrK0ZhYMEtBr4=
+github.com/gomicro/bogus v0.1.2-0.20180508160002-615633fee854 h1:bFepvAaX8H5+wZQP0I6JkydD9lhiF7imm6kvre6h4cA=
+github.com/gomicro/bogus v0.1.2-0.20180508160002-615633fee854/go.mod h1:f2ricbQmGEcYLTUYSH3qHMz7dvTmvLxxOD00MSDBtKk=
+github.com/gomicro/penname v0.1.0 h1:hNvlY/MZM9FcGM2hHOmHiZu//Bg7X7exzvV0zwlKwxU=
+github.com/gomicro/penname v0.1.0/go.mod h1:00rOWDJjfAA7MAMfq6Q3e2ZLFDKMxKJ8W5ugLrpRaDI=
+github.com/hashicorp/go-version v1.2.1 h1:zEfKbn2+PDgroKdiOzqiE8rsmLqU2uwi5PB5pBJ3TkI=
+github.com/hashicorp/go-version v1.2.1/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
+github.com/onsi/gomega v1.3.0 h1:yPHEatyQC4jN3vdfvqJXG7O9vfC6LhaAV1NEdYpP+h0=
+github.com/onsi/gomega v1.3.0/go.mod h1:C1qb7wdrVGGVU+Z6iS04AVkA3Q65CEZX59MT0QO5uiA=
+golang.org/x/net v0.0.0-20180801234040-f4c29de78a2a h1:8fCF9zjAir2SP3N+axz9xs+0r4V8dqPzqsWO10t8zoo=
+golang.org/x/net v0.0.0-20180801234040-f4c29de78a2a/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+golang.org/x/text v0.3.1-0.20180802142052-96e34ec0e18a h1:37ZbUOIU5womoRyvuh6jI+7pZ/FXry5CLGQH19wxDbM=
+golang.org/x/text v0.3.1-0.20180802142052-96e34ec0e18a/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v2 v2.2.1 h1:mUhvW9EsL+naU5Q3cakzfE91YhliOondGd6ZrsDBHQE=
+gopkg.in/yaml.v2 v2.2.1/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
