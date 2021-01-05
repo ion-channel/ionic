@@ -29,6 +29,11 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 			d.Warning = true
 			d.WarningMessage = "single committer repository"
 		}
+
+		// only evaluate if our ruleID for community scan single committers is present
+		if eval.RuleID != "2981e1b0-0c8f-0137-8fe7-186590d3c755" {
+			d.Evaluated = false
+		}
 	}
 
 	digests = append(digests, *d)
