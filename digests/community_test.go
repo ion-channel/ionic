@@ -30,7 +30,9 @@ func TestCommunityDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := communityDigests(s, e)
+			evs := []*scans.Evaluation{e}
+
+			ds, err := communityDigests(s, evs)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 
@@ -55,7 +57,9 @@ func TestCommunityDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := communityDigests(s, e)
+			evs := []*scans.Evaluation{e}
+
+			ds, err := communityDigests(s, evs)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 
@@ -79,7 +83,9 @@ func TestCommunityDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := communityDigests(s, e)
+			evs := []*scans.Evaluation{e}
+
+			ds, err := communityDigests(s, evs)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 
@@ -107,7 +113,9 @@ func TestCommunityDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := communityDigests(s, e)
+			evs := []*scans.Evaluation{e}
+
+			ds, err := communityDigests(s, evs)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(2))
 
@@ -115,11 +123,119 @@ func TestCommunityDigests(t *testing.T) {
 			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
 			Expect(ds[0].Pending).To(BeFalse())
 			Expect(ds[0].Errored).To(BeFalse())
+			Expect(ds[0].Evaluated).To(BeFalse())
 
 			Expect(ds[1].Title).To(Equal("days since last commit"))
 			fmt.Printf(fmt.Sprintf("%s", ds[1]))
 			res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
 			Expect(string(ds[1].Data)).To(Equal(res))
+			Expect(ds[1].Evaluated).To(BeFalse())
+		})
+
+		g.It("should properly evaluate a community scan evaluation without days since last activity rule", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			now := time.Now()
+			committedAt := now.AddDate(0, 0, -15)
+			e.RuleID = "2981e1b0-0c8f-0137-8fe7-186590d3c755"
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "community",
+				Data: scans.CommunityResults{
+					Committers:  123321,
+					CommittedAt: committedAt,
+				},
+			}
+
+			evs := []*scans.Evaluation{e}
+
+			ds, err := communityDigests(s, evs)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(2))
+
+			Expect(ds[0].Title).To(Equal("unique committers"))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+			Expect(ds[0].Evaluated).To(BeTrue())
+
+			Expect(ds[1].Title).To(Equal("days since last commit"))
+			fmt.Printf(fmt.Sprintf("%s", ds[1]))
+			res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
+			Expect(string(ds[1].Data)).To(Equal(res))
+			Expect(ds[1].Evaluated).To(BeFalse())
+		})
+
+		g.It("should properly evaluate a community scan evaluation with days since last activity rule", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			now := time.Now()
+			e.RuleID = "efcb4ae5-ff36-413a-962b-3f4d2170be2a"
+			committedAt := now.AddDate(0, 0, -15)
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "community",
+				Data: scans.CommunityResults{
+					Committers:  123321,
+					CommittedAt: committedAt,
+				},
+			}
+
+			evs := []*scans.Evaluation{e}
+
+			ds, err := communityDigests(s, evs)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(2))
+
+			Expect(ds[0].Title).To(Equal("unique committers"))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+			Expect(ds[0].Evaluated).To(BeFalse())
+
+			Expect(ds[1].Title).To(Equal("days since last commit"))
+			fmt.Printf(fmt.Sprintf("%s", ds[1]))
+			res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
+			Expect(string(ds[1].Data)).To(Equal(res))
+			Expect(ds[1].Evaluated).To(BeTrue())
+		})
+
+		g.It("should properly evaluate a community scan evaluation with both rules", func() {
+			s := &scanner.ScanStatus{}
+			s.Status = scanner.ScanStatusFinished
+			e := scans.NewEval()
+			now := time.Now()
+			committedAt := now.AddDate(0, 0, -15)
+			e.RuleID = "2981e1b0-0c8f-0137-8fe7-186590d3c755"
+			e.TranslatedResults = &scans.TranslatedResults{
+				Type: "community",
+				Data: scans.CommunityResults{
+					Committers:  123321,
+					CommittedAt: committedAt,
+				},
+			}
+
+			eCommittedAtEval := scans.NewEval()
+			eCommittedAtEval.RuleID = "efcb4ae5-ff36-413a-962b-3f4d2170be2a"
+			eCommittedAtEval.TranslatedResults = e.TranslatedResults
+
+			evs := []*scans.Evaluation{e, eCommittedAtEval}
+
+			ds, err := communityDigests(s, evs)
+			Expect(err).To(BeNil())
+			Expect(len(ds)).To(Equal(2))
+
+			Expect(ds[0].Title).To(Equal("unique committers"))
+			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
+			Expect(ds[0].Pending).To(BeFalse())
+			Expect(ds[0].Errored).To(BeFalse())
+			Expect(ds[0].Evaluated).To(BeTrue())
+
+			Expect(ds[1].Title).To(Equal("days since last commit"))
+			fmt.Printf(fmt.Sprintf("%s", ds[1]))
+			res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
+			Expect(string(ds[1].Data)).To(Equal(res))
+			Expect(ds[1].Evaluated).To(BeTrue())
 		})
 	})
 }

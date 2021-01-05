@@ -73,16 +73,26 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 		s := statuses[i]
 
 		var e *scans.Evaluation
+		var evals []*scans.Evaluation
+
 		if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
 			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
+				// a scan type may have multiple rule evaluations
 				if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
 					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
-					break
+					evals = append(evals, e)
 				}
 			}
 		}
 
-		d, err := _newDigests(&s, e)
+		// if we didn't find an matching ruleset evals, we still want the digests for scanstatus even if a ruleset doesnt match it
+		if len(evals) == 0 {
+			evals = append(evals, e)
+		}
+
+		// create the digests for our scan and evaluation(s)
+		d, err := _newDigests(&s, evals)
+
 		if err != nil {
 			errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
 			continue
@@ -91,8 +101,8 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 		if d != nil {
 			ds = append(ds, d...)
 		}
-	}
 
+	}
 	sort.Slice(ds, func(i, j int) bool { return ds[i].Index < ds[j].Index })
 
 	if len(errs) > 0 {
@@ -102,12 +112,20 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 	return ds, nil
 }
 
-func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
-	if eval != nil {
-		err := eval.Translate()
-		if err != nil {
-			return nil, fmt.Errorf("evaluation translate error: %v", err.Error())
+func _newDigests(status *scanner.ScanStatus, evals []*scans.Evaluation) ([]Digest, error) {
+	for _, eval := range evals {
+		if eval != nil {
+			err := eval.Translate()
+			if err != nil {
+				return nil, fmt.Errorf("evaluation translate error: %v", err.Error())
+			}
 		}
+	}
+
+	var eval *scans.Evaluation
+	// check if we have an eval, otherwise pass in a nil
+	if len(evals) > 0 {
+		eval = evals[0]
 	}
 
 	switch strings.ToLower(status.Name) {
@@ -124,7 +142,7 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 		return virusDigests(status, eval)
 
 	case "community":
-		return communityDigests(status, eval)
+		return communityDigests(status, evals)
 
 	case "license":
 		return licenseDigests(status, eval)
