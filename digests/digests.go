@@ -1,6 +1,7 @@
 package digests
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -73,26 +74,46 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 		s := statuses[i]
 
 		var e *scans.Evaluation
+		var evals []*scans.Evaluation
+		sf, _ := json.Marshal(&e)
+		fmt.Printf("E is %s", sf)
+
+		evals = append(evals, e)
 		if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
 			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
+				// a scan type may have multiple rule evaluations
 				if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
 					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
-					break
+					sf, _ := json.Marshal(&e)
+					fmt.Printf("\n\n\n EVAL is %s", sf)
+					evals = append(evals, e)
+					// if err != nil {
+					// 	errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
+					// 	continue
+					// }
+
+					// if d != nil {
+					// 	ds = append(ds, d...)
+					// }
 				}
 			}
 		}
+		// } else {
 
-		d, err := _newDigests(&s, e)
-		if err != nil {
-			errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
-			continue
+		for i := range evals {
+			d, err := _newDigests(&s, evals[i])
+
+			if err != nil {
+				errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
+				continue
+			}
+
+			if d != nil {
+				ds = append(ds, d...)
+			}
 		}
 
-		if d != nil {
-			ds = append(ds, d...)
-		}
 	}
-
 	sort.Slice(ds, func(i, j int) bool { return ds[i].Index < ds[j].Index })
 
 	if len(errs) > 0 {
@@ -123,7 +144,7 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 	case "virus":
 		return virusDigests(status, eval)
 
-	case "community":
+	case "community", "community_activity":
 		return communityDigests(status, eval)
 
 	case "license":
