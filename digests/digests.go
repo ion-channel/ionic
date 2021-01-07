@@ -1,7 +1,6 @@
 package digests
 
 import (
-	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -73,8 +72,6 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 	for i := range statuses {
 		s := statuses[i]
 
-		fmt.Printf("Name is: %s", s.Name)
-
 		var e *scans.Evaluation
 		var evals []*scans.Evaluation
 
@@ -82,9 +79,6 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
 				// a scan type may have multiple rule evaluations
 				if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
-					//e =
-					sf, _ := json.Marshal(&appliedRuleset.RuleEvaluationSummary.Ruleresults[i])
-					fmt.Printf("\n\n\n EVAL is %s", sf)
 					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
 					evals = append(evals, e)
 				}
@@ -119,48 +113,6 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 
 	return ds, nil
 }
-
-// // NewDigests takes an applied ruleset and returns the relevant digests derived
-// // from all the evaluations in it, and any errors it encounters.
-// func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scanner.ScanStatus) ([]Digest, error) {
-// 	ds := make([]Digest, 0)
-// 	errs := make([]string, 0, 0)
-
-// 	for i := range statuses {
-// 		s := statuses[i]
-
-// 		var e *scans.Evaluation
-// 		if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
-// 			// per scan type we may have multiple rule that apply
-// 			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
-// 				if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
-// 					// if we find a rule for a scan type create the digests for it
-// 					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
-// 					break
-// 					//d, err := _newDigests(&s, e)
-// 				}
-// 			}
-// 		}
-
-// 		d, err := _newDigests(&s, e)
-// 		if err != nil {
-// 			errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
-// 			continue
-// 		}
-
-// 		if d != nil {
-// 			ds = append(ds, d...)
-// 		}
-// 	}
-
-// 	sort.Slice(ds, func(i, j int) bool { return ds[i].Index < ds[j].Index })
-
-// 	if len(errs) > 0 {
-// 		return ds, fmt.Errorf("failed to make some digests: %v", strings.Join(errs, "; "))
-// 	}
-
-// 	return ds, nil
-// }
 
 func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	if eval != nil {
