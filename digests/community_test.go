@@ -139,7 +139,7 @@ func TestCommunityDigests(t *testing.T) {
 
 			ds, err := communityDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(1))
 
 			Expect(ds[0].Title).To(Equal("unique committers"))
 			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
@@ -147,11 +147,11 @@ func TestCommunityDigests(t *testing.T) {
 			Expect(ds[0].Errored).To(BeFalse())
 			Expect(ds[0].Evaluated).To(BeTrue())
 
-			Expect(ds[1].Title).To(Equal("days since last commit"))
-			fmt.Printf(fmt.Sprintf("%s", ds[1]))
-			res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
-			Expect(string(ds[1].Data)).To(Equal(res))
-			Expect(ds[1].Evaluated).To(BeFalse())
+			// Expect(ds[1].Title).To(Equal("days since last commit"))
+			// fmt.Printf(fmt.Sprintf("%s", ds[1]))
+			// res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
+			// Expect(string(ds[1].Data)).To(Equal(res))
+			// Expect(ds[1].Evaluated).To(BeFalse())
 		})
 
 		g.It("should properly evaluate a community scan evaluation with days since last activity rule", func() {
@@ -171,19 +171,19 @@ func TestCommunityDigests(t *testing.T) {
 
 			ds, err := communityDigests(s, e)
 			Expect(err).To(BeNil())
-			Expect(len(ds)).To(Equal(2))
+			Expect(len(ds)).To(Equal(1))
 
-			Expect(ds[0].Title).To(Equal("unique committers"))
-			Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
-			Expect(ds[0].Pending).To(BeFalse())
-			Expect(ds[0].Errored).To(BeFalse())
-			Expect(ds[0].Evaluated).To(BeFalse())
+			// Expect(ds[0].Title).To(Equal("unique committers"))
+			// Expect(string(ds[0].Data)).To(Equal(`{"count":123321}`))
+			// Expect(ds[0].Pending).To(BeFalse())
+			// Expect(ds[0].Errored).To(BeFalse())
+			// Expect(ds[0].Evaluated).To(BeFalse())
 
-			Expect(ds[1].Title).To(Equal("days since last commit"))
-			fmt.Printf(fmt.Sprintf("%s", ds[1]))
+			Expect(ds[0].Title).To(Equal("days since last commit"))
+			fmt.Printf(fmt.Sprintf("%s", ds[0]))
 			res := fmt.Sprintf("{\"chars\":\"%s\"}", "15")
-			Expect(string(ds[1].Data)).To(Equal(res))
-			Expect(ds[1].Evaluated).To(BeTrue())
+			Expect(string(ds[0].Data)).To(Equal(res))
+			Expect(ds[0].Evaluated).To(BeTrue())
 		})
 	})
 }

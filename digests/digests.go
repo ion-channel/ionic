@@ -73,19 +73,24 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 	for i := range statuses {
 		s := statuses[i]
 
-		var e *scans.Evaluation
-		var evals []*scans.Evaluation
-		sf, _ := json.Marshal(&e)
-		fmt.Printf("E is %s", sf)
+		fmt.Printf("Name is: %s", s.Name)
 
-		evals = append(evals, e)
+		var e *scans.Evaluation
+		//var es *scans.Evaluation
+		var evals []*scans.Evaluation
+		//evals := make([]scans.Evaluation, 0)
+		// sf, _ := json.Marshal(&e)
+		// // fmt.Printf("E is %s", sf)
+
+		//evals = append(evals, e)
 		if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
 			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
 				// a scan type may have multiple rule evaluations
 				if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
-					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
-					sf, _ := json.Marshal(&e)
+					//e =
+					sf, _ := json.Marshal(&appliedRuleset.RuleEvaluationSummary.Ruleresults[i])
 					fmt.Printf("\n\n\n EVAL is %s", sf)
+					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
 					evals = append(evals, e)
 					// if err != nil {
 					// 	errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
@@ -98,10 +103,16 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 				}
 			}
 		}
+
+		// if we didn't find an matching ruleset evals, we still want the digests for scanstatus even if a ruleset doesnt match
+		if len(evals) == 0 {
+			evals = append(evals, e)
+		}
 		// } else {
 
 		for i := range evals {
-			d, err := _newDigests(&s, evals[i])
+			ev := evals[i]
+			d, err := _newDigests(&s, ev)
 
 			if err != nil {
 				errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
@@ -122,6 +133,48 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 
 	return ds, nil
 }
+
+// // NewDigests takes an applied ruleset and returns the relevant digests derived
+// // from all the evaluations in it, and any errors it encounters.
+// func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scanner.ScanStatus) ([]Digest, error) {
+// 	ds := make([]Digest, 0)
+// 	errs := make([]string, 0, 0)
+
+// 	for i := range statuses {
+// 		s := statuses[i]
+
+// 		var e *scans.Evaluation
+// 		if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
+// 			// per scan type we may have multiple rule that apply
+// 			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
+// 				if appliedRuleset.RuleEvaluationSummary.Ruleresults[i].ID == s.ID {
+// 					// if we find a rule for a scan type create the digests for it
+// 					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
+// 					break
+// 					//d, err := _newDigests(&s, e)
+// 				}
+// 			}
+// 		}
+
+// 		d, err := _newDigests(&s, e)
+// 		if err != nil {
+// 			errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
+// 			continue
+// 		}
+
+// 		if d != nil {
+// 			ds = append(ds, d...)
+// 		}
+// 	}
+
+// 	sort.Slice(ds, func(i, j int) bool { return ds[i].Index < ds[j].Index })
+
+// 	if len(errs) > 0 {
+// 		return ds, fmt.Errorf("failed to make some digests: %v", strings.Join(errs, "; "))
+// 	}
+
+// 	return ds, nil
+// }
 
 func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
 	if eval != nil {
@@ -144,7 +197,9 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 	case "virus":
 		return virusDigests(status, eval)
 
-	case "community", "community_activity":
+	case "community":
+		return communityDigests(status, eval)
+	case "community_activity":
 		return communityDigests(status, eval)
 
 	case "license":

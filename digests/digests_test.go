@@ -44,6 +44,7 @@ func TestDigests(t *testing.T) {
 				fmt.Printf("\n\n Digests: %s \n", s)
 
 				Expect(ds).ToNot(BeNil())
+				Expect(len(ds)).To(Equal(18))
 				Expect(ds[16].RuleID).To(Equal("2981e1b0-0c8f-0137-8fe7-186590d3c755"))
 				Expect(ds[17].RuleID).To(Equal("d3b66d48-40a1-11eb-b378-0242ac130002"))
 				// Expect(ds[1].Index).To(Equal(3))

@@ -14,7 +14,7 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 	d := NewDigest(status, UniqueCommittersIndex, "unique committer", "unique committers")
 	activityDigest := NewDigest(status, CommittedAtIndex, "days since last commit", "days since last commit")
 
-	if eval != nil && !status.Errored() {
+	if eval != nil && !status.Errored() && eval.RuleID != "d3b66d48-40a1-11eb-b378-0242ac130002" && eval.RuleID != "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" && eval.RuleID != "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into community")
@@ -40,11 +40,10 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 		// 	activityDigest.Evaluated = false
 		// 	activityDigest.Warning = false
 		// }
+		digests = append(digests, *d)
 	}
 
-	digests = append(digests, *d)
-
-	if eval != nil && !status.Errored() {
+	if eval != nil && !status.Errored() && eval.RuleID != "2981e1b0-0c8f-0137-8fe7-186590d3c755" {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
 		if !ok {
 			return nil, fmt.Errorf("error coercing evaluation translated results into community")
@@ -74,8 +73,8 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 		if eval.RuleID != "d3b66d48-40a1-11eb-b378-0242ac130002" && eval.RuleID != "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" && eval.RuleID != "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
 			activityDigest.Evaluated = false
 		}
+		digests = append(digests, *activityDigest)
 	}
 
-	digests = append(digests, *activityDigest)
 	return digests, nil
 }
