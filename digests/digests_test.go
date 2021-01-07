@@ -18,13 +18,6 @@ func TestDigests(t *testing.T) {
 	g.Describe("Digests", func() {
 		g.Describe("New Digests", func() {
 			g.It("should be sortable by index", func() {
-				// ds := []Digest{
-				// 	Digest{Index: 1},
-				// 	Digest{Index: 3},
-				// 	Digest{Index: 2},
-				// 	Digest{Index: 0},
-				// }
-
 				var analysisStatus scanner.AnalysisStatus
 				var appliedRulesetSummary rulesets.AppliedRulesetSummary
 
@@ -47,16 +40,6 @@ func TestDigests(t *testing.T) {
 				Expect(len(ds)).To(Equal(18))
 				Expect(ds[16].RuleID).To(Equal("2981e1b0-0c8f-0137-8fe7-186590d3c755"))
 				Expect(ds[17].RuleID).To(Equal("d3b66d48-40a1-11eb-b378-0242ac130002"))
-				// Expect(ds[1].Index).To(Equal(3))
-				// Expect(ds[2].Index).To(Equal(2))
-				// Expect(ds[3].Index).To(Equal(0))
-
-				// sort.Slice(ds, func(i, j int) bool { return ds[i].Index < ds[j].Index })
-
-				// Expect(ds[0].Index).To(Equal(0))
-				// Expect(ds[1].Index).To(Equal(1))
-				// Expect(ds[2].Index).To(Equal(2))
-				// Expect(ds[3].Index).To(Equal(3))
 			})
 		})
 	})

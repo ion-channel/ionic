@@ -76,13 +76,8 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 		fmt.Printf("Name is: %s", s.Name)
 
 		var e *scans.Evaluation
-		//var es *scans.Evaluation
 		var evals []*scans.Evaluation
-		//evals := make([]scans.Evaluation, 0)
-		// sf, _ := json.Marshal(&e)
-		// // fmt.Printf("E is %s", sf)
 
-		//evals = append(evals, e)
 		if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
 			for i := range appliedRuleset.RuleEvaluationSummary.Ruleresults {
 				// a scan type may have multiple rule evaluations
@@ -92,14 +87,6 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 					fmt.Printf("\n\n\n EVAL is %s", sf)
 					e = &appliedRuleset.RuleEvaluationSummary.Ruleresults[i]
 					evals = append(evals, e)
-					// if err != nil {
-					// 	errs = append(errs, fmt.Sprintf("failed to make digest(s) from scan: %v", err.Error()))
-					// 	continue
-					// }
-
-					// if d != nil {
-					// 	ds = append(ds, d...)
-					// }
 				}
 			}
 		}
@@ -108,7 +95,6 @@ func NewDigests(appliedRuleset *rulesets.AppliedRulesetSummary, statuses []scann
 		if len(evals) == 0 {
 			evals = append(evals, e)
 		}
-		// } else {
 
 		for i := range evals {
 			ev := evals[i]
@@ -198,8 +184,6 @@ func _newDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, 
 		return virusDigests(status, eval)
 
 	case "community":
-		return communityDigests(status, eval)
-	case "community_activity":
 		return communityDigests(status, eval)
 
 	case "license":

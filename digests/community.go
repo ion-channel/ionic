@@ -14,6 +14,7 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 	d := NewDigest(status, UniqueCommittersIndex, "unique committer", "unique committers")
 	activityDigest := NewDigest(status, CommittedAtIndex, "days since last commit", "days since last commit")
 
+	// append community digest if our community activity rule isn't present
 	if eval != nil && !status.Errored() && eval.RuleID != "d3b66d48-40a1-11eb-b378-0242ac130002" && eval.RuleID != "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" && eval.RuleID != "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
 		if !ok {
@@ -30,19 +31,10 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 			d.WarningMessage = "single committer repository"
 		}
 
-		// only evaluate if our ruleID for community scan single committers is present
-		// if eval.RuleID != "2981e1b0-0c8f-0137-8fe7-186590d3c755" {
-		// 	d.Evaluated = false
-		// }
-		// For community scans and digest
-		// Only evaluate this rule if one of 1 year, 90, or 30 days rule is not present otherwise we will
-		// if eval.RuleID == "d3b66d48-40a1-11eb-b378-0242ac130002" || eval.RuleID == "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" || eval.RuleID == "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
-		// 	activityDigest.Evaluated = false
-		// 	activityDigest.Warning = false
-		// }
 		digests = append(digests, *d)
 	}
 
+	// append community activity digest if single committer rule isn't present, otherwise we would overwrite it
 	if eval != nil && !status.Errored() && eval.RuleID != "2981e1b0-0c8f-0137-8fe7-186590d3c755" {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
 		if !ok {
