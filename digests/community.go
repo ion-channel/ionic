@@ -9,11 +9,51 @@ import (
 	"github.com/ion-channel/ionic/scans"
 )
 
-func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Digest, error) {
+func communityDigests(status *scanner.ScanStatus, evals []*scans.Evaluation) ([]Digest, error) {
 	digests := make([]Digest, 0)
-	d := NewDigest(status, UniqueCommittersIndex, "unique committer", "unique committers")
-	activityDigest := NewDigest(status, CommittedAtIndex, "days since last commit", "days since last commit")
 
+	for _, eval := range evals {
+		if len(evals) > 1 {
+			// we have both types of community evals present for uiqeue comitters and days since last commit
+			// evaluate them both
+			if eval.RuleID == "2981e1b0-0c8f-0137-8fe7-186590d3c755" {
+				d, err := communityComittersDigest(status, eval)
+				if err != nil {
+					return nil, err
+				}
+				digests = append(digests, *d)
+
+			}
+			// if rule(s) for 30, 90, 1 year since last activity create and evaluate for days since last committ
+			if eval.RuleID == "d3b66d48-40a1-11eb-b378-0242ac130002" || eval.RuleID == "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" || eval.RuleID == "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
+				d, err := communityComittedAtDigest(status, eval)
+				if err != nil {
+					return nil, err
+				}
+				digests = append(digests, *d)
+			}
+		} else {
+			// we have one OR the other, or no evaluation but we still want both digests created.
+			d, err := communityComittersDigest(status, eval)
+			if err != nil {
+				return nil, err
+			}
+			digests = append(digests, *d)
+
+			d, err = communityComittedAtDigest(status, eval)
+			if err != nil {
+				return nil, err
+			}
+			digests = append(digests, *d)
+
+		}
+
+	}
+	return digests, nil
+}
+
+func communityComittersDigest(status *scanner.ScanStatus, eval *scans.Evaluation) (*Digest, error) {
+	d := NewDigest(status, UniqueCommittersIndex, "unique committer", "unique committers")
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
 		if !ok {
@@ -29,10 +69,16 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 			d.Warning = true
 			d.WarningMessage = "single committer repository"
 		}
+
+		if eval.RuleID != "2981e1b0-0c8f-0137-8fe7-186590d3c755" {
+			d.Evaluated = false
+		}
 	}
+	return d, nil
+}
 
-	digests = append(digests, *d)
-
+func communityComittedAtDigest(status *scanner.ScanStatus, eval *scans.Evaluation) (*Digest, error) {
+	activityDigest := NewDigest(status, CommittedAtIndex, "days since last commit", "days since last commit")
 	if eval != nil && !status.Errored() {
 		b, ok := eval.TranslatedResults.Data.(scans.CommunityResults)
 		if !ok {
@@ -57,8 +103,12 @@ func communityDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Dig
 		if err != nil {
 			return nil, fmt.Errorf("failed to create committed at digest: %v", err.Error())
 		}
-	}
 
-	digests = append(digests, *activityDigest)
-	return digests, nil
+		// evaluate if our Rule for days since last commit is present
+		if eval.RuleID != "d3b66d48-40a1-11eb-b378-0242ac130002" && eval.RuleID != "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" && eval.RuleID != "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
+			activityDigest.Evaluated = false
+		}
+	}
+	return activityDigest, nil
+
 }
