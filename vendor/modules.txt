@@ -8,6 +8,9 @@ github.com/gomicro/bogus/paths
 # github.com/gomicro/penname v0.1.0
 ## explicit
 github.com/gomicro/penname
+# github.com/google/uuid v1.2.0
+## explicit
+github.com/google/uuid
 # github.com/hashicorp/go-version v1.2.1
 ## explicit
 github.com/hashicorp/go-version
@@ -25,13 +28,19 @@ github.com/onsi/gomega/matchers/support/goraph/edge
 github.com/onsi/gomega/matchers/support/goraph/node
 github.com/onsi/gomega/matchers/support/goraph/util
 github.com/onsi/gomega/types
-# golang.org/x/net v0.0.0-20180801234040-f4c29de78a2a
+# github.com/spdx/tools-golang v0.0.0-20201122192914-a16d50ee1552
 ## explicit
+github.com/spdx/tools-golang/spdx
+github.com/spdx/tools-golang/spdxlib
+# github.com/spf13/cobra v1.1.1
+## explicit
+# github.com/spf13/viper v1.7.1
+## explicit
+# golang.org/x/net v0.0.0-20190620200207-3b0461eec859
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
-# golang.org/x/text v0.3.1-0.20180802142052-96e34ec0e18a
-## explicit
+# golang.org/x/text v0.3.2
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -49,6 +58,5 @@ golang.org/x/text/internal/utf8internal
 golang.org/x/text/language
 golang.org/x/text/runes
 golang.org/x/text/transform
-# gopkg.in/yaml.v2 v2.2.1
-## explicit
+# gopkg.in/yaml.v2 v2.2.8
 gopkg.in/yaml.v2
