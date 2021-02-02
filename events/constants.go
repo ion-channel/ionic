@@ -43,6 +43,8 @@ const (
 	ForgotPassword = "forgot_password"
 	// PasswordChanged constant for password changed event action
 	PasswordChanged = "password_changed"
+	// ProjectFlipped constant for a project flipping from passing to failing
+	ProjectFlipped = "project_flipped"
 	// UserSignup constant for user signup event action
 	UserSignup = "user_signup"
 	// UserSignupStarted constant for user signup process initiation

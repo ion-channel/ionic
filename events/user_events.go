@@ -13,6 +13,7 @@ var validUserEventActions = map[string]string{
 	PasswordChanged:   PasswordChanged,
 	UserSignup:        UserSignup,
 	UserSignupStarted: UserSignupStarted,
+	ProjectFlipped:    ProjectFlipped,
 }
 
 // UserEventAction represents possible actions related to a user event
