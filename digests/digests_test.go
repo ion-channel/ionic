@@ -2,7 +2,6 @@ package digests
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	"github.com/franela/goblin"
@@ -26,9 +25,6 @@ func TestDigests(t *testing.T) {
 				err = json.Unmarshal([]byte(appliedRuleset), &appliedRulesetSummary)
 				Expect(err).To(BeNil())
 				ds, err := NewDigests(&appliedRulesetSummary, analysisStatus.ScanStatus)
-
-				s, _ := json.Marshal(ds)
-				fmt.Printf("\n\n Digests: %s \n", s)
 
 				Expect(ds).ToNot(BeNil())
 				Expect(len(ds)).To(Equal(18))

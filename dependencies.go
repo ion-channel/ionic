@@ -140,3 +140,29 @@ func (ic *IonClient) SearchDependencies(q, token string) ([]dependencies.Depende
 	}
 	return results, nil
 }
+
+// GetDependencyVersions takes a package name, an ecosystem to find the
+// package in, optional version, and a token for accessing the API.
+// If version is supplied, it will return all known versions greater than what was given
+// It returns a slice of Ionic dependencies.Dependency objects
+func (ic *IonClient) GetDependencyVersions(packageName, ecosystem, version, token string) ([]dependencies.Dependency, error) {
+	params := &url.Values{}
+	params.Set("name", packageName)
+	params.Set("type", ecosystem)
+	if version != "" {
+		params.Set("version", version)
+	}
+
+	b, _, err := ic.Get(dependencies.GetDependencyVersions, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get dependency versions: %v", err.Error())
+	}
+
+	var deps []dependencies.Dependency
+	err = json.Unmarshal(b, &deps)
+	if err != nil {
+		return nil, fmt.Errorf("cannot parse dependency: %v", err.Error())
+	}
+
+	return deps, nil
+}
