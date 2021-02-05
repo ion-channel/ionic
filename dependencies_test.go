@@ -115,6 +115,24 @@ func TestDependencies(t *testing.T) {
 			hrs := server.HitRecords()
 			Expect(len(hrs)).To(Equal(1))
 		})
+
+		g.It("should get dependency versions", func() {
+			server.AddPath("/v1/dependency/getVersions").
+				SetMethods("GET").
+				SetPayload([]byte(sampleDependencyVersions)).
+				SetStatus(http.StatusOK)
+
+			deps, err := client.GetDependencyVersions("hypercord", "npm", "", "atoken")
+
+			Expect(err).To(BeNil())
+			Expect(deps[0].Version).To(Equal("1.4.1"))
+			Expect(deps[0].Name).To(Equal("hypercored"))
+			Expect(deps[0].CreatedAt).NotTo(BeNil())
+			Expect(len(deps)).To(Equal(4))
+
+			hrs := server.HitRecords()
+			Expect(len(hrs)).To(Equal(1))
+		})
 	})
 }
 
@@ -123,6 +141,7 @@ const (
 	sampleLatestVersionsResponse = `{"data":["1.16.3","1.16.2"]}`
 	sampleResolutionResponse     = `{"data":{"dependencies":[{"version":"1.16.3"}]}}`
 	sampleSearchResponse         = `{"data":[{"name":"invaluable", "version":"1.16.3", "org": "nefarious"}]}`
+	sampleDependencyVersions     = `{"data":[{"name":"hypercored","version":"1.4.1","latest_version":"","org":"","type":"","package":"","scope":"","requirement":"","dependencies":null,"confidence":0,"created_at":"2017-09-27T09:54:05.643Z","updated_at":"2021-02-04T23:32:37.078164Z"},{"name":"hypercored","version":"1.4.0","latest_version":"","org":"","type":"","package":"","scope":"","requirement":"","dependencies":null,"confidence":0,"created_at":"2017-09-27T07:34:04.857Z","updated_at":"2021-02-04T23:32:37.078164Z"},{"name":"hypercored","version":"1.3.0","latest_version":"","org":"","type":"","package":"","scope":"","requirement":"","dependencies":null,"confidence":0,"created_at":"2017-07-11T22:31:42.531Z","updated_at":"2021-02-04T23:32:37.078164Z"},{"name":"hypercored","version":"1.2.2","latest_version":"","org":"","type":"","package":"","scope":"","requirement":"","dependencies":null,"confidence":0,"created_at":"2017-06-13T14:14:28.372Z","updated_at":"2021-02-04T23:32:37.078164Z"}]}`
 
 	samplePomSnippet = `<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">

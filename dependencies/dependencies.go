@@ -1,5 +1,7 @@
 package dependencies
 
+import "time"
+
 const (
 	// GetLatestVersionForDependencyEndpoint - returns the latest single version for a dependency
 	GetLatestVersionForDependencyEndpoint = "v1/dependency/getLatestVersionForDependency"
@@ -9,6 +11,8 @@ const (
 	ResolveDependenciesInFileEndpoint = "v1/dependency/resolveDependenciesInFile"
 	// ResolveDependencySearchEndpoint is a string representation of the current endpoint for searching dependencies
 	ResolveDependencySearchEndpoint = "v1/dependency/search"
+	// GetDependencyVersions is a string representation of the current endpoint for returns the list of known versions for a dependency
+	GetDependencyVersions = "v1/dependency/getVersions"
 )
 
 // Dependency represents all the known information for a dependency object
@@ -24,6 +28,8 @@ type Dependency struct {
 	Requirement   string       `json:"requirement"`
 	Dependencies  []Dependency `json:"dependencies"`
 	Confidence    float32      `json:"confidence"`
+	CreatedAt     time.Time    `json:"created_at,omitempty"`
+	UpdatedAt     time.Time    `json:"updated_at,omitempty"`
 }
 
 // Meta represents all the known meta information for a dependency set
