@@ -24,8 +24,8 @@ func communityDigests(status *scanner.ScanStatus, evals []*scans.Evaluation) ([]
 				digests = append(digests, *d)
 
 			}
-			// if rule(s) for 30, 90, 1 year since last activity create and evaluate for days since last committ
-			if eval.RuleID == "d3b66d48-40a1-11eb-b378-0242ac130002" || eval.RuleID == "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" || eval.RuleID == "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
+			// if rule(s) for 30, 90, 180 days, 1 year since last activity create and evaluate for days since last committ
+			if eval.RuleID == "d3b66d48-40a1-11eb-b378-0242ac130002" || eval.RuleID == "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" || eval.RuleID == "21353ecd-b3a9-411d-ab93-c868cdf2c69c" || eval.RuleID == "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
 				d, err := communityComittedAtDigest(status, eval)
 				if err != nil {
 					return nil, err
@@ -105,7 +105,7 @@ func communityComittedAtDigest(status *scanner.ScanStatus, eval *scans.Evaluatio
 		}
 
 		// evaluate if our Rule for days since last commit is present
-		if eval.RuleID != "d3b66d48-40a1-11eb-b378-0242ac130002" && eval.RuleID != "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" && eval.RuleID != "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
+		if eval.RuleID != "d3b66d48-40a1-11eb-b378-0242ac130002" && eval.RuleID != "6db01715-9e9e-4ff9-bd15-1fcd776d81b8" && eval.RuleID != "21353ecd-b3a9-411d-ab93-c868cdf2c69c" && eval.RuleID != "efcb4ae5-ff36-413a-962b-3f4d2170be2a" {
 			activityDigest.Evaluated = false
 		}
 	}
