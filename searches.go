@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/ion-channel/ionic/community"
+	"github.com/ion-channel/ionic/dependencies"
 	"github.com/ion-channel/ionic/products"
 	"github.com/ion-channel/ionic/responses"
 )
@@ -20,11 +21,22 @@ type SearchMatch struct {
 	// Requires common fields to be explicitly
 	// defined here
 	Name       string    `json:"name"`
+	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
-	Confidence float64   `json:"confidence"`
+	Confidence float32   `json:"confidence"`
+	Version    string    `json:"version,omitempty"`
+	Org        string    `json:"org,omitempty"`
 
-	*community.Repo
-	*products.Product
+	// Clean up the output
+	Vulnerabilities *interface{} `json:"vulnerabilities,omitempty"`
+	Source          *interface{} `json:"source,omitempty"`
+	References      *interface{} `json:"references,omitempty"`
+	Aliases         *interface{} `json:"aliases,omitempty"`
+	Dependencies    *interface{} `json:"dependencies,omitempty"`
+
+	*community.Repo          `json:",omitempty"`
+	*products.Product        `json:",omitempty"`
+	*dependencies.Dependency `json:",omitempty"`
 }
 
 // GetSearch takes a query to perform and a to be searched param

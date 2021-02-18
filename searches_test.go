@@ -40,7 +40,7 @@ func TestSearches(t *testing.T) {
 			Expect(hitRecords[0].Header.Get("Authorization")).To(Equal("Bearer sometoken"))
 
 			Expect(searchResults[0].Name).To(Equal("jdk"))
-			Expect(searchResults[0].Confidence).To(Equal(1.0))
+			Expect(searchResults[0].Confidence).To(Equal(float32(1.0)))
 			Expect(searchResults[0].Org).To(Equal("ibm"))
 		})
 	})
