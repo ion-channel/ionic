@@ -263,7 +263,7 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 		projErr = ErrInvalidProject
 	}
 
-	if p.Source == nil {
+	if p.Source == nil && (p.Type != nil && strings.ToLower(*p.Type) != "source_unavailable") {
 		invalidFields["source"] = "missing source"
 		projErr = ErrInvalidProject
 	}
@@ -329,6 +329,11 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 			r := regexp.MustCompile(validDockerURIRegex)
 			if p.Source != nil && !r.MatchString(*p.Source) {
 				invalidFields["source"] = "source must be a docker image name"
+				projErr = ErrInvalidProject
+			}
+		case "source_unavailable":
+			if p.Source != nil && len(*p.Source) > 0 {
+				invalidFields["source"] = "source cannot be specified for this project type"
 				projErr = ErrInvalidProject
 			}
 		default:
