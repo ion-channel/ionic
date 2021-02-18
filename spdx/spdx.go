@@ -111,15 +111,14 @@ func ProjectFromSPDX2_1(doc *spdx.Document2_1) (projects.Project, error) {
 	return proj, nil
 }
 
-// ProjectPackageFromSPDX2_2 Assumes parsing on individual package from an SPDX file (v2.2) with package source at PackageDownloadLocation
-// PackageDownloadLocation must be a resolveable URL
-// to create a project
-func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) (projects.Project, error) {
-	p := projects.Project{}
+// ProjectPackageFromSPDX2_2 parses packages from an SPDX file (v2.2) with package source at PackageDownloadLocation
+// PackageDownloadLocation must be a resolveable URL to create a project
+func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) ([]projects.Project, error) {
+	projs := make([]projects.Project, 0)
 	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
-		return p, nil
+		return projs, nil
 	}
 
 	// SPDX Document does contain packages, so we'll go through each one
@@ -130,52 +129,47 @@ func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) (proje
 			continue
 		}
 
-		if pkg.PackageName == packageName {
-			// create our project
-			var name, ptype, source, branch, description string
-			active := true
-			monitor := true
+		// create our project
+		var name, ptype, source, branch, description string
+		active := true
+		monitor := true
 
-			tmpID := uuid.New().String()
-			name = pkg.PackageName
+		tmpID := uuid.New().String()
+		name = pkg.PackageName
 
-			if pkg.PackageDownloadLocation == "" {
-				err := fmt.Errorf("Error while creating project SPDX file %s must contain PackageDownloadLocation field", doc.CreationInfo.DocumentName)
-				return p, err
-			}
-
-			if strings.Contains(pkg.PackageDownloadLocation, "git") {
-				source = pkg.PackageDownloadLocation
-				branch = "master"
-				ptype = "git"
-			} else {
-				source = pkg.PackageDownloadLocation
-				ptype = "artifact"
-			}
-
-			if pkg.PackageDescription != "" {
-				description = pkg.PackageDescription
-			}
-
-			proj := projects.Project{
-				ID:          &tmpID,
-				Branch:      &branch,
-				Description: &description,
-				TeamID:      &teamID,
-				Type:        &ptype,
-				Source:      &source,
-				Name:        &name,
-				RulesetID:   &rulesetID,
-				Active:      active,
-				Monitor:     monitor,
-			}
-
-			return proj, nil
+		if pkg.PackageDownloadLocation == "" {
+			ptype = "source_unavailable"
+		} else if strings.Contains(pkg.PackageDownloadLocation, "git") {
+			source = pkg.PackageDownloadLocation
+			branch = "master"
+			ptype = "git"
+		} else {
+			source = pkg.PackageDownloadLocation
+			ptype = "artifact"
 		}
+
+		if pkg.PackageDescription != "" {
+			description = pkg.PackageDescription
+		}
+
+		proj := projects.Project{
+			ID:          &tmpID,
+			Branch:      &branch,
+			Description: &description,
+			TeamID:      &teamID,
+			Type:        &ptype,
+			Source:      &source,
+			Name:        &name,
+			RulesetID:   &rulesetID,
+			Active:      active,
+			Monitor:     monitor,
+		}
+
+		projs = append(projs, proj)
 
 	}
 
-	return p, nil
+	return projs, nil
 }
 
 // Helper function to parse email from SPDX Creator info
@@ -192,16 +186,15 @@ func parseCreatorEmail(creatorPersons []string) string {
 	return ""
 }
 
-// ProjectPackageFromSPDX2_1 assumes parsing on individual package from an SPDX file (v2.1) with package source at PackageDownloadLocation
-// PackageDownloadLocation must be a resolveable URL
-// to create a project
-func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) (projects.Project, error) {
-	p := projects.Project{}
+// ProjectPackageFromSPDX2_1 parses packages from an SPDX file (v2.1) with package source at PackageDownloadLocation
+// PackageDownloadLocation must be a resolveable URL to create a project
+func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) ([]projects.Project, error) {
+	projs := make([]projects.Project, 0)
 
 	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_1(doc)
 	if err != nil {
 		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
-		return p, nil
+		return projs, nil
 	}
 
 	// SPDX Document does contain packages, so we'll go through each one
@@ -212,52 +205,46 @@ func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) (proje
 			continue
 		}
 
-		if pkg.PackageName == packageName {
-			// create our project
-			var name, ptype, source, branch, description string
-			active := true
-			monitor := true
+		var name, ptype, source, branch, description string
+		active := true
+		monitor := true
 
-			tmpID := uuid.New().String()
-			name = pkg.PackageName
+		tmpID := uuid.New().String()
+		name = pkg.PackageName
 
-			if pkg.PackageDownloadLocation == "" {
-				err := fmt.Errorf("Error while creating project SPDX file %s must contain PackageDownloadLocation field", doc.CreationInfo.DocumentName)
-				return p, err
-			}
-
-			if strings.Contains(pkg.PackageDownloadLocation, "git") {
-				source = pkg.PackageDownloadLocation
-				branch = "master"
-				ptype = "git"
-			} else {
-				source = pkg.PackageDownloadLocation
-				ptype = "artifact"
-			}
-
-			if pkg.PackageDescription != "" {
-				description = pkg.PackageDescription
-			}
-
-			proj := projects.Project{
-				ID:          &tmpID,
-				Branch:      &branch,
-				Description: &description,
-				TeamID:      &teamID,
-				Type:        &ptype,
-				Source:      &source,
-				Name:        &name,
-				RulesetID:   &rulesetID,
-				Active:      active,
-				Monitor:     monitor,
-			}
-
-			return proj, nil
+		if pkg.PackageDownloadLocation == "" {
+			ptype = "source_unavailable"
+		} else if strings.Contains(pkg.PackageDownloadLocation, "git") {
+			source = pkg.PackageDownloadLocation
+			branch = "master"
+			ptype = "git"
+		} else {
+			source = pkg.PackageDownloadLocation
+			ptype = "artifact"
 		}
+
+		if pkg.PackageDescription != "" {
+			description = pkg.PackageDescription
+		}
+
+		proj := projects.Project{
+			ID:          &tmpID,
+			Branch:      &branch,
+			Description: &description,
+			TeamID:      &teamID,
+			Type:        &ptype,
+			Source:      &source,
+			Name:        &name,
+			RulesetID:   &rulesetID,
+			Active:      active,
+			Monitor:     monitor,
+		}
+
+		projs = append(projs, proj)
 
 	}
 
-	return p, nil
+	return projs, nil
 }
 
 // Pretty print functions for SPDX file license/package information.
