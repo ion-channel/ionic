@@ -291,6 +291,8 @@ type CommunityResults struct {
 	Name        string    `json:"name" xml:"name"`
 	URL         string    `json:"url" xml:"url"`
 	CommittedAt time.Time `json:"committed_at" xml:"committed_at"`
+	OldNames    []string  `json:"old_names" xml:"old_names"`
+	Stars       int       `json:"stars" xml:"stars"`
 }
 
 // CoverageResults represents the data collected from a code coverage scan.  It
