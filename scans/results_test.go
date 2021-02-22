@@ -39,6 +39,7 @@ func TestScanResults(t *testing.T) {
 			// validate the json parsing
 			Expect(err).NotTo(HaveOccurred())
 			Expect(untranslatedCommunityResult.Community).NotTo(BeNil())
+			Expect(untranslatedCommunityResult.Community.Stars).To(Equal(2))
 
 			var untranslatedExternalVulnerabilityResult UntranslatedResults
 			err = json.Unmarshal([]byte(SampleValidUntranslatedResultsExternalVulnerability), &untranslatedExternalVulnerabilityResult)
@@ -110,6 +111,8 @@ func TestScanResults(t *testing.T) {
 			Expect(a.Committers).To(Equal(7))
 			Expect(a.Name).To(Equal("ion-channel/ion-connect"))
 			Expect(a.URL).To(Equal("https://github.com/ion-channel/ion-connect"))
+			Expect(a.Stars).To(Equal(2))
+			Expect(a.OldNames).To(Equal([]string{"old/name"}))
 		})
 
 		g.It("should unmarshal a scan results with coverage data", func() {
@@ -311,7 +314,7 @@ const (
 	SampleValidScanResultsAboutYML = `{"type":"about_yml", "data":{"message": "foo message", "valid": true, "content": "some content"}}`
 
 	SampleValidScanResultsBuildsystems  = `{"type":"buildsystems","data":{"compilers":[{"name":"Go","version":"1.1.0"}],"docker_file":{"images":[{"name":"golang","version":"1.1.0"}],"dependencies":[{"name":"bash","version":"","latest_version":"","org":"","type":"","package":"","scope":"","requirement":"","dependencies":null,"confidence":0,"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z"},{"name":"build-base","version":"","latest_version":"","org":"","type":"","package":"","scope":"","requirement":"","dependencies":null,"confidence":0,"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z"},{"name":"curl","version":"","latest_version":"","org":"","type":"","package":"","scope":"","requirement":"","dependencies":null,"confidence":0,"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z"}]}}}`
-	SampleValidScanResultsCommunity     = `{"type":"community", "data":{"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}}`
+	SampleValidScanResultsCommunity     = `{"type":"community", "data":{"old_names":["old/name"],"stars":2,"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}}`
 	SampleValidScanResultsCoverage      = `{"type":"external_coverage", "data":{"value":42.0}}`
 	SampleValidScanResultsDependency    = `{"type":"dependency","data":{"dependencies":[{"requirement":">1.0","latest_version":"2.0","org":"net.sourceforge.javacsv","name":"javacsv","type":"maven","package":"jar","version":"2.0","scope":"compile"},{"latest_version":"4.12","org":"junit","name":"junit","type":"maven","package":"jar","version":"4.11","scope":"test"},{"latest_version":"1.4-atlassian-1","org":"org.hamcrest","name":"hamcrest-core","type":"maven","package":"jar","version":"1.3","scope":"test"},{"latest_version":"4.5.2","org":"org.apache.httpcomponents","name":"httpclient","type":"maven","package":"jar","version":"4.3.4","scope":"compile"},{"latest_version":"4.4.5","org":"org.apache.httpcomponents","name":"httpcore","type":"maven","package":"jar","version":"4.3.2","scope":"compile"},{"latest_version":"99.0-does-not-exist","org":"commons-logging","name":"commons-logging","type":"maven","package":"jar","version":"1.1.3","scope":"compile"},{"latest_version":"20041127.091804","org":"commons-codec","name":"commons-codec","type":"maven","package":"jar","version":"1.6","scope":"compile"}],"meta":{"first_degree_count":3,"no_version_count":0,"total_unique_count":7,"update_available_count":2}}}`
 	SampleValidScanResultsEcosystems    = `{"type":"ecosystems","data":{"Java":2430,"Makefile":210,"Ruby":666}}`
@@ -323,7 +326,7 @@ const (
 	SampleValidExternalVulnerabilities  = `{"type":"external_vulnerability","data":{"critical":1,"high":0,"medium":1,"low": 0}}`
 
 	SampleValidUntranslatedResultsExternalVulnerability = `{"external_vulnerability":{"critical":43, "high":262, "medium":0, "low":79}, "source":{"name":"Fortify", "url":""}, "notes":"", "raw":{"fpr":"/ion/fortify.zip"}}`
-	SampleValidUntranslatedResultsCommunity             = `{"type":"community", "data":{"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}}`
+	SampleValidUntranslatedResultsCommunity             = `{"type":"community", "data":{"old_names":["old/name"],"stars":2,"committers":7,"name":"ion-channel/ion-connect","url":"https://github.com/ion-channel/ion-connect"}}`
 	SampleValidUntranslatedScanResultsLicense           = `{"license": {"license": {"type": [{"name": "a license"}], "name": "some license"}}}`
 	SampleValidUntranslatedScanResultsVulnerability     = `{"vulnerabilities": {"meta": {"vulnerability_count": 0},"vulnerabilities": []}}`
 	SampleValidUntranslatedScanResultsVirus             = `{"clam_av_details":{"clamav_db_version":"Tue Apr 24 12:26:01 2018\n","clamav_version":"ClamAV 0.99.4"},"clamav":{"data_read":"2.78 MB (ratio 1.68:1)","data_scanned":"4.66 MB","engine_version":"0.99.4","file_notes":{"empty_file":["/workspace/851c1261-471c-4713-bdc4-fabb0c2d0f6a/xunit-plugin-1-102/xunit-plugin-master/src/main/resources/util/taglib"]},"infected_files":0,"known_viruses":6480116,"scanned_directories":132,"scanned_files":305,"time":"18.655 sec (0 m 18 s)"}      }`
