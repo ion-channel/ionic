@@ -293,6 +293,7 @@ type CommunityResults struct {
 	CommittedAt time.Time `json:"committed_at" xml:"committed_at"`
 	OldNames    []string  `json:"old_names" xml:"old_names"`
 	Stars       int       `json:"stars" xml:"stars"`
+	NameChanged bool      `json:"name_changed" xml:"name_changed"`
 }
 
 // CoverageResults represents the data collected from a code coverage scan.  It
