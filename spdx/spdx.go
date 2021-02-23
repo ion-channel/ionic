@@ -117,15 +117,14 @@ func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) ([]pro
 	projs := make([]projects.Project, 0)
 	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if err != nil {
-		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
-		return projs, nil
+		return projs, fmt.Errorf("unable to get describe packages from SPDX document: %v", err)
 	}
 
 	// SPDX Document does contain packages, so we'll go through each one
 	for _, pkgID := range pkgIDs {
 		pkg, ok := doc.Packages[pkgID]
 		if !ok {
-			fmt.Printf("Package %s has described relationship but ID not found\n", string(pkgID))
+			fmt.Printf("Package %s has described relationship but ID not found - skipping package\n", string(pkgID))
 			continue
 		}
 
@@ -137,7 +136,7 @@ func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) ([]pro
 		tmpID := uuid.New().String()
 		name = pkg.PackageName
 
-		if pkg.PackageDownloadLocation == "" {
+		if pkg.PackageDownloadLocation == "" || pkg.PackageDownloadLocation == "NOASSERTION" {
 			ptype = "source_unavailable"
 		} else if strings.Contains(pkg.PackageDownloadLocation, "git") {
 			source = pkg.PackageDownloadLocation
@@ -193,15 +192,14 @@ func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) ([]pro
 
 	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_1(doc)
 	if err != nil {
-		fmt.Printf("Unable to get describe packages from SPDX document: %v\n", err)
-		return projs, nil
+		return projs, fmt.Errorf("unable to get describe packages from SPDX document: %v", err)
 	}
 
 	// SPDX Document does contain packages, so we'll go through each one
 	for _, pkgID := range pkgIDs {
 		pkg, ok := doc.Packages[pkgID]
 		if !ok {
-			fmt.Printf("Package %s has described relationship but ID not found\n", string(pkgID))
+			fmt.Printf("Package %s has described relationship but ID not found - skipping package\n", string(pkgID))
 			continue
 		}
 
@@ -212,7 +210,7 @@ func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) ([]pro
 		tmpID := uuid.New().String()
 		name = pkg.PackageName
 
-		if pkg.PackageDownloadLocation == "" {
+		if pkg.PackageDownloadLocation == "" || pkg.PackageDownloadLocation == "NOASSERTION" {
 			ptype = "source_unavailable"
 		} else if strings.Contains(pkg.PackageDownloadLocation, "git") {
 			source = pkg.PackageDownloadLocation
