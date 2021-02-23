@@ -109,9 +109,11 @@ func TestSPDX(t *testing.T) {
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
-			Expect(*p.Name).To(Equal(packageName))
-			Expect(*p.Type).To(Equal("artifact"))
-			Expect(*p.Description).To(Equal(pkg["id"].PackageDescription))
+			Expect(len(p)).To(Equal(1))
+			first := p[0]
+			Expect(*first.Name).To(Equal(packageName))
+			Expect(*first.Type).To(Equal("artifact"))
+			Expect(*first.Description).To(Equal(pkg["id"].PackageDescription))
 		})
 
 		g.It("should return no error if a created Project from package is valid for 2.2", func() {
@@ -134,9 +136,11 @@ func TestSPDX(t *testing.T) {
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
-			Expect(*p.Name).To(Equal(packageName))
-			Expect(*p.Type).To(Equal("git"))
-			Expect(*p.Description).To(Equal(pkg["id"].PackageDescription))
+			Expect(len(p)).To(Equal(1))
+			first := p[0]
+			Expect(*first.Name).To(Equal(packageName))
+			Expect(*first.Type).To(Equal("git"))
+			Expect(*first.Description).To(Equal(pkg["id"].PackageDescription))
 		})
 
 		g.It("should an no error if a package is invalid (due to missing download location) for 2.2", func() {
@@ -152,11 +156,14 @@ func TestSPDX(t *testing.T) {
 				Packages:     pkg,
 			}
 
-			_, err := ProjectPackageFromSPDX2_2(&doc, packageName)
+			p, err := ProjectPackageFromSPDX2_2(&doc, packageName)
 
-			Expect(err).ToNot(BeNil())
-			errStr := err.Error()
-			Expect(errStr).To(ContainSubstring("PackageDownloadLocation"))
+			Expect(err).To(BeNil())
+			Expect(p).NotTo(BeNil())
+			Expect(len(p)).To(Equal(1))
+			first := p[0]
+			Expect(*first.Name).To(Equal(packageName))
+			Expect(*first.Type).To(Equal("source_unavailable"))
 		})
 
 		g.It("should an no error if a package is invalid (due to missing download location) for 2.1", func() {
@@ -171,11 +178,14 @@ func TestSPDX(t *testing.T) {
 				Packages:     pkg,
 			}
 
-			_, err := ProjectPackageFromSPDX2_1(&doc, packageName)
+			p, err := ProjectPackageFromSPDX2_1(&doc, packageName)
 
-			Expect(err).ToNot(BeNil())
-			errStr := err.Error()
-			Expect(errStr).To(ContainSubstring("PackageDownloadLocation"))
+			Expect(err).To(BeNil())
+			Expect(p).NotTo(BeNil())
+			Expect(len(p)).To(Equal(1))
+			first := p[0]
+			Expect(*first.Name).To(Equal(packageName))
+			Expect(*first.Type).To(Equal("source_unavailable"))
 		})
 	})
 
