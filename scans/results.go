@@ -432,7 +432,8 @@ type VirusResults struct {
 type VulnerabilityResults struct {
 	Vulnerabilities []VulnerabilityResultsProduct `json:"vulnerabilities" xml:"vulnerabilities"`
 	Meta            struct {
-		VulnerabilityCount int `json:"vulnerability_count" xml:"vulnerability_count"`
+		VulnerabilityCount int    `json:"vulnerability_count" xml:"vulnerability_count"`
+		ResolvedTo         string `json:"resolved_to" xml:"resolved_to"`
 	} `json:"meta" xml:"meta"`
 }
 
