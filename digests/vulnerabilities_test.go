@@ -193,9 +193,6 @@ func TestVulnerabilitiesDigests(t *testing.T) {
 
 			j, _ := json.Marshal(&e.TranslatedResults.Data)
 
-			fmt.Printf("J IS %s", string(j))
-			fmt.Printf("B is %s", fmt.Sprintf("%s", b))
-
 			Expect(string(j)).To(Equal(string(b)))
 		})
 
