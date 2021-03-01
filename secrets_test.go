@@ -37,6 +37,8 @@ func TestSecrets(t *testing.T) {
 			Expect(hitRecords).To(HaveLen(1))
 			Expect(hitRecords[0].Header.Get("Authorization")).To(Equal("Bearer sometoken"))
 			Expect(secrets[0].Rule).To(Equal("RSA private key"))
+			// intentionally blank the second half of the string
+			Expect(secrets[0].Match).To(Equal("-----BEGIN RSA ***************"))
 		})
 	})
 }
