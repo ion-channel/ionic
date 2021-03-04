@@ -35,6 +35,7 @@ type Product struct {
 	Sources            []Source      `json:"source" xml:"source"`
 	Confidence         float64       `json:"confidence" xml:"confidence"`
 	VulnerabilityCount int           `json:"vulnerability_count" xml:"vulnerability_count"`
+	Mttr               *int64        `json:"mttr_seconds" xml:"mttr_seconds"`
 	Vulnerabilities    []interface{} `json:"vulnerabilities" xml:"vulnerabilities"`
 }
 
