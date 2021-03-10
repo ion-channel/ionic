@@ -159,6 +159,9 @@ func _newDigests(status *scanner.ScanStatus, evals []*scans.Evaluation) ([]Diges
 	case "about_yml", "file_type":
 		return nil, nil
 
+	case "secrets":
+		return nil, nil
+
 	default:
 		return nil, fmt.Errorf("Couldn't figure out how to map '%v' to a digest", status.Name)
 	}

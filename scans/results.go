@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/ion-channel/ionic/dependencies"
+	"github.com/ion-channel/ionic/secrets"
 	"github.com/ion-channel/ionic/vulnerabilities"
 )
 
@@ -25,6 +26,7 @@ type UntranslatedResults struct {
 	Virus                   *VirusResults                   `json:"clamav,omitempty"`
 	VirusDetails            *ClamavDetails                  `json:"clam_av_details,omitempty"`
 	Vulnerability           *VulnerabilityResults           `json:"vulnerabilities,omitempty"`
+	Secret                  *SecretResults                  `json:"secrets,omitempty"`
 }
 
 // Translate moves information from the particular sub-struct, IE
@@ -70,6 +72,10 @@ func (u *UntranslatedResults) Translate() *TranslatedResults {
 	if u.License != nil {
 		tr.Type = "license"
 		tr.Data = *u.License
+	}
+	if u.Secret != nil {
+		tr.Type = "secrets"
+		tr.Data = *u.Secret
 	}
 	if u.Virus != nil {
 		tr.Type = "virus"
@@ -173,6 +179,14 @@ func (r *TranslatedResults) UnmarshalJSON(b []byte) error {
 		}
 
 		r.Data = l
+	case "secrets":
+		var b SecretResults
+		err := json.Unmarshal(tr.RawData, &b)
+		if err != nil {
+			return fmt.Errorf("failed to unmarshall secrets results: %v", err)
+		}
+
+		r.Data = b
 	case "virus", "clamav":
 		var v VirusResults
 		err := json.Unmarshal(tr.RawData, &v)
@@ -410,6 +424,36 @@ type FileNotes map[string][]string
 type ClamavDetails struct {
 	ClamavVersion   string `json:"clamav_version" xml:"clamav_version"`
 	ClamavDbVersion string `json:"clamav_db_version" xml:"clamav_db_version"`
+}
+
+// Secret derived struct for results specific data
+type Secret struct {
+	secrets.Secret
+	File string `json:"file" xml:"file"`
+}
+
+// SecretResults contains secrets finding data
+type SecretResults struct {
+	Secrets []Secret `json:"secrets" xml:"secrets"`
+}
+
+// MarshalJSON meets the marshaller interface to custom wrangle an ecosystem
+// result into the json shape
+func (e SecretResults) MarshalJSON() ([]byte, error) {
+	return json.Marshal(e.Secrets)
+}
+
+// UnmarshalJSON meets the unmarshaller interface to custom wrangle the
+// ecosystem scan into an ecosystem result
+func (e *SecretResults) UnmarshalJSON(b []byte) error {
+	var s []Secret
+	err := json.Unmarshal(b, &s)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal secrets result: %v", err.Error())
+	}
+
+	e.Secrets = s
+	return nil
 }
 
 // VirusResults represents the data collected from a virus scan.  It includes
