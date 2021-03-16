@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	"github.com/ion-channel/ionic/aliases"
 	"github.com/ion-channel/ionic/projects"
 	"github.com/spdx/tools-golang/spdx"
 	"github.com/spdx/tools-golang/spdxlib"
@@ -164,6 +165,31 @@ func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) ([]pro
 			Monitor:     monitor,
 		}
 
+		pVersion := ""
+		if pkg.PackageVersion != "" {
+			pVersion = pkg.PackageVersion
+		}
+
+		pOrg := ""
+		if pkg.PackageSupplierOrganization != "" {
+			pOrg = pkg.PackageSupplierOrganization
+		}
+
+		pName := ""
+		if pkg.PackageName != "" {
+			pName = pkg.PackageName
+		}
+
+		// check if any of pVersion, pOrg, pName are not empty string
+		if len(pVersion) > 0 || len(pOrg) > 0 || len(pName) > 0 {
+			alias := aliases.Alias{
+				Name:    pName,
+				Org:     pOrg,
+				Version: pVersion,
+			}
+			proj.Aliases = []aliases.Alias{alias}
+		}
+
 		projs = append(projs, proj)
 
 	}
@@ -236,6 +262,31 @@ func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) ([]pro
 			RulesetID:   &rulesetID,
 			Active:      active,
 			Monitor:     monitor,
+		}
+
+		pVersion := ""
+		if pkg.PackageVersion != "" {
+			pVersion = pkg.PackageVersion
+		}
+
+		pOrg := ""
+		if pkg.PackageSupplierOrganization != "" {
+			pOrg = pkg.PackageSupplierOrganization
+		}
+
+		pName := ""
+		if pkg.PackageName != "" {
+			pName = pkg.PackageName
+		}
+
+		// check if any of pVersion, pOrg, pName are not empty string
+		if len(pVersion) > 0 || len(pOrg) > 0 || len(pName) > 0 {
+			alias := aliases.Alias{
+				Name:    pName,
+				Org:     pOrg,
+				Version: pVersion,
+			}
+			proj.Aliases = []aliases.Alias{alias}
 		}
 
 		projs = append(projs, proj)
