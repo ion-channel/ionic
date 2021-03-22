@@ -135,8 +135,13 @@ func (p *Project) ProjectReachable(client *http.Client, baseURL *url.URL, token 
 				invalidFields["source"] = "source must be a docker image name"
 				projErr = ErrInvalidProject
 			}
+		case "source_unavailable":
+			if p.Source != nil && len(*p.Source) > 0 {
+				invalidFields["source"] = "source cannot be specified for this project type"
+				projErr = ErrInvalidProject
+			}
 		default:
-			invalidFields["type"] = fmt.Sprintf("invalid type value")
+			invalidFields["type"] = "invalid type value"
 			projErr = ErrInvalidProject
 		}
 	}
@@ -169,7 +174,7 @@ func (p *Project) ValidateRequiredFields(client *http.Client, baseURL *url.URL, 
 		projErr = ErrInvalidProject
 	}
 
-	if p.Source == nil {
+	if p.Source == nil && (p.Type != nil && strings.ToLower(*p.Type) != "source_unavailable") {
 		invalidFields["source"] = "missing source"
 		projErr = ErrInvalidProject
 	}
@@ -224,8 +229,13 @@ func (p *Project) ValidateRequiredFields(client *http.Client, baseURL *url.URL, 
 				invalidFields["source"] = "source must be a docker image name"
 				projErr = ErrInvalidProject
 			}
+		case "source_unavailable":
+			if p.Source != nil && len(*p.Source) > 0 {
+				invalidFields["source"] = "source cannot be specified for this project type"
+				projErr = ErrInvalidProject
+			}
 		default:
-			invalidFields["type"] = fmt.Sprintf("invalid type value")
+			invalidFields["type"] = "invalid type value"
 			projErr = ErrInvalidProject
 		}
 	}
@@ -337,7 +347,7 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 				projErr = ErrInvalidProject
 			}
 		default:
-			invalidFields["type"] = fmt.Sprintf("invalid type value")
+			invalidFields["type"] = "invalid type value"
 			projErr = ErrInvalidProject
 		}
 	}
