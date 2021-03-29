@@ -26,6 +26,24 @@ func (ic *IonClient) GetRepo(repo, token string) (*community.Repo, error) {
 	return &resultRepo, nil
 }
 
+// GetReposForActor takes in an user, committer or actor string and calls the Ion API to get
+// a slice of Ionic community.Repo
+func (ic *IonClient) GetReposForActor(name, token string) ([]community.Repo, error) {
+	params := &url.Values{}
+	params.Set("name", name)
+
+	b, _, err := ic.Get(community.GetReposForActorEndpoint, token, params, nil, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get repos for actor (%s) : %v", name, err.Error())
+	}
+	var resultRepos []community.Repo
+	err = json.Unmarshal(b, &resultRepos)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal getRepos results: %v (%v)", err.Error(), string(b))
+	}
+	return resultRepos, nil
+}
+
 // SearchRepo takes a query `org AND name` and
 // calls the Ion API to retrieve the information, then forms a slice of
 // Ionic community.Repo objects
