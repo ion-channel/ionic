@@ -53,11 +53,10 @@ type Vulnerability struct {
 // VulnerabilityInput struct for adding a vulnerability
 type VulnerabilityInput struct {
 	Vulnerability
-	Dependencies   []string   `json:"dependencies"`
-	Source         []string   `json:"source"`
-	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
-	CreatedAt      *time.Time `json:"created_at,omitempty"`
-	TriggerRefresh bool       `json:"trigger_refresh,omitempty"`
+	Dependencies []string   `json:"dependencies"`
+	Source       []string   `json:"source"`
+	UpdatedAt    *time.Time `json:"updated_at,omitempty"`
+	CreatedAt    *time.Time `json:"created_at,omitempty"`
 }
 
 // Source represents information about where the vulnerability data came from
