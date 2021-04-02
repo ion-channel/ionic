@@ -320,12 +320,12 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 			if u != nil {
 				res, err := client.Head(u.String())
 				if err != nil {
-					invalidFields["source"] = "source failed to return a response"
+					invalidFields["source"] = "artifact source failed to return a response"
 					projErr = ErrInvalidProject
 				}
 
 				if res != nil && res.StatusCode == http.StatusNotFound {
-					invalidFields["source"] = "source returned a not found"
+					invalidFields["source"] = fmt.Sprintf("artifact source of %v returned a 404 (not found)", *p.Source)
 					projErr = ErrInvalidProject
 				}
 			}
