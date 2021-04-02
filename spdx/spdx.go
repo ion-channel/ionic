@@ -38,7 +38,7 @@ func ProjectFromSPDX2_2(doc *spdx.Document2_2) (projects.Project, error) {
 	name = doc.CreationInfo.DocumentName
 	if strings.Contains(doc.CreationInfo.DocumentNamespace, "git") {
 		source = doc.CreationInfo.DocumentNamespace
-		branch = "master"
+		branch = "HEAD" // use the remote's default branch
 		ptype = "git"
 	} else {
 		source = doc.CreationInfo.DocumentNamespace
@@ -85,7 +85,7 @@ func ProjectFromSPDX2_1(doc *spdx.Document2_1) (projects.Project, error) {
 	name = doc.CreationInfo.DocumentName
 	if strings.Contains(doc.CreationInfo.DocumentNamespace, "git") {
 		source = doc.CreationInfo.DocumentNamespace
-		branch = "master"
+		branch = "HEAD" // use the remote's default branch
 		ptype = "git"
 	} else {
 		source = doc.CreationInfo.DocumentNamespace
@@ -141,7 +141,7 @@ func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) ([]pro
 			ptype = "source_unavailable"
 		} else if strings.Contains(pkg.PackageDownloadLocation, "git") {
 			source = pkg.PackageDownloadLocation
-			branch = "master"
+			branch = "HEAD" // use the remote's default branch
 			ptype = "git"
 		} else {
 			source = pkg.PackageDownloadLocation
@@ -240,7 +240,7 @@ func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) ([]pro
 			ptype = "source_unavailable"
 		} else if strings.Contains(pkg.PackageDownloadLocation, "git") {
 			source = pkg.PackageDownloadLocation
-			branch = "master"
+			branch = "HEAD" // use the remote's default branch
 			ptype = "git"
 		} else {
 			source = pkg.PackageDownloadLocation
