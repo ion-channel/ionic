@@ -76,18 +76,23 @@ type Summary struct {
 type ExportData struct {
 	AnalysisID         string `json:"analysis_id"`
 	ProjectID          string `json:"project_id"`
+	CPE                string `json:"cpe"`
 	Status             string `json:"status"`
+	Source             string `json:"source"`
+	CommitterCount     int    `json:"committer_count"`
+	DaysSinceLastCommit int   `json:"days_since_last_commit"`
 	VirusCount         int    `json:"virus_count"`
 	VulnerabilityCount int    `json:"vulnerability_count"`
 	HighVulnCount      int    `json:"high_vulnerability_count"`
 	CritVulnCount      int    `json:"critical_vulnerability_count"`
-	Vulnerabilities	   VulnerabilityExportData `json:"vulnerabilities"`
+	Vulnerabilities    []VulnerabilityExportData `json:"vulnerabilities"`
 }
 
+// VulnerabilityExportData summarizes key details about a vulnerability to be included in a project's export data.
 type VulnerabilityExportData struct {
-	Name	 string `json:"name"`
-	Severity string `json:"severity"`
-	Score	 int	`json:"score"`
+	Name     string  `json:"name"`
+	Severity string  `json:"severity"`
+	Score    float64 `json:"score"`
 }
 
 // String returns a JSON formatted string of the analysis object
