@@ -81,6 +81,13 @@ type ExportData struct {
 	VulnerabilityCount int    `json:"vulnerability_count"`
 	HighVulnCount      int    `json:"high_vulnerability_count"`
 	CritVulnCount      int    `json:"critical_vulnerability_count"`
+	Vulnerabilities	   VulnerabilityExportData `json:"vulnerabilities"`
+}
+
+type VulnerabilityExportData struct {
+	Name	 string `json:"name"`
+	Severity string `json:"severity"`
+	Score	 int	`json:"score"`
 }
 
 // String returns a JSON formatted string of the analysis object
