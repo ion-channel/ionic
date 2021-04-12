@@ -74,25 +74,33 @@ type Summary struct {
 
 // ExportData is the data representation of a scan's exported data
 type ExportData struct {
-	AnalysisID         string `json:"analysis_id"`
-	ProjectID          string `json:"project_id"`
-	CPE                string `json:"cpe"`
-	Status             string `json:"status"`
-	Source             string `json:"source"`
-	CommitterCount     int    `json:"committer_count"`
-	DaysSinceLastCommit int   `json:"days_since_last_commit"`
-	VirusCount         int    `json:"virus_count"`
-	VulnerabilityCount int    `json:"vulnerability_count"`
-	HighVulnCount      int    `json:"high_vulnerability_count"`
-	CritVulnCount      int    `json:"critical_vulnerability_count"`
-	Vulnerabilities    []VulnerabilityExportData `json:"vulnerabilities"`
+	AnalysisID          string                    `json:"analysis_id"`
+	ProjectID           string                    `json:"project_id"`
+	CPE                 string                    `json:"cpe"`
+	Status              string                    `json:"status"`
+	Source              string                    `json:"source"`
+	CommitterCount      int                       `json:"committer_count"`
+	DaysSinceLastCommit int                       `json:"days_since_last_commit"`
+	VirusCount          int                       `json:"virus_count"`
+	VulnerabilityCount  int                       `json:"vulnerability_count"`
+	HighVulnCount       int                       `json:"high_vulnerability_count"`
+	CritVulnCount       int                       `json:"critical_vulnerability_count"`
+	Vulnerabilities     []VulnerabilityExportData `json:"vulnerabilities"`
+}
+
+// VulnerabilityScore is just a normal float64, but it is rounded down to one decimal place when marshaled to JSON
+type VulnerabilityScore float64
+
+// MarshalJSON rounds the VulnerabilityScore down to one decimal place to avoid weird values like 7.80000002
+func (s VulnerabilityScore) MarshalJSON() ([]byte, error) {
+	return []byte(fmt.Sprintf("%.1f", s)), nil
 }
 
 // VulnerabilityExportData summarizes key details about a vulnerability to be included in a project's export data.
 type VulnerabilityExportData struct {
-	Name     string  `json:"name"`
-	Severity string  `json:"severity"`
-	Score    float64 `json:"score"`
+	Name     string             `json:"name"`
+	Severity string             `json:"severity"`
+	Score    VulnerabilityScore `json:"score"`
 }
 
 // String returns a JSON formatted string of the analysis object
