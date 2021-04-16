@@ -79,6 +79,32 @@ func (ic *IonClient) GetAppliedRuleSets(appliedRequestBatch []*rulesets.AppliedR
 	return &s, nil
 }
 
+// GetAppliedRuleSetsBrief takes a slice of AppliedRulesetRequest and returns their applied ruleset results in
+// brief/summarized form, omitting any not found
+func (ic *IonClient) GetAppliedRuleSetsBrief(appliedRequestBatch []*rulesets.AppliedRulesetRequest, token string) (*[]rulesets.AppliedRulesetSummary, error) {
+	b, err := json.Marshal(appliedRequestBatch)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal project: %v", err.Error())
+	}
+
+	params := &url.Values{}
+	params.Add("summarized", "true")
+
+	buff := bytes.NewBuffer(b)
+	r, err := ic.Post(rulesets.GetBatchAppliedRulesetEndpoint, token, params, *buff, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get applied ruleset summary: %v", err.Error())
+	}
+
+	var s []rulesets.AppliedRulesetSummary
+	err = json.Unmarshal(r, &s)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal applied ruleset summary: %v", err.Error())
+	}
+
+	return &s, nil
+}
+
 //GetRawAppliedRuleSet takes a projectID, teamID, analysisID, and page definition and returns the corresponding applied ruleset summary json or an error encountered by the API
 func (ic *IonClient) GetRawAppliedRuleSet(projectID, teamID, analysisID, token string, page *pagination.Pagination) (json.RawMessage, error) {
 	params := &url.Values{}
