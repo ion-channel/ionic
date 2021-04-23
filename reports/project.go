@@ -109,8 +109,8 @@ func NewProjectReports(input NewProjectReportsInput, defaultRulesetName string) 
 
 	projectStatus := ProjectStatusPending
 	rulesetName := defaultRulesetName
-	if appliedRuleset != nil && appliedRuleset.RuleEvaluationSummary != nil {
-		rulesetName = appliedRuleset.RuleEvaluationSummary.RulesetName
+	if appliedRuleset != nil {
+		rulesetName = appliedRuleset.RulesetName
 	}
 
 	if analysisStatus != nil {

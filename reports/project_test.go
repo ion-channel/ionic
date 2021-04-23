@@ -55,6 +55,7 @@ func TestProjectReport(t *testing.T) {
 					RulesetName: expectedRulesetName,
 					Summary:     "pass",
 				},
+				RulesetName: expectedRulesetName,
 			}
 
 			as := &scanner.AnalysisStatus{
