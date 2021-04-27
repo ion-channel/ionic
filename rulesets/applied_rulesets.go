@@ -18,6 +18,8 @@ type AppliedRulesetSummary struct {
 	ProjectID             string                 `json:"project_id"`
 	TeamID                string                 `json:"team_id"`
 	AnalysisID            string                 `json:"analysis_id"`
+	RulesetID             string                 `json:"ruleset_id"`
+	RulesetName           string                 `json:"ruleset_name"`
 	RuleEvaluationSummary *RuleEvaluationSummary `json:"rule_evaluation_summary"`
 	CreatedAt             time.Time              `json:"created_at"`
 	UpdatedAt             time.Time              `json:"updated_at"`
