@@ -5,6 +5,8 @@ import "time"
 const (
 	// GetRepoEndpoint is a string representation of the current endpoint for getting repo
 	GetRepoEndpoint = `v1/repo/getRepo`
+	// GetReposInCommonEndpoint is a string representation of the current endpoint for getting repos
+	GetReposInCommonEndpoint = `/v1/repo/getReposInCommon`
 	// GetReposForActorEndpoint is a string representation of the current endpoint for getting repos
 	GetReposForActorEndpoint = `v1/repo/getReposForActor`
 	// SearchRepoEndpoint is a string representation of the current endpoint for searching repo

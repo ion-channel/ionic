@@ -7,6 +7,7 @@ import (
 
 	. "github.com/franela/goblin"
 	"github.com/gomicro/bogus"
+	"github.com/ion-channel/ionic/pagination"
 	. "github.com/onsi/gomega"
 )
 
@@ -42,6 +43,27 @@ func TestCommunity(t *testing.T) {
 			Expect(searchResults.Name).To(Equal("monsooncommerce/gstats"))
 			Expect(searchResults.URL).To(Equal("https://github.com/monsooncommerce/gstats"))
 			Expect(searchResults.Committers).To(Equal(2))
+		})
+		g.It("should get repos in common", func() {
+			server.AddPath("/v1/repo/getReposInCommon").
+				SetMethods("GET").
+				SetPayload([]byte(sampleValidSearchRepoResponse)).
+				SetStatus(http.StatusOK)
+			page := pagination.AllItems
+			searchResults, err := client.GetReposInCommon("monsooncommerce", page, "blaToken")
+			Expect(err).NotTo(HaveOccurred())
+
+			hitRecords := server.HitRecords()
+			Expect(hitRecords).To(HaveLen(1))
+			Expect(hitRecords[0].Header.Get("Authorization")).To(Equal("Bearer blaToken"))
+			Expect(hitRecords[0].Query.Get("name")).To(Equal("monsooncommerce"))
+
+			Expect(searchResults).NotTo(BeNil())
+			Expect(searchResults).To(HaveLen(1))
+			Expect(searchResults[0].Name).To(Equal("monsooncommerce/gstats"))
+			Expect(searchResults[0].URL).To(Equal("https://github.com/monsooncommerce/gstats"))
+			Expect(searchResults[0].Committers).To(Equal(2))
+			Expect(searchResults[0].Confidence).To(Equal(0.99999))
 		})
 		g.It("should search repos", func() {
 			server.AddPath("/v1/repo/search").

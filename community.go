@@ -6,6 +6,7 @@ import (
 	"net/url"
 
 	"github.com/ion-channel/ionic/community"
+	"github.com/ion-channel/ionic/pagination"
 )
 
 // GetRepo takes in a repository string and calls the Ion API to get
@@ -24,6 +25,24 @@ func (ic *IonClient) GetRepo(repo, token string) (*community.Repo, error) {
 		return nil, fmt.Errorf("failed to unmarshal getRepo results: %v (%v)", err.Error(), string(b))
 	}
 	return &resultRepo, nil
+}
+
+// GetReposInCommon takes in an user, committer or actor string and calls the Ion API to get
+// a slice of Ionic community.Repo
+func (ic *IonClient) GetReposInCommon(name string, page *pagination.Pagination, token string) ([]community.Repo, error) {
+	params := &url.Values{}
+	params.Set("name", name)
+
+	b, _, err := ic.Get(community.GetReposInCommonEndpoint, token, params, nil, page)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get repos in common (%s) : %v", name, err.Error())
+	}
+	var resultRepos []community.Repo
+	err = json.Unmarshal(b, &resultRepos)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal repos in common results: %v (%v)", err.Error(), string(b))
+	}
+	return resultRepos, nil
 }
 
 // GetReposForActor takes in an user, committer or actor string and calls the Ion API to get
