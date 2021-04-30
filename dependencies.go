@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 
 	"github.com/ion-channel/ionic/dependencies"
 )
@@ -49,10 +50,17 @@ func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResoluti
 
 	w.Close()
 
+	var endpoint string
+	if path.Base(o.File) == "Gemfile.lock" {
+		endpoint = dependencies.ResolveFromFileEndpoint
+	} else {
+		endpoint = dependencies.ResolveDependenciesInFileEndpoint
+	}
+
 	h := http.Header{}
 	h.Set("Content-Type", w.FormDataContentType())
 
-	b, err := ic.Post(dependencies.ResolveDependenciesInFileEndpoint, token, params, buf, h)
+	b, err := ic.Post(endpoint, token, params, buf, h)
 	if err != nil {
 		return nil, fmt.Errorf("failed to resolve dependencies: %v", err.Error())
 	}

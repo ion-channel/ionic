@@ -9,6 +9,9 @@ const (
 	GetVersionsForDependencyEndpoint = "v1/dependency/getVersionsForDependency"
 	// ResolveDependenciesInFileEndpoint - given a dependency file and ecosystem name returns the full tree of known dependencies
 	ResolveDependenciesInFileEndpoint = "v1/dependency/resolveDependenciesInFile"
+	// ResolveFromFileEndpoint - given a dependency file and ecosystem name returns the full tree of known dependencies.
+	// Only supports Gemfile.lock.
+	ResolveFromFileEndpoint = "v1/dependency/resolveFromFile"
 	// ResolveDependencySearchEndpoint is a string representation of the current endpoint for searching dependencies
 	ResolveDependencySearchEndpoint = "v1/dependency/search"
 	// GetDependencyVersions is a string representation of the current endpoint for returns the list of known versions for a dependency
