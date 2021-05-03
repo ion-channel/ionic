@@ -2,8 +2,7 @@ package digests
 
 import (
 	"fmt"
-
-	"github.com/hashicorp/go-version"
+	"github.com/ion-channel/ionic"
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 )
@@ -262,39 +261,23 @@ func dependencyDigests(status *scanner.ScanStatus, eval *scans.Evaluation) ([]Di
 	return digests, nil
 }
 
+// digestOutdatedCount is a filter function that returns the given dependency if it is out-of-date,
+// or nil if it up-to-date.
 func digestOutdatedCount(d *scans.Dependency) *scans.Dependency {
 	dep := d
-	ver, verErr := version.NewVersion(d.Version)
-	latestVersion, lvErr := version.NewVersion(d.LatestVersion)
-	// return the dep as is if we given a bad version
-	if verErr != nil || lvErr != nil {
-		return dep
-	}
 
-	// for major.minor.patch
-	var versionsBehind [3]int
-	// check if our version is out of date, and calculate its versions behind if so
-	if ver.LessThan(latestVersion) {
-		versions := ver.Segments()
-		latestVer := latestVersion.Segments()
-		for i := 0; i < len(versionsBehind); i++ {
-			if versions[i] <= latestVer[i] {
-				versionsBehind[i] = latestVer[i] - versions[i]
-			} else {
-				versionsBehind[i] = 0
-			}
-		}
-
-		outdatedMeta := scans.OutdatedMeta{
-			MajorBehind: versionsBehind[0],
-			MinorBehind: versionsBehind[1],
-			PatchBehind: versionsBehind[2],
+	if dep.OutdatedMeta == nil {
+		outdatedMeta, err := ionic.GetDifferenceBetweenVersions(d.LatestVersion, d.Version)
+		if err != nil {
+			return dep
 		}
 
 		dep.OutdatedMeta = &outdatedMeta
-		return dep
-
 	}
-	// otherwise return nothing
+
+	if dep.OutdatedMeta.MajorBehind > 0 || dep.OutdatedMeta.MinorBehind > 0 || dep.OutdatedMeta.PatchBehind > 0 {
+		return dep
+	}
+
 	return nil
 }
