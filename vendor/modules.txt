@@ -11,10 +11,14 @@ github.com/gomicro/penname
 # github.com/google/uuid v1.2.0
 ## explicit
 github.com/google/uuid
-# github.com/hashicorp/go-version v1.2.1
+# github.com/hashicorp/go-version v1.3.0
 ## explicit
 github.com/hashicorp/go-version
-# github.com/onsi/gomega v1.3.0
+# github.com/kr/pretty v0.1.0
+## explicit
+# github.com/onsi/ginkgo v1.16.2
+## explicit
+# github.com/onsi/gomega v1.10.1
 ## explicit
 github.com/onsi/gomega
 github.com/onsi/gomega/format
@@ -32,15 +36,11 @@ github.com/onsi/gomega/types
 ## explicit
 github.com/spdx/tools-golang/spdx
 github.com/spdx/tools-golang/spdxlib
-# github.com/spf13/cobra v1.1.1
-## explicit
-# github.com/spf13/viper v1.7.1
-## explicit
-# golang.org/x/net v0.0.0-20190620200207-3b0461eec859
+# golang.org/x/net v0.0.0-20201021035429-f5854403a974
 golang.org/x/net/html
 golang.org/x/net/html/atom
 golang.org/x/net/html/charset
-# golang.org/x/text v0.3.2
+# golang.org/x/text v0.3.3
 golang.org/x/text/encoding
 golang.org/x/text/encoding/charmap
 golang.org/x/text/encoding/htmlindex
@@ -58,5 +58,10 @@ golang.org/x/text/internal/utf8internal
 golang.org/x/text/language
 golang.org/x/text/runes
 golang.org/x/text/transform
-# gopkg.in/yaml.v2 v2.2.8
+# golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+golang.org/x/xerrors
+golang.org/x/xerrors/internal
+# gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127
+## explicit
+# gopkg.in/yaml.v2 v2.3.0
 gopkg.in/yaml.v2

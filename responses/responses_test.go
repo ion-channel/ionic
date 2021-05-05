@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/franela/goblin"
+	"github.com/franela/goblin"
 	"github.com/gomicro/penname"
 	. "github.com/onsi/gomega"
 )
 
 func TestResponses(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Response", func() {
