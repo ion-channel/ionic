@@ -1,6 +1,8 @@
 package dependencies
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	// GetLatestVersionForDependencyEndpoint - returns the latest single version for a dependency
@@ -9,6 +11,9 @@ const (
 	GetVersionsForDependencyEndpoint = "v1/dependency/getVersionsForDependency"
 	// ResolveDependenciesInFileEndpoint - given a dependency file and ecosystem name returns the full tree of known dependencies
 	ResolveDependenciesInFileEndpoint = "v1/dependency/resolveDependenciesInFile"
+	// ResolveFromFileEndpoint - given a dependency file and ecosystem name returns the full tree of known dependencies.
+	// Only supports Gemfile.lock.
+	ResolveFromFileEndpoint = "v1/dependency/resolveFromFile"
 	// ResolveDependencySearchEndpoint is a string representation of the current endpoint for searching dependencies
 	ResolveDependencySearchEndpoint = "v1/dependency/search"
 	// GetDependencyVersions is a string representation of the current endpoint for returns the list of known versions for a dependency
@@ -30,6 +35,14 @@ type Dependency struct {
 	Confidence    float32      `json:"confidence"`
 	CreatedAt     time.Time    `json:"created_at,omitempty"`
 	UpdatedAt     time.Time    `json:"updated_at,omitempty"`
+	OutdatedVersion OutdatedMeta `json:"outdated_version"`
+}
+
+// OutdatedMeta is used to represent the number of versions behind a dependency is
+type OutdatedMeta struct {
+	MajorBehind int `json:"major_behind" xml:"major_behind"`
+	MinorBehind int `json:"minor_behind" xml:"minor_behind"`
+	PatchBehind int `json:"patch_behind" xml:"patch_behind"`
 }
 
 // Meta represents all the known meta information for a dependency set

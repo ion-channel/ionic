@@ -4,11 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/hashicorp/go-version"
+	"github.com/ion-channel/ionic/scans"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 
 	"github.com/ion-channel/ionic/dependencies"
 )
@@ -49,10 +52,17 @@ func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResoluti
 
 	w.Close()
 
+	var endpoint string
+	if path.Base(o.File) == "Gemfile.lock" {
+		endpoint = dependencies.ResolveFromFileEndpoint
+	} else {
+		endpoint = dependencies.ResolveDependenciesInFileEndpoint
+	}
+
 	h := http.Header{}
 	h.Set("Content-Type", w.FormDataContentType())
 
-	b, err := ic.Post(dependencies.ResolveDependenciesInFileEndpoint, token, params, buf, h)
+	b, err := ic.Post(endpoint, token, params, buf, h)
 	if err != nil {
 		return nil, fmt.Errorf("failed to resolve dependencies: %v", err.Error())
 	}
@@ -165,4 +175,41 @@ func (ic *IonClient) GetDependencyVersions(packageName, ecosystem, version, toke
 	}
 
 	return deps, nil
+}
+
+// GetDifferenceBetweenVersions calculates the difference between two version strings, returning an OutdatedMeta
+// object, or an error.
+func GetDifferenceBetweenVersions(newerVersion, olderVersion string) (outdatedMeta scans.OutdatedMeta, err error) {
+	ver, err := version.NewVersion(olderVersion)
+	if err != nil {
+		return outdatedMeta, err
+	}
+
+	latestVersion, err := version.NewVersion(newerVersion)
+	if err != nil {
+		return outdatedMeta, err
+	}
+
+	// for major.minor.patch
+	var versionsBehind [3]int
+	// check if our version is out of date, and calculate its versions behind if so
+	if ver.LessThan(latestVersion) {
+		versions := ver.Segments()
+		latestVer := latestVersion.Segments()
+		for i := 0; i < len(versionsBehind); i++ {
+			if versions[i] <= latestVer[i] {
+				versionsBehind[i] = latestVer[i] - versions[i]
+			} else {
+				versionsBehind[i] = 0
+			}
+		}
+
+		outdatedMeta = scans.OutdatedMeta{
+			MajorBehind: versionsBehind[0],
+			MinorBehind: versionsBehind[1],
+			PatchBehind: versionsBehind[2],
+		}
+	}
+
+	return outdatedMeta, err
 }
