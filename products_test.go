@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	. "github.com/franela/goblin"
+	"github.com/franela/goblin"
 	"github.com/gomicro/bogus"
 	"github.com/ion-channel/ionic/pagination"
 	"github.com/ion-channel/ionic/products"
@@ -14,7 +14,7 @@ import (
 )
 
 func TestProducts(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Products", func() {

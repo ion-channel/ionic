@@ -9,12 +9,12 @@ import (
 	"github.com/ion-channel/ionic/scanner"
 	"github.com/ion-channel/ionic/scans"
 
-	. "github.com/franela/goblin"
+	"github.com/franela/goblin"
 	. "github.com/onsi/gomega"
 )
 
 func TestAnalysisReport(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Analysis Report", func() {

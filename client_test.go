@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"testing"
 
-	. "github.com/franela/goblin"
+	"github.com/franela/goblin"
 	"github.com/ion-channel/ionic/pagination"
 	. "github.com/onsi/gomega"
 )
 
 func TestClient(t *testing.T) {
-	g := Goblin(t)
+	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
 	g.Describe("Client", func() {
