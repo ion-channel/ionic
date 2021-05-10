@@ -125,7 +125,7 @@ func (p *Project) ProjectReachable(client *http.Client, baseURL *url.URL, token 
 			}
 		case "git", "svn", "s3":
 			r := regexp.MustCompile(validGitURIRegex)
-			if p.Source != nil && !r.MatchString(*p.Source) {
+			if p.Source != nil && !r.MatchString(strings.ToLower(*p.Source)) {
 				invalidFields["source"] = "source must be a valid uri"
 				projErr = ErrInvalidProject
 			}
@@ -219,7 +219,7 @@ func (p *Project) ValidateRequiredFields(client *http.Client, baseURL *url.URL, 
 			}
 		case "git", "svn", "s3":
 			r := regexp.MustCompile(validGitURIRegex)
-			if p.Source != nil && !r.MatchString(*p.Source) {
+			if p.Source != nil && !r.MatchString(strings.ToLower(*p.Source)) {
 				invalidFields["source"] = "source must be a valid uri"
 				projErr = ErrInvalidProject
 			}
@@ -331,7 +331,7 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 			}
 		case "git", "svn", "s3":
 			r := regexp.MustCompile(validGitURIRegex)
-			if p.Source != nil && !r.MatchString(*p.Source) {
+			if p.Source != nil && !r.MatchString(strings.ToLower(*p.Source)) {
 				invalidFields["source"] = "source must be a valid uri"
 				projErr = ErrInvalidProject
 			}
