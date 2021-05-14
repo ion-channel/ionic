@@ -7,7 +7,6 @@ import (
 
 	"github.com/franela/goblin"
 	"github.com/gomicro/bogus"
-	"github.com/ion-channel/ionic/pagination"
 	. "github.com/onsi/gomega"
 )
 
@@ -46,17 +45,21 @@ func TestCommunity(t *testing.T) {
 		})
 		g.It("should get repos in common", func() {
 			server.AddPath("/v1/repo/getReposInCommon").
-				SetMethods("GET").
+				SetMethods("POST").
 				SetPayload([]byte(sampleValidSearchRepoResponse)).
 				SetStatus(http.StatusOK)
-			page := pagination.AllItems
-			searchResults, err := client.GetReposInCommon("monsooncommerce", page, "blaToken")
+
+			options := GetReposInCommonOptions{
+				Subject:    "monsooncommerce",
+				Comparands: []string{"other", "repo"},
+			}
+
+			searchResults, err := client.GetReposInCommon(options, "blaToken")
 			Expect(err).NotTo(HaveOccurred())
 
 			hitRecords := server.HitRecords()
 			Expect(hitRecords).To(HaveLen(1))
 			Expect(hitRecords[0].Header.Get("Authorization")).To(Equal("Bearer blaToken"))
-			Expect(hitRecords[0].Query.Get("name")).To(Equal("monsooncommerce"))
 
 			Expect(searchResults).NotTo(BeNil())
 			Expect(searchResults).To(HaveLen(1))
