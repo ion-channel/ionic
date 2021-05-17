@@ -1,12 +1,12 @@
 package ionic
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/url"
 
 	"github.com/ion-channel/ionic/community"
-	"github.com/ion-channel/ionic/pagination"
 )
 
 // GetRepo takes in a repository string and calls the Ion API to get
@@ -27,17 +27,33 @@ func (ic *IonClient) GetRepo(repo, token string) (*community.Repo, error) {
 	return &resultRepo, nil
 }
 
-// GetReposInCommon takes in an user, committer or actor string and calls the Ion API to get
-// a slice of Ionic community.Repo
-func (ic *IonClient) GetReposInCommon(name string, page *pagination.Pagination, token string) ([]community.Repo, error) {
-	params := &url.Values{}
-	params.Set("name", name)
+// GetReposInCommonOptions encapsulates params for repos in common requests
+type GetReposInCommonOptions struct {
+	Subject    string   `json:"subject"`
+	Comparands []string `json:"comparands"`
+	ByActor    bool     `json:"by_actor"`
+}
 
-	b, _, err := ic.Get(community.GetReposInCommonEndpoint, token, params, nil, page)
+// GetReposInCommonOutput encapsulates params for repos in common requests
+type GetReposInCommonOutput struct {
+	community.Repo
+	CommonCommitters int `json:"common_committers,omitempty" xml:"common_committers,omitempty"`
+	CommonActors     int `json:"common_actors,omitempty" xml:"common_actors,omitempty"`
+}
+
+// GetReposInCommon takes in an subject repo, a slice of string camparands and bool option for actors
+//  and calls the Ion API to get matches with the count of committers shared
+func (ic *IonClient) GetReposInCommon(options GetReposInCommonOptions, token string) ([]GetReposInCommonOutput, error) {
+	body, err := json.Marshal(options)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get repos in common (%s) : %v", name, err.Error())
+		return nil, fmt.Errorf("failed to marshal options for repos in common (%s) : %v", options.Subject, err.Error())
 	}
-	var resultRepos []community.Repo
+
+	b, err := ic.Post(community.GetReposInCommonEndpoint, token, nil, *bytes.NewBuffer(body), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get repos in common (%s) : %v", options.Subject, err.Error())
+	}
+	var resultRepos []GetReposInCommonOutput
 	err = json.Unmarshal(b, &resultRepos)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal repos in common results: %v (%v)", err.Error(), string(b))
