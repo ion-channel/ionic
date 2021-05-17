@@ -37,8 +37,8 @@ type GetReposInCommonOptions struct {
 // GetReposInCommonOutput encapsulates params for repos in common requests
 type GetReposInCommonOutput struct {
 	community.Repo
-	CommonCommitters int `json:"common_committers,omitempty" xml:"common_committers,omitempty"`
-	CommonActors     int `json:"common_actors,omitempty" xml:"common_actors,omitempty"`
+	CommonCommitters []string `json:"common_committers,omitempty" xml:"common_committers,omitempty"`
+	CommonActors     []string `json:"common_actors,omitempty" xml:"common_actors,omitempty"`
 }
 
 // GetReposInCommon takes in an subject repo, a slice of string camparands and bool option for actors
