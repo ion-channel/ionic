@@ -18,6 +18,8 @@ const (
 	ReportGetScanReportEndpoint = "v1/report/getScan"
 	// ReportGetExportedDataEndpoint is a string representation of the current endpoint for exporting projects data
 	ReportGetExportedDataEndpoint = "v1/report/getExportedData"
+	// ReportGetExportedVulnerabilityDataEndpoint is the endpoint for exporting vulnerability data from one or more projects
+	ReportGetExportedVulnerabilityDataEndpoint = "v1/report/getExportedVulnerabilityData"
 
 	// ProjectStatusErrored denotes a request for analysis has errored during
 	// the run, the message field will have more details
@@ -68,7 +70,6 @@ type ExportFields struct {
 	CritVulnCount       *int                               `json:"critical_vuln_count"`
 	HighVulnCount       *int                               `json:"high_vuln_count"`
 	VirusCount          *int                               `json:"virus_count"`
-	Vulnerabilities     []analyses.VulnerabilityExportData `json:"vulnerabilities"`
 }
 
 // NewProjectReport takes a project and analysis summaries to return a

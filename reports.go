@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/ion-channel/ionic/analyses"
 	"net/url"
 
 	"github.com/ion-channel/ionic/reports"
@@ -129,6 +130,35 @@ func (ic *IonClient) GetExportedProjectsData(ids []string, teamID, token string)
 	}
 
 	var ed reports.ExportedData
+	err = json.Unmarshal(r, &ed)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal exported projects data response: %v", err.Error())
+	}
+
+	return &ed, nil
+}
+
+// GetExportedVulnerabilityData takes slice of project ids, team id, and token
+// returns slice of exported vulnerability data for the requested projects
+func (ic *IonClient) GetExportedVulnerabilityData(ids []string, teamID, token string) (*[]analyses.VulnerabilityExportData, error) {
+	p := requests.ByIDsAndTeamID{
+		TeamID: teamID,
+		IDs:    ids,
+	}
+
+	b, err := json.Marshal(p)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(reports.ReportGetExportedVulnerabilityDataEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to request exported data: %v", err.Error())
+	}
+
+	var ed []analyses.VulnerabilityExportData
 	err = json.Unmarshal(r, &ed)
 
 	if err != nil {

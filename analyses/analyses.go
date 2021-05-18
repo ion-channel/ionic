@@ -14,6 +14,8 @@ const (
 	AnalysisGetAnalysisEndpoint = "v1/animal/getAnalysis"
 	// AnalysisGetAnalysesEndpoint returns multiple raw analyses. Requires team id and project id.
 	AnalysisGetAnalysesEndpoint = "v1/animal/getAnalyses"
+	// AnalysisGetLatestAnalysisIDsEndpoint returns the latest analysis summary. Requires team id, project ID(s) optional
+	AnalysisGetLatestAnalysisIDsEndpoint = "v1/animal/getLatestAnalysisIDs"
 	// AnalysisGetLatestAnalysisSummaryEndpoint returns the latest analysis summary. Requires team id and project id.
 	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
 	// AnalysisGetPublicAnalysisEndpoint returns a public analysis.  Requires an analysis id.
@@ -26,6 +28,9 @@ const (
 	AnalysisGetScanEndpoint = "v1/animal/getAnalysisExportData"
 	// AnalysisGetAnalysesExportData returns exported data for a list of analyses. Requires a team id and list of analyses ids.
 	AnalysisGetAnalysesExportData = "v1/animal/getAnalysesExportData"
+	// AnalysisGetAnalysesVulnerabilityExportData returns exported vulnerability data for a list of analyses.
+	// Requires a team id and list of analyses ids.
+	AnalysisGetAnalysesVulnerabilityExportData = "v1/animal/getAnalysesVulnerabilityExportData"
 )
 
 // Analysis is a representation of an Ion Channel Analysis within the system
@@ -85,7 +90,6 @@ type ExportData struct {
 	VulnerabilityCount  int                       `json:"vulnerability_count"`
 	HighVulnCount       int                       `json:"high_vulnerability_count"`
 	CritVulnCount       int                       `json:"critical_vulnerability_count"`
-	Vulnerabilities     []VulnerabilityExportData `json:"vulnerabilities"`
 }
 
 // VulnerabilityScore is just a normal float64, but it is rounded down to one decimal place when marshaled to JSON
@@ -98,9 +102,15 @@ func (s VulnerabilityScore) MarshalJSON() ([]byte, error) {
 
 // VulnerabilityExportData summarizes key details about a vulnerability to be included in a project's export data.
 type VulnerabilityExportData struct {
-	Name     string             `json:"name"`
-	Severity string             `json:"severity"`
-	Score    VulnerabilityScore `json:"score"`
+	ProjectID 	string				`json:"project_id"`
+	ProjectName string				`json:"project_name"`
+	AnalysisID 	string				`json:"analysis_id"`
+	Title		string				`json:"title"`
+	ExternalID 	string             	`json:"external_id"`
+	Severity 	string             	`json:"severity"`
+	Score    	VulnerabilityScore 	`json:"score"`
+	Dependency 	string				`json:"dependency"`
+	DependencyVersion string		`json:"dependency_version"`
 }
 
 // String returns a JSON formatted string of the analysis object

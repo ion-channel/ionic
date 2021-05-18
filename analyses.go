@@ -151,6 +151,35 @@ func (ic *IonClient) GetRawAnalyses(teamID, projectID, token string, page *pagin
 	return b, nil
 }
 
+// GetLatestAnalysisIDs takes a team ID, project ID(s), and token. It returns the
+// latest analysis IDs for the project as a map in the form map[project_id] = latest_analysis_id
+// It returns an error for any API issues it encounters.
+func (ic *IonClient) GetLatestAnalysisIDs(teamID string, projectIDs []string, token string) (*map[string]string, error) {
+	ri := requests.ByIDsAndTeamID{
+		IDs:    projectIDs,
+		TeamID: teamID,
+	}
+
+	b, err := json.Marshal(ri)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(analyses.AnalysisGetLatestAnalysisIDsEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get latest analysis IDs: %v", err.Error())
+	}
+
+	a := make(map[string]string)
+	err = json.Unmarshal(r, &a)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get latest analysis IDs: %v", err.Error())
+	}
+
+	return &a, nil
+}
+
+
 // GetLatestAnalysisSummary takes a team ID, project ID, and token. It returns the
 // latest analysis summary for the project. It returns an error for any API
 // issues it encounters.
@@ -213,4 +242,31 @@ func (ic *IonClient) GetAnalysesExportData(teamID string, ids []string, token st
 	}
 
 	return ps, nil
+}
+
+// GetAnalysesVulnerabilityExportData takes team id and a slice of analysis ids
+// returns a slice of vulnerability analyses exported data
+func (ic *IonClient) GetAnalysesVulnerabilityExportData(teamID string, ids []string, token string) ([]analyses.VulnerabilityExportData, error) {
+	ri := requests.ByIDsAndTeamID{
+		IDs:    ids,
+		TeamID: teamID,
+	}
+
+	b, err := json.Marshal(ri)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(analyses.AnalysisGetAnalysesVulnerabilityExportData, token, nil, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get project states: %v", err.Error())
+	}
+
+	var vulnerabilities []analyses.VulnerabilityExportData
+	err = json.Unmarshal(r, &vulnerabilities)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return vulnerabilities, nil
 }
