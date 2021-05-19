@@ -4,14 +4,16 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/hashicorp/go-version"
-	"github.com/ion-channel/ionic/scans"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"os"
 	"path"
+	"strings"
+
+	"github.com/hashicorp/go-version"
+	"github.com/ion-channel/ionic/scans"
 
 	"github.com/ion-channel/ionic/dependencies"
 )
@@ -53,9 +55,10 @@ func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResoluti
 	w.Close()
 
 	var endpoint string
-	if path.Base(o.File) == "Gemfile.lock" {
+	switch {
+	case strings.Contains(path.Base(o.File), "Gemfile.lock") || strings.Contains(path.Base(o.File), "go.mod"):
 		endpoint = dependencies.ResolveFromFileEndpoint
-	} else {
+	default:
 		endpoint = dependencies.ResolveDependenciesInFileEndpoint
 	}
 
