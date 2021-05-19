@@ -54,7 +54,6 @@ func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResoluti
 
 	w.Close()
 
-	fmt.Printf("FILE: %v\n", o.File)
 	var endpoint string
 	switch {
 	case strings.Contains(path.Base(o.File), "Gemfile.lock") || strings.Contains(path.Base(o.File), "go.mod"):
