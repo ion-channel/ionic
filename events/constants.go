@@ -35,8 +35,6 @@ const (
 	ProjectAdded = "project_added"
 	// VersionAdded constant for version added event action
 	VersionAdded = "version_added"
-	// VulnerablityAdded constant for vulnerablity added event action
-	VulnerablityAdded = "vulnerablity_added"
 	// AccountCreated constant for account created event action
 	AccountCreated = "account_created"
 	// ForgotPassword constant for forgot password event action

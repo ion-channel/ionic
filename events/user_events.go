@@ -36,7 +36,7 @@ func (a *UserEventAction) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// UserEvent represents the user releated segement of an Event within Ion Channel
+// UserEvent represents the user related segment of an Event within Ion Channel
 type UserEvent struct {
 	Action UserEventAction `json:"action"`
 	User   users.User      `json:"user"`

@@ -32,14 +32,14 @@ const (
 	PortfolioGetProjectIdsByDependencyEndpoint = "v1/animal/getProjectIdsByDependency"
 )
 
-// VulnerabilityStat represents the vulnerabiity stat summary for the portfolio page
+// VulnerabilityStat represents the vulnerability stat summary for the portfolio page
 type VulnerabilityStat struct {
 	TotalVulnerabilities      int    `json:"total_vulnerabilities"`
 	UniqueVulnerabilities     int    `json:"unique_vulnerabilities"`
 	MostFrequentVulnerability string `json:"most_frequent_vulnerability"`
 }
 
-// PortfolioListParams represents the vulnerability list paramaters
+// PortfolioListParams represents the vulnerability list parameters
 type PortfolioListParams struct {
 	Ids      []string `json:"ids"`
 	ListType string   `json:"list_type,omitempty"`
@@ -92,7 +92,7 @@ type DependencyStat struct {
 	DirectDependencies     int `json:"direct_dependencies"`
 	TransitiveDependencies int `json:"transitive_dependencies"`
 	OutdatedDependencies   int `json:"outdated_dependencies"`
-	NoVersionSpecified     int `json:"no_vesion_dependencies"`
+	NoVersionSpecified     int `json:"no_version_dependencies"`
 }
 
 // Dependency represents data for an individual dependency

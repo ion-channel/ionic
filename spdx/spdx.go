@@ -212,7 +212,7 @@ func parseCreatorEmail(creatorPersons []string) string {
 }
 
 // ProjectPackageFromSPDX2_1 parses packages from an SPDX file (v2.1) with package source at PackageDownloadLocation
-// PackageDownloadLocation must be a resolveable URL to create a project
+// PackageDownloadLocation must be a resolvable URL to create a project
 func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) ([]projects.Project, error) {
 	projs := make([]projects.Project, 0)
 

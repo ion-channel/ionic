@@ -52,7 +52,7 @@ func od(d *scans.Dependency) *scans.Dependency {
 func outdatedWithMeta(d *scans.Dependency) *scans.Dependency {
 	scanDep := *d
 
-	// check our top level dependncy first, to see if it's out of date
+	// check our top level dependency first, to see if it's out of date
 	scanDeps := od(&scanDep)
 
 	// if so continue down the tree calculating dep counts

@@ -9,7 +9,7 @@ import (
 const (
 	// GetDestinationsEndpoint returns all destinations for a team. Requires team id.
 	GetDestinationsEndpoint = "/v1/teams/getDeliveryDestinations"
-	// DeleteDestinationEndpoint markes a delivery destination as deleted. It requires a delivery destination id.
+	// DeleteDestinationEndpoint marks a delivery destination as deleted. It requires a delivery destination id.
 	DeleteDestinationEndpoint = "/v1/teams/deleteDeliveryDestination"
 	// CreateDestinationEndpoint creates a destination. Requires team id, location, region, name, destination type, access key (empty string allowed), secret key (empty string allowed) and token.
 	CreateDestinationEndpoint = "/v1/teams/createDeliveryDestination"

@@ -148,7 +148,7 @@ func _newDigests(status *scanner.ScanStatus, evals []*scans.Evaluation) ([]Diges
 		return licenseDigests(status, eval)
 
 	case "external_coverage", "code_coverage", "coverage":
-		return coveragDigests(status, eval)
+		return coverageDigests(status, eval)
 
 	case "difference":
 		return differenceDigests(status, eval)

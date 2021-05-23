@@ -34,7 +34,7 @@ func TestScanner(t *testing.T) {
 			Expect(analysisStatus.Status).To(Equal("accepted"))
 		})
 
-		g.It("should create an analysis for a project whithout a branch", func() {
+		g.It("should create an analysis for a project without a branch", func() {
 			server.AddPath("/v1/scanner/analyzeProject").
 				SetMethods("POST").
 				SetPayload([]byte(SampleValidAnalysisStatus)).

@@ -23,7 +23,7 @@ const (
 // Platform
 type Vulnerability struct {
 	ID                          int                `json:"id" xml:"id"`
-	ExternalID                  string             `json:"external_id" xml:"exteral_id"`
+	ExternalID                  string             `json:"external_id" xml:"external_id"`
 	Source                      []Source           `json:"source" xml:"source"`
 	Title                       string             `json:"title" xml:"title"`
 	Summary                     string             `json:"summary" xml:"summary"`
@@ -37,7 +37,7 @@ type Vulnerability struct {
 	ConfidentialityImpact       string             `json:"confidentiality_impact" xml:"confidentiality_impact"`
 	IntegrityImpact             string             `json:"integrity_impact" xml:"integrity_impact"`
 	AvailabilityImpact          string             `json:"availability_impact" xml:"availability_impact"`
-	VulnerabilitySource         string             `json:"vulnerabilty_source" xml:"vulnerability_source"`
+	VulnerabilitySource         string             `json:"vulnerability_source" xml:"vulnerability_source"`
 	AssessmentCheck             json.RawMessage    `json:"assessment_check" xml:"assessment_check"`
 	Scanner                     json.RawMessage    `json:"scanner" xml:"scanner"`
 	Recommendation              string             `json:"recommendation" xml:"recommendation"`

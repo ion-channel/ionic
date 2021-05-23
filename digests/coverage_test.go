@@ -26,7 +26,7 @@ func TestCoverageDigests(t *testing.T) {
 				},
 			}
 
-			ds, err := coveragDigests(s, e)
+			ds, err := coverageDigests(s, e)
 			Expect(err).To(BeNil())
 			Expect(len(ds)).To(Equal(1))
 

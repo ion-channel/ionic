@@ -20,7 +20,7 @@ const (
 	maxPagingLimit      = 100
 )
 
-// IonClient represnets a communication layer with the Ion Channel API
+// IonClient represents a communication layer with the Ion Channel API
 type IonClient struct {
 	baseURL *url.URL
 	client  *http.Client

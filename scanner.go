@@ -50,7 +50,7 @@ func (ic *IonClient) AnalyzeProject(projectID, teamID, branch, token string) (*s
 }
 
 // AnalyzeProjects takes a team ID to perform analyses on. An optional set of
-// params can be provided to go along with the request, predominently for
+// params can be provided to go along with the request, predominantly for
 // internal purposes. It will return the IDs of the analyses created and any
 // errors it encounters with the request.
 func (ic *IonClient) AnalyzeProjects(teamID, token string, params *url.Values) ([]string, error) {

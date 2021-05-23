@@ -17,7 +17,7 @@ func TestAnalysis(t *testing.T) {
 
 	g.Describe("New Analysis Summary", func() {
 		g.It("should return a new analysis summary", func() {
-			expectedAnalysisID := "analysizing"
+			expectedAnalysisID := "analysing"
 
 			a := &Analysis{
 				ID: expectedAnalysisID,

@@ -18,6 +18,7 @@ func TestPortfolios(t *testing.T) {
 	g.Describe("Portfolios", func() {
 		server := bogus.New()
 		h, p := server.HostPort()
+		print(h,p)
 		client, _ := New(fmt.Sprintf("http://%v:%v", h, p))
 
 		g.It("should get vulnerability statistics", func() {
@@ -123,6 +124,7 @@ func TestPortfolios(t *testing.T) {
 			Expect(r.DirectDependencies).To(Equal(44))
 			Expect(r.TransitiveDependencies).To(Equal(33))
 			Expect(r.OutdatedDependencies).To(Equal(22))
+			print(r.NoVersionSpecified)
 			Expect(r.NoVersionSpecified).To(Equal(11))
 		})
 
@@ -200,7 +202,7 @@ const (
 	SampleStartedEndedSummary = `{"data":{"analyzing_projects":2,"errored_projects":6,"finished_projects":3}}`
 	SampleAffectedProjectIds  = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"","version":"","vulnerabilities":15},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"","version":"","vulnerabilities":1}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
 	SampleAffectedProjectInfo = `{"data":[{"id":"1984b037-71f5-4bc2-84f0-5baf37a25fa5","name":"someName1","version":"someVersion1","vulnerabilities":0},{"id":"bc169c32-5d3c-4685-ae7e-8efe3a47c4fa","name":"someName2","version":"someVersion2","vulnerabilities":0}],"meta":{"copyright":"Copyright 2018 Selection Pressure LLC www.selectpress.net","authors":["Ion Channel Dev Team"],"version":"v1","total_count":0,"offset":0}}`
-	SampleDependencyStats     = `{"data":{"direct_dependencies":44,"transitive_dependencies":33,"outdated_dependencies":22,"no_vesion_dependencies":11}}`
+	SampleDependencyStats     = `{"data":{"direct_dependencies":44,"transitive_dependencies":33,"outdated_dependencies":22,"no_version_dependencies":11}}`
 	SampleDependencyList      = `{"data":{"dependency_list":[{"name":"name1","org":"org1","version":"someversion1","package":"package1","type":"type1","latest_version":"latestversion1","scope":"scope1","requirement":"requirement1","file":"file1","projects_count":2}]}}`
 	SampleStatusHistory       = `{"data":[{"status":"pass","count":4,"first_created_at":"2020-07-31T10:54:51.725241-07:00"},{"status":"fail","count":1,"first_created_at":"2020-07-31T10:58:51.725241-07:00"},{"status":"pass","count":1,"first_created_at":"2020-07-31T10:59:51.725241-07:00"}],"meta":{"total_count":3,"offset":0,"last_update":"0001-01-01T00:00:00Z"}}`
 	SampleGetMttr             = `{"data":{"mttr":"1 day","unresolved_incident":false,"time_in_current_status":"1.83 days","failed_mttr_incidents":1,"project_count":1,"data":[{"status":"pass","count":2,"first_created_at":"2020-08-01T22:54:34.543703Z"},{"status":"fail","count":1,"first_created_at":"2020-08-02T22:54:34.579672Z"},{"status":"pass","count":1,"first_created_at":"2020-08-03T22:54:34.608181Z"}]},"meta":{"total_count":1,"offset":0,"last_update":"2020-08-05T18:48:10.6778402Z"}}`

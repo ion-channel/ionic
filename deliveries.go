@@ -9,7 +9,7 @@ import (
 	"github.com/ion-channel/ionic/deliveries"
 )
 
-// GetDeliveryDestinations takes a team ID, and token. It returns list of deliveres and
+// GetDeliveryDestinations takes a team ID, and token. It returns list of deliveries and
 // an error if it receives a bad response from the API or fails to unmarshal the
 // JSON response from the API.
 func (ic *IonClient) GetDeliveryDestinations(teamID, token string) ([]deliveries.Destination, error) {
