@@ -105,7 +105,7 @@ func TestSPDX(t *testing.T) {
 				Packages: pkg,
 			}
 
-			p, err := ProjectPackageFromSPDX2_1(&doc, packageName)
+			p, err := ProjectPackageFromSPDX2_1(&doc)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
@@ -132,7 +132,7 @@ func TestSPDX(t *testing.T) {
 				Packages: pkg,
 			}
 
-			p, err := ProjectPackageFromSPDX2_2(&doc, packageName)
+			p, err := ProjectPackageFromSPDX2_2(&doc)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
@@ -156,7 +156,7 @@ func TestSPDX(t *testing.T) {
 				Packages:     pkg,
 			}
 
-			p, err := ProjectPackageFromSPDX2_2(&doc, packageName)
+			p, err := ProjectPackageFromSPDX2_2(&doc)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
@@ -178,7 +178,7 @@ func TestSPDX(t *testing.T) {
 				Packages:     pkg,
 			}
 
-			p, err := ProjectPackageFromSPDX2_1(&doc, packageName)
+			p, err := ProjectPackageFromSPDX2_1(&doc)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
