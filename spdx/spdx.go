@@ -114,7 +114,7 @@ func ProjectFromSPDX2_1(doc *spdx.Document2_1) (projects.Project, error) {
 
 // ProjectPackageFromSPDX2_2 parses packages from an SPDX file (v2.2) with package source at PackageDownloadLocation
 // PackageDownloadLocation must be a resolveable URL to create a project
-func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2, packageName string) ([]projects.Project, error) {
+func ProjectPackageFromSPDX2_2(doc *spdx.Document2_2) ([]projects.Project, error) {
 	projs := make([]projects.Project, 0)
 	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_2(doc)
 	if err != nil {
@@ -213,7 +213,7 @@ func parseCreatorEmail(creatorPersons []string) string {
 
 // ProjectPackageFromSPDX2_1 parses packages from an SPDX file (v2.1) with package source at PackageDownloadLocation
 // PackageDownloadLocation must be a resolveable URL to create a project
-func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1, packageName string) ([]projects.Project, error) {
+func ProjectPackageFromSPDX2_1(doc *spdx.Document2_1) ([]projects.Project, error) {
 	projs := make([]projects.Project, 0)
 
 	pkgIDs, err := spdxlib.GetDescribedPackageIDs2_1(doc)
