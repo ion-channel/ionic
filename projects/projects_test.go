@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
 	"testing"
 	"time"
 
@@ -367,7 +366,7 @@ func TestProject(t *testing.T) {
 					IDs: &[]string{"aaaa", "bbbb", "cccc"},
 				}
 
-				Expect(pf.Param()).To(Equal("IDs:aaaa;bbbb;cccc,Type:git,Active:false"))
+				Expect(pf.Param()).To(Equal("IDs:aaaa bbbb cccc,Type:git,Active:false"))
 			})
 
 			g.It("should not include blank filters in the params", func() {
@@ -387,11 +386,11 @@ func TestProject(t *testing.T) {
 				t := "git"
 				s := "https://github.com/ion-channel/ionic"
 				tid := "coolteam"
-				id := "projectid"
+				ids := []string{"abc123", "def456", "ghi789"}
 				m := true
 
 				pf := Filter{
-					ID:      &id,
+					IDs:      &ids,
 					TeamID:  &tid,
 					Source:  &s,
 					Type:    &t,
@@ -402,8 +401,10 @@ func TestProject(t *testing.T) {
 				newPf := ParseParam(pf.Param())
 				Expect(newPf).NotTo(BeNil())
 
-				Expect(newPf.ID).NotTo(BeNil())
-				Expect(*newPf.ID).To(Equal(id))
+				Expect(newPf.ID).To(BeNil())
+
+				Expect(newPf.IDs).NotTo(BeNil())
+				Expect(*newPf.IDs).To(Equal(ids))
 
 				Expect(newPf.Type).NotTo(BeNil())
 				Expect(*newPf.Type).To(Equal(t))
@@ -427,76 +428,13 @@ func TestProject(t *testing.T) {
 			})
 
 			g.It("should ignore unknown fields in the params", func() {
-				newPf := ParseParam("IDs:aaaa;bbbb;cccc,URL:someurl,ID:coolproject")
+				newPf := ParseParam("IDs:aaaa bbbb cccc,URL:someurl,ID:coolproject")
 				Expect(newPf).NotTo(BeNil())
 
 				Expect(newPf.ID).NotTo(BeNil())
 				Expect(*newPf.ID).To(Equal("coolproject"))
 				Expect(newPf.IDs).NotTo(BeNil())
 				Expect(*newPf.IDs).To(Equal([]string{"aaaa", "bbbb", "cccc"}))
-			})
-		})
-
-		g.Describe("To SQL", func() {
-			g.It("should convert a filter to a where clause with an identifier", func() {
-				a := false
-				t := "git"
-				ti := "someteamid"
-				ids := []string{"abc123", "def456"}
-
-				pf := Filter{
-					Type:   &t,
-					Active: &a,
-					TeamID: &ti,
-					IDs: &ids,
-				}
-
-				query, vals := pf.SQL("p")
-				Expect(query).To(Equal(" WHERE p.id=ANY($1) AND p.team_id=$2 AND p.type=$3 AND p.active=$4\n"))
-				Expect(len(vals)).To(Equal(4))
-
-				projectIds := reflect.ValueOf(vals[0])
-				Expect(projectIds.Len()).To(Equal(2))
-				Expect(projectIds.Index(0).Interface()).To(Equal("abc123"))
-				Expect(projectIds.Index(1).Interface()).To(Equal("def456"))
-
-				teamID, ok := vals[1].(string)
-				Expect(ok).To(BeTrue())
-				Expect(teamID).To(Equal(ti))
-
-				typeStr, ok := vals[2].(string)
-				Expect(ok).To(BeTrue())
-				Expect(typeStr).To(Equal(t))
-
-				active, ok := vals[3].(bool)
-				Expect(ok).To(BeTrue())
-				Expect(active).To(Equal(a))
-			})
-
-			g.It("should convert a filter to a where clause without an identifier", func() {
-				a := false
-				t := "git"
-				ti := "someteamid"
-				ids := []string{"abc123", "def456"}
-
-				pf := Filter{
-					Type:   &t,
-					Active: &a,
-					TeamID: &ti,
-					IDs: &ids,
-				}
-
-				query, vals := pf.SQL("")
-				Expect(query).To(Equal(" WHERE id=ANY($1) AND team_id=$2 AND type=$3 AND active=$4\n"))
-				Expect(len(vals)).To(Equal(4))
-			})
-
-			g.It("should return an empty where clause for no params", func() {
-				pf := Filter{}
-
-				query, vals := pf.SQL("p")
-				Expect(query).To(Equal(""))
-				Expect(len(vals)).To(Equal(0))
 			})
 		})
 	})

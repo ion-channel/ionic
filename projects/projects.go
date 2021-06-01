@@ -406,7 +406,7 @@ func ParseParam(param string) *Filter {
 
 			field.Set(reflect.ValueOf(&value))
 		case reflect.Slice:
-			value := strings.Split(value, ";")
+			value := strings.Split(value, " ")
 			field.Set(reflect.ValueOf(&value))
 		default:
 			// shouldn't ever happen, but just in case
@@ -422,13 +422,9 @@ func ParseParam(param string) *Filter {
 func (pf *Filter) Param() string {
 	ps := make([]string, 0)
 
-	fields := reflect.TypeOf(pf)
-	values := reflect.ValueOf(pf)
-
-	if fields.Kind() == reflect.Ptr {
-		fields = fields.Elem()
-		values = values.Elem()
-	}
+	// get the fields and values of the underlying Filter (Elem dereferences the pointer)
+	fields := reflect.TypeOf(pf).Elem()
+	values := reflect.ValueOf(pf).Elem()
 
 	for i := 0; i < fields.NumField(); i++ {
 		value := values.Field(i)
@@ -449,80 +445,19 @@ func (pf *Filter) Param() string {
 		case reflect.Bool:
 			ps = append(ps, fmt.Sprintf("%v:%v", name, value.Bool()))
 		case reflect.Slice:
+			// elements of the slice are separated by spaces:
+			// example: IDs:abc def ghi
 			sliceLen := value.Len()
 			if sliceLen == 0 {
 				continue
 			}
 
-			valueStr := fmt.Sprintf("%v:", name)
-			for ii := 0; ii < sliceLen; ii++ {
-				valueStr += fmt.Sprintf("%v;", value.Index(ii).String())
-			}
-
-			valueStr = strings.TrimRight(valueStr, ";")
+			valueStr := strings.Join(value.Interface().([]string), " ")
+			valueStr = fmt.Sprintf("%v:%v", name, valueStr)
 
 			ps = append(ps, valueStr)
 		}
 	}
 
 	return strings.Join(ps, ",")
-}
-
-// SQL takes an identifier and returns the filter as a constructed where clause
-// and set of values for use in a query as SQL params. If the identifier is left
-// blank it will not be included in the resulting where clause.
-func (pf *Filter) SQL(identifier string) (string, []interface{}) {
-	fields := reflect.TypeOf(pf)
-	values := reflect.ValueOf(pf)
-
-	if fields.Kind() == reflect.Ptr {
-		fields = fields.Elem()
-		values = values.Elem()
-	}
-
-	ident := ""
-	if identifier != "" {
-		ident = fmt.Sprintf("%v.", identifier)
-	}
-
-	idx := 1
-	wheres := make([]string, 0)
-	vals := make([]interface{}, 0)
-	for i := 0; i < fields.NumField(); i++ {
-		tag, ok := fields.Field(i).Tag.Lookup("sql")
-		if !ok {
-			continue
-		}
-
-		value := values.Field(i)
-		if value.IsNil() {
-			continue
-		}
-
-		if value.Kind() == reflect.Ptr {
-			// get the underlying value if this is a pointer
-			value = value.Elem()
-		}
-
-		var where string
-		switch value.Kind() {
-		case reflect.String, reflect.Bool:
-			where = fmt.Sprintf("%v%v=$%v", ident, tag, idx)
-		case reflect.Array, reflect.Slice:
-			where = fmt.Sprintf("%v%v=ANY($%v)", ident, tag, idx)
-		default:
-			fmt.Printf("%v", value.Kind())
-		}
-
-		wheres = append(wheres, where)
-		vals = append(vals, value.Interface())
-		idx++
-	}
-
-	where := strings.Join(wheres, " AND ")
-	if where != "" {
-		where = fmt.Sprintf(" WHERE %v\n", where)
-	}
-
-	return where, vals
 }
