@@ -358,12 +358,15 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 // Filter represents the available fields to filter a get project request
 // with.
 type Filter struct {
-	ID      *string `sql:"id"`
-	TeamID  *string `sql:"team_id"`
-	Source  *string `sql:"source"`
-	Type    *string `sql:"type"`
-	Active  *bool   `sql:"active"`
-	Monitor *bool   `sql:"should_monitor"`
+	// ID filters on a single ID
+	ID      *string   `sql:"id"`
+	// IDs filters on one or more IDs
+	IDs     *[]string `sql:"id"`
+	TeamID  *string   `sql:"team_id"`
+	Source  *string   `sql:"source"`
+	Type    *string   `sql:"type"`
+	Active  *bool     `sql:"active"`
+	Monitor *bool     `sql:"should_monitor"`
 }
 
 // ParseParam takes a param string, breaks it apart, and repopulates it into a
@@ -373,35 +376,41 @@ func ParseParam(param string) *Filter {
 	pf := Filter{}
 
 	fvs := strings.Split(param, ",")
-	for i := range fvs {
-		parts := strings.SplitN(fvs[i], ":", 2)
+	for ii := range fvs {
+		parts := strings.SplitN(fvs[ii], ":", 2)
+		if len(parts) != 2 {
+			continue
+		}
 
-		if len(parts) == 2 {
-			name := parts[0]
-			comp := func(n string) bool { return strings.ToLower(n) == name }
+		name := parts[0]
+		value := parts[1]
 
-			value := parts[1]
+		field := reflect.ValueOf(&pf).Elem().FieldByNameFunc(func(n string) bool { return strings.ToLower(n) == strings.ToLower(name) })
+		if !field.IsValid() {
+			continue
+		}
 
-			field, found := reflect.TypeOf(&pf).Elem().FieldByNameFunc(comp)
-			if !found {
+		kind := field.Type().Kind()
+		if kind == reflect.Ptr {
+			kind = field.Type().Elem().Kind()
+		}
+
+		switch kind {
+		case reflect.String:
+			field.Set(reflect.ValueOf(&value))
+		case reflect.Bool:
+			value, err := strconv.ParseBool(value)
+			if err != nil {
 				continue
 			}
 
-			kind := field.Type.Kind()
-
-			if kind == reflect.Ptr {
-				kind = field.Type.Elem().Kind()
-			}
-
-			switch kind {
-			case reflect.String:
-				reflect.ValueOf(&pf).Elem().FieldByNameFunc(comp).Set(reflect.ValueOf(&value))
-			case reflect.Bool:
-				b, err := strconv.ParseBool(value)
-				if err == nil {
-					reflect.ValueOf(&pf).Elem().FieldByNameFunc(comp).Set(reflect.ValueOf(&b))
-				}
-			}
+			field.Set(reflect.ValueOf(&value))
+		case reflect.Slice:
+			value := strings.Split(value, ";")
+			field.Set(reflect.ValueOf(&value))
+		default:
+			// shouldn't ever happen, but just in case
+			continue
 		}
 	}
 
@@ -432,13 +441,27 @@ func (pf *Filter) Param() string {
 			value = value.Elem()
 		}
 
-		name := strings.ToLower(fields.Field(i).Name)
+		name := fields.Field(i).Name
 
 		switch value.Kind() {
 		case reflect.String:
 			ps = append(ps, fmt.Sprintf("%v:%v", name, value.String()))
 		case reflect.Bool:
 			ps = append(ps, fmt.Sprintf("%v:%v", name, value.Bool()))
+		case reflect.Slice:
+			sliceLen := value.Len()
+			if sliceLen == 0 {
+				continue
+			}
+
+			valueStr := fmt.Sprintf("%v:", name)
+			for ii := 0; ii < sliceLen; ii++ {
+				valueStr += fmt.Sprintf("%v;", value.Index(ii).String())
+			}
+
+			valueStr = strings.TrimRight(valueStr, ";")
+
+			ps = append(ps, valueStr)
 		}
 	}
 
@@ -449,7 +472,6 @@ func (pf *Filter) Param() string {
 // and set of values for use in a query as SQL params. If the identifier is left
 // blank it will not be included in the resulting where clause.
 func (pf *Filter) SQL(identifier string) (string, []interface{}) {
-
 	fields := reflect.TypeOf(pf)
 	values := reflect.ValueOf(pf)
 
@@ -458,32 +480,41 @@ func (pf *Filter) SQL(identifier string) (string, []interface{}) {
 		values = values.Elem()
 	}
 
+	ident := ""
+	if identifier != "" {
+		ident = fmt.Sprintf("%v.", identifier)
+	}
+
 	idx := 1
 	wheres := make([]string, 0)
 	vals := make([]interface{}, 0)
 	for i := 0; i < fields.NumField(); i++ {
-		value := values.Field(i)
+		tag, ok := fields.Field(i).Tag.Lookup("sql")
+		if !ok {
+			continue
+		}
 
+		value := values.Field(i)
 		if value.IsNil() {
 			continue
 		}
 
 		if value.Kind() == reflect.Ptr {
+			// get the underlying value if this is a pointer
 			value = value.Elem()
 		}
 
-		tag, ok := fields.Field(i).Tag.Lookup("sql")
-		if !ok {
-			tag = fields.Field(i).Name
+		var where string
+		switch value.Kind() {
+		case reflect.String, reflect.Bool:
+			where = fmt.Sprintf("%v%v=$%v", ident, tag, idx)
+		case reflect.Array, reflect.Slice:
+			where = fmt.Sprintf("%v%v=ANY($%v)", ident, tag, idx)
+		default:
+			fmt.Printf("%v", value.Kind())
 		}
 
-		ident := ""
-		if identifier != "" {
-			ident = fmt.Sprintf("%v.", identifier)
-		}
-
-		name := strings.ToLower(tag)
-		wheres = append(wheres, fmt.Sprintf("%v%v=$%v", ident, name, idx))
+		wheres = append(wheres, where)
 		vals = append(vals, value.Interface())
 		idx++
 	}

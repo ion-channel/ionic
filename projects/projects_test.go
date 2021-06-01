@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 	"testing"
 	"time"
 
@@ -363,9 +364,10 @@ func TestProject(t *testing.T) {
 				pf := Filter{
 					Type:   &t,
 					Active: &a,
+					IDs: &[]string{"aaaa", "bbbb", "cccc"},
 				}
 
-				Expect(pf.Param()).To(Equal("type:git,active:false"))
+				Expect(pf.Param()).To(Equal("IDs:aaaa;bbbb;cccc,Type:git,Active:false"))
 			})
 
 			g.It("should not include blank filters in the params", func() {
@@ -375,7 +377,7 @@ func TestProject(t *testing.T) {
 					Type: &t,
 				}
 
-				Expect(pf.Param()).To(Equal("type:git"))
+				Expect(pf.Param()).To(Equal("Type:git"))
 			})
 		})
 
@@ -425,11 +427,13 @@ func TestProject(t *testing.T) {
 			})
 
 			g.It("should ignore unknown fields in the params", func() {
-				newPf := ParseParam("url:someurl,id:coolproject")
+				newPf := ParseParam("IDs:aaaa;bbbb;cccc,URL:someurl,ID:coolproject")
 				Expect(newPf).NotTo(BeNil())
 
 				Expect(newPf.ID).NotTo(BeNil())
 				Expect(*newPf.ID).To(Equal("coolproject"))
+				Expect(newPf.IDs).NotTo(BeNil())
+				Expect(*newPf.IDs).To(Equal([]string{"aaaa", "bbbb", "cccc"}))
 			})
 		})
 
@@ -438,26 +442,33 @@ func TestProject(t *testing.T) {
 				a := false
 				t := "git"
 				ti := "someteamid"
+				ids := []string{"abc123", "def456"}
 
 				pf := Filter{
 					Type:   &t,
 					Active: &a,
 					TeamID: &ti,
+					IDs: &ids,
 				}
 
 				query, vals := pf.SQL("p")
-				Expect(query).To(Equal(" WHERE p.team_id=$1 AND p.type=$2 AND p.active=$3\n"))
-				Expect(len(vals)).To(Equal(3))
+				Expect(query).To(Equal(" WHERE p.id=ANY($1) AND p.team_id=$2 AND p.type=$3 AND p.active=$4\n"))
+				Expect(len(vals)).To(Equal(4))
 
-				teamID, ok := vals[0].(string)
+				projectIds := reflect.ValueOf(vals[0])
+				Expect(projectIds.Len()).To(Equal(2))
+				Expect(projectIds.Index(0).Interface()).To(Equal("abc123"))
+				Expect(projectIds.Index(1).Interface()).To(Equal("def456"))
+
+				teamID, ok := vals[1].(string)
 				Expect(ok).To(BeTrue())
 				Expect(teamID).To(Equal(ti))
 
-				typeStr, ok := vals[1].(string)
+				typeStr, ok := vals[2].(string)
 				Expect(ok).To(BeTrue())
 				Expect(typeStr).To(Equal(t))
 
-				active, ok := vals[2].(bool)
+				active, ok := vals[3].(bool)
 				Expect(ok).To(BeTrue())
 				Expect(active).To(Equal(a))
 			})
@@ -466,16 +477,18 @@ func TestProject(t *testing.T) {
 				a := false
 				t := "git"
 				ti := "someteamid"
+				ids := []string{"abc123", "def456"}
 
 				pf := Filter{
 					Type:   &t,
 					Active: &a,
 					TeamID: &ti,
+					IDs: &ids,
 				}
 
 				query, vals := pf.SQL("")
-				Expect(query).To(Equal(" WHERE team_id=$1 AND type=$2 AND active=$3\n"))
-				Expect(len(vals)).To(Equal(3))
+				Expect(query).To(Equal(" WHERE id=ANY($1) AND team_id=$2 AND type=$3 AND active=$4\n"))
+				Expect(len(vals)).To(Equal(4))
 			})
 
 			g.It("should return an empty where clause for no params", func() {
