@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/ion-channel/ionic/scans"
 	"net/url"
 
 	"github.com/ion-channel/ionic/scanner"
@@ -204,4 +205,28 @@ func (ic *IonClient) GetProjectsStates(ids []string, filter string, token string
 	}
 
 	return ps, nil
+}
+
+// FindScans takes a set of search parameters and a team ID, and returns a slice of scan results
+func (ic *IonClient) FindScans(parameters scans.SearchParameters, teamID, token string) ([]scans.Scan, error) {
+	b, err := json.Marshal(parameters)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	params := &url.Values{}
+	params.Set("team_id", teamID)
+
+	r, err := ic.Post(scans.ScanFindScansEndpoint, token, params, *bytes.NewBuffer(b), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to find scans: %v", err.Error())
+	}
+
+	var scansResult []scans.Scan
+	err = json.Unmarshal(r, &scansResult)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response: %v", err.Error())
+	}
+
+	return scansResult, nil
 }

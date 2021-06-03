@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+const (
+	// ScanFindScansEndpoint is the endpoint used to search for scan results
+	ScanFindScansEndpoint = "v1/animal/findScans"
+)
+
 // Scan represents the data collected from an individual scan on a project.
 type Scan struct {
 	*scan
@@ -27,6 +32,13 @@ type scan struct {
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
 }
+
+// SearchParameters represents the parameters that can be set when performing a scan search
+type SearchParameters struct {
+	AnalysisIDs []string `json:"analysis_ids"`
+	ScanTypes	[]string `json:"scan_types"`
+}
+
 
 // String returns a JSON formatted string of the scan object
 func (s Scan) String() string {
