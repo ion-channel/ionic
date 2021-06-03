@@ -36,9 +36,8 @@ type scan struct {
 // SearchParameters represents the parameters that can be set when performing a scan search
 type SearchParameters struct {
 	AnalysisIDs []string `json:"analysis_ids"`
-	ScanTypes	[]string `json:"scan_types"`
+	ScanTypes   []string `json:"scan_types"`
 }
-
 
 // String returns a JSON formatted string of the scan object
 func (s Scan) String() string {

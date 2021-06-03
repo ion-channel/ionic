@@ -56,20 +56,20 @@ type ExportedData struct {
 
 // ExportFields represents the project data
 type ExportFields struct {
-	ProjectName         string                             `json:"project_name"`
-	ProjectID           string                             `json:"project_id"`
-	ProductName         string                             `json:"product_name"`
-	CPE                 string                             `json:"cpe"`
-	Source              string                             `json:"source"`
-	CommitterCount      *int                               `json:"committer_count"`
-	DaysSinceLastCommit *int                               `json:"days_since_last_commit"`
-	Version             string                             `json:"version"`
-	Org                 string                             `json:"org"`
-	CurrentStatus       string                             `json:"current_status"`
-	VulnCount           *int                               `json:"vuln_count"`
-	CritVulnCount       *int                               `json:"critical_vuln_count"`
-	HighVulnCount       *int                               `json:"high_vuln_count"`
-	VirusCount          *int                               `json:"virus_count"`
+	ProjectName         string `json:"project_name"`
+	ProjectID           string `json:"project_id"`
+	ProductName         string `json:"product_name"`
+	CPE                 string `json:"cpe"`
+	Source              string `json:"source"`
+	CommitterCount      *int   `json:"committer_count"`
+	DaysSinceLastCommit *int   `json:"days_since_last_commit"`
+	Version             string `json:"version"`
+	Org                 string `json:"org"`
+	CurrentStatus       string `json:"current_status"`
+	VulnCount           *int   `json:"vuln_count"`
+	CritVulnCount       *int   `json:"critical_vuln_count"`
+	HighVulnCount       *int   `json:"high_vuln_count"`
+	VirusCount          *int   `json:"virus_count"`
 }
 
 // NewProjectReport takes a project and analysis summaries to return a
