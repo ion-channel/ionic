@@ -363,7 +363,7 @@ func TestProject(t *testing.T) {
 				pf := Filter{
 					Type:   &t,
 					Active: &a,
-					IDs: &[]string{"aaaa", "bbbb", "cccc"},
+					IDs:    &[]string{"aaaa", "bbbb", "cccc"},
 				}
 
 				Expect(pf.Param()).To(Equal("IDs:aaaa bbbb cccc,Type:git,Active:false"))
@@ -390,7 +390,7 @@ func TestProject(t *testing.T) {
 				m := true
 
 				pf := Filter{
-					IDs:      &ids,
+					IDs:     &ids,
 					TeamID:  &tid,
 					Source:  &s,
 					Type:    &t,

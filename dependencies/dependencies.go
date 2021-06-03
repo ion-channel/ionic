@@ -23,18 +23,18 @@ const (
 // Dependency represents all the known information for a dependency object
 // within the Ion Channel API
 type Dependency struct {
-	Name          string       `json:"name,omitempty"`
-	Version       string       `json:"version"`
-	LatestVersion string       `json:"latest_version"`
-	Org           string       `json:"org"`
-	Type          string       `json:"type"`
-	Package       string       `json:"package"`
-	Scope         string       `json:"scope"`
-	Requirement   string       `json:"requirement"`
-	Dependencies  []Dependency `json:"dependencies"`
-	Confidence    float32      `json:"confidence"`
-	CreatedAt     time.Time    `json:"created_at,omitempty"`
-	UpdatedAt     time.Time    `json:"updated_at,omitempty"`
+	Name            string       `json:"name,omitempty"`
+	Version         string       `json:"version"`
+	LatestVersion   string       `json:"latest_version"`
+	Org             string       `json:"org"`
+	Type            string       `json:"type"`
+	Package         string       `json:"package"`
+	Scope           string       `json:"scope"`
+	Requirement     string       `json:"requirement"`
+	Dependencies    []Dependency `json:"dependencies"`
+	Confidence      float32      `json:"confidence"`
+	CreatedAt       time.Time    `json:"created_at,omitempty"`
+	UpdatedAt       time.Time    `json:"updated_at,omitempty"`
 	OutdatedVersion OutdatedMeta `json:"outdated_version"`
 }
 

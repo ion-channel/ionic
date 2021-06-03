@@ -179,7 +179,6 @@ func (ic *IonClient) GetLatestAnalysisIDs(teamID string, projectIDs []string, to
 	return &a, nil
 }
 
-
 // GetLatestAnalysisSummary takes a team ID, project ID, and token. It returns the
 // latest analysis summary for the project. It returns an error for any API
 // issues it encounters.

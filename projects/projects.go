@@ -359,7 +359,7 @@ func (p *Project) Validate(client *http.Client, baseURL *url.URL, token string) 
 // with.
 type Filter struct {
 	// ID filters on a single ID
-	ID      *string   `sql:"id"`
+	ID *string `sql:"id"`
 	// IDs filters on one or more IDs
 	IDs     *[]string `sql:"id"`
 	TeamID  *string   `sql:"team_id"`
