@@ -201,6 +201,35 @@ func (ic *IonClient) GetLatestAnalysisSummary(teamID, projectID, token string) (
 	return &a, nil
 }
 
+// GetLatestAnalysisSummaries takes a team ID, project IDs, and a token. It returns the
+// latest analysis summaries for the given project. It returns an error for any API
+// issues it encounters.
+func (ic *IonClient) GetLatestAnalysisSummaries(teamID string, projectIDs []string, token string) ([]analyses.Summary, error) {
+	body := requests.ByIDsAndTeamID{
+		TeamID: teamID,
+		IDs:    projectIDs,
+	}
+
+	b, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request body: %v", err.Error())
+	}
+
+	r, err := ic.Post(analyses.AnalysisGetLatestAnalysisSummariesEndpoint, token, nil, *bytes.NewBuffer(b), nil)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to get latest analysis summaries: %v", err.Error())
+	}
+
+	var a []analyses.Summary
+	err = json.Unmarshal(r, &a)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get latest analysis summaries: %v", err.Error())
+	}
+
+	return a, nil
+}
+
 // GetRawLatestAnalysisSummary takes a team ID, project ID, and token. It returns the
 // raw JSON from the API.  It returns an error for any API issues it encounters.
 func (ic *IonClient) GetRawLatestAnalysisSummary(teamID, projectID, token string) (json.RawMessage, error) {

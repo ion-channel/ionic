@@ -18,6 +18,8 @@ const (
 	AnalysisGetLatestAnalysisIDsEndpoint = "v1/animal/getLatestAnalysisIDs"
 	// AnalysisGetLatestAnalysisSummaryEndpoint returns the latest analysis summary. Requires team id and project id.
 	AnalysisGetLatestAnalysisSummaryEndpoint = "v1/animal/getLatestAnalysisSummary"
+	// AnalysisGetLatestAnalysisSummariesEndpoint returns the latest analysis summaries for multiple projects. Requires team id and project id.
+	AnalysisGetLatestAnalysisSummariesEndpoint = "v1/animal/getLatestAnalysisSummaries"
 	// AnalysisGetPublicAnalysisEndpoint returns a public analysis.  Requires an analysis id.
 	AnalysisGetPublicAnalysisEndpoint = "v1/animal/getPublicAnalysis"
 	// AnalysisGetLatestPublicAnalysisEndpoint returns a public analysis.  Requires an analysis id.
