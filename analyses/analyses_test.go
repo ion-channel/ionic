@@ -20,7 +20,7 @@ func TestAnalysis(t *testing.T) {
 			expectedAnalysisID := "analysizing"
 
 			a := &Analysis{
-				ID: expectedAnalysisID,
+				Summary: Summary{ID: expectedAnalysisID},
 			}
 			ar := &rulesets.AppliedRulesetSummary{}
 
@@ -51,27 +51,29 @@ func TestAnalysis(t *testing.T) {
 			text := "sometext"
 
 			a := Analysis{
-				ID:            "someid",
-				TeamID:        "someteamid",
-				ProjectID:     "someproject",
-				Name:          "somename",
-				Text:          &text,
-				Type:          "sometype",
-				Source:        "somesource",
-				Branch:        "somebranch",
-				Description:   "somedesc",
-				Status:        "somestatus",
-				RulesetID:     "somerulesetid",
-				CreatedAt:     createdAt,
-				UpdatedAt:     updatedAt,
-				Duration:      4.242,
-				TriggerHash:   "sometriggerhas",
-				TriggerText:   "sometriggertext",
-				TriggerAuthor: "sometriggerauthor",
+				Summary: Summary{
+					ID:            "someid",
+					TeamID:        "someteamid",
+					ProjectID:     "someproject",
+					Name:          "somename",
+					Text:          &text,
+					Type:          "sometype",
+					Source:        "somesource",
+					Branch:        "somebranch",
+					Description:   "somedesc",
+					Status:        "somestatus",
+					RulesetID:     "somerulesetid",
+					CreatedAt:     createdAt,
+					UpdatedAt:     updatedAt,
+					Duration:      4.242,
+					TriggerHash:   "sometriggerhas",
+					TriggerText:   "sometriggertext",
+					TriggerAuthor: "sometriggerauthor",
+				},
 				ScanSummaries: nil,
 				Public:        true,
 			}
-			Expect(fmt.Sprintf("%v", a)).To(Equal(`{"id":"someid","team_id":"someteamid","project_id":"someproject","name":"somename","text":"sometext","type":"sometype","source":"somesource","branch":"somebranch","description":"somedesc","status":"somestatus","ruleset_id":"somerulesetid","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","duration":4.242,"trigger_hash":"sometriggerhas","trigger_text":"sometriggertext","trigger_author":"sometriggerauthor","scan_summaries":null,"public":true}`))
+			Expect(fmt.Sprintf("%v", a)).To(Equal(`{"id":"someid","analysis_id":"","team_id":"someteamid","project_id":"someproject","name":"somename","text":"sometext","type":"sometype","source":"somesource","branch":"somebranch","description":"somedesc","risk":"","summary":"","passed":false,"ruleset_id":"somerulesetid","ruleset_name":"","status":"somestatus","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","duration":4.242,"trigger_hash":"sometriggerhas","trigger_text":"sometriggertext","trigger_author":"sometriggerauthor","trigger":"","scan_summaries":null,"public":true}`))
 		})
 	})
 }
