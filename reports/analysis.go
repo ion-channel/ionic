@@ -23,12 +23,14 @@ type AnalysisReport struct {
 func NewAnalysisReport(status *scanner.AnalysisStatus, analysis *analyses.Analysis, appliedRuleset *rulesets.AppliedRulesetSummary, experimental bool) (*AnalysisReport, error) {
 	if analysis == nil {
 		analysis = &analyses.Analysis{
-			ID:        status.ID,
-			ProjectID: status.ProjectID,
-			TeamID:    status.TeamID,
-			Status:    status.Status,
-			CreatedAt: status.CreatedAt,
-			UpdatedAt: status.UpdatedAt,
+			Summary: analyses.Summary{
+				ID:        status.ID,
+				ProjectID: status.ProjectID,
+				TeamID:    status.TeamID,
+				Status:    status.Status,
+				CreatedAt: status.CreatedAt,
+				UpdatedAt: status.UpdatedAt,
+			},
 		}
 	}
 
