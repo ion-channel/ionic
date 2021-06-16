@@ -16,176 +16,251 @@ func TestSPDX(t *testing.T) {
 	g := goblin.Goblin(t)
 	RegisterFailHandler(func(m string, _ ...int) { g.Fail(m) })
 
-	g.Describe("create Project from SPDX", func() {
-		g.It("should return no error, and a Project if spdx file is valid format 2.1", func() {
+	g.Describe("SPDX v2.1", func() {
+		g.It("should return the top-level project when no dependencies requested", func() {
+			spdxDocumentRef := spdx.MakeDocElementID("", "DOCUMENT")
+			spdxRef := spdx.MakeDocElementID("", "some-cool-pkg")
+			spdxDependencyRef := spdx.MakeDocElementID("", "some-dep")
+			spdxPackage := spdx.Package2_1{
+				PackageName:                 "some-cool-pkg",
+				PackageSPDXIdentifier:       spdxRef.ElementRefID,
+				PackageVersion:              "1.2.3",
+				PackageSupplierOrganization: "The Org",
+				PackageDownloadLocation:     "https://github.com/some-org/some-cool-pkg.git@main",
+				PackageDescription:          "Some description",
+			}
+			spdxDependencyPackage := spdx.Package2_1{
+				PackageName:                 "some-dep",
+				PackageSPDXIdentifier:       spdxDependencyRef.ElementRefID,
+				PackageVersion:              "3.2.1",
+				PackageSupplierOrganization: "The Org",
+				PackageDownloadLocation:     "https://github.com/some-org/some-dep.git",
+				PackageDescription:          "Some dep description",
+			}
+			packages := make(map[spdx.ElementID]*spdx.Package2_1)
+			packages[spdxRef.ElementRefID] = &spdxPackage
+			packages[spdxDependencyRef.ElementRefID] = &spdxDependencyPackage
+
+			relationships := []*spdx.Relationship2_1{{
+				RefA:         spdxDocumentRef,
+				Relationship: "DESCRIBES",
+				RefB:         spdxRef,
+			}, {
+				RefA:         spdxRef,
+				Relationship: "DEPENDS_ON",
+				RefB:         spdxDependencyRef,
+			}}
+
 			doc := spdx.Document2_1{
 				CreationInfo: &spdx.CreationInfo2_1{
-					DocumentName:      "some-cool-pkg",
-					DocumentNamespace: "http://%v:%v/goodurl",
+					DocumentName:      "SPDX SBOM",
+					DocumentNamespace: "http://ionchannel.io",
 					CreatorPersons:    []string{"Monsieur Package Creator (mpc@mail.com)"},
-					CreatorComment:    "some cool package",
+					CreatorComment:    "some cool package SBOM",
 				},
+				Packages:      packages,
+				Relationships: relationships,
 			}
 
-			p, err := ProjectFromSPDX2_1(&doc)
+			p, err := ProjectsFromSPDX(&doc, false)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
-			Expect(*p.Name).To(Equal(doc.CreationInfo.DocumentName))
-			Expect(*p.Type).To(Equal("artifact"))
-			Expect(*p.Description).To(Equal(doc.CreationInfo.CreatorComment))
+			Expect(len(p)).To(Equal(1))
+			Expect(*p[0].Name).To(Equal(spdxPackage.PackageName))
+			Expect(*p[0].Type).To(Equal("git"))
+			Expect(*p[0].Description).To(Equal(spdxPackage.PackageDescription))
+			Expect(len(p[0].Aliases)).To(Equal(1))
+			Expect(p[0].Aliases[0].Version).To(Equal(spdxPackage.PackageVersion))
+			Expect(*p[0].Branch).To(Equal("main"))
 		})
 
-		g.It("should return no error, and a Project if spdx file is valid format 2.2", func() {
-			doc := spdx.Document2_2{
-				CreationInfo: &spdx.CreationInfo2_2{
-					DocumentName:      "some-cool-pkg",
-					DocumentNamespace: "http://github.com/my/repo",
+		g.It("should return all projects when dependencies requested", func() {
+			spdxDocumentRef := spdx.MakeDocElementID("", "DOCUMENT")
+			spdxRef := spdx.MakeDocElementID("", "some-cool-pkg")
+			spdxDependencyRef := spdx.MakeDocElementID("", "some-dep")
+			spdxPackage := spdx.Package2_1{
+				PackageName:                 "some-cool-pkg",
+				PackageSPDXIdentifier:       spdxRef.ElementRefID,
+				PackageVersion:              "1.2.3",
+				PackageSupplierOrganization: "The Org",
+				PackageDownloadLocation:     "https://github.com/some-org/some-cool-pkg.git@my-cool-branch",
+				PackageDescription:          "Some description",
+			}
+			spdxDependencyPackage := spdx.Package2_1{
+				PackageName:                 "some-dep",
+				PackageSPDXIdentifier:       spdxDependencyRef.ElementRefID,
+				PackageVersion:              "3.2.1",
+				PackageSupplierOrganization: "The Org",
+				PackageDescription:          "Some dep description",
+			}
+			packages := make(map[spdx.ElementID]*spdx.Package2_1)
+			packages[spdxRef.ElementRefID] = &spdxPackage
+			packages[spdxDependencyRef.ElementRefID] = &spdxDependencyPackage
+
+			relationships := []*spdx.Relationship2_1{{
+				RefA:         spdxDocumentRef,
+				Relationship: "DESCRIBES",
+				RefB:         spdxRef,
+			}, {
+				RefA:         spdxRef,
+				Relationship: "DEPENDS_ON",
+				RefB:         spdxDependencyRef,
+			}}
+
+			doc := spdx.Document2_1{
+				CreationInfo: &spdx.CreationInfo2_1{
+					DocumentName:      "SPDX SBOM",
+					DocumentNamespace: "http://ionchannel.io",
 					CreatorPersons:    []string{"Monsieur Package Creator (mpc@mail.com)"},
-					CreatorComment:    "some cool package",
+					CreatorComment:    "some cool package SBOM",
 				},
+				Packages:      packages,
+				Relationships: relationships,
 			}
 
-			p, err := ProjectFromSPDX2_2(&doc)
+			p, err := ProjectsFromSPDX(&doc, true)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
-			Expect(*p.Name).To(Equal(doc.CreationInfo.DocumentName))
-			Expect(*p.Type).To(Equal("git"))
-			Expect(*p.Description).To(Equal(doc.CreationInfo.CreatorComment))
-		})
-
-		g.It("should return an error if a created Project is invalid due to missing field for 2.2", func() {
-			doc := spdx.Document2_2{
-				CreationInfo: &spdx.CreationInfo2_2{
-					DocumentName:   "some-cool-pkg",
-					CreatorPersons: []string{"Monsieur Package Creator (mpc@mail.com)"},
-					CreatorComment: "some cool package",
-				},
-			}
-
-			_, err := ProjectFromSPDX2_2(&doc)
-
-			Expect(err).ToNot(BeNil())
-			errStr := err.Error()
-			Expect(errStr).To(ContainSubstring("DocumentNamespace"))
-		})
-
-		g.It("should return an error if a created Project is invalid due to missing field for 2.1", func() {
-			doc := spdx.Document2_1{
-				CreationInfo: &spdx.CreationInfo2_1{
-					DocumentName:   "some-cool-pkg",
-					CreatorPersons: []string{"Monsieur Package Creator (mpc@mail.com)"},
-					CreatorComment: "some cool package",
-				},
-			}
-
-			_, err := ProjectFromSPDX2_1(&doc)
-
-			Expect(err).ToNot(BeNil())
-			errStr := err.Error()
-			Expect(errStr).To(ContainSubstring("DocumentNamespace"))
+			Expect(len(p)).To(Equal(2))
+			Expect(*p[0].Name).To(Equal(spdxPackage.PackageName))
+			Expect(*p[0].Type).To(Equal("git"))
+			Expect(*p[0].Description).To(Equal(spdxPackage.PackageDescription))
+			Expect(len(p[0].Aliases)).To(Equal(1))
+			Expect(p[0].Aliases[0].Version).To(Equal(spdxPackage.PackageVersion))
+			Expect(p[0].Aliases[0].Org).To(Equal(spdxPackage.PackageSupplierOrganization))
+			Expect(*p[0].Branch).To(Equal("my-cool-branch"))
+			Expect(*p[1].Name).To(Equal(spdxDependencyPackage.PackageName))
+			Expect(*p[1].Type).To(Equal("source_unavailable"))
+			Expect(*p[1].Description).To(Equal(spdxDependencyPackage.PackageDescription))
+			Expect(len(p[1].Aliases)).To(Equal(1))
+			Expect(p[1].Aliases[0].Version).To(Equal(spdxDependencyPackage.PackageVersion))
+			Expect(p[1].Aliases[0].Org).To(Equal(spdxPackage.PackageSupplierOrganization))
 		})
 	})
-
-	g.Describe("create Project from an SPDX package", func() {
-		g.It("should return no error if a created Project from package is valid for 2.1", func() {
-			pkg := make(map[spdx.ElementID]*spdx.Package2_1)
-			packageName := "some-cool-package"
-			pkg["id"] = &spdx.Package2_1{
-				PackageName:             packageName,
-				PackageDownloadLocation: "http://%v:%v/goodurl",
-				PackageDescription:      "some cool package",
+	g.Describe("SPDX v2.2", func() {
+		g.It("should return the top-level project when no dependencies requested", func() {
+			spdxDocumentRef := spdx.MakeDocElementID("", "DOCUMENT")
+			spdxRef := spdx.MakeDocElementID("", "some-cool-pkg")
+			spdxDependencyRef := spdx.MakeDocElementID("", "some-dep")
+			spdxPackage := spdx.Package2_2{
+				PackageName:                 "some-cool-pkg",
+				PackageSPDXIdentifier:       spdxRef.ElementRefID,
+				PackageVersion:              "1.2.3",
+				PackageSupplierOrganization: "The Org",
+				PackageDownloadLocation:     "https://github.com/some-org/some-cool-pkg.git@ian/some-branch",
+				PackageDescription:          "Some description",
 			}
-			doc := spdx.Document2_1{
-				CreationInfo: &spdx.CreationInfo2_1{
-					DocumentNamespace: "http://%v:%v/goodurl",
-					CreatorPersons:    []string{"Monsieur Package Creator (mpc@mail.com)"},
-				},
-				Packages: pkg,
+			spdxDependencyPackage := spdx.Package2_2{
+				PackageName:                 "some-dep",
+				PackageSPDXIdentifier:       spdxDependencyRef.ElementRefID,
+				PackageVersion:              "3.2.1",
+				PackageSupplierOrganization: "The Org",
+				PackageDownloadLocation:     "https://github.com/some-org/some-dep.git",
+				PackageDescription:          "Some dep description",
 			}
+			packages := make(map[spdx.ElementID]*spdx.Package2_2)
+			packages[spdxRef.ElementRefID] = &spdxPackage
+			packages[spdxDependencyRef.ElementRefID] = &spdxDependencyPackage
 
-			p, err := ProjectPackageFromSPDX2_1(&doc)
+			relationships := []*spdx.Relationship2_2{{
+				RefA:         spdxDocumentRef,
+				Relationship: "DESCRIBES",
+				RefB:         spdxRef,
+			}, {
+				RefA:         spdxRef,
+				Relationship: "DEPENDS_ON",
+				RefB:         spdxDependencyRef,
+			}}
 
-			Expect(err).To(BeNil())
-			Expect(p).NotTo(BeNil())
-			Expect(len(p)).To(Equal(1))
-			first := p[0]
-			Expect(*first.Name).To(Equal(packageName))
-			Expect(*first.Type).To(Equal("artifact"))
-			Expect(*first.Description).To(Equal(pkg["id"].PackageDescription))
-		})
-
-		g.It("should return no error if a created Project from package is valid for 2.2", func() {
-			pkg := make(map[spdx.ElementID]*spdx.Package2_2)
-			packageName := "some-cool-package"
-			pkg["id"] = &spdx.Package2_2{
-				PackageName:             packageName,
-				PackageDownloadLocation: "http://github.com/my/repo",
-				PackageDescription:      "some cool package",
-			}
 			doc := spdx.Document2_2{
 				CreationInfo: &spdx.CreationInfo2_2{
-					DocumentNamespace: "http://%v:%v/goodurl",
+					DocumentName:      "SPDX SBOM",
+					DocumentNamespace: "http://ionchannel.io",
 					CreatorPersons:    []string{"Monsieur Package Creator (mpc@mail.com)"},
+					CreatorComment:    "some cool package SBOM",
 				},
-				Packages: pkg,
+				Packages:      packages,
+				Relationships: relationships,
 			}
 
-			p, err := ProjectPackageFromSPDX2_2(&doc)
+			p, err := ProjectsFromSPDX(&doc, false)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
 			Expect(len(p)).To(Equal(1))
-			first := p[0]
-			Expect(*first.Name).To(Equal(packageName))
-			Expect(*first.Type).To(Equal("git"))
-			Expect(*first.Description).To(Equal(pkg["id"].PackageDescription))
+			Expect(*p[0].Name).To(Equal(spdxPackage.PackageName))
+			Expect(*p[0].Type).To(Equal("git"))
+			Expect(*p[0].Description).To(Equal(spdxPackage.PackageDescription))
+			Expect(len(p[0].Aliases)).To(Equal(1))
+			Expect(p[0].Aliases[0].Version).To(Equal(spdxPackage.PackageVersion))
+			Expect(*p[0].Branch).To(Equal("ian/some-branch"))
 		})
 
-		g.It("should an no error if a package is invalid (due to missing download location) for 2.2", func() {
-			pkg := make(map[spdx.ElementID]*spdx.Package2_2)
-			packageName := "some-cool-package"
-			pkg["id"] = &spdx.Package2_2{
-				PackageName:             packageName,
-				PackageDownloadLocation: "",
-				PackageDescription:      "some cool package",
+		g.It("should return all projects when dependencies requested", func() {
+			spdxDocumentRef := spdx.MakeDocElementID("", "DOCUMENT")
+			spdxRef := spdx.MakeDocElementID("", "some-cool-pkg")
+			spdxDependencyRef := spdx.MakeDocElementID("", "some-dep")
+			spdxPackage := spdx.Package2_2{
+				PackageName:                 "some-cool-pkg",
+				PackageSPDXIdentifier:       spdxRef.ElementRefID,
+				PackageVersion:              "1.2.3",
+				PackageSupplierOrganization: "The Org",
+				PackageDownloadLocation:     "https://github.com/some-org/some-cool-pkg.git",
+				PackageDescription:          "Some description",
 			}
+			spdxDependencyPackage := spdx.Package2_2{
+				PackageName:                 "some-dep",
+				PackageSPDXIdentifier:       spdxDependencyRef.ElementRefID,
+				PackageVersion:              "3.2.1",
+				PackageSupplierOrganization: "The Org",
+				PackageDescription:          "Some dep description",
+			}
+			packages := make(map[spdx.ElementID]*spdx.Package2_2)
+			packages[spdxRef.ElementRefID] = &spdxPackage
+			packages[spdxDependencyRef.ElementRefID] = &spdxDependencyPackage
+
+			relationships := []*spdx.Relationship2_2{{
+				RefA:         spdxDocumentRef,
+				Relationship: "DESCRIBES",
+				RefB:         spdxRef,
+			}, {
+				RefA:         spdxRef,
+				Relationship: "DEPENDS_ON",
+				RefB:         spdxDependencyRef,
+			}}
+
 			doc := spdx.Document2_2{
-				CreationInfo: &spdx.CreationInfo2_2{},
-				Packages:     pkg,
+				CreationInfo: &spdx.CreationInfo2_2{
+					DocumentName:      "SPDX SBOM",
+					DocumentNamespace: "http://ionchannel.io",
+					CreatorPersons:    []string{"Monsieur Package Creator (mpc@mail.com)"},
+					CreatorComment:    "some cool package SBOM",
+				},
+				Packages:      packages,
+				Relationships: relationships,
 			}
 
-			p, err := ProjectPackageFromSPDX2_2(&doc)
+			p, err := ProjectsFromSPDX(&doc, true)
 
 			Expect(err).To(BeNil())
 			Expect(p).NotTo(BeNil())
-			Expect(len(p)).To(Equal(1))
-			first := p[0]
-			Expect(*first.Name).To(Equal(packageName))
-			Expect(*first.Type).To(Equal("source_unavailable"))
-		})
-
-		g.It("should an no error if a package is invalid (due to missing download location) for 2.1", func() {
-			pkg := make(map[spdx.ElementID]*spdx.Package2_1)
-			packageName := "some-cool-package"
-			pkg["id"] = &spdx.Package2_1{
-				PackageName:        packageName,
-				PackageDescription: "some cool package",
-			}
-			doc := spdx.Document2_1{
-				CreationInfo: &spdx.CreationInfo2_1{},
-				Packages:     pkg,
-			}
-
-			p, err := ProjectPackageFromSPDX2_1(&doc)
-
-			Expect(err).To(BeNil())
-			Expect(p).NotTo(BeNil())
-			Expect(len(p)).To(Equal(1))
-			first := p[0]
-			Expect(*first.Name).To(Equal(packageName))
-			Expect(*first.Type).To(Equal("source_unavailable"))
+			Expect(len(p)).To(Equal(2))
+			Expect(*p[0].Name).To(Equal(spdxPackage.PackageName))
+			Expect(*p[0].Type).To(Equal("git"))
+			Expect(*p[0].Description).To(Equal(spdxPackage.PackageDescription))
+			Expect(len(p[0].Aliases)).To(Equal(1))
+			Expect(p[0].Aliases[0].Version).To(Equal(spdxPackage.PackageVersion))
+			Expect(p[0].Aliases[0].Org).To(Equal(spdxPackage.PackageSupplierOrganization))
+			Expect(*p[0].Branch).To(Equal("HEAD"))
+			Expect(*p[1].Name).To(Equal(spdxDependencyPackage.PackageName))
+			Expect(*p[1].Type).To(Equal("source_unavailable"))
+			Expect(*p[1].Description).To(Equal(spdxDependencyPackage.PackageDescription))
+			Expect(len(p[1].Aliases)).To(Equal(1))
+			Expect(p[1].Aliases[0].Version).To(Equal(spdxDependencyPackage.PackageVersion))
+			Expect(p[1].Aliases[0].Org).To(Equal(spdxPackage.PackageSupplierOrganization))
+			Expect(*p[1].Branch).To(Equal(""))
 		})
 	})
 

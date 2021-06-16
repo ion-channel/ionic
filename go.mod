@@ -14,3 +14,5 @@ require (
 	github.com/spdx/tools-golang v0.0.0-20201122192914-a16d50ee1552
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
+
+replace github.com/spdx/tools-golang => github.com/ion-channel/tools-golang v0.0.0-20210615220006-88b94127213b
