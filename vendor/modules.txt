@@ -32,7 +32,7 @@ github.com/onsi/gomega/matchers/support/goraph/edge
 github.com/onsi/gomega/matchers/support/goraph/node
 github.com/onsi/gomega/matchers/support/goraph/util
 github.com/onsi/gomega/types
-# github.com/spdx/tools-golang v0.0.0-20201122192914-a16d50ee1552
+# github.com/spdx/tools-golang v0.0.0-20201122192914-a16d50ee1552 => github.com/ion-channel/tools-golang v0.0.0-20210615220006-88b94127213b
 ## explicit
 github.com/spdx/tools-golang/spdx
 github.com/spdx/tools-golang/spdxlib
@@ -65,3 +65,4 @@ golang.org/x/xerrors/internal
 ## explicit
 # gopkg.in/yaml.v2 v2.3.0
 gopkg.in/yaml.v2
+# github.com/spdx/tools-golang => github.com/ion-channel/tools-golang v0.0.0-20210615220006-88b94127213b

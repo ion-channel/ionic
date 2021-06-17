@@ -22,7 +22,7 @@ const (
 
 // SBOMExportOptions represents all of the different settings a user can specify for how the SBOM is exported.
 type SBOMExportOptions struct {
-	Format SBOMFormat
+	Format              SBOMFormat
 	IncludeDependencies bool
 }
 
