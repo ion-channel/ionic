@@ -148,6 +148,8 @@ func ProjectsFromSPDX(doc interface{}, includeDependencies bool) ([]projects.Pro
 				if !strings.Contains(possibleBranch, ":") && !commitHashRegex.MatchString(possibleBranch) {
 					branch = possibleBranch
 					foundBranchName = true
+					// now we need to remove the branch name from the source
+					source = source[0:branchDelimiterIndex]
 				}
 			}
 			if !foundBranchName {

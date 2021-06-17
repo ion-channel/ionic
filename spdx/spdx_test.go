@@ -73,6 +73,7 @@ func TestSPDX(t *testing.T) {
 			Expect(len(p[0].Aliases)).To(Equal(1))
 			Expect(p[0].Aliases[0].Version).To(Equal(spdxPackage.PackageVersion))
 			Expect(*p[0].Branch).To(Equal("main"))
+			Expect(*p[0].Source).To(Equal("https://github.com/some-org/some-cool-pkg.git"))
 		})
 
 		g.It("should return all projects when dependencies requested", func() {
