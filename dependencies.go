@@ -58,7 +58,9 @@ func (ic *IonClient) ResolveDependenciesInFile(o dependencies.DependencyResoluti
 	switch {
 	case strings.Contains(path.Base(o.File), "Gemfile.lock") ||
 		strings.Contains(path.Base(o.File), "go.mod") ||
-		strings.Contains(path.Base(o.File), "requirements.txt"):
+		strings.Contains(path.Base(o.File), "package-lock.json") ||
+		strings.Contains(path.Base(o.File), "requirements.txt") ||
+		strings.Contains(path.Base(o.File), "yarn.lock"):
 		endpoint = dependencies.ResolveFromFileEndpoint
 	default:
 		endpoint = dependencies.ResolveDependenciesInFileEndpoint
