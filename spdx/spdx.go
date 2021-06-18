@@ -121,7 +121,7 @@ func ProjectsFromSPDX(doc interface{}, includeDependencies bool) ([]projects.Pro
 
 		tmpID := uuid.New().String()
 
-		if pkg.DownloadLocation == "" || pkg.DownloadLocation == "NOASSERTION" {
+		if pkg.DownloadLocation == "" || pkg.DownloadLocation == "NOASSERTION" || pkg.DownloadLocation == "NONE" {
 			ptype = "source_unavailable"
 		} else if strings.Contains(pkg.DownloadLocation, "git") {
 			ptype = "git"
