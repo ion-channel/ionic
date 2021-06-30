@@ -32,6 +32,7 @@ type User struct {
 	Metadata          json.RawMessage   `json:"metadata"`
 	SysAdmin          bool              `json:"sys_admin"`
 	System            bool              `json:"system"`
+	Organizations	  map[string]string `json:"organizations"`
 	Teams             map[string]string `json:"teams"`
 }
 
@@ -50,18 +51,24 @@ func (u User) String() string {
 	return string(b)
 }
 
+// IsMemberOfOrganization takes a team id and returns true if user is a member of that team.
+func (u User) IsMemberOfOrganization(id string) bool {
+	_, ok := u.Organizations[id]
+	return ok
+}
+
+// IsAdminOfOrganization takes a team id and returns true if user is an admin of that team.
+func (u User) IsAdminOfOrganization(id string) bool {
+	return u.Organizations[id] == "admin"
+}
+
 // IsMemberOfTeam takes a team id and returns true if user is a member of that team.
 func (u User) IsMemberOfTeam(id string) bool {
-	if _, ok := u.Teams[id]; ok {
-		return true
-	}
-	return false
+	_, ok := u.Teams[id]
+	return ok
 }
 
 // IsAdminOfTeam takes a team id and returns true if user is an admin of that team.
 func (u User) IsAdminOfTeam(id string) bool {
-	if ok := u.Teams[id] == "admin"; ok {
-		return true
-	}
-	return false
+	return u.Teams[id] == "admin"
 }
