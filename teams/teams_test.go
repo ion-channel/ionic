@@ -31,8 +31,9 @@ func TestTeam(t *testing.T) {
 				POCName:          "youknowit",
 				POCEmail:         "you@know.it",
 				DefaultDeployKey: "secrets here",
+				OrganizationID:   "orgid",
 			}
-			Expect(fmt.Sprintf("%v", t)).To(Equal(`{"id":"someid","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","deleted_at":"2018-07-07T13:42:47.651387237Z","name":"somename","delivering":false,"sys_admin":true,"poc_name":"youknowit","poc_email":"you@know.it","default_deploy_key":"secrets here"}`))
+			Expect(fmt.Sprintf("%v", t)).To(Equal(`{"id":"someid","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","deleted_at":"2018-07-07T13:42:47.651387237Z","name":"somename","delivering":false,"sys_admin":true,"poc_name":"youknowit","poc_email":"you@know.it","default_deploy_key":"secrets here","organization_id":"orgid"}`))
 		})
 	})
 }

@@ -32,10 +32,11 @@ func TestUser(t *testing.T) {
 				Metadata:          nil,
 				SysAdmin:          true,
 				System:            false,
+				Organizations:     nil,
 				Teams:             nil,
 			}
 
-			Expect(fmt.Sprintf("%v", u)).To(Equal(`{"id":"someid","email":"some_email","username":"some_user","chat_handle":"some_chat_handle","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","last_active_at":"2018-07-07T13:42:47.651387237Z","externally_managed":true,"metadata":null,"sys_admin":true,"system":false,"teams":null}`))
+			Expect(fmt.Sprintf("%v", u)).To(Equal(`{"id":"someid","email":"some_email","username":"some_user","chat_handle":"some_chat_handle","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","last_active_at":"2018-07-07T13:42:47.651387237Z","externally_managed":true,"metadata":null,"sys_admin":true,"system":false,"organizations":null,"teams":null}`))
 
 		})
 

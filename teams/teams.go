@@ -27,6 +27,7 @@ type Team struct {
 	POCName          string    `json:"poc_name"`
 	POCEmail         string    `json:"poc_email"`
 	DefaultDeployKey string    `json:"default_deploy_key"`
+	OrganizationID   string	   `json:"organization_id"`
 }
 
 // String returns a JSON formatted string of the team object
