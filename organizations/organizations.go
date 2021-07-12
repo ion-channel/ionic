@@ -17,11 +17,11 @@ const (
 
 // Organization is a logical collection of teams.
 type Organization struct {
-	ID               string    `json:"id"`
-	CreatedAt        time.Time `json:"created_at"`
-	UpdatedAt        time.Time `json:"updated_at"`
-	DeletedAt        time.Time `json:"deleted_at"`
-	Name             string    `json:"name"`
+	ID        string     `json:"id"`
+	CreatedAt time.Time  `json:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at"`
+	DeletedAt *time.Time `json:"deleted_at"`
+	Name      string     `json:"name"`
 }
 
 // String returns a JSON formatted string of the team object

@@ -32,7 +32,7 @@ type User struct {
 	Metadata          json.RawMessage   `json:"metadata"`
 	SysAdmin          bool              `json:"sys_admin"`
 	System            bool              `json:"system"`
-	Organizations	  map[string]string `json:"organizations"`
+	Organizations     map[string]string `json:"organizations"`
 	Teams             map[string]string `json:"teams"`
 }
 

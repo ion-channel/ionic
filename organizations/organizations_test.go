@@ -21,11 +21,11 @@ func TestTeam(t *testing.T) {
 			deletedAt := time.Date(2018, 07, 07, 13, 42, 47, 651387237, time.UTC)
 
 			org := Organization{
-				ID:               "someid",
-				CreatedAt:        createdAt,
-				UpdatedAt:        updatedAt,
-				DeletedAt:        deletedAt,
-				Name:             "somename",
+				ID:        "someid",
+				CreatedAt: createdAt,
+				UpdatedAt: updatedAt,
+				DeletedAt: &deletedAt,
+				Name:      "somename",
 			}
 			Expect(fmt.Sprintf("%v", org)).To(Equal(`{"id":"someid","created_at":"2018-07-07T13:42:47.651387237Z","updated_at":"2018-07-07T13:42:47.651387237Z","deleted_at":"2018-07-07T13:42:47.651387237Z","name":"somename"}`))
 		})
